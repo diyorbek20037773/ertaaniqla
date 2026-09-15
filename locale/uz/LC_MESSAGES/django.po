@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 13:55+0500\n"
+"POT-Creation-Date: 2026-09-15 14:06+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -325,6 +325,14 @@ msgid ""
 msgstr ""
 "Sahifa Telegram/Facebook’da ulashilganda koʻrsatiladi. Boʻsh boʻlsa "
 "avtomatik yaratiladi."
+
+#| msgid "social sharing image"
+msgid "generated sharing image"
+msgstr "avtomatik yaratilgan ulashish rasmi"
+
+msgid "Rendered automatically on publish when no sharing image is chosen."
+msgstr ""
+"Ulashish rasmi tanlanmagan boʻlsa, eʼlon qilinganda avtomatik yaratiladi."
 
 msgid "hide from search engines"
 msgstr "qidiruv tizimlaridan yashirish"
@@ -787,6 +795,17 @@ msgstr "Tashqi havola kiritilishi shart."
 msgid "The URL does not belong to the selected provider."
 msgstr "Havola tanlangan provayderga tegishli emas."
 
+#, python-format
+msgid "%(label)s is too large (max %(mb)d MB)."
+msgstr "%(label)s juda katta (maks. %(mb)d MB)."
+
+#, python-format
+msgid "%(label)s content type %(mime)s is not allowed."
+msgstr "%(label)s tarkib turi %(mime)s ruxsat etilmagan."
+
+msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
+msgstr "Subtitr fayllari WebVTT boʻlishi kerak ('WEBVTT' bilan boshlanadi)."
+
 msgid "Search"
 msgstr "Qidiruv"
 
@@ -838,6 +857,75 @@ msgstr "mavzu sahifasi"
 
 msgid "Stories"
 msgstr "Hikoyalar"
+
+#| msgid "topic index page"
+msgid "stories index page"
+msgstr "hikoyalar sahifasi"
+
+msgid "displayed name"
+msgstr "koʻrsatiladigan ism"
+
+msgid "May be a pseudonym. Never a full name without written consent."
+msgstr ""
+"Taxallus boʻlishi mumkin. Yozma rozilik boʻlmasa, toʻliq ism koʻrsatilmaydi."
+
+msgid "diagnosis (short, plain words)"
+msgstr "tashxis (qisqa, oddiy soʻzlar bilan)"
+
+msgid "Written by the editor, e.g. 'breast cancer, stage 1'."
+msgstr "Muharrir yozadi, masalan: 'koʻkrak bezi saratoni, 1-bosqich'."
+
+msgid "photo"
+msgstr "surat"
+
+msgid "story"
+msgstr "hikoya"
+
+#| msgid "synonyms"
+msgid "anonymised"
+msgstr "anonimlashtirilgan"
+
+msgid "Name changed and identifying details removed."
+msgstr "Ism oʻzgartirilgan, shaxsni aniqlovchi maʼlumotlar olib tashlangan."
+
+msgid "written consent obtained"
+msgstr "yozma rozilik olingan"
+
+msgid "Required before publishing."
+msgstr "Eʼlon qilishdan oldin talab qilinadi."
+
+msgid "consent of the legal guardian (minors)"
+msgstr "qonuniy vakil roziligi (voyaga yetmaganlar)"
+
+msgid "Required for stories in the children's section."
+msgstr "Bolalar boʻlimidagi hikoyalar uchun talab qilinadi."
+
+msgid "consent document (private)"
+msgstr "rozilik hujjati (maxfiy)"
+
+msgid "Scanned consent form. Stored as a private document, never public."
+msgstr ""
+"Skanerlangan rozilik shakli. Maxfiy hujjat sifatida saqlanadi, hech qachon "
+"ochiq emas."
+
+msgid "Person"
+msgstr "Shaxs"
+
+msgid "Consent (required to publish)"
+msgstr "Rozilik (eʼlon qilish uchun shart)"
+
+msgid "patient story"
+msgstr "bemor hikoyasi"
+
+msgid "patient stories"
+msgstr "bemorlar hikoyalari"
+
+msgid "The story cannot be published without the person's written consent."
+msgstr "Hikoya insonning yozma roziligisiz eʼlon qilinishi mumkin emas."
+
+msgid "Stories of minors require the consent of the legal guardian."
+msgstr ""
+"Voyaga yetmaganlar hikoyalari uchun qonuniy vakil roziligi talab qilinadi."
 
 msgid "Tools"
 msgstr "Vositalar"
@@ -1020,8 +1108,6 @@ msgid "Key figures"
 msgstr "Asosiy raqamlar"
 
 #, python-format
-#| msgid "%(counter)s institution"
-#| msgid_plural "%(counter)s institutions"
 msgid "%(counter)s result"
 msgid_plural "%(counter)s results"
 msgstr[0] "%(counter)s ta natija"
@@ -1043,7 +1129,6 @@ msgid "Type at least two characters."
 msgstr "Kamida ikkita belgi kiriting."
 
 #, python-format
-#| msgid "Search"
 msgid "Search: %(q)s"
 msgstr "Qidiruv: %(q)s"
 
@@ -1052,6 +1137,23 @@ msgstr "Mavzular"
 
 msgid "Articles will appear here."
 msgstr "Maqolalar shu yerda paydo boʻladi."
+
+msgid "Patient story"
+msgstr "Bemor hikoyasi"
+
+msgid "Published with the person's consent."
+msgstr "Insonning roziligi bilan eʼlon qilingan."
+
+msgid "Name and details changed."
+msgstr "Ism va tafsilotlar oʻzgartirilgan."
+
+#| msgid "Filter institutions"
+msgid "Filter by section"
+msgstr "Boʻlim boʻyicha filtrlash"
+
+#| msgid "Articles will appear here."
+msgid "Stories will appear here."
+msgstr "Hikoyalar shu yerda paydo boʻladi."
 
 #~ msgid ""
 #~ "This site is an information and education resource. It does not make a "

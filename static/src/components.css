@@ -195,6 +195,13 @@
   .filter-form__field--checkbox label { font-weight: 400; }
   .map-placeholder { min-height: 12rem; border: 1px dashed var(--neutral-400); display: flex; align-items: center; justify-content: center; color: var(--neutral-600); margin-block: var(--space-6); }
 
+  /* stories/*.html */
+  .filter-tabs { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-block: var(--space-4); }
+  .filter-tabs a { display: inline-flex; align-items: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-4); border: 1px solid var(--neutral-200); border-radius: var(--radius); text-decoration: none; }
+  .filter-tabs a[aria-current="true"] { background: var(--brand); color: var(--brand-contrast); border-color: var(--brand); }
+  .story__person { font-weight: 700; margin: 0 0 var(--space-2); }
+  .story__footer { margin-top: var(--space-8); font-size: 0.9em; color: var(--neutral-600); }
+
   /* articles/article_page.html */
   .article__hero { width: 100%; height: auto; border-radius: var(--radius); }
   .article__footer { margin-top: var(--space-12); padding-top: var(--space-4); border-top: 1px solid var(--neutral-200); color: var(--neutral-600); font-size: 0.9em; }

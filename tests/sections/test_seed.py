@@ -17,6 +17,7 @@ from apps.core.seed.builder import Seeder
 from apps.directory.models import DirectoryPage
 from apps.home.models import HomePage
 from apps.sections.models import SectionIndexPage, TopicIndexPage
+from apps.stories.models import StoryIndexPage
 
 pytestmark = pytest.mark.django_db
 
@@ -29,11 +30,13 @@ def page_for(key: str, lang: str) -> Page:
         "topic": TopicIndexPage,
         "article": ArticlePage,
         "directory": DirectoryPage,
+        "stories": StoryIndexPage,
     }[node.kind]
     candidates = model.objects.filter(locale=locale, slug=node.slug[lang], live=True)
     section_key = key.split(".")[0]
     for page in candidates:
-        if page.specific.get_section().section_key == section_key:
+        section = page.specific.get_section()
+        if section is None or section.section_key == section_key:
             return page.specific
     raise AssertionError(f"page {key} ({lang}) not found")
 

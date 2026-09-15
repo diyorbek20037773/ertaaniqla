@@ -1278,7 +1278,37 @@ CHILDREN = Node(
     ],
 )
 
-TREE: list[Node] = [WOMEN, CHILDREN]
+
+def intro_stories(lang: str, ctx: SeedContext) -> Body:
+    return [
+        callout(
+            "info",
+            t(lang, "Haqiqiy bemorlar hikoyalari", "Истории реальных пациентов"),
+            p(
+                t(
+                    lang,
+                    "Har bir hikoya faqat inson (voyaga yetmaganlar uchun — qonuniy vakili) yozma roziligi bilan eʼlon qilinadi.",
+                    "Каждая история публикуется только с письменного согласия человека (для несовершеннолетних — законного представителя).",
+                ),
+                TODO,
+            ),
+        )
+    ]
+
+
+STORIES = Node(
+    key="stories",
+    kind="stories",
+    title={"uz": "Bemorlar hikoyalari", "ru": "Истории пациентов"},
+    slug={"uz": "hikoyalar", "ru": "istorii"},
+    summary={
+        "uz": "Haqiqiy bemorlar hikoyalari — rozilik bilan",
+        "ru": "Истории реальных пациентов — с согласия",
+    },
+    body=intro_stories,
+)
+
+TREE: list[Node] = [WOMEN, CHILDREN, STORIES]
 
 HOME = {
     "title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},

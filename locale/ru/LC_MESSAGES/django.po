@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 13:55+0500\n"
+"POT-Creation-Date: 2026-09-15 14:06+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -322,6 +322,13 @@ msgid ""
 msgstr ""
 "Показывается при публикации ссылки в Telegram/Facebook. Если пусто — "
 "создаётся автоматически."
+
+#| msgid "social sharing image"
+msgid "generated sharing image"
+msgstr "сгенерированное изображение для соцсетей"
+
+msgid "Rendered automatically on publish when no sharing image is chosen."
+msgstr "Создаётся автоматически при публикации, если изображение не выбрано."
 
 msgid "hide from search engines"
 msgstr "скрыть от поисковых систем"
@@ -778,6 +785,17 @@ msgstr "Нужна внешняя ссылка."
 msgid "The URL does not belong to the selected provider."
 msgstr "Ссылка не относится к выбранному провайдеру."
 
+#, python-format
+msgid "%(label)s is too large (max %(mb)d MB)."
+msgstr "%(label)s слишком большой (макс. %(mb)d МБ)."
+
+#, python-format
+msgid "%(label)s content type %(mime)s is not allowed."
+msgstr "%(label)s: тип содержимого %(mime)s не разрешён."
+
+msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
+msgstr "Файлы субтитров должны быть WebVTT (начинаться с 'WEBVTT')."
+
 msgid "Search"
 msgstr "Поиск"
 
@@ -827,6 +845,74 @@ msgstr "страница темы"
 
 msgid "Stories"
 msgstr "Истории"
+
+#| msgid "topic index page"
+msgid "stories index page"
+msgstr "страница историй"
+
+msgid "displayed name"
+msgstr "отображаемое имя"
+
+msgid "May be a pseudonym. Never a full name without written consent."
+msgstr "Может быть псевдонимом. Полное имя — только с письменного согласия."
+
+msgid "diagnosis (short, plain words)"
+msgstr "диагноз (кратко, простыми словами)"
+
+msgid "Written by the editor, e.g. 'breast cancer, stage 1'."
+msgstr "Пишет редактор, например: «рак молочной железы, 1 стадия»."
+
+msgid "photo"
+msgstr "фото"
+
+msgid "story"
+msgstr "история"
+
+#| msgid "synonyms"
+msgid "anonymised"
+msgstr "анонимизировано"
+
+msgid "Name changed and identifying details removed."
+msgstr "Имя изменено, идентифицирующие детали удалены."
+
+msgid "written consent obtained"
+msgstr "письменное согласие получено"
+
+msgid "Required before publishing."
+msgstr "Требуется перед публикацией."
+
+msgid "consent of the legal guardian (minors)"
+msgstr "согласие законного представителя (несовершеннолетние)"
+
+msgid "Required for stories in the children's section."
+msgstr "Требуется для историй в детском разделе."
+
+msgid "consent document (private)"
+msgstr "документ согласия (приватный)"
+
+msgid "Scanned consent form. Stored as a private document, never public."
+msgstr ""
+"Скан формы согласия. Хранится как приватный документ, никогда не "
+"публикуется."
+
+msgid "Person"
+msgstr "Человек"
+
+msgid "Consent (required to publish)"
+msgstr "Согласие (обязательно для публикации)"
+
+msgid "patient story"
+msgstr "история пациента"
+
+msgid "patient stories"
+msgstr "истории пациентов"
+
+msgid "The story cannot be published without the person's written consent."
+msgstr "Историю нельзя опубликовать без письменного согласия человека."
+
+msgid "Stories of minors require the consent of the legal guardian."
+msgstr ""
+"Для историй несовершеннолетних требуется согласие законного представителя."
 
 msgid "Tools"
 msgstr "Инструменты"
@@ -1013,8 +1099,6 @@ msgid "Key figures"
 msgstr "Ключевые цифры"
 
 #, python-format
-#| msgid "%(counter)s institution"
-#| msgid_plural "%(counter)s institutions"
 msgid "%(counter)s result"
 msgid_plural "%(counter)s results"
 msgstr[0] "%(counter)s результат"
@@ -1038,7 +1122,6 @@ msgid "Type at least two characters."
 msgstr "Введите не менее двух символов."
 
 #, python-format
-#| msgid "Search"
 msgid "Search: %(q)s"
 msgstr "Поиск: %(q)s"
 
@@ -1047,6 +1130,23 @@ msgstr "Темы"
 
 msgid "Articles will appear here."
 msgstr "Здесь появятся статьи."
+
+msgid "Patient story"
+msgstr "История пациента"
+
+msgid "Published with the person's consent."
+msgstr "Опубликовано с согласия человека."
+
+msgid "Name and details changed."
+msgstr "Имя и детали изменены."
+
+#| msgid "Filter institutions"
+msgid "Filter by section"
+msgstr "Фильтр по разделу"
+
+#| msgid "Articles will appear here."
+msgid "Stories will appear here."
+msgstr "Здесь появятся истории."
 
 #~ msgid ""
 #~ "This site is an information and education resource. It does not make a "

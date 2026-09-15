@@ -77,7 +77,12 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] search: `apps/search` — Postgres FTS (`ertaaniqla` = simple + unaccent) over both locales, uz/ru synonym groups, Latin↔Cyrillic transliteration, apostrophe normalisation, FTS + title autocomplete merge, visitor language first; view at `/uz/qidiruv/?q=` / `/ru/poisk/?q=` (translated URL segment), HTMX search-as-you-type + plain GET fallback; `rebuild_search` command
   - [x] axe-core (Playwright init script, CSP-safe) on 6 pages: 0 serious/critical (children brand darkened to #8a5a00 for 4.5:1)
   - [x] Gate: search tests (uz "saraton" → ru «рак» pages; «скрининг» → `/uz/ayollar/skrining/`), block render both locales, a11y e2e green, coverage 95 %
-- [ ] M3 — Media & stories
+- [x] **M3 — Media & stories** — DONE, tagged `m3`
+  - [x] `media_library.services`: ffmpeg/ffprobe pipeline (720p/480p H.264 + poster → default storage, status machine uploaded→processing→ready/failed with error text), Celery task `media_library.transcode_video` (queue `media`, enqueued on upload via post_save + on_commit); MIME sniffing (libmagic) for videos/documents/VTT, WebVTT check, EXIF/XMP strip (+ orientation) on image upload
+  - [x] private documents: `before_serve_document` hook → 404 for anonymous / users without `choose_document`
+  - [x] OG image per page: `apps/core/og.py` (Pillow, bundled DejaVu, section colour, 1200×630), task `core.generate_og_image` on `page_published` → `BasePage.og_image_generated`; `base.html` `og:image` fallback + width/height
+  - [x] `stories`: `StoryIndexPage` (`/uz/hikoyalar/` `/ru/istorii/`, section filter tabs) + `PatientStoryPage` (person_display_name, section, diagnosis_short, summary, hero, body, is_anonymised, consent_obtained, consent_guardian, private consent_document); `clean()` blocks publishing without consent (guardian for children); seeded in both languages
+  - [x] Gate: container integration test transcodes a generated 2 s 1280×720 sample → 720p + 480p + poster (`docker exec ertaaniqla-web-1 … pytest -m integration`); publishing a story without consent raises ValidationError; OG task produces a 1200×630 PNG; 31 new UI strings uz+ru; coverage 94 %
 - [ ] M4 — Directory, tools, FAQ, feedback, glossary
 - [ ] M5 — SEO, a11y, perf, print, blogger kit (structure only; no visual polish)
 - [ ] M5b — Design integration (blocked until Figma arrives)
@@ -104,7 +109,15 @@ curl :8001 → /uz/ /ru/ sections, topics, articles, directory all 200; /uz/qaye
 
 ## Next concrete action
 
-Start **M3 — Media & stories**: Celery `transcode_video` (ffmpeg 720p/480p + poster, status
+Start **M4 — Directory, tools, FAQ, feedback, glossary**: `import_institutions` CSV command +
+`data/institutions.sample.csv` (fake), Leaflet map (self-hosted JS via npm, OSM tiles) + HTMX
+region/type filters on `DirectoryPage`; `apps/tools` (screening helper — table-driven rules
+mammography 45–65/2y, ultrasound <45/2y, HPV 30–50; women's symptom self-check; children's
+warning-signs checklist; patient-route page) behind waffle flags; `apps/faq` Question form
+(honeypot, Turnstile, rate limit, encrypted contact, consent) → moderation → `FAQPage`, purge
+job; `apps/feedback` form + retention job (Celery beat); glossary tooltip tag + glossary page.
+
+(M3 note kept for history:) Start **M3 — Media & stories**: Celery `transcode_video` (ffmpeg 720p/480p + poster, status
 machine on `media_library.Video`), VTT subtitles already on the model, galleries/documents
 exist as blocks; OG image generation task (Pillow, section colour) on publish;
 `stories.PatientStoryPage` with consent enforcement (`consent_obtained`, `consent_guardian`

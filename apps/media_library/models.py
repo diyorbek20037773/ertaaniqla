@@ -68,6 +68,18 @@ class PortalDocument(AbstractDocument):
         verbose_name = _("document")
         verbose_name_plural = _("documents")
 
+    def clean(self) -> None:
+        super().clean()
+        if self.file and getattr(self.file, "_committed", True) is False:
+            from apps.media_library.services import DOCUMENT_MIME_TYPES, validate_upload
+
+            extension = self.file.name.rsplit(".", 1)[-1].lower() if "." in self.file.name else ""
+            allowed = DOCUMENT_MIME_TYPES.get(extension)
+            if allowed is not None:
+                validate_upload(
+                    self.file, allowed, settings.MAX_DOCUMENT_UPLOAD_BYTES, str(_("Document"))
+                )
+
 
 # ---------------------------------------------------------------------------
 # Video snippet
@@ -193,12 +205,42 @@ class Video(index.Indexed, TimeStampedModel):
 
     def clean(self) -> None:
         super().clean()
+        from apps.media_library.services import (
+            SUBTITLE_MIME_TYPES,
+            VIDEO_MIME_TYPES,
+            validate_upload,
+            validate_vtt,
+        )
+
+        errors: dict[str, ValidationError] = {}
+        for field_name in ("subtitles_uz", "subtitles_ru"):
+            subtitle = getattr(self, field_name)
+            if subtitle and getattr(subtitle, "_committed", True) is False:
+                try:
+                    validate_upload(subtitle, SUBTITLE_MIME_TYPES, 2 * 1024 * 1024, "VTT")
+                    validate_vtt(subtitle)
+                except ValidationError as exc:
+                    errors[field_name] = exc
         if self.source == VideoSource.UPLOAD:
             if not self.file:
                 raise ValidationError(
-                    {"file": _("Upload a video file or choose an external source.")}
+                    {"file": _("Upload a video file or choose an external source."), **errors}
                 )
+            if getattr(self.file, "_committed", True) is False:
+                try:
+                    validate_upload(
+                        self.file,
+                        VIDEO_MIME_TYPES,
+                        settings.MAX_VIDEO_UPLOAD_BYTES,
+                        str(_("Video")),
+                    )
+                except ValidationError as exc:
+                    errors["file"] = exc
+            if errors:
+                raise ValidationError(errors)
         else:
+            if errors:
+                raise ValidationError(errors)
             if not self.external_url:
                 raise ValidationError({"external_url": _("An external URL is required.")})
             pattern = _PROVIDER_PATTERNS[self.source]

@@ -49,6 +49,13 @@ class BasePage(Page):
             "Shown when the page is shared in Telegram/Facebook. Generated automatically if empty."
         ),
     )
+    og_image_generated = models.ImageField(
+        _("generated sharing image"),
+        upload_to="og/",
+        blank=True,
+        editable=False,
+        help_text=_("Rendered automatically on publish when no sharing image is chosen."),
+    )
     noindex = models.BooleanField(
         _("hide from search engines"),
         default=False,
@@ -126,6 +133,16 @@ class BasePage(Page):
             "organisation": getattr(reviewer, "organisation", "") if reviewer else "",
             "date": self.last_reviewed_at,
         }
+
+    @property
+    def og_image_generated_url(self) -> str:
+        """URL of the auto-generated OG image (base.html falls back to it when no og_image)."""
+        if self.og_image_generated:
+            try:
+                return str(self.og_image_generated.url)
+            except ValueError:  # pragma: no cover - file missing on disk
+                return ""
+        return ""
 
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context: dict[str, Any] = super().get_context(request, *args, **kwargs)

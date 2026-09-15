@@ -15,7 +15,7 @@
 > `templates/components/*.html` / `templates/blocks/*.html` (tuzilma) fayllarida. Figma
 > dizaynini qo'llash = faqat shu fayllarni o'zgartirish, **Python o'zgarmaydi**.
 
-Last updated: 2026-09-15 (M2). Screenshots at 390 px: `tests/e2e/screenshots/`.
+Last updated: 2026-09-15 (M3). Screenshots at 390 px: `tests/e2e/screenshots/`.
 
 ## 1. Design tokens / Токены / Tokenlar — `static/src/tokens.css`
 
@@ -43,6 +43,8 @@ Editors may override `--brand`/`--brand-soft` per section from the CMS (`Section
 | `articles/article_page.html` | ArticlePage | заголовок, summary, page-meta (время чтения, бейдж «Проверено врачом»), hero image, блоки body, дисклеймер | Maqola sahifasi | with/without hero image, verified badge |
 | `directory/directory_page.html` | DirectoryPage | заголовок, intro, форма фильтров (регион, тип, раздел, бесплатно), счётчик, карточки учреждений, заглушка карты | Muassasalar katalogi | empty results; map placeholder (M4: Leaflet + HTMX) |
 | `search/search.html` + `search/_results.html` | search view (`/uz/qidiruv/?q=`, `/ru/poisk/?q=`) | заголовок, форма поиска, счётчик, список результатов (заголовок, summary, метка языка, цвет раздела), пустое состояние, подсказка | Qidiruv sahifasi | no query / results / empty; HTMX partial = `_results.html` |
+| `stories/story_index_page.html` | StoryIndexPage (`/uz/hikoyalar/`) | заголовок, intro, вкладки-фильтр (все / женский / детский), сетка карточек историй (фото, имя, summary) | Hikoyalar sahifasi | empty state; filter active |
+| `stories/patient_story_page.html` | PatientStoryPage | eyebrow «История пациента», имя (псевдоним) + диагноз, summary, page-meta, фото, блоки, подпись о согласии/анонимизации | Bemor hikoyasi | anonymised on/off; section colour |
 | `404.html`, `429.html`, `500.html`, `core/lockout.html` | errors | текст + ссылка на главную | Xato sahifalari | — |
 
 ## 3. Components / Компоненты / Komponentlar — `templates/components/`
@@ -65,6 +67,7 @@ Each partial documents its context variables in a header comment. CSS block of t
 | `video.html` | Плеер (HTML5 + VTT uz/ru + постер) или провайдер-embed; спикер; подпись; транскрипт (`<details>`) | Video pleer / embed, transkript | `video, embed, caption, transcript` | upload ready / processing / external; vertical 9:16 |
 | `embed_frame.html` | iframe YouTube/Telegram; **click-to-load** фасад для Instagram/TikTok; `<noscript>` ссылка | Provayder iframe / bosib yuklash fasadi | `embed{provider,src,vertical,click_to_load}` | facade / loaded / no-JS |
 | `institution_card.html` | Карточка учреждения: название, тип, «бесплатно по госпрограмме», адрес, телефон, часы, услуги, сайт, дата проверки | Muassasa kartasi | `institution` | free badge on/off; no phone/hours |
+| `filter-tabs` (CSS in stories) | Вкладки фильтра раздела (aria-current) | Bo'lim filtr tugmalari | links | active / inactive |
 | `search_form.html` | Поле поиска (GET-форма; на странице поиска — HTMX «поиск при вводе») | Qidiruv maydoni | `query, autofocus, results_target` | plain / HTMX live |
 | `footer.html` | Подвал: дисклеймер (обязателен), горячая линия, соцсети, текст, ПП-402/186, логотипы партнёров (Агентство, Яндекс, Hamroh) | Pastki qism | `SiteSettings` | logos present / placeholders |
 

@@ -324,6 +324,7 @@ MAX_IMAGE_UPLOAD_BYTES = env.int("MAX_IMAGE_UPLOAD_BYTES", default=20 * 1024 * 1
 MAX_VIDEO_UPLOAD_BYTES = env.int("MAX_VIDEO_UPLOAD_BYTES", default=512 * 1024 * 1024)
 MAX_DOCUMENT_UPLOAD_BYTES = env.int("MAX_DOCUMENT_UPLOAD_BYTES", default=50 * 1024 * 1024)
 FFMPEG_BINARY = env("FFMPEG_BINARY", default="ffmpeg")
+OG_IMAGE_FONT_DIR = BASE_DIR / "static" / "fonts"  # DejaVu (Latin + Cyrillic + U+02BB)
 CLAMAV_HOST = env("CLAMAV_HOST", default="")
 CLAMAV_PORT = env.int("CLAMAV_PORT", default=3310)
 
@@ -394,6 +395,10 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60 * 25
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_DEFAULT_QUEUE = "default"
+CELERY_TASK_ROUTES = {
+    "media_library.*": {"queue": "media"},
+    "core.generate_og_image": {"queue": "media"},
+}
 CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     # populated by apps in later milestones via apps.core.celery_schedule
 }

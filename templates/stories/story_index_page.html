@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} stories/story_index_page.html — Context: page (StoryIndexPage), stories
+   (list[PatientStoryPage]), section_filter ("", "women", "children"). {% endcomment %}
+{% block content %}
+<div class="container">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  <nav class="filter-tabs" aria-label="{% trans 'Filter by section' %}">
+    <a href="{{ page.url }}" {% if not section_filter %}aria-current="true"{% endif %}>{% trans "All" %}</a>
+    <a href="{{ page.url }}?section=women" {% if section_filter == "women" %}aria-current="true"{% endif %}>{% trans "Women's cancer" %}</a>
+    <a href="{{ page.url }}?section=children" {% if section_filter == "children" %}aria-current="true"{% endif %}>{% trans "Childhood cancer" %}</a>
+  </nav>
+  <section class="cards-grid" aria-label="{% trans 'Stories' %}">
+    <div class="cards-grid__items">
+      {% for story in stories %}
+        {% include "components/card.html" with title=story.title url=story.url text=story.summary image=story.hero_image meta=story.person_display_name tag="h2" %}
+      {% empty %}
+        <p class="placeholder">{% trans "Stories will appear here." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

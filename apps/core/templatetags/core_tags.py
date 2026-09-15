@@ -119,6 +119,11 @@ def hreflang_links(context: dict[str, Any]) -> SafeString:
     )
 
 
+@register.simple_tag(takes_context=True, name="site_root_url")
+def site_root_url_tag(context: dict[str, Any]) -> str:
+    return site_root_url(context.get("request"))
+
+
 @register.simple_tag(takes_context=True)
 def canonical_url(context: dict[str, Any]) -> str:
     page = context.get("page")

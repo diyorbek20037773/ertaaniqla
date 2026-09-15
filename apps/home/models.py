@@ -58,6 +58,7 @@ class HomePage(BasePage):
         "sections.SectionIndexPage",
         "articles.ArticlePage",
         "directory.DirectoryPage",
+        "stories.StoryIndexPage",
     ]
     template = "home/home_page.html"
 

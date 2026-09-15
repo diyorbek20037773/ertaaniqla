@@ -33,7 +33,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | W-10 | Государственная поддержка — бесплатный скрининг; возможности в кабинетах онконастороженности; права и обязанности пациентов и врачей | ArticlePage callout placeholder with the 3 bullets | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | W-11 | Уход и поддержка — 3 columns verbatim (Физическое здоровье ×4 / Эмоциональная поддержка ×4 / Практические вопросы ×4) | `three_columns` block seeded verbatim | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | W-12 | Жизнь после рака — 3 columns verbatim (Наблюдение ×3 / Возвращение ×3 / Долгосрочное здоровье ×3) | `three_columns` block seeded verbatim | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
-| W-13 | Content formats: видеоролики врачей РОНЦ и ЦЗМиР; мобилограф-видео; инфографика и иллюстрации; истории пациентов (с согласия); материалы для распространения (мужья, дети, блогеры) | `Video` snippet (long/short_vertical), `image_gallery`, `PatientStoryPage`, `MaterialsPage` | M3/M5 tests | M3/M5 | todo |
+| W-13 | Content formats: видеоролики врачей РОНЦ и ЦЗМиР; мобилограф-видео; инфографика и иллюстрации; истории пациентов (с согласия); материалы для распространения (мужья, дети, блогеры) | `Video` (long/short_vertical) + transcoding, `image_gallery`, `PatientStoryPage`; `MaterialsPage` (blogger kit) → M5 | M3 tests; M5 | M3/M5 | wip (materials page M5) |
 
 ## C. Section 2 — childhood cancer pages (TZ §2.2, spec §2.3)
 
@@ -50,7 +50,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | C-09 | Уход и поддержка — 3 columns verbatim (Физический уход ×4 / Эмоциональная поддержка ×4 / Практические вопросы ×4) | `three_columns` | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | C-10 | Информация для семьи — 2 columns verbatim (Для родителей ×5 / Для близких ×5) | `two_columns` | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | C-11 | Жизнь после рака — 3 columns verbatim (Наблюдение ×3 / Возвращение ×3 (школа) / Долгосрочное здоровье ×3) | `three_columns` | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
-| C-12 | Content formats: видео врачей Детской онкогематологии; мобилограф; инфографика; истории (согласие законного представителя) ; материалы (родители, дети, блогеры) | `Video`, `PatientStoryPage.consent_guardian`, `MaterialsPage` | M3/M5 tests | M3/M5 | todo |
+| C-12 | Content formats: видео врачей Детской онкогематологии; мобилограф; инфографика; истории (согласие законного представителя) ; материалы (родители, дети, блогеры) | `Video`, `PatientStoryPage.consent_guardian` (enforced for `section=children`), `MaterialsPage` → M5 | `tests/stories/test_consent.py::test_children_story_needs_guardian_consent`; M5 | M3/M5 | wip (materials page M5) |
 | C-13 | Structure follows St. Jude "Together" model; content per PP-186 | page tree mirrors St. Jude "Together" structure; note in section intro | `tests/sections/test_seed.py::test_children_menu_has_the_five_tz_items` | M1 | done |
 
 ## D. Cross-cutting features F1–F17 (spec §2.4)
@@ -59,14 +59,14 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 |---|---|---|---|---|---|
 | F1 | Bilingual ru/uz with switcher preserving page | wagtail-localize trees, `core_tags.lang_switch` / `hreflang_links` | `tests/core/test_templatetags.py` | M1 | done |
 | F2 | Mobile adaptation | mobile-first CSS, 390 px screenshots | `tests/e2e/test_screens.py` | M1 | done (wireframe; design M5b) |
-| F3 | Video (long + short vertical) | `Video` snippet, ffmpeg transcode | `tests/media_library` | M3 | todo |
-| F4 | Infographics / galleries, downloadable | `image_gallery` block | `tests/articles/test_blocks.py` | M3 | todo |
+| F3 | Video (long + short vertical) | `media_library.Video` snippet (kind, source, file/external, poster, VTT uz/ru, transcript, status, renditions), Celery `transcode_video` (ffmpeg 720p/480p H.264 + poster, queue `media`), `video` block / `components/video.html` | `tests/media_library/test_services.py` (status machine, integration transcode of a 2 s sample), `tests/media_library/test_video.py` | M3 | done |
+| F4 | Infographics / galleries, downloadable | `image_gallery` block (alt text, captions, download link), `document_download` block; EXIF/GPS stripped on upload; MIME sniffed | `tests/articles/test_blocks.py::test_image_gallery_render`, `tests/media_library/test_services.py` | M3 | done |
 | F5 | Feedback forms | `apps/feedback` | `tests/feedback` | M4 | todo |
 | F6 | Navigation: mega-menu per section, breadcrumbs, sitemap | `apps/core/navigation.py`, `components/nav.html`, `breadcrumbs.html` | `tests/sections/test_models.py::test_navigation_structure_and_cache` | M1/M5 | wip (mega-menu + breadcrumbs done; sitemap per language M5) |
 | F7 | Speed optimisation | caching §4.5, budgets §4.6 | `tests/perf/test_budgets.py` | M5 | todo |
 | F8 | Stable operation: admin, updates, bug-fix, data protection | M6 DevOps + §8 security | M6 gate | M6 | todo |
-| F9 | Social distribution: OG tags, share buttons, blogger materials | `share.html`, OG image task, `MaterialsPage` | `tests/core/test_seo.py` | M5 | todo |
-| F10 | Patient stories with consent | `PatientStoryPage.clean()` | `tests/stories/test_consent.py` | M3 | todo |
+| F9 | Social distribution: OG tags, share buttons, blogger materials | OG tags in `base.html`; OG image generated per page on publish (`apps/core/og.py`, task `core.generate_og_image`); share bar + `MaterialsPage` → M5 | `tests/core/test_og.py`; M5 | M3/M5 | wip (share bar + materials M5) |
+| F10 | Patient stories with consent | `stories.PatientStoryPage.clean()` (consent_obtained; consent_guardian for children; private consent document), `StoryIndexPage` `/uz/hikoyalar/` `/ru/istorii/` | `tests/stories/test_consent.py`, `tests/media_library/test_private_documents.py` | M3 | done |
 | F11 | Where-to-go directory with regions | `apps/directory` | `tests/directory` | M4 | todo |
 | F12 | 4-step patient route component | `steps` block | `tests/articles/test_blocks.py::test_steps_auto_number_and_deadline` | M2/M4 | wip (block done; tools page M4) |
 | F13 | Step-by-step self-exam guide | `steps` block on Symptoms + `print.css` | `tests/sections/test_seed.py` | M2/M5 | wip (steps + placeholders + print skeleton; interactive M2) |

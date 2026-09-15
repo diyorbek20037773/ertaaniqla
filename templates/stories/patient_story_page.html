@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+{% comment %} stories/patient_story_page.html — Context: page (PatientStoryPage), section_key. {% endcomment %}
+{% block og_type %}article{% endblock %}
+{% block content %}
+<article class="container article story">
+  <header class="page-header">
+    <p class="page-header__eyebrow">{% trans "Patient story" %}</p>
+    <h1>{{ page.title }}</h1>
+    <p class="story__person">{{ page.person_display_name }}{% if page.diagnosis_short %} — {{ page.diagnosis_short }}{% endif %}</p>
+    {% if page.summary %}<p class="page-header__lead">{{ page.summary }}</p>{% endif %}
+    {% include "components/page_meta.html" %}
+    {% if page.hero_image %}
+      {% image page.hero_image width-1200 as hero %}
+      <img class="article__hero" src="{{ hero.url }}" alt="{{ hero.alt }}" width="{{ hero.width }}" height="{{ hero.height }}">
+    {% endif %}
+  </header>
+  <div class="article__body">
+    {% for block in page.body %}{% include_block block %}{% endfor %}
+  </div>
+  <footer class="story__footer">
+    <p class="story__consent">{% trans "Published with the person's consent." %}{% if page.is_anonymised %} {% trans "Name and details changed." %}{% endif %}</p>
+  </footer>
+</article>
+{% endblock %}

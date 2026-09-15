@@ -207,12 +207,14 @@ class Seeder:
         from apps.articles.models import ArticlePage
         from apps.directory.models import DirectoryPage
         from apps.sections.models import SectionIndexPage, TopicIndexPage
+        from apps.stories.models import StoryIndexPage
 
         return {
             "section": SectionIndexPage,
             "topic": TopicIndexPage,
             "article": ArticlePage,
             "directory": DirectoryPage,
+            "stories": StoryIndexPage,
         }[kind]
 
     def upsert_page(self, node: Node, lang: str, parent: Any, source: Any | None) -> Any:

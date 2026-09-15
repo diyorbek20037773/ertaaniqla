@@ -16,7 +16,7 @@
     {% if page.search_description %}<meta property="og:description" content="{{ page.search_description }}">{% elif page.summary %}<meta property="og:description" content="{{ page.summary }}">{% endif %}
     <meta property="og:url" content="{% canonical_url %}">
     <meta property="og:locale" content="{% if LANGUAGE_CODE == 'ru' %}ru_RU{% else %}uz_UZ{% endif %}">
-    {% if page.og_image %}{% image page.og_image fill-1200x630 as og %}<meta property="og:image" content="{{ og.full_url }}">{% endif %}
+    {% if page.og_image %}{% image page.og_image fill-1200x630 as og %}<meta property="og:image" content="{{ og.full_url }}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">{% elif page.og_image_generated_url %}<meta property="og:image" content="{% site_root_url %}{{ page.og_image_generated_url }}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">{% endif %}
     <meta name="twitter:card" content="summary_large_image">
   {% endblock %}
   <link rel="stylesheet" href="{% static 'dist/main.css' %}">

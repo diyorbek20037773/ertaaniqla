@@ -418,6 +418,89 @@ T: dict[str, tuple[str, str]] = {
         "Введите не менее двух символов.",
     ),
     "Search: %(q)s": ("Qidiruv: %(q)s", "Поиск: %(q)s"),
+    # M3 — media & stories
+    "generated sharing image": (
+        "avtomatik yaratilgan ulashish rasmi",
+        "сгенерированное изображение для соцсетей",
+    ),
+    "Rendered automatically on publish when no sharing image is chosen.": (
+        "Ulashish rasmi tanlanmagan boʻlsa, eʼlon qilinganda avtomatik yaratiladi.",
+        "Создаётся автоматически при публикации, если изображение не выбрано.",
+    ),
+    "%(label)s is too large (max %(mb)d MB).": (
+        "%(label)s juda katta (maks. %(mb)d MB).",
+        "%(label)s слишком большой (макс. %(mb)d МБ).",
+    ),
+    "%(label)s content type %(mime)s is not allowed.": (
+        "%(label)s tarkib turi %(mime)s ruxsat etilmagan.",
+        "%(label)s: тип содержимого %(mime)s не разрешён.",
+    ),
+    "Subtitle files must be WebVTT (start with 'WEBVTT').": (
+        "Subtitr fayllari WebVTT boʻlishi kerak ('WEBVTT' bilan boshlanadi).",
+        "Файлы субтитров должны быть WebVTT (начинаться с 'WEBVTT').",
+    ),
+    "stories index page": ("hikoyalar sahifasi", "страница историй"),
+    "displayed name": ("koʻrsatiladigan ism", "отображаемое имя"),
+    "May be a pseudonym. Never a full name without written consent.": (
+        "Taxallus boʻlishi mumkin. Yozma rozilik boʻlmasa, toʻliq ism koʻrsatilmaydi.",
+        "Может быть псевдонимом. Полное имя — только с письменного согласия.",
+    ),
+    "diagnosis (short, plain words)": (
+        "tashxis (qisqa, oddiy soʻzlar bilan)",
+        "диагноз (кратко, простыми словами)",
+    ),
+    "Written by the editor, e.g. 'breast cancer, stage 1'.": (
+        "Muharrir yozadi, masalan: 'koʻkrak bezi saratoni, 1-bosqich'.",
+        "Пишет редактор, например: «рак молочной железы, 1 стадия».",
+    ),
+    "photo": ("surat", "фото"),
+    "story": ("hikoya", "история"),
+    "anonymised": ("anonimlashtirilgan", "анонимизировано"),
+    "Name changed and identifying details removed.": (
+        "Ism oʻzgartirilgan, shaxsni aniqlovchi maʼlumotlar olib tashlangan.",
+        "Имя изменено, идентифицирующие детали удалены.",
+    ),
+    "written consent obtained": ("yozma rozilik olingan", "письменное согласие получено"),
+    "Required before publishing.": (
+        "Eʼlon qilishdan oldin talab qilinadi.",
+        "Требуется перед публикацией.",
+    ),
+    "consent of the legal guardian (minors)": (
+        "qonuniy vakil roziligi (voyaga yetmaganlar)",
+        "согласие законного представителя (несовершеннолетние)",
+    ),
+    "Required for stories in the children's section.": (
+        "Bolalar boʻlimidagi hikoyalar uchun talab qilinadi.",
+        "Требуется для историй в детском разделе.",
+    ),
+    "consent document (private)": ("rozilik hujjati (maxfiy)", "документ согласия (приватный)"),
+    "Scanned consent form. Stored as a private document, never public.": (
+        "Skanerlangan rozilik shakli. Maxfiy hujjat sifatida saqlanadi, hech qachon ochiq emas.",
+        "Скан формы согласия. Хранится как приватный документ, никогда не публикуется.",
+    ),
+    "Person": ("Shaxs", "Человек"),
+    "Consent (required to publish)": (
+        "Rozilik (eʼlon qilish uchun shart)",
+        "Согласие (обязательно для публикации)",
+    ),
+    "patient story": ("bemor hikoyasi", "история пациента"),
+    "patient stories": ("bemorlar hikoyalari", "истории пациентов"),
+    "The story cannot be published without the person's written consent.": (
+        "Hikoya insonning yozma roziligisiz eʼlon qilinishi mumkin emas.",
+        "Историю нельзя опубликовать без письменного согласия человека.",
+    ),
+    "Stories of minors require the consent of the legal guardian.": (
+        "Voyaga yetmaganlar hikoyalari uchun qonuniy vakil roziligi talab qilinadi.",
+        "Для историй несовершеннолетних требуется согласие законного представителя.",
+    ),
+    "Patient story": ("Bemor hikoyasi", "История пациента"),
+    "Published with the person's consent.": (
+        "Insonning roziligi bilan eʼlon qilingan.",
+        "Опубликовано с согласия человека.",
+    ),
+    "Name and details changed.": ("Ism va tafsilotlar oʻzgartirilgan.", "Имя и детали изменены."),
+    "Filter by section": ("Boʻlim boʻyicha filtrlash", "Фильтр по разделу"),
+    "Stories will appear here.": ("Hikoyalar shu yerda paydo boʻladi.", "Здесь появятся истории."),
 }
 
 # msgid: (uz forms, ru forms)  — uz has 1 plural form, ru has 3
@@ -507,8 +590,8 @@ def unfuzzy(lang: str, index: int) -> int:
     for entry in po.fuzzy_entries():
         if entry.msgid_plural and entry.msgid in P:
             entry.msgstr_plural = dict(enumerate(P[entry.msgid][index]))
-        elif entry.msgid in F:
-            entry.msgstr = F[entry.msgid][index]
+        elif entry.msgid in F or entry.msgid in T:
+            entry.msgstr = (F.get(entry.msgid) or T[entry.msgid])[index]
         else:
             continue
         entry.flags = [f for f in entry.flags if f != "fuzzy"]

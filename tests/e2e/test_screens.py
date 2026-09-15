@@ -27,6 +27,7 @@ PAGES = [
     ("article-symptoms-ru", "/ru/zhenskiy/osvedomlennost/simptomy/"),
     ("article-care-children-uz", "/uz/bolalar/parvarish/"),
     ("directory-uz", "/uz/ayollar/qayerga-murojaat/"),
+    ("stories-ru", "/ru/istorii/"),
 ]
 
 
