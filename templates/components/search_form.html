@@ -1,0 +1,15 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/search_form.html — site search box. Plain GET form (non-JS) + HTMX
+   search-as-you-type into `results_target` when present (search page only).
+   Context: query (str, optional), autofocus (bool), results_target (CSS selector, optional).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<form class="search-form" role="search" method="get" action="{% url 'search:search' %}"
+      {% if results_target %}hx-get="{% url 'search:search' %}" hx-target="{{ results_target }}" hx-trigger="input changed delay:300ms from:#search-q, submit" hx-push-url="true"{% endif %}>
+  <label class="search-form__label" for="search-q">{% trans "Search the site" %}</label>
+  <div class="search-form__row">
+    <input class="search-form__input" id="search-q" type="search" name="q" value="{{ query }}"
+           maxlength="100" minlength="2" placeholder="{% trans 'e.g. mammography' %}" {% if autofocus %}autofocus{% endif %}>
+    <button class="button button--primary search-form__button" type="submit">{% trans "Search" %}</button>
+  </div>
+</form>

@@ -27,7 +27,7 @@
   /* section brands — working defaults, designer decides final hues (spec §2.1) */
   --brand-w: #b8336a;        /* women: rose */
   --brand-w-soft: #f6e4ec;
-  --brand-c: #b5780a;        /* children: amber */
+  --brand-c: #8a5a00;        /* children: amber (≥ 4.5:1 on --brand-c-soft, axe-checked) */
   --brand-c-soft: #f7ecd6;
 
   /* active brand (overridden by data-section) */

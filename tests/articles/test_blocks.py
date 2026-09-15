@@ -343,3 +343,79 @@ def test_region_choices_include_all_regions() -> None:
 
 def test_locale_fixture_exists() -> None:
     assert Locale.objects.filter(language_code="ru").exists()
+
+
+ALL_BLOCK_VALUES: dict[str, Any] = {
+    "rich_text": "<p>Matn</p>",
+    "callout": {"kind": "info", "title": "T", "text": "<p>x</p>"},
+    "three_columns": {
+        "columns": [{"title": f"C{i}", "items": "<ul><li>i</li></ul>"} for i in range(3)]
+    },
+    "two_columns": {"columns": [{"title": f"C{i}", "items": "<p>i</p>"} for i in range(2)]},
+    "steps": {
+        "title": "S",
+        "steps": [
+            {
+                "number": "",
+                "title": "One",
+                "text": "<p>a</p>",
+                "deadline": "d",
+                "link": {"page": None, "url": ""},
+            }
+        ],
+    },
+    "cards_grid": {
+        "title": "G",
+        "cards": [
+            {
+                "image": None,
+                "icon": "",
+                "title": "Card",
+                "text": "<p>t</p>",
+                "link": {"page": None, "url": ""},
+            }
+        ],
+    },
+    "symptom_list": {
+        "title": "",
+        "symptoms": [{"symptom": "S", "urgency": "urgent", "explanation": ""}],
+    },
+    "stat": {"value": "1", "label": "L", "source": "", "year": None},
+    "video": {
+        "video": None,
+        "external_url": "https://youtu.be/dQw4w9WgXcQ",
+        "caption": "",
+        "transcript": "",
+    },
+    "faq_accordion": {"title": "", "items": [{"question": "Q?", "answer": "<p>A</p>"}]},
+    "institution_list": {"title": "", "region": "", "kind": "", "free_only": False, "limit": 5},
+    "cta": {
+        "text": "",
+        "button_label": "Go",
+        "link": {"page": None, "url": "https://x.uz"},
+        "style": "primary",
+    },
+    "quote": {"text": "Q", "author": "", "role": ""},
+    "table": {
+        "caption": "",
+        "columns": [{"type": "text", "heading": "H"}],
+        "rows": [{"values": ["v"]}],
+    },
+    "embed": {"url": "https://www.tiktok.com/@a/video/1", "caption": ""},
+}
+
+
+@pytest.mark.parametrize("lang", ["uz", "ru"])
+@pytest.mark.parametrize("block_type", sorted(ALL_BLOCK_VALUES))
+def test_every_block_renders_in_both_locales(block_type: str, lang: str) -> None:
+    """M2 gate: every block renders in uz and ru with translated UI strings (no English)."""
+    stream = StreamValue(
+        ArticleBodyBlock(),
+        [{"type": block_type, "value": ALL_BLOCK_VALUES[block_type]}],
+        is_lazy=True,
+    )
+    with translation.override(lang):
+        html = str(stream)
+    assert html.strip()
+    for english in ("Load content", "Urgent — see a doctor now", "Transcript", "Timing", "Source:"):
+        assert english not in html, (block_type, lang, english)

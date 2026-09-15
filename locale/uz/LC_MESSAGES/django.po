@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 12:34+0500\n"
+"POT-Creation-Date: 2026-09-15 13:55+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,6 @@ msgstr "Sarlavha"
 msgid "Callout"
 msgstr "Ajratilgan blok"
 
-#| msgid "job title"
 msgid "Column title"
 msgstr "Ustun sarlavhasi"
 
@@ -101,7 +100,6 @@ msgstr "Qadamlar"
 msgid "Steps (patient route, self-exam guide)"
 msgstr "Qadamlar (bemor yoʻli, oʻz-oʻzini tekshirish)"
 
-#| msgid "image"
 msgid "Image"
 msgstr "Rasm"
 
@@ -133,7 +131,6 @@ msgstr "Belgi"
 msgid "Urgency"
 msgstr "Shoshilinchlik"
 
-#| msgid "organisation"
 msgid "Explanation"
 msgstr "Izoh"
 
@@ -187,7 +184,6 @@ msgstr ""
 "Faqat YouTube, Telegram, Instagram va TikTok havolalari qoʻllab-"
 "quvvatlanadi."
 
-#| msgid "images"
 msgid "Images"
 msgstr "Rasmlar"
 
@@ -197,25 +193,21 @@ msgstr "Yuklab olishga ruxsat (infografika)"
 msgid "Image gallery / infographics"
 msgstr "Rasmlar galereyasi / infografika"
 
-#| msgid "document"
 msgid "Document"
 msgstr "Hujjat"
 
-#| msgid "description"
 msgid "Description"
 msgstr "Tavsif"
 
 msgid "Document download"
 msgstr "Hujjatni yuklab olish"
 
-#| msgid "Questions & FAQ"
 msgid "Question"
 msgstr "Savol"
 
 msgid "Answer"
 msgstr "Javob"
 
-#| msgid "Questions & FAQ"
 msgid "Questions"
 msgstr "Savollar"
 
@@ -225,7 +217,6 @@ msgstr "Savol-javob akkordeoni / shifokorga savollar"
 msgid "Terms"
 msgstr "Atamalar"
 
-#| msgid "Glossary"
 msgid "Glossary terms"
 msgstr "Lugʻat atamalari"
 
@@ -274,7 +265,6 @@ msgstr "Iqtibos"
 msgid "Author"
 msgstr "Muallif"
 
-#| msgid "organisation"
 msgid "Role / organisation"
 msgstr "Lavozim / tashkilot"
 
@@ -299,18 +289,15 @@ msgstr "qisqacha mazmun"
 msgid "Shown in listings, the mega-menu and search results."
 msgstr "Roʻyxatlarda, mega-menyuda va qidiruv natijalarida koʻrsatiladi."
 
-#| msgid "image"
 msgid "hero image"
 msgstr "asosiy rasm"
 
 msgid "body"
 msgstr "asosiy matn"
 
-#| msgid "Articles"
 msgid "article"
 msgstr "maqola"
 
-#| msgid "Articles"
 msgid "articles"
 msgstr "maqolalar"
 
@@ -464,7 +451,6 @@ msgstr "tartib"
 msgid "region"
 msgstr "viloyat"
 
-#| msgid "Sections"
 msgid "regions"
 msgstr "viloyatlar"
 
@@ -537,7 +523,6 @@ msgstr "uzunlik"
 msgid "free under the state programme"
 msgstr "davlat dasturi boʻyicha bepul"
 
-#| msgid "Sections"
 msgid "sections"
 msgstr "boʻlimlar"
 
@@ -556,14 +541,12 @@ msgstr ""
 "Kelajakda sinxronlash uchun tashqi reyestrdagi (masalan, DMED) "
 "identifikator."
 
-#| msgid "credit / source"
 msgid "external source"
 msgstr "tashqi manba"
 
 msgid "Name"
 msgstr "Nomi"
 
-#| msgid "Sections"
 msgid "Location"
 msgstr "Joylashuv"
 
@@ -601,18 +584,15 @@ msgstr "Qayta aloqa"
 msgid "Glossary"
 msgstr "Lugʻat"
 
-#| msgid "Sections"
 msgid "Both sections"
 msgstr "Ikkala boʻlim"
 
 msgid "term"
 msgstr "atama"
 
-#| msgid "description"
 msgid "definition"
 msgstr "taʼrif"
 
-#| msgid "Sections"
 msgid "section"
 msgstr "boʻlim"
 
@@ -624,25 +604,21 @@ msgstr ""
 "Vergul bilan ajratilgan muqobil yozilishlar (masalan, kirillcha, "
 "qisqartmalar)."
 
-#| msgid "Glossary"
 msgid "glossary term"
 msgstr "lugʻat atamasi"
 
-#| msgid "Glossary"
 msgid "glossary terms"
 msgstr "lugʻat atamalari"
 
 msgid "Home"
 msgstr "Bosh sahifa"
 
-#| msgid "job title"
 msgid "hero title"
 msgstr "asosiy sarlavha"
 
 msgid "Key idea of the portal — early detection. Filled by the copywriter."
 msgstr "Portalning asosiy gʻoyasi — erta aniqlash. Kopirayter toʻldiradi."
 
-#| msgid "job title"
 msgid "hero subtitle"
 msgstr "asosiy sarlavha osti"
 
@@ -659,7 +635,6 @@ msgstr ""
 msgid "statistics strip (3 stats)"
 msgstr "statistika qatori (3 ta koʻrsatkich)"
 
-#| msgid "Skip to main content"
 msgid "additional content"
 msgstr "qoʻshimcha kontent"
 
@@ -672,11 +647,9 @@ msgstr "Tanlangan maqolalar"
 msgid "Featured videos"
 msgstr "Tanlangan videolar"
 
-#| msgid "Go to the home page"
 msgid "home page"
 msgstr "bosh sahifa"
 
-#| msgid "created at"
 msgid "featured article"
 msgstr "tanlangan maqola"
 
@@ -746,7 +719,6 @@ msgstr "Tayyor"
 msgid "Failed"
 msgstr "Xatolik"
 
-#| msgid "job title"
 msgid "title"
 msgstr "sarlavha"
 
@@ -773,7 +745,6 @@ msgstr "davomiyligi (soniya)"
 msgid "doctor's name"
 msgstr "shifokor ismi"
 
-#| msgid "organisation"
 msgid "doctor's organisation"
 msgstr "shifokor tashkiloti"
 
@@ -789,7 +760,6 @@ msgstr "subtitrlar (ru, VTT)"
 msgid "status"
 msgstr "holat"
 
-#| msgid "Sections"
 msgid "renditions"
 msgstr "versiyalar"
 
@@ -896,6 +866,9 @@ msgstr "foydalanuvchilar"
 msgid "Erta aniqla"
 msgstr "Erta aniqla"
 
+msgid "qidiruv/"
+msgstr "qidiruv/"
+
 msgid "Page not found"
 msgstr "Sahifa topilmadi"
 
@@ -945,7 +918,6 @@ msgstr "Tinchlantirish"
 msgid "Note"
 msgstr "Eslatma"
 
-#| msgid "Skip to main content"
 msgid "Load content"
 msgstr "Kontentni yuklash"
 
@@ -961,7 +933,6 @@ msgstr "Prezidentning PQ-402 va PQ-186-sonli qarorlari asosida yaratilgan."
 msgid "Partners"
 msgstr "Hamkorlar"
 
-#| msgid "Erta aniqla"
 msgid "Erta aniqla — home"
 msgstr "Erta aniqla — bosh sahifa"
 
@@ -994,6 +965,12 @@ msgstr "Shifokor tekshirgan"
 msgid "Verified by a doctor"
 msgstr "Shifokor tekshirgan"
 
+msgid "Search the site"
+msgstr "Sayt boʻylab qidirish"
+
+msgid "e.g. mammography"
+msgstr "masalan, mammografiya"
+
 msgid "Timing"
 msgstr "Muddat"
 
@@ -1016,7 +993,6 @@ msgstr ""
 msgid "Filter institutions"
 msgstr "Muassasalarni filtrlash"
 
-#| msgid "Sections"
 msgid "Section"
 msgstr "Boʻlim"
 
@@ -1037,12 +1013,39 @@ msgstr[0] "%(counter)s ta muassasa"
 msgid "Map will be shown here."
 msgstr "Bu yerda xarita koʻrsatiladi."
 
-#| msgid "description"
 msgid "Open section"
 msgstr "Boʻlimni ochish"
 
 msgid "Key figures"
 msgstr "Asosiy raqamlar"
+
+#, python-format
+#| msgid "%(counter)s institution"
+#| msgid_plural "%(counter)s institutions"
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] "%(counter)s ta natija"
+
+msgid "In Russian"
+msgstr "Rus tilida"
+
+msgid "In Uzbek"
+msgstr "Oʻzbek tilida"
+
+msgid ""
+"Nothing found. Try another word, for example the name of a symptom or a "
+"test."
+msgstr ""
+"Hech narsa topilmadi. Boshqa soʻzni sinab koʻring, masalan, belgi yoki "
+"tekshiruv nomini."
+
+msgid "Type at least two characters."
+msgstr "Kamida ikkita belgi kiriting."
+
+#, python-format
+#| msgid "Search"
+msgid "Search: %(q)s"
+msgstr "Qidiruv: %(q)s"
 
 msgid "Topics"
 msgstr "Mavzular"

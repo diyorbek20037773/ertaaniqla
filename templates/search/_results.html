@@ -1,0 +1,26 @@
+{% load i18n %}
+{% comment %} search/_results.html — results list (also the HTMX partial).
+   Context: query, results (list[SearchResult]), result_count. {% endcomment %}
+{% if query %}
+  <p class="search-results__count">
+    {% blocktrans trimmed count counter=result_count %}{{ counter }} result{% plural %}{{ counter }} results{% endblocktrans %}
+    — <q>{{ query }}</q>
+  </p>
+  {% if results %}
+    <ol class="search-results">
+      {% for result in results %}
+        <li class="search-result" data-section="{{ result.section_key }}" lang="{{ result.language_code }}">
+          <h2 class="search-result__title"><a href="{{ result.url }}">{{ result.title }}</a></h2>
+          {% if result.summary %}<p class="search-result__summary">{{ result.summary }}</p>{% endif %}
+          {% if result.language_code != LANGUAGE_CODE %}
+            <p class="search-result__lang">{% if result.language_code == "ru" %}{% trans "In Russian" %}{% else %}{% trans "In Uzbek" %}{% endif %}</p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="search-results__empty">{% trans "Nothing found. Try another word, for example the name of a symptom or a test." %}</p>
+  {% endif %}
+{% else %}
+  <p class="search-results__hint">{% trans "Type at least two characters." %}</p>
+{% endif %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 12:34+0500\n"
+"POT-Creation-Date: 2026-09-15 13:55+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,6 @@ msgstr "Заголовок"
 msgid "Callout"
 msgstr "Выделенный блок"
 
-#| msgid "job title"
 msgid "Column title"
 msgstr "Заголовок колонки"
 
@@ -100,7 +99,6 @@ msgstr "Шаги"
 msgid "Steps (patient route, self-exam guide)"
 msgstr "Шаги (маршрут пациента, самообследование)"
 
-#| msgid "image"
 msgid "Image"
 msgstr "Изображение"
 
@@ -132,7 +130,6 @@ msgstr "Симптом"
 msgid "Urgency"
 msgstr "Срочность"
 
-#| msgid "organisation"
 msgid "Explanation"
 msgstr "Пояснение"
 
@@ -184,7 +181,6 @@ msgstr "Выберите видео или укажите внешнюю ссы�
 msgid "Only YouTube, Telegram, Instagram and TikTok links are supported."
 msgstr "Поддерживаются только ссылки YouTube, Telegram, Instagram и TikTok."
 
-#| msgid "images"
 msgid "Images"
 msgstr "Изображения"
 
@@ -194,25 +190,21 @@ msgstr "Разрешить скачивание (инфографика)"
 msgid "Image gallery / infographics"
 msgstr "Галерея изображений / инфографика"
 
-#| msgid "document"
 msgid "Document"
 msgstr "Документ"
 
-#| msgid "description"
 msgid "Description"
 msgstr "Описание"
 
 msgid "Document download"
 msgstr "Скачивание документа"
 
-#| msgid "Questions & FAQ"
 msgid "Question"
 msgstr "Вопрос"
 
 msgid "Answer"
 msgstr "Ответ"
 
-#| msgid "Questions & FAQ"
 msgid "Questions"
 msgstr "Вопросы"
 
@@ -222,7 +214,6 @@ msgstr "Аккордеон вопросов / вопросы врачу"
 msgid "Terms"
 msgstr "Термины"
 
-#| msgid "Glossary"
 msgid "Glossary terms"
 msgstr "Термины глоссария"
 
@@ -271,7 +262,6 @@ msgstr "Цитата"
 msgid "Author"
 msgstr "Автор"
 
-#| msgid "organisation"
 msgid "Role / organisation"
 msgstr "Роль / организация"
 
@@ -296,18 +286,15 @@ msgstr "краткое описание"
 msgid "Shown in listings, the mega-menu and search results."
 msgstr "Показывается в списках, мега-меню и результатах поиска."
 
-#| msgid "image"
 msgid "hero image"
 msgstr "главное изображение"
 
 msgid "body"
 msgstr "содержимое"
 
-#| msgid "Articles"
 msgid "article"
 msgstr "статья"
 
-#| msgid "Articles"
 msgid "articles"
 msgstr "статьи"
 
@@ -460,7 +447,6 @@ msgstr "порядок сортировки"
 msgid "region"
 msgstr "регион"
 
-#| msgid "Sections"
 msgid "regions"
 msgstr "регионы"
 
@@ -533,7 +519,6 @@ msgstr "долгота"
 msgid "free under the state programme"
 msgstr "бесплатно по госпрограмме"
 
-#| msgid "Sections"
 msgid "sections"
 msgstr "разделы"
 
@@ -551,14 +536,12 @@ msgid ""
 msgstr ""
 "Идентификатор во внешнем реестре (например, DMED) для будущей синхронизации."
 
-#| msgid "credit / source"
 msgid "external source"
 msgstr "внешний источник"
 
 msgid "Name"
 msgstr "Название"
 
-#| msgid "Sections"
 msgid "Location"
 msgstr "Расположение"
 
@@ -595,18 +578,15 @@ msgstr "Обратная связь"
 msgid "Glossary"
 msgstr "Словарь"
 
-#| msgid "Sections"
 msgid "Both sections"
 msgstr "Оба раздела"
 
 msgid "term"
 msgstr "термин"
 
-#| msgid "description"
 msgid "definition"
 msgstr "определение"
 
-#| msgid "Sections"
 msgid "section"
 msgstr "раздел"
 
@@ -617,25 +597,21 @@ msgid "Comma-separated alternative spellings (e.g. Cyrillic, abbreviations)."
 msgstr ""
 "Альтернативные написания через запятую (например, кириллица, сокращения)."
 
-#| msgid "Glossary"
 msgid "glossary term"
 msgstr "термин глоссария"
 
-#| msgid "Glossary"
 msgid "glossary terms"
 msgstr "термины глоссария"
 
 msgid "Home"
 msgstr "Главная"
 
-#| msgid "job title"
 msgid "hero title"
 msgstr "главный заголовок"
 
 msgid "Key idea of the portal — early detection. Filled by the copywriter."
 msgstr "Ключевая идея портала — раннее выявление. Заполняет копирайтер."
 
-#| msgid "job title"
 msgid "hero subtitle"
 msgstr "подзаголовок"
 
@@ -652,7 +628,6 @@ msgstr ""
 msgid "statistics strip (3 stats)"
 msgstr "полоса статистики (3 показателя)"
 
-#| msgid "Skip to main content"
 msgid "additional content"
 msgstr "дополнительное содержимое"
 
@@ -665,11 +640,9 @@ msgstr "Избранные статьи"
 msgid "Featured videos"
 msgstr "Избранные видео"
 
-#| msgid "Go to the home page"
 msgid "home page"
 msgstr "главная страница"
 
-#| msgid "created at"
 msgid "featured article"
 msgstr "избранная статья"
 
@@ -739,7 +712,6 @@ msgstr "Готово"
 msgid "Failed"
 msgstr "Ошибка"
 
-#| msgid "job title"
 msgid "title"
 msgstr "заголовок"
 
@@ -764,7 +736,6 @@ msgstr "длительность (секунды)"
 msgid "doctor's name"
 msgstr "имя врача"
 
-#| msgid "organisation"
 msgid "doctor's organisation"
 msgstr "организация врача"
 
@@ -780,7 +751,6 @@ msgstr "субтитры (ru, VTT)"
 msgid "status"
 msgstr "статус"
 
-#| msgid "Sections"
 msgid "renditions"
 msgstr "версии"
 
@@ -885,6 +855,9 @@ msgstr "пользователи"
 msgid "Erta aniqla"
 msgstr "Эрта аниқла"
 
+msgid "qidiruv/"
+msgstr "poisk/"
+
 msgid "Page not found"
 msgstr "Страница не найдена"
 
@@ -934,7 +907,6 @@ msgstr "Успокоение"
 msgid "Note"
 msgstr "Примечание"
 
-#| msgid "Skip to main content"
 msgid "Load content"
 msgstr "Загрузить содержимое"
 
@@ -950,7 +922,6 @@ msgstr "Создан в соответствии с Постановлениям
 msgid "Partners"
 msgstr "Партнёры"
 
-#| msgid "Erta aniqla"
 msgid "Erta aniqla — home"
 msgstr "Эрта аниқла — главная"
 
@@ -985,6 +956,12 @@ msgstr "Проверено врачом"
 msgid "Verified by a doctor"
 msgstr "Проверено врачом"
 
+msgid "Search the site"
+msgstr "Поиск по сайту"
+
+msgid "e.g. mammography"
+msgstr "например, маммография"
+
 msgid "Timing"
 msgstr "Сроки"
 
@@ -1007,7 +984,6 @@ msgstr ""
 msgid "Filter institutions"
 msgstr "Фильтр учреждений"
 
-#| msgid "Sections"
 msgid "Section"
 msgstr "Раздел"
 
@@ -1030,12 +1006,41 @@ msgstr[2] "%(counter)s учреждений"
 msgid "Map will be shown here."
 msgstr "Здесь будет карта."
 
-#| msgid "description"
 msgid "Open section"
 msgstr "Открыть раздел"
 
 msgid "Key figures"
 msgstr "Ключевые цифры"
+
+#, python-format
+#| msgid "%(counter)s institution"
+#| msgid_plural "%(counter)s institutions"
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] "%(counter)s результат"
+msgstr[1] "%(counter)s результата"
+msgstr[2] "%(counter)s результатов"
+
+msgid "In Russian"
+msgstr "На русском"
+
+msgid "In Uzbek"
+msgstr "На узбекском"
+
+msgid ""
+"Nothing found. Try another word, for example the name of a symptom or a "
+"test."
+msgstr ""
+"Ничего не найдено. Попробуйте другое слово, например название симптома или "
+"обследования."
+
+msgid "Type at least two characters."
+msgstr "Введите не менее двух символов."
+
+#, python-format
+#| msgid "Search"
+msgid "Search: %(q)s"
+msgstr "Поиск: %(q)s"
 
 msgid "Topics"
 msgstr "Темы"

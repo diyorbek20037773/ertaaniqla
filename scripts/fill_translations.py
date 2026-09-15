@@ -1,7 +1,7 @@
-"""One-off: fill uz/ru translations for the M1 strings (run after `make messages`).
+"""Fill uz/ru translations for UI strings (run after `make messages`).
 
 Kept in the repo so the wording is reviewable; safe to re-run (only fills empty entries).
-Usage: python scripts/translations_m1.py
+Usage: python scripts/fill_translations.py
 """
 
 from __future__ import annotations
@@ -403,6 +403,21 @@ T: dict[str, tuple[str, str]] = {
     "Key figures": ("Asosiy raqamlar", "Ключевые цифры"),
     "Topics": ("Mavzular", "Темы"),
     "Articles will appear here.": ("Maqolalar shu yerda paydo boʻladi.", "Здесь появятся статьи."),
+    # M2 — search
+    "qidiruv/": ("qidiruv/", "poisk/"),
+    "Search the site": ("Sayt boʻylab qidirish", "Поиск по сайту"),
+    "e.g. mammography": ("masalan, mammografiya", "например, маммография"),
+    "In Russian": ("Rus tilida", "На русском"),
+    "In Uzbek": ("Oʻzbek tilida", "На узбекском"),
+    "Nothing found. Try another word, for example the name of a symptom or a test.": (
+        "Hech narsa topilmadi. Boshqa soʻzni sinab koʻring, masalan, belgi yoki tekshiruv nomini.",
+        "Ничего не найдено. Попробуйте другое слово, например название симптома или обследования.",
+    ),
+    "Type at least two characters.": (
+        "Kamida ikkita belgi kiriting.",
+        "Введите не менее двух символов.",
+    ),
+    "Search: %(q)s": ("Qidiruv: %(q)s", "Поиск: %(q)s"),
 }
 
 # msgid: (uz forms, ru forms)  — uz has 1 plural form, ru has 3
@@ -410,6 +425,10 @@ P: dict[str, tuple[list[str], list[str]]] = {
     "%(minutes)s min read": (
         ["%(minutes)s daqiqa oʻqish"],
         ["%(minutes)s минута чтения", "%(minutes)s минуты чтения", "%(minutes)s минут чтения"],
+    ),
+    "%(counter)s result": (
+        ["%(counter)s ta natija"],
+        ["%(counter)s результат", "%(counter)s результата", "%(counter)s результатов"],
     ),
     "%(counter)s institution": (
         ["%(counter)s ta muassasa"],
@@ -477,6 +496,7 @@ F: dict[str, tuple[str, str]] = {
     "Erta aniqla — home": ("Erta aniqla — bosh sahifa", "Эрта аниқла — главная"),
     "Section": ("Boʻlim", "Раздел"),
     "Open section": ("Boʻlimni ochish", "Открыть раздел"),
+    "Search: %(q)s": ("Qidiruv: %(q)s", "Поиск: %(q)s"),
 }
 
 
@@ -485,10 +505,14 @@ def unfuzzy(lang: str, index: int) -> int:
     po = polib.pofile(str(path))
     fixed = 0
     for entry in po.fuzzy_entries():
-        if entry.msgid in F:
+        if entry.msgid_plural and entry.msgid in P:
+            entry.msgstr_plural = dict(enumerate(P[entry.msgid][index]))
+        elif entry.msgid in F:
             entry.msgstr = F[entry.msgid][index]
-            entry.flags = [f for f in entry.flags if f != "fuzzy"]
-            fixed += 1
+        else:
+            continue
+        entry.flags = [f for f in entry.flags if f != "fuzzy"]
+        fixed += 1
     po.save(str(path))
     return fixed
 

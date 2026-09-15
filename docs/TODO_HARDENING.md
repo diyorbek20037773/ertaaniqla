@@ -9,3 +9,4 @@ here. Each item: what, why, where.
 | H-002 | infra | Move `/metrics` basic-auth to nginx `auth_basic` + IP allow-list once Prometheus host is known (M6). | `docker/nginx` |
 | H-003 | search | Upgrade path to Meilisearch if Postgres FTS relevance is insufficient on real content. | `apps/search` |
 | H-004 | ops | PgBouncer when concurrent DB connections exceed 200 (spec §11.1). | `compose.prod.yml` |
+| H-005 | search | Move the uz/ru synonym list to a CMS snippet once editors want to maintain it; add `AutocompleteField` on `summary` and per-locale relevance boosting. | `apps/search/synonyms.py` |

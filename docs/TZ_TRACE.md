@@ -73,7 +73,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | F14 | Parents' glossary | `apps/glossary` Term + tooltip tag | `tests/glossary` | M4 | todo |
 | F15 | Questions-to-ask-the-doctor checklists (both sections) | `faq_accordion` block | `tests/articles/test_blocks.py::test_faq_accordion_uses_details` | M2/M5 | wip (faq_accordion block + placeholders; print M5) |
 | F16 | Support groups / psychological help contacts | `Institution.kind=psych_support|ngo` + care pages | `tests/directory` | M4 | todo |
-| F17 | Statistics blocks (Uzbekistan) | `stat` block | `tests/articles/test_blocks.py::test_stat_render` | M2 | wip (stat block + placeholders; design M2) |
+| F17 | Statistics blocks (Uzbekistan) | `stat` block, home stats strip; values = placeholders until doctors provide data | `tests/articles/test_blocks.py::test_stat_render`, `tests/home/test_home.py` | M2 | done (structure) |
 
 ## E. Recommended additions A1–A8 (spec §2.5)
 
@@ -82,7 +82,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | A1 | Screening eligibility helper | `apps/tools/screening.py` (table-driven) | `tests/tools/test_screening.py` (every boundary) | M4 | todo |
 | A2 | Self-check checklists (women; children warning signs) | `apps/tools/selfcheck.py` | `tests/tools/test_selfcheck.py` | M4 | todo |
 | A3 | Ask-a-question + moderated FAQ | `apps/faq` | `tests/faq` | M4 | todo |
-| A4 | Full-text search (FTS, uz/ru, accent-insensitive) | `apps/search` + core migration `ertaaniqla` config | `tests/search` | M2 | todo |
+| A4 | Full-text search (FTS, uz/ru, accent-insensitive) | `apps/search` (services, synonyms, translit), core migration `ertaaniqla` config, HTMX + non-JS form | `tests/search/test_search.py`, `tests/search/test_translit.py` | M2 | done |
 | A5 | Printable/PDF key pages | print CSS | `tests/e2e/test_print.py` | M5 | todo |
 | A6 | Telegram deep links + blogger materials page | `share.html`, `MaterialsPage` | `tests/core/test_seo.py` | M5 | todo |
 | A7 | Yandex.Metrika behind consent; no ad trackers | `apps/analytics` | `tests/analytics` | M5 | todo |
@@ -97,7 +97,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | E-03 | Admin not at `/admin/`; CMS at `/cms/`; 2FA; axes lockout | `config/urls.py`, settings | `tests/core/test_infra.py` | M0/M7 | wip |
 | E-04 | PII encrypted at rest, key rotation | `apps/core/fields.py` | `tests/core/test_fields.py` | M0 | wip |
 | E-05 | CSP nonce, security headers | settings, nginx | `tests/core/test_infra.py` | M0/M6 | wip |
-| E-06 | FTS config with unaccent | `apps/core/migrations/0001` | `tests/search` | M0/M2 | wip |
+| E-06 | FTS config with unaccent | `apps/core/migrations/0001`, `apps/search` | `tests/search` | M0/M2 | done |
 | E-07 | Docker multi-stage, compose dev/prod, Makefile §15, CI quality job | `docker/`, `compose*.yml`, `Makefile`, `.github/workflows/ci.yml` | CI | M0 | wip |
 | E-08 | Coverage ≥ 85 %, ruff, mypy strict on core/tools/directory/feedback | `pyproject.toml` | CI | M0 | wip |
 | E-09 | Translations complete uz+ru (CI check) | `scripts/check_translations.py` | CI | M0 | wip |

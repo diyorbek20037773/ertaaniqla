@@ -15,7 +15,7 @@
 > `templates/components/*.html` / `templates/blocks/*.html` (tuzilma) fayllarida. Figma
 > dizaynini qo'llash = faqat shu fayllarni o'zgartirish, **Python o'zgarmaydi**.
 
-Last updated: 2026-09-15 (M1). Screenshots at 390 px: `tests/e2e/screenshots/`.
+Last updated: 2026-09-15 (M2). Screenshots at 390 px: `tests/e2e/screenshots/`.
 
 ## 1. Design tokens / Токены / Tokenlar — `static/src/tokens.css`
 
@@ -24,7 +24,7 @@ Last updated: 2026-09-15 (M1). Screenshots at 390 px: `tests/e2e/screenshots/`.
 | `--neutral-0…900` | Серая шкала (фон, текст, границы) | Kulrang shkala (fon, matn, chegaralar) | #fff → #111 |
 | `--info/--warning/--danger/--success` + `*-bg` | Семантические цвета (уведомления, срочность симптомов) | Semantik ranglar (ogohlantirish, belgilar shoshilinchligi) | blue / amber / red / green |
 | `--brand-w`, `--brand-w-soft` | Идентичность раздела «Женский рак» 🎗 | «Ayollar saratoni» bo'limi identikasi 🎗 | rose #b8336a |
-| `--brand-c`, `--brand-c-soft` | Идентичность раздела «Детский рак» 🎀 | «Bolalar saratoni» bo'limi identikasi 🎀 | amber #b5780a |
+| `--brand-c`, `--brand-c-soft` | Идентичность раздела «Детский рак» 🎀 | «Bolalar saratoni» bo'limi identikasi 🎀 | amber #8a5a00 |
 | `--brand`, `--brand-soft`, `--brand-contrast` | Активный цвет раздела; переключается `body[data-section]` | Faol bo'lim rangi; `body[data-section]` orqali almashadi | neutral outside sections |
 | `--font-sans`, `--text-base` (18px), `--leading`, `--measure` (70ch) | Типографика | Tipografika | system font |
 | `--space-1…12`, `--radius`, `--tap-target` (44px), `--container` | Отступы, радиусы, размер касания | Bo'shliqlar, radius, bosish maydoni | 4px grid |
@@ -42,6 +42,7 @@ Editors may override `--brand`/`--brand-soft` per section from the CMS (`Section
 | `sections/topic_index_page.html` | TopicIndexPage | заголовок, summary, intro, сетка карточек статей (картинка, заголовок, summary, время чтения) | Mavzu sarlavhasi, maqola kartalari | empty state («Articles will appear here») |
 | `articles/article_page.html` | ArticlePage | заголовок, summary, page-meta (время чтения, бейдж «Проверено врачом»), hero image, блоки body, дисклеймер | Maqola sahifasi | with/without hero image, verified badge |
 | `directory/directory_page.html` | DirectoryPage | заголовок, intro, форма фильтров (регион, тип, раздел, бесплатно), счётчик, карточки учреждений, заглушка карты | Muassasalar katalogi | empty results; map placeholder (M4: Leaflet + HTMX) |
+| `search/search.html` + `search/_results.html` | search view (`/uz/qidiruv/?q=`, `/ru/poisk/?q=`) | заголовок, форма поиска, счётчик, список результатов (заголовок, summary, метка языка, цвет раздела), пустое состояние, подсказка | Qidiruv sahifasi | no query / results / empty; HTMX partial = `_results.html` |
 | `404.html`, `429.html`, `500.html`, `core/lockout.html` | errors | текст + ссылка на главную | Xato sahifalari | — |
 
 ## 3. Components / Компоненты / Komponentlar — `templates/components/`
@@ -64,6 +65,7 @@ Each partial documents its context variables in a header comment. CSS block of t
 | `video.html` | Плеер (HTML5 + VTT uz/ru + постер) или провайдер-embed; спикер; подпись; транскрипт (`<details>`) | Video pleer / embed, transkript | `video, embed, caption, transcript` | upload ready / processing / external; vertical 9:16 |
 | `embed_frame.html` | iframe YouTube/Telegram; **click-to-load** фасад для Instagram/TikTok; `<noscript>` ссылка | Provayder iframe / bosib yuklash fasadi | `embed{provider,src,vertical,click_to_load}` | facade / loaded / no-JS |
 | `institution_card.html` | Карточка учреждения: название, тип, «бесплатно по госпрограмме», адрес, телефон, часы, услуги, сайт, дата проверки | Muassasa kartasi | `institution` | free badge on/off; no phone/hours |
+| `search_form.html` | Поле поиска (GET-форма; на странице поиска — HTMX «поиск при вводе») | Qidiruv maydoni | `query, autofocus, results_target` | plain / HTMX live |
 | `footer.html` | Подвал: дисклеймер (обязателен), горячая линия, соцсети, текст, ПП-402/186, логотипы партнёров (Агентство, Яндекс, Hamroh) | Pastki qism | `SiteSettings` | logos present / placeholders |
 
 ## 4. Content blocks / Блоки контента / Kontent bloklari — `templates/blocks/`

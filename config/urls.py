@@ -13,6 +13,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from django.utils.translation import gettext_lazy as _
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -41,6 +42,8 @@ if settings.DEBUG:
 
 urlpatterns += i18n_patterns(
     path("sitemap.xml", core_views.sitemap_language, name="sitemap_language"),
+    # translated URL segment: uz "qidiruv/", ru "poisk/" (spec §4.4)
+    path(_("qidiruv/"), include("apps.search.urls")),
     # Wagtail serves every page (sections, articles, tools pages, directory, faq, …)
     path("", include(wagtail_urls)),
     prefix_default_language=True,

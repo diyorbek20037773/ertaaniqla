@@ -71,7 +71,12 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] `docs/COMPONENT_INVENTORY.md` (ru+uz), `docs/CONTENT_MODEL.md`, DECISIONS D-010…D-015, TZ_TRACE rows updated
   - [x] 238 new UI strings translated uz+ru (`scripts/translations_m1.py`), check green
   - [x] Gate: `test_every_live_page_returns_200_in_both_languages` (54 pages), `assertNumQueries` ≤ 40 on section index, translations complete, Playwright 390 px screenshots (10) in `tests/e2e/screenshots/`, menu + language-switch e2e green; coverage 94.65 %; ruff/mypy clean; `check --deploy` OK
-- [ ] M2 — Components, home, search (structure + a11y only; no visual polish)
+- [x] **M2 — Components, home, search** — DONE, tagged `m2` (structure + a11y only, D-003)
+  - [x] every block rendered with structure/a11y in both locales (`test_every_block_renders_in_both_locales`); steps, columns, cards, symptom urgency (colour + icon + text), stat, callouts, table, faq `<details>`, quote, cta, embed click-to-load — all from M1
+  - [x] home: section cards, stats strip, featured articles/videos, settings banner (M1) — verified by `tests/home`
+  - [x] search: `apps/search` — Postgres FTS (`ertaaniqla` = simple + unaccent) over both locales, uz/ru synonym groups, Latin↔Cyrillic transliteration, apostrophe normalisation, FTS + title autocomplete merge, visitor language first; view at `/uz/qidiruv/?q=` / `/ru/poisk/?q=` (translated URL segment), HTMX search-as-you-type + plain GET fallback; `rebuild_search` command
+  - [x] axe-core (Playwright init script, CSP-safe) on 6 pages: 0 serious/critical (children brand darkened to #8a5a00 for 4.5:1)
+  - [x] Gate: search tests (uz "saraton" → ru «рак» pages; «скрининг» → `/uz/ayollar/skrining/`), block render both locales, a11y e2e green, coverage 95 %
 - [ ] M3 — Media & stories
 - [ ] M4 — Directory, tools, FAQ, feedback, glossary
 - [ ] M5 — SEO, a11y, perf, print, blogger kit (structure only; no visual polish)
@@ -99,9 +104,10 @@ curl :8001 → /uz/ /ru/ sections, topics, articles, directory all 200; /uz/qaye
 
 ## Next concrete action
 
-Start **M2 — Components, home, search** (structure + a11y only, no visual polish):
-`apps/search` (Postgres FTS view `/uz/qidiruv/?q=`, uz/ru synonyms, Latin↔Cyrillic normaliser,
-HTMX search-as-you-type + non-JS form), home featured logic already exists; axe (Playwright)
-0 serious on 5 pages; block render tests in both locales already exist — extend for search.
-Remember: web container must be restarted after adding new templatetag modules
-(`docker compose -f compose.yml -f compose.dev.yml restart web`).
+Start **M3 — Media & stories**: Celery `transcode_video` (ffmpeg 720p/480p + poster, status
+machine on `media_library.Video`), VTT subtitles already on the model, galleries/documents
+exist as blocks; OG image generation task (Pillow, section colour) on publish;
+`stories.PatientStoryPage` with consent enforcement (`consent_obtained`, `consent_guardian`
+for minors, private consent document, `is_anonymised`), stories index at `/uz/hikoyalar/`.
+ffmpeg: not on host PATH — check `Get-Command ffmpeg`; the Docker image has it (CI installs it).
+Remember: restart the web container after adding new templatetag/app modules.
