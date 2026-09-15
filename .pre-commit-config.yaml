@@ -1,0 +1,31 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: ["--maxkb=2048"]
+      - id: detect-private-key
+      - id: check-merge-conflict
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.9
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: no-env-file
+        name: never commit .env
+        entry: bash -c 'git diff --cached --name-only | grep -Ex "\.env(\..*)?" | grep -vx "\.env\.example" && { echo ".env must not be committed"; exit 1; } || exit 0'
+        language: system
+        pass_filenames: false
+      - id: no-todo-in-prod-code
+        name: no TODO/NotImplementedError in apps/ and config/
+        entry: bash -c 'grep -rnE "NotImplementedError|# TODO|\[\[TODO" apps config --include=*.py | grep -v "seed_content" | grep -v "migrations" && exit 1 || exit 0'
+        language: system
+        pass_filenames: false

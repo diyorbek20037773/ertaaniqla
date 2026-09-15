@@ -1,0 +1,11 @@
+{# ---------------------------------------------------------------------------
+   components/nav.html — primary navigation (wireframe). Filled with the two section
+   mega-menus + language switcher in M1. Context: request, LANGUAGE_CODE.
+   --------------------------------------------------------------------------- #}
+{% load i18n %}
+<nav class="site-nav" aria-label="{% trans 'Main navigation' %}">
+  <ul class="site-nav__list">
+    <li><a href="/{{ LANGUAGE_CODE }}/">{% trans "Home" %}</a></li>
+  </ul>
+  {% include "components/lang_switch.html" %}
+</nav>

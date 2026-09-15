@@ -1,0 +1,103 @@
+# Base services (spec §11.1). Overrides: compose.dev.yml / compose.prod.yml.
+name: ertaaniqla
+
+x-app: &app
+  image: ${WEB_IMAGE:-ertaaniqla/web:local}
+  build:
+    context: .
+    dockerfile: docker/web/Dockerfile
+    args:
+      APP_RELEASE: ${APP_RELEASE:-dev}
+      INSTALL_DEV: ${INSTALL_DEV:-0}
+  env_file: .env
+  environment:
+    DATABASE_URL: postgres://${POSTGRES_USER:-ertaaniqla}:${POSTGRES_PASSWORD:-ertaaniqla}@db:5432/${POSTGRES_DB:-ertaaniqla}
+    REDIS_URL: redis://redis:6379/0
+    CELERY_BROKER_URL: redis://redis:6379/1
+    CELERY_RESULT_BACKEND: redis://redis:6379/2
+  volumes:
+    - media:/srv/media
+    - static:/app/staticfiles
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ertaaniqla}
+      POSTGRES_USER: ${POSTGRES_USER:-ertaaniqla}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ertaaniqla}
+      POSTGRES_INITDB_ARGS: "--locale=C.UTF-8 --encoding=UTF8"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ertaaniqla} -d ${POSTGRES_DB:-ertaaniqla}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "512mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  migrate:
+    <<: *app
+    command: ["migrate"]
+    restart: "no"
+
+  web:
+    <<: *app
+    command: ["web"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/scripts/healthcheck.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  worker:
+    <<: *app
+    command: ["worker"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  beat:
+    <<: *app
+    command: ["beat"]
+    depends_on:
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
+  redisdata:
+  media:
+  static:

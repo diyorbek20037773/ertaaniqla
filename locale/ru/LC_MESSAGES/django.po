@@ -1,0 +1,175 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-15 11:24+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Analytics"
+msgstr "Аналитика"
+
+msgid "Articles"
+msgstr "Статьи"
+
+msgid "Core"
+msgstr "Ядро"
+
+msgid "created at"
+msgstr "создано"
+
+msgid "updated at"
+msgstr "обновлено"
+
+msgid "Directory"
+msgstr "Каталог учреждений"
+
+msgid "Questions & FAQ"
+msgstr "Вопросы и ответы"
+
+msgid "Feedback"
+msgstr "Обратная связь"
+
+msgid "Glossary"
+msgstr "Словарь"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Media library"
+msgstr "Медиатека"
+
+msgid "credit / source"
+msgstr "автор / источник"
+
+msgid "decorative (no alt text needed)"
+msgstr "декоративное (alt-текст не нужен)"
+
+msgid ""
+"Only for purely decorative images. Content images must describe themselves."
+msgstr ""
+"Только для чисто декоративных изображений. Содержательные изображения должны"
+" иметь описание."
+
+msgid "image"
+msgstr "изображение"
+
+msgid "images"
+msgstr "изображения"
+
+msgid "private (consent forms etc.)"
+msgstr "приватный (формы согласия и т. п.)"
+
+msgid "Private documents are served only to logged-in CMS users."
+msgstr "Приватные документы доступны только авторизованным пользователям CMS."
+
+msgid "description"
+msgstr "описание"
+
+msgid "document"
+msgstr "документ"
+
+msgid "documents"
+msgstr "документы"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Sections"
+msgstr "Разделы"
+
+msgid "Stories"
+msgstr "Истории"
+
+msgid "Tools"
+msgstr "Инструменты"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "organisation"
+msgstr "организация"
+
+msgid ""
+"e.g. RONC, Mother & Child Health Centre — shown on the 'verified by' badge"
+msgstr ""
+"например, РОНЦ, Центр здоровья матери и ребёнка — показывается на бейдже "
+"«Проверено врачом»"
+
+msgid "job title"
+msgstr "должность"
+
+msgid "user"
+msgstr "пользователь"
+
+msgid "users"
+msgstr "пользователи"
+
+msgid "Erta aniqla"
+msgstr "Эрта аниқла"
+
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+msgid "The page you are looking for does not exist or has moved."
+msgstr "Запрашиваемая страница не существует или была перемещена."
+
+msgid "Go to the home page"
+msgstr "Перейти на главную"
+
+msgid "Too many requests"
+msgstr "Слишком много запросов"
+
+msgid "Please wait a minute and try again."
+msgstr "Пожалуйста, подождите минуту и попробуйте снова."
+
+msgid "Server error"
+msgstr "Ошибка сервера"
+
+msgid ""
+"Something went wrong on our side. We have been notified. Please try again "
+"later."
+msgstr ""
+"На нашей стороне произошла ошибка. Мы уже получили уведомление. Пожалуйста, "
+"попробуйте позже."
+
+msgid "Skip to main content"
+msgstr "Перейти к основному содержимому"
+
+msgid ""
+"This site is an information and education resource. It does not make a "
+"diagnosis. If you notice symptoms, contact a doctor."
+msgstr ""
+"Этот сайт — информационно-образовательный ресурс. Он не ставит диагноз. Если"
+" вы заметили симптомы, обратитесь к врачу."
+
+msgid "Built under Presidential Resolutions PP-402 and PP-186."
+msgstr "Создан в соответствии с Постановлениями Президента ПП-402 и ПП-186."
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Main navigation"
+msgstr "Основная навигация"
+
+msgid "Account temporarily locked"
+msgstr "Аккаунт временно заблокирован"
+
+msgid ""
+"Too many failed sign-in attempts. Please try again in one hour or contact "
+"the administrator."
+msgstr ""
+"Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к"
+" администратору."

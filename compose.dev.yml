@@ -1,0 +1,48 @@
+# Dev overrides: bind mounts, runserver, Mailpit, published ports.
+services:
+  db:
+    ports:
+      - "5433:5432"   # 5432 is often taken by a local Postgres (DECISIONS D-002)
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  migrate:
+    volumes:
+      - .:/app
+      - media:/srv/media
+
+  web:
+    command: ["runserver"]
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      DJANGO_DEBUG: "true"
+      EMAIL_URL: smtp://mailpit:1025
+      CELERY_TASK_ALWAYS_EAGER: "false"
+    volumes:
+      - .:/app
+      - media:/srv/media
+    ports:
+      - "${WEB_PORT:-8000}:8000"   # WEB_PORT in .env if 8000 is taken on the host
+
+  worker:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      EMAIL_URL: smtp://mailpit:1025
+    volumes:
+      - .:/app
+      - media:/srv/media
+
+  beat:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+    volumes:
+      - .:/app
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped

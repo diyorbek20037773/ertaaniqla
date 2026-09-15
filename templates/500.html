@@ -1,0 +1,16 @@
+{% load i18n static %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'uz' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% trans "Server error" %} — {% trans "Erta aniqla" %}</title>
+  <link rel="stylesheet" href="{% static 'dist/main.css' %}">
+</head>
+<body>
+  <main id="main" class="container prose">
+    <h1>{% trans "Server error" %}</h1>
+    <p>{% trans "Something went wrong on our side. We have been notified. Please try again later." %}</p>
+    <p><a href="/">{% trans "Go to the home page" %}</a></p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,157 @@
+[project]
+name = "ertaaniqla"
+version = "0.1.0"
+description = "Erta aniqla — onco-awareness portal (Django + Wagtail), bilingual uz/ru"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Proprietary" }
+dependencies = [
+    "Django>=5.2,<5.3",
+    "wagtail>=7.0,<7.1",
+    "wagtail-localize>=1.14,<1.15",
+    "psycopg[binary]>=3.2",
+    "redis>=5.2",
+    "django-redis>=5.4",
+    "celery[redis]>=5.4",
+    "django-environ>=0.12",
+    "django-csp>=4.0",
+    "django-axes>=7.0",
+    "django-otp>=1.6",
+    "wagtail-2fa>=1.8",
+    "django-ratelimit>=4.1",
+    "django-crispy-forms>=2.3",
+    "crispy-tailwind>=1.0",
+    "django-storages>=1.14",
+    "python-magic>=0.4.27",
+    "Pillow>=11.0",
+    "whitenoise[brotli]>=6.8",
+    "gunicorn>=23.0",
+    "sentry-sdk[django]>=2.20",
+    "django-prometheus>=2.3",
+    "python-json-logger>=3.2",
+    "django-waffle>=4.2",
+    "django-extensions>=3.2",
+    "cryptography>=43.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9",
+    "mypy>=1.14",
+    "django-stubs[compatible-mypy]>=5.1",
+    "celery-types>=0.22",
+    "types-polib",
+    "pytest>=8.3",
+    "pytest-django>=4.9",
+    "pytest-cov>=6.0",
+    "factory-boy>=3.3",
+    "wagtail-factories>=4.2",
+    "freezegun>=1.5",
+    "django-debug-toolbar>=5.0",
+    "playwright>=1.49",
+    "pytest-playwright>=0.6",
+    "polib>=1.2",
+    "pre-commit>=4.0",
+    "pip-audit>=2.7",
+    "python-magic-bin>=0.4.14; sys_platform == 'win32'",
+]
+
+# ---------------------------------------------------------------------------
+# ruff
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/migrations/**", ".venv", "node_modules", "static/dist"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W",      # pycodestyle / pyflakes
+    "I",                # isort
+    "UP",               # pyupgrade
+    "B",                # bugbear
+    "DJ",               # flake8-django
+    "S",                # bandit (security)
+    "T20",              # no print
+    "SIM",              # simplify
+    "C4",               # comprehensions
+    "RUF",
+]
+ignore = [
+    "RUF012",  # mutable class attrs — idiomatic in Django/Wagtail
+    "S101",    # assert — used in tests
+    "DJ001",   # null=True on CharField is used deliberately for optional PII fields
+    "RUF001", "RUF002", "RUF003",  # Uzbek Latin uses U+02BB (ʻ) by design (ADR-0003)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "DJ", "T20"]
+"scripts/**" = ["T20", "S"]
+"config/settings/**" = ["F403", "F405"]
+"**/management/commands/**" = ["T20"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ---------------------------------------------------------------------------
+# mypy
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+plugins = ["mypy_django_plugin.main"]
+files = ["apps", "config"]
+exclude = ["migrations/", "node_modules/", ".venv/"]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+check_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+# Wagtail ships no type stubs: its abstract models/pages are `Any`
+disallow_subclassing_any = false
+disable_error_code = ["django-manager-missing"]
+
+# strict on the apps the spec names (§6)
+[[tool.mypy.overrides]]
+module = ["apps.core.*", "apps.tools.*", "apps.directory.*", "apps.feedback.*"]
+# explicit strict flags (mypy ignores `strict` in per-module sections);
+# subclassing Any / generic Any stay allowed because Wagtail is untyped
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+warn_return_any = true
+strict_equality = true
+no_implicit_reexport = true
+extra_checks = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+addopts = "-ra -q --strict-markers --reuse-db"
+markers = [
+    "e2e: Playwright browser tests (need a running server)",
+    "integration: needs docker services (postgres/redis/ffmpeg)",
+]
+filterwarnings = ["ignore::DeprecationWarning:wagtail.*"]
+
+[tool.coverage.run]
+source = ["apps"]
+omit = ["*/migrations/*", "*/tests/*", "*/management/commands/seed_*.py"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_covered = true
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError"]

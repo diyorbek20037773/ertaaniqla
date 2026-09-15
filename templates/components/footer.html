@@ -1,0 +1,23 @@
+{# ---------------------------------------------------------------------------
+   components/footer.html — site footer (wireframe).
+   Context: request, LANGUAGE_CODE, settings (Wagtail site settings from M1: hotline,
+   social links, partner logos, legal texts). Always shows the medical disclaimer (spec §8).
+   --------------------------------------------------------------------------- #}
+{% load i18n %}
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <p class="site-footer__disclaimer">
+      {% blocktrans trimmed %}
+        This site is an information and education resource. It does not make a diagnosis.
+        If you notice symptoms, contact a doctor.
+      {% endblocktrans %}
+      <span class="placeholder">[[TODO: content — copywriter: final disclaimer text]]</span>
+    </p>
+    <p class="site-footer__legal">
+      {% blocktrans trimmed %}Built under Presidential Resolutions PP-402 and PP-186.{% endblocktrans %}
+    </p>
+    <p class="site-footer__partners">
+      <span class="placeholder">[[TODO: partner logos — Agency, Yandex, Hamroh]]</span>
+    </p>
+  </div>
+</footer>

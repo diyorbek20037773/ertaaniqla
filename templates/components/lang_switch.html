@@ -1,0 +1,19 @@
+{# ---------------------------------------------------------------------------
+   components/lang_switch.html — language switcher.
+   Context: request, LANGUAGE_CODE. In M1 it links to the translated counterpart of the
+   current page (wagtail-localize); until then it links to the language root.
+   Non-JS: plain links (no form needed).
+   --------------------------------------------------------------------------- #}
+{% load i18n %}
+{% get_available_languages as LANGUAGES %}
+<ul class="lang-switch" aria-label="{% trans 'Language' %}">
+  {% for code, name in LANGUAGES %}
+    <li>
+      {% if code == LANGUAGE_CODE %}
+        <span class="lang-switch__current" aria-current="true" lang="{{ code }}">{{ name }}</span>
+      {% else %}
+        <a class="lang-switch__link" href="/{{ code }}/" hreflang="{{ code }}" lang="{{ code }}" rel="alternate">{{ name }}</a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,72 @@
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Wireframe base styles. Component-level rules live next to their partials as
+   classes here (one block per templates/components/*.html) so the designer can
+   restyle each component in isolation (DECISIONS D-003).
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: calc(var(--text-base) * var(--font-scale));
+    line-height: var(--leading);
+    color: var(--neutral-900);
+    background: var(--neutral-0);
+    -webkit-text-size-adjust: 100%;
+  }
+  body { margin: 0; min-height: 100dvh; display: flex; flex-direction: column; }
+  main { flex: 1 0 auto; }
+  a { color: var(--brand); text-decoration: underline; text-underline-offset: 0.15em; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+  }
+  h1, h2, h3 { line-height: 1.25; font-weight: 700; margin: 0 0 var(--space-4); }
+  h1 { font-size: 1.75em; }
+  h2 { font-size: 1.4em; margin-top: var(--space-8); }
+  h3 { font-size: 1.15em; margin-top: var(--space-6); }
+  p, ul, ol { margin: 0 0 var(--space-4); }
+  img, video { max-width: 100%; height: auto; }
+  button, input, select, textarea { font: inherit; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+}
+
+@layer components {
+  .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--space-4); }
+  .prose { max-width: var(--measure); }
+  .placeholder { color: var(--neutral-600); font-style: italic; }
+  .skip-link {
+    position: absolute; left: var(--space-2); top: -100px; z-index: 100;
+    padding: var(--space-2) var(--space-4); background: var(--neutral-900); color: var(--neutral-0);
+  }
+  .skip-link:focus { top: var(--space-2); }
+
+  /* components/header.html */
+  .site-header { border-bottom: 1px solid var(--neutral-200); background: var(--neutral-0); }
+  .site-header__inner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); min-height: 56px; }
+  .site-header__brand { font-weight: 700; text-decoration: none; color: var(--neutral-900); }
+
+  /* components/nav.html */
+  .site-nav { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); margin-left: auto; }
+  .site-nav__list { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0; padding: 0; }
+  .site-nav__list a { display: inline-flex; align-items: center; min-height: var(--tap-target); text-decoration: none; }
+
+  /* components/lang_switch.html */
+  .lang-switch { display: flex; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+  .lang-switch__current { font-weight: 700; padding: var(--space-2); }
+  .lang-switch__link { display: inline-block; padding: var(--space-2); min-height: var(--tap-target); }
+
+  /* components/footer.html */
+  .site-footer { border-top: 1px solid var(--neutral-200); background: var(--neutral-50); padding-block: var(--space-8); font-size: 0.9em; color: var(--neutral-600); }
+}
+
+@media print {
+  .site-header, .site-footer, .skip-link { display: none !important; }
+  a { color: inherit; text-decoration: none; }
+}

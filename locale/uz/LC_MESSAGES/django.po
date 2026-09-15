@@ -1,0 +1,175 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-15 11:24+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Analytics"
+msgstr "Analitika"
+
+msgid "Articles"
+msgstr "Maqolalar"
+
+msgid "Core"
+msgstr "Asosiy"
+
+msgid "created at"
+msgstr "yaratilgan vaqti"
+
+msgid "updated at"
+msgstr "yangilangan vaqti"
+
+msgid "Directory"
+msgstr "Muassasalar katalogi"
+
+msgid "Questions & FAQ"
+msgstr "Savollar va javoblar"
+
+msgid "Feedback"
+msgstr "Qayta aloqa"
+
+msgid "Glossary"
+msgstr "Lugʻat"
+
+msgid "Home"
+msgstr "Bosh sahifa"
+
+msgid "Media library"
+msgstr "Media kutubxona"
+
+msgid "credit / source"
+msgstr "muallif / manba"
+
+msgid "decorative (no alt text needed)"
+msgstr "bezak rasm (alt matn shart emas)"
+
+msgid ""
+"Only for purely decorative images. Content images must describe themselves."
+msgstr ""
+"Faqat bezak uchun rasmlarga. Mazmunli rasmlar oʻzini tavsiflashi shart."
+
+msgid "image"
+msgstr "rasm"
+
+msgid "images"
+msgstr "rasmlar"
+
+msgid "private (consent forms etc.)"
+msgstr "maxfiy (rozilik hujjatlari va h.k.)"
+
+msgid "Private documents are served only to logged-in CMS users."
+msgstr ""
+"Maxfiy hujjatlar faqat tizimga kirgan CMS foydalanuvchilariga koʻrsatiladi."
+
+msgid "description"
+msgstr "tavsif"
+
+msgid "document"
+msgstr "hujjat"
+
+msgid "documents"
+msgstr "hujjatlar"
+
+msgid "Search"
+msgstr "Qidiruv"
+
+msgid "Sections"
+msgstr "Boʻlimlar"
+
+msgid "Stories"
+msgstr "Hikoyalar"
+
+msgid "Tools"
+msgstr "Vositalar"
+
+msgid "Users"
+msgstr "Foydalanuvchilar"
+
+msgid "organisation"
+msgstr "tashkilot"
+
+msgid ""
+"e.g. RONC, Mother & Child Health Centre — shown on the 'verified by' badge"
+msgstr ""
+"masalan, RONIM, Ona va bola salomatligi markazi — «Shifokor tekshirgan» "
+"belgisida koʻrsatiladi"
+
+msgid "job title"
+msgstr "lavozim"
+
+msgid "user"
+msgstr "foydalanuvchi"
+
+msgid "users"
+msgstr "foydalanuvchilar"
+
+msgid "Erta aniqla"
+msgstr "Erta aniqla"
+
+msgid "Page not found"
+msgstr "Sahifa topilmadi"
+
+msgid "The page you are looking for does not exist or has moved."
+msgstr "Siz izlayotgan sahifa mavjud emas yoki koʻchirilgan."
+
+msgid "Go to the home page"
+msgstr "Bosh sahifaga oʻtish"
+
+msgid "Too many requests"
+msgstr "Soʻrovlar juda koʻp"
+
+msgid "Please wait a minute and try again."
+msgstr "Iltimos, bir daqiqa kutib, qayta urinib koʻring."
+
+msgid "Server error"
+msgstr "Server xatosi"
+
+msgid ""
+"Something went wrong on our side. We have been notified. Please try again "
+"later."
+msgstr ""
+"Bizning tomonimizda xatolik yuz berdi. Bu haqda xabar oldik. Iltimos, "
+"keyinroq qayta urinib koʻring."
+
+msgid "Skip to main content"
+msgstr "Asosiy mazmunga oʻtish"
+
+msgid ""
+"This site is an information and education resource. It does not make a "
+"diagnosis. If you notice symptoms, contact a doctor."
+msgstr ""
+"Bu sayt axborot-taʼlim manbasi. U tashxis qoʻymaydi. Belgilarni sezsangiz, "
+"shifokorga murojaat qiling."
+
+msgid "Built under Presidential Resolutions PP-402 and PP-186."
+msgstr "Prezidentning PQ-402 va PQ-186-sonli qarorlari asosida yaratilgan."
+
+msgid "Language"
+msgstr "Til"
+
+msgid "Main navigation"
+msgstr "Asosiy navigatsiya"
+
+msgid "Account temporarily locked"
+msgstr "Hisob vaqtincha bloklangan"
+
+msgid ""
+"Too many failed sign-in attempts. Please try again in one hour or contact "
+"the administrator."
+msgstr ""
+"Tizimga kirishga muvaffaqiyatsiz urinishlar juda koʻp. Bir soatdan soʻng "
+"qayta urinib koʻring yoki administratorga murojaat qiling."

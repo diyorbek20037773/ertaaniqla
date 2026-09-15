@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Account temporarily locked" %}{% endblock %}
+{% block content %}
+<div class="container prose">
+  <h1>{% trans "Account temporarily locked" %}</h1>
+  <p>{% trans "Too many failed sign-in attempts. Please try again in one hour or contact the administrator." %}</p>
+</div>
+{% endblock %}

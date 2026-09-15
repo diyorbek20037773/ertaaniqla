@@ -1,0 +1,129 @@
+# Production overrides (spec §11.1): nginx, limits, logging, backup, monitoring profile.
+# Full nginx/TLS/backup/monitoring wiring is completed in M6; the shape is fixed here.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "50m"
+    max-file: "5"
+
+services:
+  db:
+    command:
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - effective_cache_size=6GB
+      - -c
+      - work_mem=32MB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - wal_level=replica
+      - -c
+      - max_wal_size=2GB
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+    logging: *logging
+
+  redis:
+    deploy:
+      resources:
+        limits:
+          memory: 640m
+    logging: *logging
+
+  migrate:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+    logging: *logging
+
+  web:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      MEDIA_ROOT: /srv/media
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+    logging: *logging
+    expose:
+      - "8000"
+
+  worker:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      MEDIA_ROOT: /srv/media
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    logging: *logging
+
+  beat:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+    logging: *logging
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/sites:/etc/nginx/sites:ro
+      - ./docker/nginx/snippets:/etc/nginx/snippets:ro
+      - static:/srv/static:ro
+      - media:/srv/media:ro
+      - letsencrypt:/etc/letsencrypt:ro
+      - certbot-www:/var/www/certbot:ro
+      - nginx-cache:/var/cache/nginx
+      - /srv/ertaaniqla/maintenance:/srv/maintenance:ro
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *logging
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: ["/bin/sh", "-c", "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done"]
+    restart: unless-stopped
+    logging: *logging
+
+  backup:
+    image: ${WEB_IMAGE:-ertaaniqla/web:local}
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-ertaaniqla}:${POSTGRES_PASSWORD:-ertaaniqla}@db:5432/${POSTGRES_DB:-ertaaniqla}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-ertaaniqla}
+    command: ["backup-cron"]
+    volumes:
+      - media:/srv/media:ro
+      - backups:/backups
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *logging
+
+  clamav:
+    image: clamav/clamav:stable
+    profiles: ["clamav"]
+    volumes:
+      - clamav:/var/lib/clamav
+    restart: unless-stopped
+    logging: *logging
+
+volumes:
+  letsencrypt:
+  certbot-www:
+  nginx-cache:
+  backups:
+  clamav:

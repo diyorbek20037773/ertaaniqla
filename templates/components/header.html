@@ -1,0 +1,13 @@
+{# ---------------------------------------------------------------------------
+   components/header.html — site header (wireframe level, see DECISIONS D-003)
+   Context: request, LANGUAGE_CODE (from i18n), page (optional Wagtail page)
+   States: mobile (menu collapsed), desktop (menu inline). Section colour comes from
+   `data-section` on <body>. Mega-menu + language switch are filled in M1.
+   --------------------------------------------------------------------------- #}
+{% load i18n %}
+<header class="site-header" role="banner">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/{{ LANGUAGE_CODE }}/">{% trans "Erta aniqla" %}</a>
+    {% block header_nav %}{% include "components/nav.html" %}{% endblock %}
+  </div>
+</header>
