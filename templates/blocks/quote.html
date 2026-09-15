@@ -1,0 +1,4 @@
+<figure class="block block--quote quote">
+  <blockquote class="quote__text">{{ value.text|linebreaksbr }}</blockquote>
+  {% if value.author or value.role %}<figcaption class="quote__author">{{ value.author }}{% if value.role %}{% if value.author %}, {% endif %}{{ value.role }}{% endif %}</figcaption>{% endif %}
+</figure>

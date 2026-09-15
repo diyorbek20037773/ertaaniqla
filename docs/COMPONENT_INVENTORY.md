@@ -1,0 +1,108 @@
+# COMPONENT INVENTORY / ИНВЕНТАРЬ КОМПОНЕНТОВ / KOMPONENTLAR RO'YXATI
+
+> Hand-off document for the designer (DECISIONS D-003). The site is built at **wireframe**
+> level: every visual decision lives in `static/src/tokens.css` (tokens) and
+> `static/src/components.css` + `templates/components/*.html` / `templates/blocks/*.html`
+> (structure). Applying the Figma design = changing those files only — **no Python changes**.
+>
+> Документ для дизайнера. Сайт собран на уровне **вайрфрейма**: все визуальные решения
+> находятся в `static/src/tokens.css` (токены) и `static/src/components.css` +
+> `templates/components/*.html` / `templates/blocks/*.html` (структура). Внедрение дизайна
+> из Figma = правка только этих файлов, **без изменения Python**.
+>
+> Dizayner uchun hujjat. Sayt **wireframe** darajasida yig'ilgan: barcha vizual qarorlar
+> `static/src/tokens.css` (tokenlar) va `static/src/components.css` +
+> `templates/components/*.html` / `templates/blocks/*.html` (tuzilma) fayllarida. Figma
+> dizaynini qo'llash = faqat shu fayllarni o'zgartirish, **Python o'zgarmaydi**.
+
+Last updated: 2026-09-15 (M1). Screenshots at 390 px: `tests/e2e/screenshots/`.
+
+## 1. Design tokens / Токены / Tokenlar — `static/src/tokens.css`
+
+| Token | Purpose (ru) | Maqsad (uz) | Wireframe default |
+|---|---|---|---|
+| `--neutral-0…900` | Серая шкала (фон, текст, границы) | Kulrang shkala (fon, matn, chegaralar) | #fff → #111 |
+| `--info/--warning/--danger/--success` + `*-bg` | Семантические цвета (уведомления, срочность симптомов) | Semantik ranglar (ogohlantirish, belgilar shoshilinchligi) | blue / amber / red / green |
+| `--brand-w`, `--brand-w-soft` | Идентичность раздела «Женский рак» 🎗 | «Ayollar saratoni» bo'limi identikasi 🎗 | rose #b8336a |
+| `--brand-c`, `--brand-c-soft` | Идентичность раздела «Детский рак» 🎀 | «Bolalar saratoni» bo'limi identikasi 🎀 | amber #b5780a |
+| `--brand`, `--brand-soft`, `--brand-contrast` | Активный цвет раздела; переключается `body[data-section]` | Faol bo'lim rangi; `body[data-section]` orqali almashadi | neutral outside sections |
+| `--font-sans`, `--text-base` (18px), `--leading`, `--measure` (70ch) | Типографика | Tipografika | system font |
+| `--space-1…12`, `--radius`, `--tap-target` (44px), `--container` | Отступы, радиусы, размер касания | Bo'shliqlar, radius, bosish maydoni | 4px grid |
+| `--font-scale`, `html[data-contrast="high"]` | Панель доступности (шрифт ×1.25/×1.5, контраст) | Maxsus imkoniyatlar paneli (shrift, kontrast) | — |
+
+Editors may override `--brand`/`--brand-soft` per section from the CMS (`SectionIndexPage.colour_primary/accent`); emitted as a nonce'd `<style>`.
+
+## 2. Page templates / Шаблоны страниц / Sahifa shablonlari
+
+| Template | Page type | Regions (ru) | Hududlar (uz) | States |
+|---|---|---|---|---|
+| `base.html` | all | `<head>` (canonical, hreflang, OG), skip-link, header, banner, breadcrumbs, `<main>`, footer | Umumiy karkas | `data-section` = `women` / `children` / `""` |
+| `home/home_page.html` | HomePage | hero (title, subtitle, home banner), 2 карточки разделов, полоса статистики (3), избранные статьи (≤6), избранные видео (≤3), доп. блоки | Hero, 2 bo'lim kartasi, statistika (3), tanlangan maqolalar/videolar | with/without featured, banner on/off |
+| `sections/section_index_page.html` | SectionIndexPage | заголовок с эмодзи, tagline, intro-блоки, сетка карточек подразделов (h2) | Bo'lim sarlavhasi, tagline, intro, bo'limchalar kartalari | 5–7 cards |
+| `sections/topic_index_page.html` | TopicIndexPage | заголовок, summary, intro, сетка карточек статей (картинка, заголовок, summary, время чтения) | Mavzu sarlavhasi, maqola kartalari | empty state («Articles will appear here») |
+| `articles/article_page.html` | ArticlePage | заголовок, summary, page-meta (время чтения, бейдж «Проверено врачом»), hero image, блоки body, дисклеймер | Maqola sahifasi | with/without hero image, verified badge |
+| `directory/directory_page.html` | DirectoryPage | заголовок, intro, форма фильтров (регион, тип, раздел, бесплатно), счётчик, карточки учреждений, заглушка карты | Muassasalar katalogi | empty results; map placeholder (M4: Leaflet + HTMX) |
+| `404.html`, `429.html`, `500.html`, `core/lockout.html` | errors | текст + ссылка на главную | Xato sahifalari | — |
+
+## 3. Components / Компоненты / Komponentlar — `templates/components/`
+
+Each partial documents its context variables in a header comment. CSS block of the same name in `components.css`.
+
+| Component | Purpose (ru) | Maqsad (uz) | Context / fields | States |
+|---|---|---|---|---|
+| `header.html` | Шапка: логотип-заглушка, название, горячая линия (tel:), навигация | Sarlavha: logo, nom, ishonch telefoni, navigatsiya | `settings.core.SiteSettings.hotline_phone` | mobile (menu behind toggle) / desktop (inline) |
+| `nav.html` (`{% main_nav %}`) | Мега-меню: 2 раздела × 5 пунктов ТЗ + подпункты; переключатель языка | Mega-menyu: 2 bo'lim × 5 band + ichki bandlar; til almashtirgich | `sections[NavSection{key,title,url,tagline,emoji,items[NavItem{title,url,summary,children}]}]`, `section_key` | mobile `<details>` (no JS), desktop hover panel, active section underline |
+| `lang_switch.html` (`{% lang_switch %}`) | Переключатель uz/ru на перевод текущей страницы | Joriy sahifaning tarjimasiga o'tish | `links[{code,name,url,is_current}]` | current = plain text with `aria-current` |
+| `banner.html` | Экстренный баннер сайта (месяц скрининга) | Sayt bo'ylab shoshilinch banner | `SiteSettings.emergency_banner_*` | hidden / text / link |
+| `breadcrumbs.html` (`{% breadcrumbs %}`) | Хлебные крошки от главной | Yo'l ko'rsatkichi | `crumbs[Page]` | hidden on home; last item `aria-current` |
+| `page_meta.html` | Время чтения + бейдж «Проверено врачом: имя, организация (дата)» | O'qish vaqti + «Shifokor tekshirgan» belgisi | `page.reading_time`, `page.verified_badge` | badge on/off |
+| `card.html` | Универсальная карточка (статья, тема, элемент сетки) | Universal karta | `title,url,text,image,icon,meta,tag` | with image / with icon / no link |
+| `callout.html` | Выделенный блок; kind = info, warning, danger, success, **reassurance** («этот признак не всегда рак») | Ajratilgan blok | `kind,title,text` | 5 kinds; icon + sr-only label (not colour only) |
+| `steps.html` | Нумерованные шаги: маршрут пациента (4), самообследование | Raqamlangan qadamlar | `title, steps[{number,title,text,deadline,href}]` | auto numbers 01…; deadline line (ПП-402); print-friendly |
+| `symptom_list.html` | Симптомы с срочностью routine / soon / urgent | Belgilar ro'yxati (shoshilinchlik bilan) | `title, symptoms[{symptom,urgency,explanation}]` | 3 urgency levels: colour + icon + text |
+| `stat.html` | Одна цифра статистики | Bitta statistik ko'rsatkich | `value,label,source,year` | with/without source |
+| `video.html` | Плеер (HTML5 + VTT uz/ru + постер) или провайдер-embed; спикер; подпись; транскрипт (`<details>`) | Video pleer / embed, transkript | `video, embed, caption, transcript` | upload ready / processing / external; vertical 9:16 |
+| `embed_frame.html` | iframe YouTube/Telegram; **click-to-load** фасад для Instagram/TikTok; `<noscript>` ссылка | Provayder iframe / bosib yuklash fasadi | `embed{provider,src,vertical,click_to_load}` | facade / loaded / no-JS |
+| `institution_card.html` | Карточка учреждения: название, тип, «бесплатно по госпрограмме», адрес, телефон, часы, услуги, сайт, дата проверки | Muassasa kartasi | `institution` | free badge on/off; no phone/hours |
+| `footer.html` | Подвал: дисклеймер (обязателен), горячая линия, соцсети, текст, ПП-402/186, логотипы партнёров (Агентство, Яндекс, Hamroh) | Pastki qism | `SiteSettings` | logos present / placeholders |
+
+## 4. Content blocks / Блоки контента / Kontent bloklari — `templates/blocks/`
+
+Blocks are the editor's building kit (`apps/articles/blocks.py`). Each maps to a component above or has its own structure.
+
+| Block | Fields | Renders via | Used on (TZ) |
+|---|---|---|---|
+| `rich_text` | HTML (h2,h3,b,i,ol,ul,link,doc,image,embed) | `.prose` | everywhere |
+| `callout` | kind, title, text | `components/callout.html` | «Не откладывайте визит», placeholders |
+| `three_columns` | 3 × (title, items list) | `.columns--3` | Уход и поддержка, Жизнь после рака |
+| `two_columns` | 2 × (title, items list) | `.columns--2` | Информация для семьи |
+| `steps` | title, steps[number,title,text,deadline,link] | `components/steps.html` | Маршрут пациента (4 шага), самообследование |
+| `cards_grid` | title, cards[image/icon,title,text,link] | `components/card.html` | 6 видов детского рака, факторы риска, онкокоманда |
+| `symptom_list` | title, symptoms[symptom,urgency,explanation] | `components/symptom_list.html` | Симптомы |
+| `stat` | value,label,source,year | `components/stat.html` | Статистика по Узбекистану, home strip |
+| `video` | video snippet / external URL, caption, transcript | `components/video.html` | видео врачей, мобилограф |
+| `image_gallery` | title, images[image+alt, caption], downloadable | `.gallery` | инфографика |
+| `document_download` | document, description | `.document` | печатные материалы |
+| `faq_accordion` | title, items[question, answer] | `.faq` (`<details>`) | «Вопросы врачу» |
+| `glossary_terms` | title, terms[] | `.glossary-terms` (`<dl>`) | «Словарь для родителей» |
+| `institution_list` | title, region, kind, free_only, limit | `components/institution_card.html` | «Где пройти» |
+| `cta` | text, button_label, link, style | `.cta` + `.button` | переходы между страницами |
+| `quote` | text, author, role | `.quote` | цитаты пациентов/врачей |
+| `table` | caption, typed columns, rows | `.table` | таблица скрининга |
+| `embed` | url, caption | `components/embed_frame.html` | посты Telegram/Instagram/TikTok/YouTube |
+
+## 5. Global states the design must cover / Состояния / Holatlar
+
+- Mobile 390 px first; desktop ≥ 1024 px (`64rem`) shows the mega-menu inline.
+- No JS: menu and accordions work through `<details>`; embeds show a link.
+- Accessibility toolbar (M5): font ×1.25 / ×1.5, high contrast (`html[data-contrast="high"]`), reduced motion.
+- Print (`static/src/print.css`): article, steps, symptom list, FAQ checklist print without navigation.
+- Placeholders `[[TODO: content — copywriter]]` / `[[VERIFY: doctor]]` appear in content until the copywriter replaces them — style `.placeholder` only.
+
+## 6. What the designer must deliver / Что нужно от дизайнера / Dizaynerdan kerak
+
+1. Colour values for `--brand-w*`, `--brand-c*`, neutrals and semantic colours (WCAG AA ≥ 4.5:1 on text).
+2. One font family (2 weights, Latin + Cyrillic + U+02BB/U+02BC), WOFF2.
+3. Icons: section symbols 🎗/🎀 as SVG, urgency icons (routine/soon/urgent), callout icons, card icons (`data-icon` names above).
+4. Mockups for each template in §2 at 390 px and 1280 px, including empty/error states.
+5. Logo and partner logos (Agency, Yandex, Hamroh).

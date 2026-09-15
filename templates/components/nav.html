@@ -1,11 +1,46 @@
-{# ---------------------------------------------------------------------------
-   components/nav.html — primary navigation (wireframe). Filled with the two section
-   mega-menus + language switcher in M1. Context: request, LANGUAGE_CODE.
-   --------------------------------------------------------------------------- #}
-{% load i18n %}
+{% comment %} ---------------------------------------------------------------------------
+   components/nav.html — primary navigation: one mega-menu per section (5 items each per
+   TZ §II) + language switcher. Rendered by {% main_nav %} (apps/core/templatetags/core_tags).
+   Context: sections (list[NavSection]: key, title, url, tagline, emoji, items[NavItem: title,
+   url, summary, children]), LANGUAGE_CODE, section_key (active section), page.
+   States: mobile — each section is a <details> disclosure (works without JS);
+           desktop — sections inline, sub-items revealed on hover/focus (CSS only).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n core_tags %}
 <nav class="site-nav" aria-label="{% trans 'Main navigation' %}">
-  <ul class="site-nav__list">
-    <li><a href="/{{ LANGUAGE_CODE }}/">{% trans "Home" %}</a></li>
-  </ul>
-  {% include "components/lang_switch.html" %}
+  <details class="site-nav__toggle">
+    <summary class="site-nav__toggle-button" aria-controls="site-nav-menu">{% trans "Menu" %}</summary>
+    <div class="site-nav__menu" id="site-nav-menu">
+      <ul class="site-nav__sections">
+        {% for section in sections %}
+          <li class="site-nav__section{% if section.key == section_key %} is-active{% endif %}" data-section="{{ section.key }}">
+            <details class="mega-menu" {% if section.key == section_key %}open{% endif %}>
+              <summary class="mega-menu__title">
+                <span class="mega-menu__emoji" aria-hidden="true">{{ section.emoji }}</span>
+                {{ section.title }}
+              </summary>
+              <div class="mega-menu__panel">
+                <a class="mega-menu__root" href="{{ section.url }}">{{ section.title }}{% if section.tagline %} — <span class="mega-menu__tagline">{{ section.tagline }}</span>{% endif %}</a>
+                <ul class="mega-menu__items">
+                  {% for item in section.items %}
+                    <li class="mega-menu__item">
+                      <a href="{{ item.url }}">{{ item.title }}</a>
+                      {% if item.children %}
+                        <ul class="mega-menu__children">
+                          {% for child in item.children %}
+                            <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </details>
+          </li>
+        {% endfor %}
+      </ul>
+      {% lang_switch %}
+    </div>
+  </details>
 </nav>

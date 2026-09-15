@@ -1,0 +1,6 @@
+{% load i18n %}
+<div class="block block--document document">
+  <a class="document__link" href="{{ value.document.url }}" download>{{ value.document.title }}</a>
+  <span class="document__meta">({{ value.document.file_extension|upper }}, {{ value.document.file.size|filesizeformat }})</span>
+  {% if value.description %}<p class="document__description">{{ value.description }}</p>{% endif %}
+</div>

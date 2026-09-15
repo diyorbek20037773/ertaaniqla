@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} directory/directory_page.html — Context: page (DirectoryPage), institutions, regions, kinds,
+   filter {region, kind, section, free}. Plain GET form (HTMX + map arrive in M4). {% endcomment %}
+{% block content %}
+<div class="container">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+
+  <form class="filter-form" method="get" action="{{ page.url }}" aria-label="{% trans 'Filter institutions' %}">
+    <div class="filter-form__field">
+      <label for="filter-region">{% trans "Region" %}</label>
+      <select id="filter-region" name="region">
+        <option value="">{% trans "All regions" %}</option>
+        {% for region in regions %}
+          <option value="{{ region.code }}" {% if filter.region == region.code %}selected{% endif %}>{% if LANGUAGE_CODE == "ru" %}{{ region.name_ru }}{% else %}{{ region.name_uz }}{% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter-form__field">
+      <label for="filter-kind">{% trans "Type" %}</label>
+      <select id="filter-kind" name="kind">
+        <option value="">{% trans "All types" %}</option>
+        {% for code, label in kinds %}
+          <option value="{{ code }}" {% if filter.kind == code %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter-form__field">
+      <label for="filter-section">{% trans "Section" %}</label>
+      <select id="filter-section" name="section">
+        <option value="" {% if not filter.section %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="women" {% if filter.section == "women" %}selected{% endif %}>{% trans "Women's cancer" %}</option>
+        <option value="children" {% if filter.section == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>
+      </select>
+    </div>
+    <div class="filter-form__field filter-form__field--checkbox">
+      <input type="checkbox" id="filter-free" name="free" value="1" {% if filter.free %}checked{% endif %}>
+      <label for="filter-free">{% trans "Only free under the state programme" %}</label>
+    </div>
+    <button type="submit" class="button button--primary">{% trans "Show" %}</button>
+  </form>
+
+  <section class="institution-list" aria-live="polite">
+    <h2 class="sr-only">{% trans "Results" %}</h2>
+    {% if institutions %}
+      <p class="institution-list__count">{% blocktrans trimmed count counter=institutions|length %}{{ counter }} institution{% plural %}{{ counter }} institutions{% endblocktrans %}</p>
+      <div class="institution-list__items">
+        {% for institution in institutions %}
+          {% include "components/institution_card.html" with institution=institution %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="institution-list__empty">{% trans "No institutions match the selected filters yet." %}</p>
+    {% endif %}
+  </section>
+  <div class="map-placeholder" data-component="map">{% trans "Map will be shown here." %}</div>
+</div>
+{% endblock %}

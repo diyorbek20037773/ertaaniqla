@@ -1,0 +1,14 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/callout.html — highlighted box. kind: info|warning|danger|success|reassurance.
+   Context: kind (str), title (str, optional), text (html). Colour is never the only carrier
+   of meaning: an icon + the kind label are rendered for screen readers (spec §9).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<aside class="callout callout--{{ kind }}" role="note">
+  <span class="callout__icon" aria-hidden="true">{% if kind == "danger" %}!{% elif kind == "warning" %}▲{% elif kind == "success" %}✓{% elif kind == "reassurance" %}♥{% else %}i{% endif %}</span>
+  <span class="sr-only">{% if kind == "danger" %}{% trans "Important" %}{% elif kind == "warning" %}{% trans "Warning" %}{% elif kind == "success" %}{% trans "Good to know" %}{% elif kind == "reassurance" %}{% trans "Reassurance" %}{% else %}{% trans "Note" %}{% endif %}:</span>
+  <div class="callout__body">
+    {% if title %}<p class="callout__title">{{ title }}</p>{% endif %}
+    <div class="callout__text">{{ text }}</div>
+  </div>
+</aside>

@@ -1,0 +1,21 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/steps.html — numbered steps (patient route, self-exam guide). Printable.
+   Context: title (str, optional), steps (list of {number, title, text, deadline, href}).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<section class="steps">
+  {% if title %}<h2 class="steps__heading">{{ title }}</h2>{% endif %}
+  <ol class="steps__list">
+    {% for step in steps %}
+      <li class="steps__item">
+        <span class="steps__number" aria-hidden="true">{% if step.number %}{{ step.number }}{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</span>
+        <div class="steps__body">
+          <h3 class="steps__title">{{ step.title }}</h3>
+          <div class="steps__text">{{ step.text }}</div>
+          {% if step.deadline %}<p class="steps__deadline"><span class="steps__deadline-label">{% trans "Timing" %}:</span> {{ step.deadline }}</p>{% endif %}
+          {% if step.href %}<a class="steps__link" href="{{ step.href }}">{% trans "Learn more" %}</a>{% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+</section>

@@ -1,0 +1,25 @@
+/* ---------------------------------------------------------------------------
+   print.css — print stylesheet skeleton (spec §5, A5): article, patient route (steps),
+   self-exam guide (steps), question checklists (faq_accordion). Regional clinics print these.
+   The designer refines in M5b; structure must already print cleanly.
+   --------------------------------------------------------------------------- */
+@media print {
+  .site-header, .site-footer, .skip-link, .banner, .breadcrumbs, .site-nav, .cta,
+  .embed, .video__player, .video__placeholder, .map-placeholder, .filter-form, .lang-switch {
+    display: none !important;
+  }
+  html { font-size: 12pt; color: #000; background: #fff; }
+  body { display: block; }
+  .container { max-width: none; padding: 0; }
+  a { color: inherit; text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+  .card, .callout, .institution, .stat, .steps__item, .symptom, .faq__item { break-inside: avoid; border-color: #000; }
+  .card__link::after { display: none; }
+  .steps__number { border: 1px solid #000; background: none; color: #000; }
+  .columns { display: block; }
+  .columns__col { margin-bottom: 1em; }
+  details > summary { list-style: none; font-weight: 700; }
+  details:not([open]) > :not(summary) { display: block; }
+  .article__footer { border-top: 1px solid #000; }
+  @page { margin: 1.5cm; }
+}

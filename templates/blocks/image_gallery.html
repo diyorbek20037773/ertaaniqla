@@ -1,0 +1,20 @@
+{% load i18n wagtailimages_tags %}
+<section class="block block--gallery gallery">
+  {% if value.title %}<h2 class="gallery__heading">{{ value.title }}</h2>{% endif %}
+  <ul class="gallery__items">
+    {% for item in value.images %}
+      <li class="gallery__item">
+        <figure>
+          {% image item.image width-800 as img %}
+          <img src="{{ img.url }}" alt="{{ img.alt }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy">
+          {% if item.caption or value.downloadable %}
+            <figcaption>
+              {{ item.caption }}
+              {% if value.downloadable %}{% image item.image original as full %}<a class="gallery__download" href="{{ full.url }}" download>{% trans "Download" %}</a>{% endif %}
+            </figcaption>
+          {% endif %}
+        </figure>
+      </li>
+    {% endfor %}
+  </ul>
+</section>

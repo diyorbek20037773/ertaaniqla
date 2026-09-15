@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 11:24+0500\n"
+"POT-Creation-Date: 2026-09-15 12:34+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,293 @@ msgstr "Аналитика"
 msgid "Articles"
 msgstr "Статьи"
 
+msgid "Page"
+msgstr "Страница"
+
+msgid "External URL"
+msgstr "Внешняя ссылка"
+
+msgid "Link"
+msgstr "Ссылка"
+
+msgid "Choose either a page or a URL, not both."
+msgstr "Выберите либо страницу, либо ссылку, но не обе."
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "Info"
+msgstr "Информация"
+
+msgid "Warning"
+msgstr "Предупреждение"
+
+msgid "Danger — do not delay"
+msgstr "Опасно — не откладывайте"
+
+msgid "Success / good news"
+msgstr "Хорошая новость"
+
+msgid "Reassurance (this sign is not always cancer)"
+msgstr "Успокоение (этот признак не всегда рак)"
+
+msgid "Kind"
+msgstr "Тип"
+
+msgid "Title"
+msgstr "Заголовок"
+
+msgid "Callout"
+msgstr "Выделенный блок"
+
+#| msgid "job title"
+msgid "Column title"
+msgstr "Заголовок колонки"
+
+msgid "Items (list)"
+msgstr "Пункты (список)"
+
+msgid "Columns"
+msgstr "Колонки"
+
+msgid "Three columns"
+msgstr "Три колонки"
+
+msgid "Two columns"
+msgstr "Две колонки"
+
+msgid "Number"
+msgstr "Номер"
+
+msgid "Leave empty to number automatically (01, 02, …)."
+msgstr "Оставьте пустым для автоматической нумерации (01, 02, …)."
+
+msgid "Deadline / timing"
+msgstr "Срок / сроки"
+
+msgid "E.g. referral deadline per PP-402. Shown as a separate line."
+msgstr "Например, срок направления по ПП-402. Показывается отдельной строкой."
+
+msgid "Heading"
+msgstr "Заголовок"
+
+msgid "Steps"
+msgstr "Шаги"
+
+msgid "Steps (patient route, self-exam guide)"
+msgstr "Шаги (маршрут пациента, самообследование)"
+
+#| msgid "image"
+msgid "Image"
+msgstr "Изображение"
+
+msgid "Icon name"
+msgstr "Имя иконки"
+
+msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
+msgstr ""
+"Необязательный идентификатор иконки для дизайнера (например, 'dna', 'age')."
+
+msgid "Cards"
+msgstr "Карточки"
+
+msgid "Cards grid"
+msgstr "Сетка карточек"
+
+msgid "Routine — mention at the next visit"
+msgstr "Планово — скажите на следующем приёме"
+
+msgid "Soon — see a doctor within days"
+msgstr "Скоро — обратитесь к врачу в ближайшие дни"
+
+msgid "Urgent — see a doctor now"
+msgstr "Срочно — обратитесь к врачу сейчас"
+
+msgid "Symptom"
+msgstr "Симптом"
+
+msgid "Urgency"
+msgstr "Срочность"
+
+#| msgid "organisation"
+msgid "Explanation"
+msgstr "Пояснение"
+
+msgid "Symptoms"
+msgstr "Симптомы"
+
+msgid "Symptom list"
+msgstr "Список симптомов"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "E.g. '1 из 8' or '45–65'."
+msgstr "Например, «1 из 8» или «45–65»."
+
+msgid "Label"
+msgstr "Подпись"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Year"
+msgstr "Год"
+
+msgid "Statistic"
+msgstr "Статистика"
+
+msgid "Video from library"
+msgstr "Видео из библиотеки"
+
+msgid ""
+"YouTube, Telegram, Instagram or TikTok link (used when no library video)."
+msgstr ""
+"Ссылка YouTube, Telegram, Instagram или TikTok (если нет видео из "
+"библиотеки)."
+
+msgid "Caption"
+msgstr "Подпись"
+
+msgid "Transcript"
+msgstr "Расшифровка"
+
+msgid "Video"
+msgstr "Видео"
+
+msgid "Choose a video or enter an external URL."
+msgstr "Выберите видео или укажите внешнюю ссылку."
+
+msgid "Only YouTube, Telegram, Instagram and TikTok links are supported."
+msgstr "Поддерживаются только ссылки YouTube, Telegram, Instagram и TikTok."
+
+#| msgid "images"
+msgid "Images"
+msgstr "Изображения"
+
+msgid "Allow download (infographics)"
+msgstr "Разрешить скачивание (инфографика)"
+
+msgid "Image gallery / infographics"
+msgstr "Галерея изображений / инфографика"
+
+#| msgid "document"
+msgid "Document"
+msgstr "Документ"
+
+#| msgid "description"
+msgid "Description"
+msgstr "Описание"
+
+msgid "Document download"
+msgstr "Скачивание документа"
+
+#| msgid "Questions & FAQ"
+msgid "Question"
+msgstr "Вопрос"
+
+msgid "Answer"
+msgstr "Ответ"
+
+#| msgid "Questions & FAQ"
+msgid "Questions"
+msgstr "Вопросы"
+
+msgid "FAQ accordion / questions to ask the doctor"
+msgstr "Аккордеон вопросов / вопросы врачу"
+
+msgid "Terms"
+msgstr "Термины"
+
+#| msgid "Glossary"
+msgid "Glossary terms"
+msgstr "Термины глоссария"
+
+msgid "All regions"
+msgstr "Все регионы"
+
+msgid "All types"
+msgstr "Все типы"
+
+msgid "Region"
+msgstr "Регион"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Only free under the state programme"
+msgstr "Только бесплатно по госпрограмме"
+
+msgid "Max items"
+msgstr "Макс. количество"
+
+msgid "Institution list"
+msgstr "Список учреждений"
+
+msgid "Button label"
+msgstr "Текст кнопки"
+
+msgid "Primary (section colour)"
+msgstr "Основная (цвет раздела)"
+
+msgid "Secondary"
+msgstr "Вторичная"
+
+msgid "Style"
+msgstr "Стиль"
+
+msgid "Call to action"
+msgstr "Призыв к действию"
+
+msgid "A page or a URL is required."
+msgstr "Нужна страница или ссылка."
+
+msgid "Quote"
+msgstr "Цитата"
+
+msgid "Author"
+msgstr "Автор"
+
+#| msgid "organisation"
+msgid "Role / organisation"
+msgstr "Роль / организация"
+
+msgid "Rich text"
+msgstr "Форматированный текст"
+
+msgid "Table"
+msgstr "Таблица"
+
+msgid "URL"
+msgstr "Ссылка (URL)"
+
+msgid "YouTube, Telegram post, Instagram post/reel or TikTok video."
+msgstr "YouTube, пост Telegram, пост/reel Instagram или видео TikTok."
+
+msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
+msgstr "Встраивание (YouTube / Telegram / Instagram / TikTok)"
+
+msgid "summary"
+msgstr "краткое описание"
+
+msgid "Shown in listings, the mega-menu and search results."
+msgstr "Показывается в списках, мега-меню и результатах поиска."
+
+#| msgid "image"
+msgid "hero image"
+msgstr "главное изображение"
+
+msgid "body"
+msgstr "содержимое"
+
+#| msgid "Articles"
+msgid "article"
+msgstr "статья"
+
+#| msgid "Articles"
+msgid "articles"
+msgstr "статьи"
+
 msgid "Core"
 msgstr "Ядро"
 
@@ -33,8 +320,271 @@ msgstr "создано"
 msgid "updated at"
 msgstr "обновлено"
 
+msgid "Women's cancer"
+msgstr "Женский рак"
+
+msgid "Childhood cancer"
+msgstr "Детский рак"
+
+msgid "social sharing image"
+msgstr "изображение для соцсетей"
+
+msgid ""
+"Shown when the page is shared in Telegram/Facebook. Generated automatically "
+"if empty."
+msgstr ""
+"Показывается при публикации ссылки в Telegram/Facebook. Если пусто — "
+"создаётся автоматически."
+
+msgid "hide from search engines"
+msgstr "скрыть от поисковых систем"
+
+msgid "Adds a noindex meta tag. Use for drafts-in-public and utility pages."
+msgstr "Добавляет мета-тег noindex. Для черновиков и служебных страниц."
+
+msgid "medically reviewed by"
+msgstr "медицинский рецензент"
+
+msgid "reviewed on"
+msgstr "дата проверки"
+
+msgid "medically verified"
+msgstr "проверено врачом"
+
+msgid "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
+msgstr ""
+"Показывает бейдж «Проверено врачом». Устанавливает медицинский рецензент."
+
+msgid "Medical review"
+msgstr "Медицинская проверка"
+
+msgid "hotline phone"
+msgstr "телефон горячей линии"
+
+msgid "Format: +998 XX XXX-XX-XX"
+msgstr "Формат: +998 XX XXX-XX-XX"
+
+msgid "second hotline phone"
+msgstr "второй телефон горячей линии"
+
+msgid "Telegram channel"
+msgstr "Telegram-канал"
+
+msgid "Instagram"
+msgstr "Instagram"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "YouTube"
+msgstr "YouTube"
+
+msgid "TikTok"
+msgstr "TikTok"
+
+msgid "footer text (uz)"
+msgstr "текст подвала (uz)"
+
+msgid "footer text (ru)"
+msgstr "текст подвала (ru)"
+
+msgid "medical disclaimer (uz)"
+msgstr "медицинский дисклеймер (uz)"
+
+msgid "medical disclaimer (ru)"
+msgstr "медицинский дисклеймер (ru)"
+
+msgid "show emergency banner"
+msgstr "показывать экстренный баннер"
+
+msgid "emergency banner (uz)"
+msgstr "экстренный баннер (uz)"
+
+msgid "emergency banner (ru)"
+msgstr "экстренный баннер (ru)"
+
+msgid "emergency banner link"
+msgstr "ссылка баннера"
+
+msgid "Yandex.Metrika counter id"
+msgstr "ID счётчика Яндекс.Метрики"
+
+msgid "legal / privacy text (uz)"
+msgstr "правовой текст / политика (uz)"
+
+msgid "legal / privacy text (ru)"
+msgstr "правовой текст / политика (ru)"
+
+msgid "Agency logo"
+msgstr "Логотип Агентства"
+
+msgid "Yandex logo"
+msgstr "Логотип Яндекса"
+
+msgid "Hamroh logo"
+msgstr "Логотип Hamroh"
+
+msgid "Hotline"
+msgstr "Горячая линия"
+
+msgid "Social networks"
+msgstr "Социальные сети"
+
+msgid "Footer & legal"
+msgstr "Подвал и правовые тексты"
+
+msgid "Emergency banner (e.g. screening month)"
+msgstr "Экстренный баннер (например, месяц скрининга)"
+
+msgid "Partner logos"
+msgstr "Логотипы партнёров"
+
+msgid "site settings"
+msgstr "настройки сайта"
+
 msgid "Directory"
 msgstr "Каталог учреждений"
+
+msgid "code"
+msgstr "код"
+
+msgid "name (uz)"
+msgstr "название (uz)"
+
+msgid "name (ru)"
+msgstr "название (ru)"
+
+msgid "sort order"
+msgstr "порядок сортировки"
+
+msgid "region"
+msgstr "регион"
+
+#| msgid "Sections"
+msgid "regions"
+msgstr "регионы"
+
+msgid "service"
+msgstr "услуга"
+
+msgid "services"
+msgstr "услуги"
+
+msgid "Family doctor point (SVP)"
+msgstr "Семейный врачебный пункт (СВП)"
+
+msgid "District polyclinic"
+msgstr "Районная поликлиника"
+
+msgid "Onco-alertness room"
+msgstr "Кабинет онконастороженности"
+
+msgid "Mother & Child Health Centre / branch"
+msgstr "Центр здоровья матери и ребёнка / филиал"
+
+msgid "Oncology centre (RONC / regional)"
+msgstr "Онкологический центр (РОНЦ / региональный)"
+
+msgid "Paediatric onco-haematology"
+msgstr "Детская онкогематология"
+
+msgid "Psychological support"
+msgstr "Психологическая поддержка"
+
+msgid "NGO / support group"
+msgstr "НКО / группа поддержки"
+
+msgid "Both"
+msgstr "Оба"
+
+msgid "kind"
+msgstr "тип"
+
+msgid "district (uz)"
+msgstr "район (uz)"
+
+msgid "district (ru)"
+msgstr "район (ru)"
+
+msgid "address (uz)"
+msgstr "адрес (uz)"
+
+msgid "address (ru)"
+msgstr "адрес (ru)"
+
+msgid "phone"
+msgstr "телефон"
+
+msgid "opening hours (uz)"
+msgstr "часы работы (uz)"
+
+msgid "opening hours (ru)"
+msgstr "часы работы (ru)"
+
+msgid "website"
+msgstr "сайт"
+
+msgid "latitude"
+msgstr "широта"
+
+msgid "longitude"
+msgstr "долгота"
+
+msgid "free under the state programme"
+msgstr "бесплатно по госпрограмме"
+
+#| msgid "Sections"
+msgid "sections"
+msgstr "разделы"
+
+msgid "data verified on"
+msgstr "дата проверки данных"
+
+msgid "published"
+msgstr "опубликовано"
+
+msgid "external id"
+msgstr "внешний ID"
+
+msgid ""
+"Identifier in an external registry (e.g. DMED) for future synchronisation."
+msgstr ""
+"Идентификатор во внешнем реестре (например, DMED) для будущей синхронизации."
+
+#| msgid "credit / source"
+msgid "external source"
+msgstr "внешний источник"
+
+msgid "Name"
+msgstr "Название"
+
+#| msgid "Sections"
+msgid "Location"
+msgstr "Расположение"
+
+msgid "Contact"
+msgstr "Контакты"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "institution"
+msgstr "учреждение"
+
+msgid "institutions"
+msgstr "учреждения"
+
+msgid "intro"
+msgstr "вступление"
+
+msgid "default section filter"
+msgstr "фильтр раздела по умолчанию"
+
+msgid "Pre-selects the section filter; visitors can change it."
+msgstr "Предварительно выбирает фильтр раздела; посетители могут изменить."
+
+msgid "directory page (where to go)"
+msgstr "страница справочника (куда обратиться)"
 
 msgid "Questions & FAQ"
 msgstr "Вопросы и ответы"
@@ -45,8 +595,89 @@ msgstr "Обратная связь"
 msgid "Glossary"
 msgstr "Словарь"
 
+#| msgid "Sections"
+msgid "Both sections"
+msgstr "Оба раздела"
+
+msgid "term"
+msgstr "термин"
+
+#| msgid "description"
+msgid "definition"
+msgstr "определение"
+
+#| msgid "Sections"
+msgid "section"
+msgstr "раздел"
+
+msgid "synonyms"
+msgstr "синонимы"
+
+msgid "Comma-separated alternative spellings (e.g. Cyrillic, abbreviations)."
+msgstr ""
+"Альтернативные написания через запятую (например, кириллица, сокращения)."
+
+#| msgid "Glossary"
+msgid "glossary term"
+msgstr "термин глоссария"
+
+#| msgid "Glossary"
+msgid "glossary terms"
+msgstr "термины глоссария"
+
 msgid "Home"
 msgstr "Главная"
+
+#| msgid "job title"
+msgid "hero title"
+msgstr "главный заголовок"
+
+msgid "Key idea of the portal — early detection. Filled by the copywriter."
+msgstr "Ключевая идея портала — раннее выявление. Заполняет копирайтер."
+
+#| msgid "job title"
+msgid "hero subtitle"
+msgstr "подзаголовок"
+
+msgid "home emergency banner"
+msgstr "экстренный баннер главной"
+
+msgid ""
+"Optional home-only banner (e.g. screening campaign month). The site-wide "
+"banner lives in Settings → Site settings."
+msgstr ""
+"Необязательный баннер только для главной (например, месяц скрининга). Баннер"
+" для всего сайта: Настройки → Настройки сайта."
+
+msgid "statistics strip (3 stats)"
+msgstr "полоса статистики (3 показателя)"
+
+#| msgid "Skip to main content"
+msgid "additional content"
+msgstr "дополнительное содержимое"
+
+msgid "Hero"
+msgstr "Главный блок (hero)"
+
+msgid "Featured articles"
+msgstr "Избранные статьи"
+
+msgid "Featured videos"
+msgstr "Избранные видео"
+
+#| msgid "Go to the home page"
+msgid "home page"
+msgstr "главная страница"
+
+#| msgid "created at"
+msgid "featured article"
+msgstr "избранная статья"
+
+msgid "video"
+msgstr "видео"
+
+msgid "featured video"
+msgstr "избранное видео"
 
 msgid "Media library"
 msgstr "Медиатека"
@@ -84,11 +715,145 @@ msgstr "документ"
 msgid "documents"
 msgstr "документы"
 
+msgid "Long video (doctor interview, lecture)"
+msgstr "Длинное видео (интервью врача, лекция)"
+
+msgid "Short vertical video (mobilograph, social media)"
+msgstr "Короткое вертикальное видео (мобилограф, соцсети)"
+
+msgid "Uploaded file"
+msgstr "Загруженный файл"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "Uploaded"
+msgstr "Загружено"
+
+msgid "Processing"
+msgstr "Обрабатывается"
+
+msgid "Ready"
+msgstr "Готово"
+
+msgid "Failed"
+msgstr "Ошибка"
+
+#| msgid "job title"
+msgid "title"
+msgstr "заголовок"
+
+msgid "source"
+msgstr "источник"
+
+msgid "video file"
+msgstr "видеофайл"
+
+msgid "Original upload. Never served directly — transcoded renditions are."
+msgstr "Исходный файл. Не отдаётся напрямую — только перекодированные версии."
+
+msgid "external URL"
+msgstr "внешняя ссылка"
+
+msgid "poster image"
+msgstr "постер"
+
+msgid "duration (seconds)"
+msgstr "длительность (секунды)"
+
+msgid "doctor's name"
+msgstr "имя врача"
+
+#| msgid "organisation"
+msgid "doctor's organisation"
+msgstr "организация врача"
+
+msgid "transcript"
+msgstr "расшифровка"
+
+msgid "subtitles (uz, VTT)"
+msgstr "субтитры (uz, VTT)"
+
+msgid "subtitles (ru, VTT)"
+msgstr "субтитры (ru, VTT)"
+
+msgid "status"
+msgstr "статус"
+
+#| msgid "Sections"
+msgid "renditions"
+msgstr "версии"
+
+msgid "processing error"
+msgstr "ошибка обработки"
+
+msgid "Media"
+msgstr "Медиа"
+
+msgid "Speaker"
+msgstr "Спикер"
+
+msgid "Accessibility"
+msgstr "Доступность"
+
+msgid "videos"
+msgstr "видео"
+
+msgid "Upload a video file or choose an external source."
+msgstr "Загрузите видеофайл или выберите внешний источник."
+
+msgid "An external URL is required."
+msgstr "Нужна внешняя ссылка."
+
+msgid "The URL does not belong to the selected provider."
+msgstr "Ссылка не относится к выбранному провайдеру."
+
 msgid "Search"
 msgstr "Поиск"
 
 msgid "Sections"
 msgstr "Разделы"
+
+msgid "Enter a colour like #b8336a."
+msgstr "Введите цвет в формате #b8336a."
+
+msgid "🎗 ribbon (women)"
+msgstr "🎗 лента (женщины)"
+
+msgid "🎀 ribbon (children)"
+msgstr "🎀 лента (дети)"
+
+msgid "tagline"
+msgstr "слоган"
+
+msgid "One sentence shown on the home page card and under the section title."
+msgstr "Одно предложение на карточке главной и под заголовком раздела."
+
+msgid "primary colour"
+msgstr "основной цвет"
+
+msgid "Overrides the token default (--brand). Leave empty to use tokens.css."
+msgstr ""
+"Переопределяет токен по умолчанию (--brand). Оставьте пустым, чтобы "
+"использовать tokens.css."
+
+msgid "accent colour"
+msgstr "акцентный цвет"
+
+msgid "icon"
+msgstr "иконка"
+
+msgid "Section identity"
+msgstr "Идентичность раздела"
+
+msgid "section index page"
+msgstr "главная страница раздела"
+
+msgid "Shown on the section index card and in the mega-menu."
+msgstr "Показывается на карточке раздела и в мега-меню."
+
+msgid "topic index page"
+msgstr "страница темы"
 
 msgid "Stories"
 msgstr "Истории"
@@ -148,21 +913,86 @@ msgstr ""
 msgid "Skip to main content"
 msgstr "Перейти к основному содержимому"
 
-msgid ""
-"This site is an information and education resource. It does not make a "
-"diagnosis. If you notice symptoms, contact a doctor."
-msgstr ""
-"Этот сайт — информационно-образовательный ресурс. Он не ставит диагноз. Если"
-" вы заметили симптомы, обратитесь к врачу."
+msgid "Download"
+msgstr "Скачать"
+
+msgid "No institutions match the selected filters yet."
+msgstr "Учреждений по выбранным фильтрам пока нет."
+
+msgid "Breadcrumbs"
+msgstr "Хлебные крошки"
+
+msgid "Important"
+msgstr "Важно"
+
+msgid "Good to know"
+msgstr "Полезно знать"
+
+msgid "Reassurance"
+msgstr "Успокоение"
+
+msgid "Note"
+msgstr "Примечание"
+
+#| msgid "Skip to main content"
+msgid "Load content"
+msgstr "Загрузить содержимое"
+
+msgid "Loads content from a third-party site."
+msgstr "Загружает содержимое со стороннего сайта."
+
+msgid "Open on"
+msgstr "Открыть в"
 
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
 msgstr "Создан в соответствии с Постановлениями Президента ПП-402 и ПП-186."
+
+msgid "Partners"
+msgstr "Партнёры"
+
+#| msgid "Erta aniqla"
+msgid "Erta aniqla — home"
+msgstr "Эрта аниқла — главная"
+
+msgid "Free under the state programme"
+msgstr "Бесплатно по госпрограмме"
+
+msgid "Website"
+msgstr "Сайт"
+
+msgid "Data verified"
+msgstr "Данные проверены"
 
 msgid "Language"
 msgstr "Язык"
 
 msgid "Main navigation"
 msgstr "Основная навигация"
+
+msgid "Menu"
+msgstr "Меню"
+
+#, python-format
+msgid "%(minutes)s min read"
+msgid_plural "%(minutes)s min read"
+msgstr[0] "%(minutes)s минута чтения"
+msgstr[1] "%(minutes)s минуты чтения"
+msgstr[2] "%(minutes)s минут чтения"
+
+msgid "Reviewed by a doctor"
+msgstr "Проверено врачом"
+
+msgid "Verified by a doctor"
+msgstr "Проверено врачом"
+
+msgid "Timing"
+msgstr "Сроки"
+
+msgid "Learn more"
+msgstr "Подробнее"
+
+msgid "The video is being processed. Please check back later."
+msgstr "Видео обрабатывается. Загляните позже."
 
 msgid "Account temporarily locked"
 msgstr "Аккаунт временно заблокирован"
@@ -173,3 +1003,49 @@ msgid ""
 msgstr ""
 "Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к"
 " администратору."
+
+msgid "Filter institutions"
+msgstr "Фильтр учреждений"
+
+#| msgid "Sections"
+msgid "Section"
+msgstr "Раздел"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "Results"
+msgstr "Результаты"
+
+#, python-format
+msgid "%(counter)s institution"
+msgid_plural "%(counter)s institutions"
+msgstr[0] "%(counter)s учреждение"
+msgstr[1] "%(counter)s учреждения"
+msgstr[2] "%(counter)s учреждений"
+
+msgid "Map will be shown here."
+msgstr "Здесь будет карта."
+
+#| msgid "description"
+msgid "Open section"
+msgstr "Открыть раздел"
+
+msgid "Key figures"
+msgstr "Ключевые цифры"
+
+msgid "Topics"
+msgstr "Темы"
+
+msgid "Articles will appear here."
+msgstr "Здесь появятся статьи."
+
+#~ msgid ""
+#~ "This site is an information and education resource. It does not make a "
+#~ "diagnosis. If you notice symptoms, contact a doctor."
+#~ msgstr ""
+#~ "Этот сайт — информационно-образовательный ресурс. Он не ставит диагноз. Если"
+#~ " вы заметили симптомы, обратитесь к врачу."

@@ -1,0 +1,4 @@
+<figure class="block block--embed">
+  {% include "components/embed_frame.html" with embed=embed title=value.caption url=value.url %}
+  {% if value.caption %}<figcaption>{{ value.caption }}</figcaption>{% endif %}
+</figure>

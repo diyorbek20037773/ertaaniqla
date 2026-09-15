@@ -1,0 +1,26 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/embed_frame.html — provider iframe (YouTube / Telegram) or click-to-load facade
+   (Instagram / TikTok — third-party content loads only after the visitor clicks; spec §4.3).
+   Context: embed (EmbedInfo: provider, src, vertical, click_to_load), title (str), url (str,
+   original link for the non-JS fallback).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+{% if embed.click_to_load %}
+  <div class="embed embed--{{ embed.provider }}{% if embed.vertical %} embed--vertical{% endif %}" x-data="{ loaded: false }">
+    <template x-if="!loaded">
+      <button type="button" class="embed__facade" @click="loaded = true">
+        <span class="embed__provider">{{ embed.provider|capfirst }}</span>
+        <span class="embed__cta">{% trans "Load content" %}</span>
+        <span class="embed__notice">{% trans "Loads content from a third-party site." %}</span>
+      </button>
+    </template>
+    <template x-if="loaded">
+      <iframe class="embed__frame" src="{{ embed.src }}" title="{{ title|default:embed.provider }}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </template>
+    <noscript><a class="embed__link" href="{{ url|default:embed.src }}" rel="noopener">{% trans "Open on" %} {{ embed.provider|capfirst }}</a></noscript>
+  </div>
+{% else %}
+  <div class="embed embed--{{ embed.provider }}{% if embed.vertical %} embed--vertical{% endif %}">
+    <iframe class="embed__frame" src="{{ embed.src }}" title="{{ title|default:embed.provider }}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+{% endif %}

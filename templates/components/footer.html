@@ -1,23 +1,34 @@
-{# ---------------------------------------------------------------------------
+{% comment %} ---------------------------------------------------------------------------
    components/footer.html — site footer (wireframe).
-   Context: request, LANGUAGE_CODE, settings (Wagtail site settings from M1: hotline,
-   social links, partner logos, legal texts). Always shows the medical disclaimer (spec §8).
-   --------------------------------------------------------------------------- #}
-{% load i18n %}
+   Context: request, LANGUAGE_CODE, settings.core.SiteSettings (hotline, socials, disclaimer,
+   footer text, legal text, partner logos). Always shows the medical disclaimer (spec §8).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n wagtailimages_tags core_tags %}
+{% with s=settings.core.SiteSettings %}
 <footer class="site-footer" role="contentinfo">
   <div class="container">
-    <p class="site-footer__disclaimer">
-      {% blocktrans trimmed %}
-        This site is an information and education resource. It does not make a diagnosis.
-        If you notice symptoms, contact a doctor.
-      {% endblocktrans %}
-      <span class="placeholder">[[TODO: content — copywriter: final disclaimer text]]</span>
-    </p>
+    <p class="site-footer__disclaimer">{{ s|localized:"disclaimer" }}</p>
+    {% if s.hotline_phone %}
+      <p class="site-footer__hotline">{% trans "Hotline" %}: <a href="{{ s.hotline_phone|phone_href }}">{{ s.hotline_phone|phone_display }}</a>
+        {% if s.hotline_phone_secondary %}, <a href="{{ s.hotline_phone_secondary|phone_href }}">{{ s.hotline_phone_secondary|phone_display }}</a>{% endif %}</p>
+    {% endif %}
+    <ul class="site-footer__social" aria-label="{% trans 'Social networks' %}">
+      {% if s.telegram_url %}<li><a href="{{ s.telegram_url }}" rel="noopener">Telegram</a></li>{% endif %}
+      {% if s.instagram_url %}<li><a href="{{ s.instagram_url }}" rel="noopener">Instagram</a></li>{% endif %}
+      {% if s.youtube_url %}<li><a href="{{ s.youtube_url }}" rel="noopener">YouTube</a></li>{% endif %}
+      {% if s.tiktok_url %}<li><a href="{{ s.tiktok_url }}" rel="noopener">TikTok</a></li>{% endif %}
+      {% if s.facebook_url %}<li><a href="{{ s.facebook_url }}" rel="noopener">Facebook</a></li>{% endif %}
+    </ul>
+    {% with footer_text=s|localized:"footer_text" %}{% if footer_text %}<p class="site-footer__text">{{ footer_text }}</p>{% endif %}{% endwith %}
     <p class="site-footer__legal">
       {% blocktrans trimmed %}Built under Presidential Resolutions PP-402 and PP-186.{% endblocktrans %}
     </p>
-    <p class="site-footer__partners">
-      <span class="placeholder">[[TODO: partner logos — Agency, Yandex, Hamroh]]</span>
-    </p>
+    <div class="site-footer__partners">
+      <span class="site-footer__partners-label">{% trans "Partners" %}:</span>
+      {% if s.partner_agency_logo %}{% image s.partner_agency_logo height-40 class="site-footer__partner-logo" %}{% else %}<span class="placeholder">[Agency]</span>{% endif %}
+      {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-40 class="site-footer__partner-logo" %}{% else %}<span class="placeholder">[Yandex]</span>{% endif %}
+      {% if s.partner_hamroh_logo %}{% image s.partner_hamroh_logo height-40 class="site-footer__partner-logo" %}{% else %}<span class="placeholder">[Hamroh]</span>{% endif %}
+    </div>
   </div>
 </footer>
+{% endwith %}

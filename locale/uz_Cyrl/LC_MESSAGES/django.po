@@ -1,0 +1,13 @@
+# Erta aniqla — Uzbek (Cyrillic script) locale STUB (ADR-0003, TODO_HARDENING H-001).
+# Not active: `uz-cyrl` is not in LANGUAGES yet. To activate: add ("uz-cyrl", "Ўзбекча") to
+# LANGUAGES / WAGTAIL_CONTENT_LANGUAGES, run `make messages`, translate, create the Wagtail
+# locale (core migration 0002 does it automatically) and sync the page tree with
+# wagtail-localize. No code changes are required.
+msgid ""
+msgstr ""
+"Project-Id-Version: ertaaniqla\n"
+"Language: uz_Cyrl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"

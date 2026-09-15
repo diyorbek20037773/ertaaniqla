@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{# sections/topic_index_page.html — Context: page (TopicIndexPage), articles (live children). #}
+{% block content %}
+<div class="container">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="page-header__lead">{{ page.summary }}</p>{% endif %}
+  </header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  <section class="cards-grid" aria-label="{% trans 'Articles' %}">
+    <div class="cards-grid__items">
+      {% for article in articles %}
+        {% blocktrans trimmed asvar meta count minutes=article.reading_time %}{{ minutes }} min read{% plural %}{{ minutes }} min read{% endblocktrans %}
+        {% include "components/card.html" with title=article.title url=article.url text=article.summary image=article.hero_image meta=meta tag="h2" %}
+      {% empty %}
+        <p class="placeholder">{% trans "Articles will appear here." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/banner.html — site-wide emergency banner (e.g. screening campaign month).
+   Context: settings.core.SiteSettings (emergency_banner_enabled, emergency_banner_uz/ru,
+   emergency_banner_link). Renders nothing when disabled or empty.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load core_tags %}
+{% with s=settings.core.SiteSettings %}
+{% if s.emergency_banner_enabled %}{% with text=s|localized:"emergency_banner" %}{% if text %}
+<div class="banner banner--emergency" role="region" aria-label="{{ text|truncatechars:60 }}">
+  <div class="container">
+    {% if s.emergency_banner_link %}<a href="{{ s.emergency_banner_link }}">{{ text }}</a>{% else %}{{ text }}{% endif %}
+  </div>
+</div>
+{% endif %}{% endwith %}{% endif %}
+{% endwith %}

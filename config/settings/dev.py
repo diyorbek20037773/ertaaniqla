@@ -14,7 +14,10 @@ MIDDLEWARE.insert(
 )
 DEBUG_TOOLBAR_CONFIG = {
     # docker: the browser IP is not in INTERNAL_IPS
-    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG and not request.headers.get("HX-Request"),
+    # hidden for HTMX partials and for Playwright runs (header set by tests/e2e)
+    "SHOW_TOOLBAR_CALLBACK": lambda request: (
+        DEBUG and not request.headers.get("HX-Request") and not request.headers.get("X-E2E")
+    ),
 }
 
 # Non-hashed static files while developing (no collectstatic needed)

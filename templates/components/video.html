@@ -1,0 +1,41 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/video.html — video player / provider embed + caption + transcript.
+   Context: video (Video snippet, optional), embed (EmbedInfo: provider, src, vertical,
+   click_to_load — optional), caption (str), transcript (html), LANGUAGE_CODE.
+   States: library upload (HTML5 <video> with poster + VTT), external provider (iframe;
+   Instagram/TikTok behind a click-to-load facade), not ready (placeholder text).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+<figure class="video{% if embed.vertical or video.is_vertical %} video--vertical{% endif %}">
+  {% if video and not video.is_external %}
+    {% if video.is_ready %}
+      <video class="video__player" controls preload="none" playsinline
+             {% if video.poster %}{% image video.poster width-960 as poster %}poster="{{ poster.url }}"{% endif %}>
+        {% with r720=video.renditions.720p r480=video.renditions.480p %}
+          {% if r720.url %}<source src="{{ r720.url }}" type="video/mp4">{% endif %}
+          {% if r480.url %}<source src="{{ r480.url }}" type="video/mp4">{% endif %}
+        {% endwith %}
+        {% if video.subtitles_uz %}<track kind="subtitles" srclang="uz" label="Oʻzbekcha" src="{{ video.subtitles_uz.url }}" {% if LANGUAGE_CODE == "uz" %}default{% endif %}>{% endif %}
+        {% if video.subtitles_ru %}<track kind="subtitles" srclang="ru" label="Русский" src="{{ video.subtitles_ru.url }}" {% if LANGUAGE_CODE == "ru" %}default{% endif %}>{% endif %}
+      </video>
+    {% else %}
+      <p class="video__placeholder">{% trans "The video is being processed. Please check back later." %}</p>
+    {% endif %}
+  {% elif embed %}
+    {% firstof video.title caption as embed_title %}
+    {% include "components/embed_frame.html" with embed=embed title=embed_title %}
+  {% endif %}
+  {% if video.doctor_name %}<p class="video__speaker">{{ video.doctor_name }}{% if video.doctor_org %}, {{ video.doctor_org }}{% endif %}</p>{% endif %}
+  {% if caption %}<figcaption class="video__caption">{{ caption }}</figcaption>{% endif %}
+  {% if transcript %}
+    <details class="video__transcript">
+      <summary>{% trans "Transcript" %}</summary>
+      <div class="prose">{{ transcript }}</div>
+    </details>
+  {% elif video.transcript %}
+    <details class="video__transcript">
+      <summary>{% trans "Transcript" %}</summary>
+      <div class="prose">{{ video.transcript|richtext }}</div>
+    </details>
+  {% endif %}
+</figure>

@@ -1,0 +1,9 @@
+{% load article_tags %}
+<section class="block block--cards-grid cards-grid">
+  {% if value.title %}<h2 class="cards-grid__heading">{{ value.title }}</h2>{% endif %}
+  <div class="cards-grid__items">
+    {% for card in value.cards %}
+      {% include "components/card.html" with title=card.title text=card.text image=card.image icon=card.icon url=card.link|link_href %}
+    {% endfor %}
+  </div>
+</section>

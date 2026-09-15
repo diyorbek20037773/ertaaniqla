@@ -1,0 +1,5 @@
+{% load article_tags %}
+<div class="block block--cta cta cta--{{ value.style }}">
+  {% if value.text %}<div class="cta__text">{{ value.text }}</div>{% endif %}
+  <a class="button button--{{ value.style }}" href="{{ value.link|link_href }}">{{ value.button_label }}</a>
+</div>

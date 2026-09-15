@@ -1,0 +1,9 @@
+{# two_columns: 2× (title, items rich list). Stacks on mobile, 2 columns on desktop. #}
+<div class="block block--columns columns columns--2">
+  {% for column in value.columns %}
+    <section class="columns__col">
+      <h3 class="columns__title">{{ column.title }}</h3>
+      <div class="columns__items prose">{{ column.items }}</div>
+    </section>
+  {% endfor %}
+</div>

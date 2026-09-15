@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+{# articles/article_page.html — Context: page (ArticlePage), section, section_key. #}
+{% block og_type %}article{% endblock %}
+{% block content %}
+<article class="container article">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="page-header__lead">{{ page.summary }}</p>{% endif %}
+    {% include "components/page_meta.html" %}
+    {% if page.hero_image %}
+      {% image page.hero_image width-1200 as hero %}
+      <img class="article__hero" src="{{ hero.url }}" alt="{{ hero.alt }}" width="{{ hero.width }}" height="{{ hero.height }}">
+    {% endif %}
+  </header>
+  <div class="article__body">
+    {% for block in page.body %}{% include_block block %}{% endfor %}
+  </div>
+</article>
+{% endblock %}

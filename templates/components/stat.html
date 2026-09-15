@@ -1,0 +1,10 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/stat.html — one statistic (value, label, source, year).
+   Context: value (str), label (str), source (str, optional), year (int, optional).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<div class="stat">
+  <p class="stat__value">{{ value }}</p>
+  <p class="stat__label">{{ label }}</p>
+  {% if source or year %}<p class="stat__source">{% trans "Source" %}: {{ source }}{% if year %}{% if source %}, {% endif %}{{ year }}{% endif %}</p>{% endif %}
+</div>

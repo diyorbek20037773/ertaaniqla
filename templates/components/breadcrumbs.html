@@ -1,0 +1,21 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/breadcrumbs.html — rendered by {% breadcrumbs %}.
+   Context: crumbs (list[Page] from the home page to the current page), page.
+   Hidden on the home page (single crumb). Current page is not a link (aria-current).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+{% if crumbs|length > 1 %}
+<nav class="breadcrumbs container" aria-label="{% trans 'Breadcrumbs' %}">
+  <ol class="breadcrumbs__list">
+    {% for crumb in crumbs %}
+      <li class="breadcrumbs__item">
+        {% if forloop.last %}
+          <span aria-current="page">{{ crumb.title }}</span>
+        {% else %}
+          <a href="{{ crumb.url }}">{% if forloop.first %}{% trans "Home" %}{% else %}{{ crumb.title }}{% endif %}</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %}

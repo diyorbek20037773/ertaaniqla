@@ -86,9 +86,11 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S", "DJ", "T20"]
-"scripts/**" = ["T20", "S"]
+"scripts/**" = ["T20", "S", "E501"]
 "config/settings/**" = ["F403", "F405"]
 "**/management/commands/**" = ["T20"]
+"apps/core/seed/tree.py" = ["E501"]  # verbatim TZ strings
+"tests/sections/test_seed.py" = ["E501"]  # verbatim TZ strings
 
 [tool.ruff.lint.isort]
 known-first-party = ["apps", "config"]
@@ -138,7 +140,7 @@ django_settings_module = "config.settings.test"
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 python_files = ["test_*.py"]
 testpaths = ["tests"]
-addopts = "-ra -q --strict-markers --reuse-db"
+addopts = "-ra -q --strict-markers --reuse-db -m 'not e2e'"
 markers = [
     "e2e: Playwright browser tests (need a running server)",
     "integration: needs docker services (postgres/redis/ffmpeg)",

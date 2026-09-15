@@ -1,0 +1,13 @@
+{% load i18n %}
+<section class="block block--institutions institution-list">
+  {% if value.title %}<h2 class="institution-list__heading">{{ value.title }}</h2>{% endif %}
+  {% if institutions %}
+    <div class="institution-list__items">
+      {% for institution in institutions %}
+        {% include "components/institution_card.html" with institution=institution %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="institution-list__empty">{% trans "No institutions match the selected filters yet." %}</p>
+  {% endif %}
+</section>

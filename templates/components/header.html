@@ -1,13 +1,24 @@
-{# ---------------------------------------------------------------------------
+{% comment %} ---------------------------------------------------------------------------
    components/header.html — site header (wireframe level, see DECISIONS D-003)
-   Context: request, LANGUAGE_CODE (from i18n), page (optional Wagtail page)
-   States: mobile (menu collapsed), desktop (menu inline). Section colour comes from
-   `data-section` on <body>. Mega-menu + language switch are filled in M1.
-   --------------------------------------------------------------------------- #}
-{% load i18n %}
+   Context: request, LANGUAGE_CODE, page (optional), section_key, settings.core.SiteSettings
+   States: mobile (menu behind <details> toggle), desktop (menu inline). Section colour comes
+   from `data-section` on <body>. Hotline number comes from Site settings.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n core_tags %}
+{% get_current_language as LANGUAGE_CODE %}
 <header class="site-header" role="banner">
   <div class="container site-header__inner">
-    <a class="site-header__brand" href="/{{ LANGUAGE_CODE }}/">{% trans "Erta aniqla" %}</a>
-    {% block header_nav %}{% include "components/nav.html" %}{% endblock %}
+    <a class="site-header__brand" href="/{{ LANGUAGE_CODE }}/" aria-label="{% trans 'Erta aniqla — home' %}">
+      <span class="site-header__logo" aria-hidden="true">[logo]</span>
+      <span class="site-header__name">{% trans "Erta aniqla" %}</span>
+    </a>
+    {% with hotline=settings.core.SiteSettings.hotline_phone %}
+      {% if hotline %}
+        <a class="site-header__hotline" href="{{ hotline|phone_href }}">
+          <span class="site-header__hotline-label">{% trans "Hotline" %}</span> {{ hotline|phone_display }}
+        </a>
+      {% endif %}
+    {% endwith %}
+    {% block header_nav %}{% main_nav %}{% endblock %}
   </div>
 </header>

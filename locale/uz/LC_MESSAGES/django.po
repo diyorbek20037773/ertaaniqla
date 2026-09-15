@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 11:24+0500\n"
+"POT-Creation-Date: 2026-09-15 12:34+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,296 @@ msgstr "Analitika"
 msgid "Articles"
 msgstr "Maqolalar"
 
+msgid "Page"
+msgstr "Sahifa"
+
+msgid "External URL"
+msgstr "Tashqi havola"
+
+msgid "Link"
+msgstr "Havola"
+
+msgid "Choose either a page or a URL, not both."
+msgstr "Sahifa yoki havoladan faqat bittasini tanlang."
+
+msgid "Text"
+msgstr "Matn"
+
+msgid "Info"
+msgstr "Maʼlumot"
+
+msgid "Warning"
+msgstr "Ogohlantirish"
+
+msgid "Danger — do not delay"
+msgstr "Xavf — kechiktirmang"
+
+msgid "Success / good news"
+msgstr "Yaxshi xabar"
+
+msgid "Reassurance (this sign is not always cancer)"
+msgstr "Tinchlantirish (bu belgi har doim saraton emas)"
+
+msgid "Kind"
+msgstr "Turi"
+
+msgid "Title"
+msgstr "Sarlavha"
+
+msgid "Callout"
+msgstr "Ajratilgan blok"
+
+#| msgid "job title"
+msgid "Column title"
+msgstr "Ustun sarlavhasi"
+
+msgid "Items (list)"
+msgstr "Bandlar (roʻyxat)"
+
+msgid "Columns"
+msgstr "Ustunlar"
+
+msgid "Three columns"
+msgstr "Uch ustun"
+
+msgid "Two columns"
+msgstr "Ikki ustun"
+
+msgid "Number"
+msgstr "Raqam"
+
+msgid "Leave empty to number automatically (01, 02, …)."
+msgstr "Avtomatik raqamlash uchun boʻsh qoldiring (01, 02, …)."
+
+msgid "Deadline / timing"
+msgstr "Muddat / vaqt"
+
+msgid "E.g. referral deadline per PP-402. Shown as a separate line."
+msgstr ""
+"Masalan, PQ-402 boʻyicha yoʻllanma muddati. Alohida qatorda koʻrsatiladi."
+
+msgid "Heading"
+msgstr "Sarlavha"
+
+msgid "Steps"
+msgstr "Qadamlar"
+
+msgid "Steps (patient route, self-exam guide)"
+msgstr "Qadamlar (bemor yoʻli, oʻz-oʻzini tekshirish)"
+
+#| msgid "image"
+msgid "Image"
+msgstr "Rasm"
+
+msgid "Icon name"
+msgstr "Ikonka nomi"
+
+msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
+msgstr ""
+"Dizayner uchun ixtiyoriy ikonka identifikatori (masalan, 'dna', 'age')."
+
+msgid "Cards"
+msgstr "Kartalar"
+
+msgid "Cards grid"
+msgstr "Kartalar toʻri"
+
+msgid "Routine — mention at the next visit"
+msgstr "Odatiy — keyingi tashrifda ayting"
+
+msgid "Soon — see a doctor within days"
+msgstr "Tez orada — bir necha kun ichida shifokorga boring"
+
+msgid "Urgent — see a doctor now"
+msgstr "Shoshilinch — hoziroq shifokorga boring"
+
+msgid "Symptom"
+msgstr "Belgi"
+
+msgid "Urgency"
+msgstr "Shoshilinchlik"
+
+#| msgid "organisation"
+msgid "Explanation"
+msgstr "Izoh"
+
+msgid "Symptoms"
+msgstr "Belgilar"
+
+msgid "Symptom list"
+msgstr "Belgilar roʻyxati"
+
+msgid "Value"
+msgstr "Qiymat"
+
+msgid "E.g. '1 из 8' or '45–65'."
+msgstr "Masalan, '8 dan 1' yoki '45–65'."
+
+msgid "Label"
+msgstr "Izoh"
+
+msgid "Source"
+msgstr "Manba"
+
+msgid "Year"
+msgstr "Yil"
+
+msgid "Statistic"
+msgstr "Statistika"
+
+msgid "Video from library"
+msgstr "Kutubxonadagi video"
+
+msgid ""
+"YouTube, Telegram, Instagram or TikTok link (used when no library video)."
+msgstr ""
+"YouTube, Telegram, Instagram yoki TikTok havolasi (kutubxona videosi "
+"boʻlmasa)."
+
+msgid "Caption"
+msgstr "Izoh"
+
+msgid "Transcript"
+msgstr "Transkript"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Choose a video or enter an external URL."
+msgstr "Video tanlang yoki tashqi havola kiriting."
+
+msgid "Only YouTube, Telegram, Instagram and TikTok links are supported."
+msgstr ""
+"Faqat YouTube, Telegram, Instagram va TikTok havolalari qoʻllab-"
+"quvvatlanadi."
+
+#| msgid "images"
+msgid "Images"
+msgstr "Rasmlar"
+
+msgid "Allow download (infographics)"
+msgstr "Yuklab olishga ruxsat (infografika)"
+
+msgid "Image gallery / infographics"
+msgstr "Rasmlar galereyasi / infografika"
+
+#| msgid "document"
+msgid "Document"
+msgstr "Hujjat"
+
+#| msgid "description"
+msgid "Description"
+msgstr "Tavsif"
+
+msgid "Document download"
+msgstr "Hujjatni yuklab olish"
+
+#| msgid "Questions & FAQ"
+msgid "Question"
+msgstr "Savol"
+
+msgid "Answer"
+msgstr "Javob"
+
+#| msgid "Questions & FAQ"
+msgid "Questions"
+msgstr "Savollar"
+
+msgid "FAQ accordion / questions to ask the doctor"
+msgstr "Savol-javob akkordeoni / shifokorga savollar"
+
+msgid "Terms"
+msgstr "Atamalar"
+
+#| msgid "Glossary"
+msgid "Glossary terms"
+msgstr "Lugʻat atamalari"
+
+msgid "All regions"
+msgstr "Barcha viloyatlar"
+
+msgid "All types"
+msgstr "Barcha turlar"
+
+msgid "Region"
+msgstr "Viloyat"
+
+msgid "Type"
+msgstr "Turi"
+
+msgid "Only free under the state programme"
+msgstr "Faqat davlat dasturi boʻyicha bepul"
+
+msgid "Max items"
+msgstr "Maksimal soni"
+
+msgid "Institution list"
+msgstr "Muassasalar roʻyxati"
+
+msgid "Button label"
+msgstr "Tugma matni"
+
+msgid "Primary (section colour)"
+msgstr "Asosiy (boʻlim rangi)"
+
+msgid "Secondary"
+msgstr "Ikkilamchi"
+
+msgid "Style"
+msgstr "Uslub"
+
+msgid "Call to action"
+msgstr "Harakatga chaqiriq"
+
+msgid "A page or a URL is required."
+msgstr "Sahifa yoki havola kiritilishi shart."
+
+msgid "Quote"
+msgstr "Iqtibos"
+
+msgid "Author"
+msgstr "Muallif"
+
+#| msgid "organisation"
+msgid "Role / organisation"
+msgstr "Lavozim / tashkilot"
+
+msgid "Rich text"
+msgstr "Formatlangan matn"
+
+msgid "Table"
+msgstr "Jadval"
+
+msgid "URL"
+msgstr "Havola (URL)"
+
+msgid "YouTube, Telegram post, Instagram post/reel or TikTok video."
+msgstr "YouTube, Telegram posti, Instagram post/reel yoki TikTok videosi."
+
+msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
+msgstr "Joylashtirish (YouTube / Telegram / Instagram / TikTok)"
+
+msgid "summary"
+msgstr "qisqacha mazmun"
+
+msgid "Shown in listings, the mega-menu and search results."
+msgstr "Roʻyxatlarda, mega-menyuda va qidiruv natijalarida koʻrsatiladi."
+
+#| msgid "image"
+msgid "hero image"
+msgstr "asosiy rasm"
+
+msgid "body"
+msgstr "asosiy matn"
+
+#| msgid "Articles"
+msgid "article"
+msgstr "maqola"
+
+#| msgid "Articles"
+msgid "articles"
+msgstr "maqolalar"
+
 msgid "Core"
 msgstr "Asosiy"
 
@@ -33,8 +323,274 @@ msgstr "yaratilgan vaqti"
 msgid "updated at"
 msgstr "yangilangan vaqti"
 
+msgid "Women's cancer"
+msgstr "Ayollar saratoni"
+
+msgid "Childhood cancer"
+msgstr "Bolalar saratoni"
+
+msgid "social sharing image"
+msgstr "ijtimoiy tarmoq rasmi"
+
+msgid ""
+"Shown when the page is shared in Telegram/Facebook. Generated automatically "
+"if empty."
+msgstr ""
+"Sahifa Telegram/Facebook’da ulashilganda koʻrsatiladi. Boʻsh boʻlsa "
+"avtomatik yaratiladi."
+
+msgid "hide from search engines"
+msgstr "qidiruv tizimlaridan yashirish"
+
+msgid "Adds a noindex meta tag. Use for drafts-in-public and utility pages."
+msgstr ""
+"noindex meta-tegini qoʻshadi. Ochiq qoralamalar va xizmat sahifalari uchun."
+
+msgid "medically reviewed by"
+msgstr "tibbiy tekshiruvni oʻtkazgan"
+
+msgid "reviewed on"
+msgstr "tekshirilgan sana"
+
+msgid "medically verified"
+msgstr "tibbiy tasdiqlangan"
+
+msgid "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
+msgstr ""
+"«Shifokor tekshirgan» belgisini koʻrsatadi. Tibbiy rezensent belgilaydi."
+
+msgid "Medical review"
+msgstr "Tibbiy tekshiruv"
+
+msgid "hotline phone"
+msgstr "ishonch telefoni"
+
+msgid "Format: +998 XX XXX-XX-XX"
+msgstr "Format: +998 XX XXX-XX-XX"
+
+msgid "second hotline phone"
+msgstr "ikkinchi ishonch telefoni"
+
+msgid "Telegram channel"
+msgstr "Telegram kanali"
+
+msgid "Instagram"
+msgstr "Instagram"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "YouTube"
+msgstr "YouTube"
+
+msgid "TikTok"
+msgstr "TikTok"
+
+msgid "footer text (uz)"
+msgstr "pastki matn (uz)"
+
+msgid "footer text (ru)"
+msgstr "pastki matn (ru)"
+
+msgid "medical disclaimer (uz)"
+msgstr "tibbiy ogohlantirish (uz)"
+
+msgid "medical disclaimer (ru)"
+msgstr "tibbiy ogohlantirish (ru)"
+
+msgid "show emergency banner"
+msgstr "shoshilinch bannerni koʻrsatish"
+
+msgid "emergency banner (uz)"
+msgstr "shoshilinch banner (uz)"
+
+msgid "emergency banner (ru)"
+msgstr "shoshilinch banner (ru)"
+
+msgid "emergency banner link"
+msgstr "banner havolasi"
+
+msgid "Yandex.Metrika counter id"
+msgstr "Yandex.Metrika hisoblagich ID"
+
+msgid "legal / privacy text (uz)"
+msgstr "huquqiy / maxfiylik matni (uz)"
+
+msgid "legal / privacy text (ru)"
+msgstr "huquqiy / maxfiylik matni (ru)"
+
+msgid "Agency logo"
+msgstr "Agentlik logotipi"
+
+msgid "Yandex logo"
+msgstr "Yandex logotipi"
+
+msgid "Hamroh logo"
+msgstr "Hamroh logotipi"
+
+msgid "Hotline"
+msgstr "Ishonch telefoni"
+
+msgid "Social networks"
+msgstr "Ijtimoiy tarmoqlar"
+
+msgid "Footer & legal"
+msgstr "Pastki qism va huquqiy matnlar"
+
+msgid "Emergency banner (e.g. screening month)"
+msgstr "Shoshilinch banner (masalan, skrining oyi)"
+
+msgid "Partner logos"
+msgstr "Hamkorlar logotiplari"
+
+msgid "site settings"
+msgstr "sayt sozlamalari"
+
 msgid "Directory"
 msgstr "Muassasalar katalogi"
+
+msgid "code"
+msgstr "kod"
+
+msgid "name (uz)"
+msgstr "nomi (uz)"
+
+msgid "name (ru)"
+msgstr "nomi (ru)"
+
+msgid "sort order"
+msgstr "tartib"
+
+msgid "region"
+msgstr "viloyat"
+
+#| msgid "Sections"
+msgid "regions"
+msgstr "viloyatlar"
+
+msgid "service"
+msgstr "xizmat"
+
+msgid "services"
+msgstr "xizmatlar"
+
+msgid "Family doctor point (SVP)"
+msgstr "Oilaviy shifokorlik punkti (OShP)"
+
+msgid "District polyclinic"
+msgstr "Tuman poliklinikasi"
+
+msgid "Onco-alertness room"
+msgstr "Onkologik ogohlik xonasi"
+
+msgid "Mother & Child Health Centre / branch"
+msgstr "Ona va bola salomatligi markazi / filiali"
+
+msgid "Oncology centre (RONC / regional)"
+msgstr "Onkologiya markazi (RONM / viloyat)"
+
+msgid "Paediatric onco-haematology"
+msgstr "Bolalar onkogematologiyasi"
+
+msgid "Psychological support"
+msgstr "Psixologik yordam"
+
+msgid "NGO / support group"
+msgstr "NNT / qoʻllab-quvvatlash guruhi"
+
+msgid "Both"
+msgstr "Ikkalasi"
+
+msgid "kind"
+msgstr "turi"
+
+msgid "district (uz)"
+msgstr "tuman (uz)"
+
+msgid "district (ru)"
+msgstr "tuman (ru)"
+
+msgid "address (uz)"
+msgstr "manzil (uz)"
+
+msgid "address (ru)"
+msgstr "manzil (ru)"
+
+msgid "phone"
+msgstr "telefon"
+
+msgid "opening hours (uz)"
+msgstr "ish vaqti (uz)"
+
+msgid "opening hours (ru)"
+msgstr "ish vaqti (ru)"
+
+msgid "website"
+msgstr "veb-sayt"
+
+msgid "latitude"
+msgstr "kenglik"
+
+msgid "longitude"
+msgstr "uzunlik"
+
+msgid "free under the state programme"
+msgstr "davlat dasturi boʻyicha bepul"
+
+#| msgid "Sections"
+msgid "sections"
+msgstr "boʻlimlar"
+
+msgid "data verified on"
+msgstr "maʼlumot tekshirilgan sana"
+
+msgid "published"
+msgstr "eʼlon qilingan"
+
+msgid "external id"
+msgstr "tashqi ID"
+
+msgid ""
+"Identifier in an external registry (e.g. DMED) for future synchronisation."
+msgstr ""
+"Kelajakda sinxronlash uchun tashqi reyestrdagi (masalan, DMED) "
+"identifikator."
+
+#| msgid "credit / source"
+msgid "external source"
+msgstr "tashqi manba"
+
+msgid "Name"
+msgstr "Nomi"
+
+#| msgid "Sections"
+msgid "Location"
+msgstr "Joylashuv"
+
+msgid "Contact"
+msgstr "Aloqa"
+
+msgid "Status"
+msgstr "Holat"
+
+msgid "institution"
+msgstr "muassasa"
+
+msgid "institutions"
+msgstr "muassasalar"
+
+msgid "intro"
+msgstr "kirish"
+
+msgid "default section filter"
+msgstr "standart boʻlim filtri"
+
+msgid "Pre-selects the section filter; visitors can change it."
+msgstr ""
+"Boʻlim filtrini oldindan tanlaydi; tashrif buyuruvchilar oʻzgartira oladi."
+
+msgid "directory page (where to go)"
+msgstr "katalog sahifasi (qayerga murojaat qilish)"
 
 msgid "Questions & FAQ"
 msgstr "Savollar va javoblar"
@@ -45,8 +601,90 @@ msgstr "Qayta aloqa"
 msgid "Glossary"
 msgstr "Lugʻat"
 
+#| msgid "Sections"
+msgid "Both sections"
+msgstr "Ikkala boʻlim"
+
+msgid "term"
+msgstr "atama"
+
+#| msgid "description"
+msgid "definition"
+msgstr "taʼrif"
+
+#| msgid "Sections"
+msgid "section"
+msgstr "boʻlim"
+
+msgid "synonyms"
+msgstr "sinonimlar"
+
+msgid "Comma-separated alternative spellings (e.g. Cyrillic, abbreviations)."
+msgstr ""
+"Vergul bilan ajratilgan muqobil yozilishlar (masalan, kirillcha, "
+"qisqartmalar)."
+
+#| msgid "Glossary"
+msgid "glossary term"
+msgstr "lugʻat atamasi"
+
+#| msgid "Glossary"
+msgid "glossary terms"
+msgstr "lugʻat atamalari"
+
 msgid "Home"
 msgstr "Bosh sahifa"
+
+#| msgid "job title"
+msgid "hero title"
+msgstr "asosiy sarlavha"
+
+msgid "Key idea of the portal — early detection. Filled by the copywriter."
+msgstr "Portalning asosiy gʻoyasi — erta aniqlash. Kopirayter toʻldiradi."
+
+#| msgid "job title"
+msgid "hero subtitle"
+msgstr "asosiy sarlavha osti"
+
+msgid "home emergency banner"
+msgstr "bosh sahifa shoshilinch banneri"
+
+msgid ""
+"Optional home-only banner (e.g. screening campaign month). The site-wide "
+"banner lives in Settings → Site settings."
+msgstr ""
+"Faqat bosh sahifa uchun ixtiyoriy banner (masalan, skrining oyi). Sayt "
+"boʻylab banner: Sozlamalar → Sayt sozlamalari."
+
+msgid "statistics strip (3 stats)"
+msgstr "statistika qatori (3 ta koʻrsatkich)"
+
+#| msgid "Skip to main content"
+msgid "additional content"
+msgstr "qoʻshimcha kontent"
+
+msgid "Hero"
+msgstr "Bosh blok (hero)"
+
+msgid "Featured articles"
+msgstr "Tanlangan maqolalar"
+
+msgid "Featured videos"
+msgstr "Tanlangan videolar"
+
+#| msgid "Go to the home page"
+msgid "home page"
+msgstr "bosh sahifa"
+
+#| msgid "created at"
+msgid "featured article"
+msgstr "tanlangan maqola"
+
+msgid "video"
+msgstr "video"
+
+msgid "featured video"
+msgstr "tanlangan video"
 
 msgid "Media library"
 msgstr "Media kutubxona"
@@ -84,11 +722,149 @@ msgstr "hujjat"
 msgid "documents"
 msgstr "hujjatlar"
 
+msgid "Long video (doctor interview, lecture)"
+msgstr "Uzun video (shifokor intervyusi, maʼruza)"
+
+msgid "Short vertical video (mobilograph, social media)"
+msgstr "Qisqa vertikal video (mobilograf, ijtimoiy tarmoqlar)"
+
+msgid "Uploaded file"
+msgstr "Yuklangan fayl"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "Uploaded"
+msgstr "Yuklangan"
+
+msgid "Processing"
+msgstr "Qayta ishlanmoqda"
+
+msgid "Ready"
+msgstr "Tayyor"
+
+msgid "Failed"
+msgstr "Xatolik"
+
+#| msgid "job title"
+msgid "title"
+msgstr "sarlavha"
+
+msgid "source"
+msgstr "manba"
+
+msgid "video file"
+msgstr "video fayl"
+
+msgid "Original upload. Never served directly — transcoded renditions are."
+msgstr ""
+"Asl fayl. Toʻgʻridan-toʻgʻri koʻrsatilmaydi — faqat qayta kodlangan "
+"versiyalar."
+
+msgid "external URL"
+msgstr "tashqi havola"
+
+msgid "poster image"
+msgstr "poster rasmi"
+
+msgid "duration (seconds)"
+msgstr "davomiyligi (soniya)"
+
+msgid "doctor's name"
+msgstr "shifokor ismi"
+
+#| msgid "organisation"
+msgid "doctor's organisation"
+msgstr "shifokor tashkiloti"
+
+msgid "transcript"
+msgstr "transkript"
+
+msgid "subtitles (uz, VTT)"
+msgstr "subtitrlar (uz, VTT)"
+
+msgid "subtitles (ru, VTT)"
+msgstr "subtitrlar (ru, VTT)"
+
+msgid "status"
+msgstr "holat"
+
+#| msgid "Sections"
+msgid "renditions"
+msgstr "versiyalar"
+
+msgid "processing error"
+msgstr "qayta ishlash xatosi"
+
+msgid "Media"
+msgstr "Media"
+
+msgid "Speaker"
+msgstr "Soʻzlovchi"
+
+msgid "Accessibility"
+msgstr "Maxsus imkoniyatlar"
+
+msgid "videos"
+msgstr "videolar"
+
+msgid "Upload a video file or choose an external source."
+msgstr "Video fayl yuklang yoki tashqi manba tanlang."
+
+msgid "An external URL is required."
+msgstr "Tashqi havola kiritilishi shart."
+
+msgid "The URL does not belong to the selected provider."
+msgstr "Havola tanlangan provayderga tegishli emas."
+
 msgid "Search"
 msgstr "Qidiruv"
 
 msgid "Sections"
 msgstr "Boʻlimlar"
+
+msgid "Enter a colour like #b8336a."
+msgstr "Rangni #b8336a koʻrinishida kiriting."
+
+msgid "🎗 ribbon (women)"
+msgstr "🎗 lenta (ayollar)"
+
+msgid "🎀 ribbon (children)"
+msgstr "🎀 lenta (bolalar)"
+
+msgid "tagline"
+msgstr "shior"
+
+msgid "One sentence shown on the home page card and under the section title."
+msgstr ""
+"Bosh sahifa kartasida va boʻlim sarlavhasi ostida koʻrsatiladigan bitta "
+"jumla."
+
+msgid "primary colour"
+msgstr "asosiy rang"
+
+msgid "Overrides the token default (--brand). Leave empty to use tokens.css."
+msgstr ""
+"Standart tokenni (--brand) almashtiradi. tokens.css ishlatish uchun boʻsh "
+"qoldiring."
+
+msgid "accent colour"
+msgstr "qoʻshimcha rang"
+
+msgid "icon"
+msgstr "ikonka"
+
+msgid "Section identity"
+msgstr "Boʻlim identikasi"
+
+msgid "section index page"
+msgstr "boʻlim bosh sahifasi"
+
+msgid "Shown on the section index card and in the mega-menu."
+msgstr "Boʻlim sahifasidagi kartada va mega-menyuda koʻrsatiladi."
+
+msgid "topic index page"
+msgstr "mavzu sahifasi"
 
 msgid "Stories"
 msgstr "Hikoyalar"
@@ -148,21 +924,84 @@ msgstr ""
 msgid "Skip to main content"
 msgstr "Asosiy mazmunga oʻtish"
 
-msgid ""
-"This site is an information and education resource. It does not make a "
-"diagnosis. If you notice symptoms, contact a doctor."
-msgstr ""
-"Bu sayt axborot-taʼlim manbasi. U tashxis qoʻymaydi. Belgilarni sezsangiz, "
-"shifokorga murojaat qiling."
+msgid "Download"
+msgstr "Yuklab olish"
+
+msgid "No institutions match the selected filters yet."
+msgstr "Tanlangan filtrlarga mos muassasalar hozircha yoʻq."
+
+msgid "Breadcrumbs"
+msgstr "Yoʻl koʻrsatkichi"
+
+msgid "Important"
+msgstr "Muhim"
+
+msgid "Good to know"
+msgstr "Bilib qoʻying"
+
+msgid "Reassurance"
+msgstr "Tinchlantirish"
+
+msgid "Note"
+msgstr "Eslatma"
+
+#| msgid "Skip to main content"
+msgid "Load content"
+msgstr "Kontentni yuklash"
+
+msgid "Loads content from a third-party site."
+msgstr "Tashqi saytdan kontent yuklanadi."
+
+msgid "Open on"
+msgstr "Ochish:"
 
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
 msgstr "Prezidentning PQ-402 va PQ-186-sonli qarorlari asosida yaratilgan."
+
+msgid "Partners"
+msgstr "Hamkorlar"
+
+#| msgid "Erta aniqla"
+msgid "Erta aniqla — home"
+msgstr "Erta aniqla — bosh sahifa"
+
+msgid "Free under the state programme"
+msgstr "Davlat dasturi boʻyicha bepul"
+
+msgid "Website"
+msgstr "Veb-sayt"
+
+msgid "Data verified"
+msgstr "Maʼlumot tekshirilgan"
 
 msgid "Language"
 msgstr "Til"
 
 msgid "Main navigation"
 msgstr "Asosiy navigatsiya"
+
+msgid "Menu"
+msgstr "Menyu"
+
+#, python-format
+msgid "%(minutes)s min read"
+msgid_plural "%(minutes)s min read"
+msgstr[0] "%(minutes)s daqiqa oʻqish"
+
+msgid "Reviewed by a doctor"
+msgstr "Shifokor tekshirgan"
+
+msgid "Verified by a doctor"
+msgstr "Shifokor tekshirgan"
+
+msgid "Timing"
+msgstr "Muddat"
+
+msgid "Learn more"
+msgstr "Batafsil"
+
+msgid "The video is being processed. Please check back later."
+msgstr "Video qayta ishlanmoqda. Keyinroq qayta urinib koʻring."
 
 msgid "Account temporarily locked"
 msgstr "Hisob vaqtincha bloklangan"
@@ -173,3 +1012,47 @@ msgid ""
 msgstr ""
 "Tizimga kirishga muvaffaqiyatsiz urinishlar juda koʻp. Bir soatdan soʻng "
 "qayta urinib koʻring yoki administratorga murojaat qiling."
+
+msgid "Filter institutions"
+msgstr "Muassasalarni filtrlash"
+
+#| msgid "Sections"
+msgid "Section"
+msgstr "Boʻlim"
+
+msgid "All"
+msgstr "Barchasi"
+
+msgid "Show"
+msgstr "Koʻrsatish"
+
+msgid "Results"
+msgstr "Natijalar"
+
+#, python-format
+msgid "%(counter)s institution"
+msgid_plural "%(counter)s institutions"
+msgstr[0] "%(counter)s ta muassasa"
+
+msgid "Map will be shown here."
+msgstr "Bu yerda xarita koʻrsatiladi."
+
+#| msgid "description"
+msgid "Open section"
+msgstr "Boʻlimni ochish"
+
+msgid "Key figures"
+msgstr "Asosiy raqamlar"
+
+msgid "Topics"
+msgstr "Mavzular"
+
+msgid "Articles will appear here."
+msgstr "Maqolalar shu yerda paydo boʻladi."
+
+#~ msgid ""
+#~ "This site is an information and education resource. It does not make a "
+#~ "diagnosis. If you notice symptoms, contact a doctor."
+#~ msgstr ""
+#~ "Bu sayt axborot-taʼlim manbasi. U tashxis qoʻymaydi. Belgilarni sezsangiz, "
+#~ "shifokorga murojaat qiling."

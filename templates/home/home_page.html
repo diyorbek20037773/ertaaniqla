@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+{% comment %} home/home_page.html — Context: page (HomePage), sections (list[SectionIndexPage]),
+   featured_articles, featured_videos, settings. Both sections presented equally (TZ §II). {% endcomment %}
+{% block breadcrumbs %}{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="hero">
+    <h1 class="hero__title">{% if page.hero_title %}{{ page.hero_title }}{% else %}{{ page.title }}{% endif %}</h1>
+    {% if page.hero_subtitle %}<p class="hero__subtitle">{{ page.hero_subtitle }}</p>{% endif %}
+    {% if page.emergency_banner %}<div class="banner banner--home">{{ page.emergency_banner|richtext }}</div>{% endif %}
+  </section>
+
+  <section class="section-cards" aria-label="{% trans 'Sections' %}">
+    {% for section in sections %}
+      <a class="section-card" href="{{ section.url }}" data-section="{{ section.section_key }}">
+        <span class="section-card__emoji" aria-hidden="true">{{ section.emoji }}</span>
+        <span class="section-card__title">{{ section.title }}</span>
+        {% if section.tagline %}<span class="section-card__tagline">{{ section.tagline }}</span>{% endif %}
+        <span class="section-card__cta">{% trans "Open section" %}</span>
+      </a>
+    {% endfor %}
+  </section>
+
+  {% if page.stats %}
+    <section class="stats-strip" aria-label="{% trans 'Key figures' %}">
+      {% for block in page.stats %}{% include_block block %}{% endfor %}
+    </section>
+  {% endif %}
+
+  {% if featured_articles %}
+    <section class="featured">
+      <h2>{% trans "Featured articles" %}</h2>
+      <div class="cards-grid__items">
+        {% for article in featured_articles %}
+          {% include "components/card.html" with title=article.title url=article.url text=article.summary image=article.hero_image %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if featured_videos %}
+    <section class="featured">
+      <h2>{% trans "Featured videos" %}</h2>
+      <div class="cards-grid__items">
+        {% for video in featured_videos %}
+          {% include "components/card.html" with title=video.title text=video.doctor_name image=video.poster %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% for block in page.body %}{% include_block block %}{% endfor %}
+</div>
+{% endblock %}

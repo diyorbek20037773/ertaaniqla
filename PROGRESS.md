@@ -41,11 +41,12 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - D-003 Wireframe-only UI until Figma arrives (see DESIGN RULE).
 - D-004 In-house `EncryptedTextField` (Fernet). D-005 custom User/Image/Document models in M0.
 - D-006 static Celery beat schedule. D-007 CMS at `/cms/`. D-008 Turnstile. D-009 FTS config `ertaaniqla`.
+- D-010 DirectoryPage inside women section + short-URL redirects. D-011 provider iframes, no oEmbed. D-012 two banners (site + home). D-013 women care/after `show_in_menus=False`. D-014 `<details>` nav/accordions. D-015 regions/services/locales via data migrations.
 
 ## Milestones
 
 - [x] Read ENGINEERING_SPEC, TZ, AUTOPILOT_PROMPT fully.
-- [ ] **M0 — Scaffold** (all items done; gate verification of the web container in progress)
+- [x] **M0 — Scaffold** — DONE, tagged `m0` (commit d87c7b2)
   - [x] PROGRESS.md (this file)
   - [x] pyproject.toml + uv.lock, .python-version (Django 5.2.17, Wagtail 7.0.x, 136 packages)
   - [x] config/ (settings base/dev/prod/test/build, urls, wsgi, asgi, celery)
@@ -58,16 +59,18 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] tests: 36 tests (infra, fields, sentry, degraded paths, prod settings + `check --deploy`), coverage 94.9 %
   - [x] locale/uz + ru `django.po` filled (46 strings, real Uzbek Latin + Russian) and compiled; translation check green
   - [x] ruff clean · mypy clean (50 files) · pip-audit clean · prod image builds
-  - [ ] Gate: compose up db+redis+web (web on host :8001), curl /healthz /readyz /uz/ /cms/login/ → commit + tag `m0`
-- [ ] M1 — Content model + i18n + seeded tree
-  - [ ] BasePage mixin (SEO, og_image, noindex, reviewed_by/at, medically_verified, get_section, reading_time)
-  - [ ] HomePage, SectionIndexPage, TopicIndexPage, ArticlePage + every block of spec §4.3 (template + clean/render test each)
-  - [ ] Site settings (hotline, socials, footer, Metrika, banner, partners, legal)
-  - [ ] wagtail-localize locales uz/ru (+ uz-Cyrl stub), hreflang, language switcher to translated counterpart
-  - [ ] `seed_content` — full TZ tree in uz+ru, idempotent
-  - [ ] base layout, tokens, `data-section` theming, mega-menu (5 items per section), breadcrumbs, footer, print CSS skeleton
-  - [ ] docs/COMPONENT_INVENTORY.md (ru+uz) — designer hand-off
-  - [ ] Gate: every live page 200 in uz and ru; `assertNumQueries` on section index; translations; Playwright screenshots 390 px → `tests/e2e/screenshots/`; tag `m1`
+  - [x] Gate: compose web on :8001 → healthz 200, readyz {db ok, cache ok}, / → /uz/, /uz/ 200, /cms/login/ 200, 404 page OK; tagged `m0`
+- [x] **M1 — Content model + i18n + seeded tree** — DONE, tagged `m1`
+  - [x] `BasePage` (og_image, noindex, reviewed_by/at, medically_verified, `get_section`, `reading_time`, `verified_badge`) — `apps/core/models.py`
+  - [x] `HomePage` (hero, section cards, stats ≤3, featured articles ≤6 / videos ≤3, home banner), `SectionIndexPage` (section_key, tagline, colours, icon, intro, `get_menu_items`), `TopicIndexPage`, `ArticlePage`, `DirectoryPage` (list + GET filters; map/HTMX/CSV in M4), `Video` snippet (fields per spec; transcoding M3), `Term`, `Institution/Region/Service` (+ data migration: 14 regions, 8 services)
+  - [x] all 18 blocks of spec §4.3 in `apps/articles/blocks.py` + `templates/blocks/*.html` + clean/render tests; embeds parsed offline (`apps/articles/embeds.py`, D-011)
+  - [x] `SiteSettings` (hotline, socials, footer/disclaimer/legal uz+ru, emergency banner, partner logos, Metrika)
+  - [x] Locales uz/ru via core migration 0002; hreflang + x-default; canonical = Wagtail Site hostname; language switcher → translated counterpart → section → root; `uz_Cyrl` .po stub
+  - [x] `seed_content --lang uz,ru` — full TZ tree (2 sections, 4 topics, 17 articles, 1 directory, home) ×2 locales, glossary terms, redirects `/uz/qayerga-murojaat/`, idempotent (2nd run: created=0 updated=0, ~2.5 s)
+  - [x] base layout, `data-section` theming + CMS colour override (nonce'd style), mega-menu (`<details>`, 5 items/section, cached 1 h + signal invalidation), breadcrumbs, footer (disclaimer, hotline, socials, partners), `print.css` skeleton, `components.css`
+  - [x] `docs/COMPONENT_INVENTORY.md` (ru+uz), `docs/CONTENT_MODEL.md`, DECISIONS D-010…D-015, TZ_TRACE rows updated
+  - [x] 238 new UI strings translated uz+ru (`scripts/translations_m1.py`), check green
+  - [x] Gate: `test_every_live_page_returns_200_in_both_languages` (54 pages), `assertNumQueries` ≤ 40 on section index, translations complete, Playwright 390 px screenshots (10) in `tests/e2e/screenshots/`, menu + language-switch e2e green; coverage 94.65 %; ruff/mypy clean; `check --deploy` OK
 - [ ] M2 — Components, home, search (structure + a11y only; no visual polish)
 - [ ] M3 — Media & stories
 - [ ] M4 — Directory, tools, FAQ, feedback, glossary
@@ -84,16 +87,21 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 ## Last command run
 
 ```
-.venv/Scripts/python -m pytest --cov   → 36 passed, coverage 94.87 % (gate 85 %)
-.venv/Scripts/ruff check .             → All checks passed
-.venv/Scripts/mypy                     → Success: no issues found in 50 source files
-pip-audit -r req.txt --strict          → No known vulnerabilities found
-scripts/check_translations.py          → translations: uz + ru complete
-docker build -f docker/web/Dockerfile  → ertaaniqla/web:local built
-docker compose … up -d web (WEB_PORT=8001, INSTALL_DEV=1) → verifying curl checks
+.venv/Scripts/python -m pytest --cov      → all passed, coverage 94.65 % (gate 85 %)
+E2E_BASE_URL=http://localhost:8001 pytest tests/e2e -m e2e → 11 passed (screenshots written)
+ruff check / format --check              → clean
+mypy                                     → Success: no issues found in 70 source files
+scripts/check_translations.py            → translations: uz + ru complete
+manage.py check --deploy (prod env)      → no issues
+manage.py seed_content (dev DB, 2nd run) → created=0 updated=0 unchanged=52
+curl :8001 → /uz/ /ru/ sections, topics, articles, directory all 200; /uz/qayerga-murojaat/ 301
 ```
 
 ## Next concrete action
 
-If the web curl checks pass: `git add -A && git commit -m "feat: M0 scaffold" && git tag m0`; then start M1
-with `apps/core/models.py` (BasePage), `apps/articles/blocks.py`, `apps/sections/models.py`, `apps/home/models.py`.
+Start **M2 — Components, home, search** (structure + a11y only, no visual polish):
+`apps/search` (Postgres FTS view `/uz/qidiruv/?q=`, uz/ru synonyms, Latin↔Cyrillic normaliser,
+HTMX search-as-you-type + non-JS form), home featured logic already exists; axe (Playwright)
+0 serious on 5 pages; block render tests in both locales already exist — extend for search.
+Remember: web container must be restarted after adding new templatetag modules
+(`docker compose -f compose.yml -f compose.dev.yml restart web`).

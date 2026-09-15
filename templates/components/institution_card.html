@@ -1,0 +1,26 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/institution_card.html — one clinic in the directory.
+   Context: institution (Institution), LANGUAGE_CODE.
+   Shows: name, kind, region/district, address, phone (tel: link), hours, services,
+   "free under the state programme" badge, verified date.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n core_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+<article class="institution" data-kind="{{ institution.kind }}">
+  <h3 class="institution__name">{% if LANGUAGE_CODE == "ru" %}{{ institution.name_ru }}{% else %}{{ institution.name_uz }}{% endif %}</h3>
+  <p class="institution__kind">{{ institution.get_kind_display }}</p>
+  {% if institution.free_under_state_programme %}<p class="institution__free">{% trans "Free under the state programme" %}</p>{% endif %}
+  <p class="institution__address">
+    {% if LANGUAGE_CODE == "ru" %}{{ institution.region.name_ru }}{% if institution.district_ru %}, {{ institution.district_ru }}{% endif %}{% if institution.address_ru %}, {{ institution.address_ru }}{% endif %}
+    {% else %}{{ institution.region.name_uz }}{% if institution.district_uz %}, {{ institution.district_uz }}{% endif %}{% if institution.address_uz %}, {{ institution.address_uz }}{% endif %}{% endif %}
+  </p>
+  {% if institution.phone %}<p class="institution__phone"><a href="{{ institution.phone|phone_href }}">{{ institution.phone|phone_display }}</a></p>{% endif %}
+  {% with hours=institution.hours_ru|default:institution.hours_uz %}{% if LANGUAGE_CODE == "ru" and hours %}<p class="institution__hours">{{ hours }}</p>{% elif institution.hours_uz %}<p class="institution__hours">{{ institution.hours_uz }}</p>{% endif %}{% endwith %}
+  {% if institution.services.all %}
+    <ul class="institution__services">
+      {% for service in institution.services.all %}<li>{% if LANGUAGE_CODE == "ru" %}{{ service.name_ru }}{% else %}{{ service.name_uz }}{% endif %}</li>{% endfor %}
+    </ul>
+  {% endif %}
+  {% if institution.website %}<p><a href="{{ institution.website }}" rel="noopener">{% trans "Website" %}</a></p>{% endif %}
+  {% if institution.verified_at %}<p class="institution__verified">{% trans "Data verified" %}: {{ institution.verified_at|date:"d.m.Y" }}</p>{% endif %}
+</article>

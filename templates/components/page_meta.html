@@ -1,0 +1,16 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/page_meta.html — reading time + "verified by a doctor" badge + last review date.
+   Context: page (BasePage: reading_time, verified_badge {name, organisation, date}).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<div class="page-meta">
+  <span class="page-meta__reading-time">{% blocktrans trimmed count minutes=page.reading_time %}{{ minutes }} min read{% plural %}{{ minutes }} min read{% endblocktrans %}</span>
+  {% with badge=page.verified_badge %}
+    {% if badge %}
+      <span class="verified-badge" title="{% trans 'Reviewed by a doctor' %}">
+        <span class="verified-badge__icon" aria-hidden="true">✓</span>
+        {% trans "Verified by a doctor" %}{% if badge.name %}: {{ badge.name }}{% if badge.organisation %}, {{ badge.organisation }}{% endif %}{% endif %}{% if badge.date %} ({{ badge.date|date:"d.m.Y" }}){% endif %}
+      </span>
+    {% endif %}
+  {% endwith %}
+</div>

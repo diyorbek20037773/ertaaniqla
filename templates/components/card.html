@@ -1,0 +1,20 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/card.html — content card (article / topic / section / cards_grid item).
+   Context: title (str), url (str, optional), text (html/str, optional), image (Wagtail image,
+   optional), icon (str, optional), meta (str, optional e.g. reading time), tag (h2|h3, default h3).
+   States: with/without image, with/without link.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load wagtailimages_tags %}
+<article class="card">
+  {% if image %}
+    {% image image fill-640x360 as img %}
+    <img class="card__image" src="{{ img.url }}" alt="{{ img.alt }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy">
+  {% elif icon %}
+    <span class="card__icon" data-icon="{{ icon }}" aria-hidden="true">[{{ icon }}]</span>
+  {% endif %}
+  <{{ tag|default:"h3" }} class="card__title">
+    {% if url %}<a class="card__link" href="{{ url }}">{{ title }}</a>{% else %}{{ title }}{% endif %}
+  </{{ tag|default:"h3" }}>
+  {% if text %}<div class="card__text">{{ text }}</div>{% endif %}
+  {% if meta %}<p class="card__meta">{{ meta }}</p>{% endif %}
+</article>

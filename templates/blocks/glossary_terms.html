@@ -1,0 +1,12 @@
+{% load i18n %}
+<section class="block block--glossary glossary-terms">
+  <h2 class="glossary-terms__heading">{% if value.title %}{{ value.title }}{% else %}{% trans "Glossary" %}{% endif %}</h2>
+  <dl class="glossary-terms__list">
+    {% for term in value.terms %}
+      {% if term %}
+        <dt class="glossary-terms__term" id="term-{{ term.pk }}">{{ term.term }}</dt>
+        <dd class="glossary-terms__definition">{{ term.definition }}</dd>
+      {% endif %}
+    {% endfor %}
+  </dl>
+</section>

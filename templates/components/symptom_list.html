@@ -1,0 +1,21 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/symptom_list.html — symptoms with urgency (routine|soon|urgent). Colour + icon +
+   text label so colour is never the only signal (spec §9).
+   Context: title (str, optional), symptoms (list of {symptom, urgency, explanation}).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<section class="symptom-list">
+  {% if title %}<h2 class="symptom-list__heading">{{ title }}</h2>{% endif %}
+  <ul class="symptom-list__items">
+    {% for item in symptoms %}
+      <li class="symptom symptom--{{ item.urgency }}">
+        <span class="symptom__icon" aria-hidden="true">{% if item.urgency == "urgent" %}!!{% elif item.urgency == "soon" %}!{% else %}•{% endif %}</span>
+        <div class="symptom__body">
+          <p class="symptom__name">{{ item.symptom }}</p>
+          <p class="symptom__urgency">{% if item.urgency == "urgent" %}{% trans "Urgent — see a doctor now" %}{% elif item.urgency == "soon" %}{% trans "Soon — see a doctor within days" %}{% else %}{% trans "Routine — mention at the next visit" %}{% endif %}</p>
+          {% if item.explanation %}<div class="symptom__explanation">{{ item.explanation }}</div>{% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</section>

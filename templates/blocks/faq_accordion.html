@@ -1,0 +1,10 @@
+{# faq_accordion: native <details> — keyboard-operable and printable without JS #}
+<section class="block block--faq faq">
+  {% if value.title %}<h2 class="faq__heading">{{ value.title }}</h2>{% endif %}
+  {% for item in value.items %}
+    <details class="faq__item">
+      <summary class="faq__question">{{ item.question }}</summary>
+      <div class="faq__answer prose">{{ item.answer }}</div>
+    </details>
+  {% endfor %}
+</section>

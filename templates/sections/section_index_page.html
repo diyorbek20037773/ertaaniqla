@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} sections/section_index_page.html — Context: page (SectionIndexPage), subsections (live children),
+   section, section_key. The body carries data-section for theming. {% endcomment %}
+{% block content %}
+<div class="container">
+  <header class="page-header">
+    <p class="page-header__eyebrow"><span aria-hidden="true">{{ page.emoji }}</span> {% trans "Section" %}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.tagline %}<p class="page-header__lead">{{ page.tagline }}</p>{% endif %}
+  </header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  <section class="cards-grid" aria-label="{% trans 'Topics' %}">
+    <div class="cards-grid__items">
+      {% for child in subsections %}
+        {% include "components/card.html" with title=child.title url=child.url text=child.summary tag="h2" %}
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}
