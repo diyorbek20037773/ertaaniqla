@@ -202,6 +202,50 @@
   .story__person { font-weight: 700; margin: 0 0 var(--space-2); }
   .story__footer { margin-top: var(--space-8); font-size: 0.9em; color: var(--neutral-600); }
 
+  /* forms: components/form_field.html, form_errors.html, tools/*, faq/*, feedback/* */
+  .field { margin-block: var(--space-4); }
+  .field label { display: block; font-weight: 700; margin-bottom: var(--space-1); }
+  .field input:not([type="checkbox"]), .field select, .field textarea { width: 100%; max-width: 32rem; min-height: var(--tap-target); padding: var(--space-2) var(--space-3); border: 1px solid var(--neutral-400); border-radius: var(--radius); background: var(--neutral-0); }
+  .field--checkbox { display: flex; gap: var(--space-2); align-items: flex-start; }
+  .field--checkbox input { width: 1.5rem; height: 1.5rem; margin-top: 0.2rem; }
+  .field--checkbox label { font-weight: 400; margin: 0; }
+  .field--error input, .field--error select, .field--error textarea { border-color: var(--danger); }
+  .field__help { font-size: 0.9em; color: var(--neutral-600); margin: var(--space-1) 0 0; }
+  .field__error { color: var(--danger); font-weight: 700; margin: var(--space-1) 0 0; }
+  .form-errors { border-left: 4px solid var(--danger); background: var(--danger-bg); padding: var(--space-3) var(--space-4); margin-block: var(--space-4); }
+  .form-errors__title { font-weight: 700; margin: 0 0 var(--space-2); }
+  .form-success { border-left: 4px solid var(--success); background: var(--success-bg); padding: var(--space-4); margin-block: var(--space-4); }
+  .hp-wrap, .hp-field { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
+  .tool-form { margin-block: var(--space-6); }
+  .tool-form__note { font-size: 0.9em; color: var(--neutral-600); }
+  .tool-form__count { font-weight: 700; color: var(--brand); min-height: 1.5em; }
+  .checklist { border: 0; padding: 0; margin: 0 0 var(--space-4); }
+  .checklist legend { font-weight: 700; margin-bottom: var(--space-2); }
+  .checklist__item { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-2) 0; border-bottom: 1px solid var(--neutral-200); }
+  .checklist__item input { width: 1.5rem; height: 1.5rem; flex: none; margin-top: 0.2rem; }
+  .tool-result { border: 2px solid var(--brand); border-radius: var(--radius); padding: var(--space-4); margin-block: var(--space-6); background: var(--brand-soft); }
+  .tool-result--urgent, .tool-result--due { border-color: var(--danger); background: var(--danger-bg); }
+  .tool-result--soon { border-color: var(--warning); background: var(--warning-bg); }
+  .tool-result--routine, .tool-result--ok { border-color: var(--success); background: var(--success-bg); }
+  .tool-result--none, .tool-result--na { border-color: var(--neutral-400); background: var(--neutral-50); }
+  .tool-result__tests { list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+  .tool-result__test { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); padding: var(--space-2) 0; border-bottom: 1px solid var(--neutral-200); }
+  .tool-result__name { font-weight: 700; min-width: 12rem; }
+  .tool-result__test--due .tool-result__status { color: var(--danger); font-weight: 700; }
+  .tool-result__test--ok .tool-result__status { color: var(--success); }
+  .tool-result__level { font-weight: 700; font-size: 1.1em; }
+  .disclaimer { border: 1px dashed var(--neutral-400); padding: var(--space-3) var(--space-4); margin-block: var(--space-8); font-size: 0.95em; color: var(--neutral-600); }
+  .question-form { margin-block: var(--space-8); }
+  .faq__meta { font-size: 0.85em; color: var(--neutral-600); }
+  .htmx-indicator { opacity: 0; transition: opacity 0.2s; }
+  .htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }
+
+  /* glossary/glossary_page.html, glossary_wrap */
+  .glossary-letters { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-block: var(--space-4); }
+  .glossary-letters a { display: inline-flex; min-width: var(--tap-target); min-height: var(--tap-target); align-items: center; justify-content: center; border: 1px solid var(--neutral-200); border-radius: var(--radius); text-decoration: none; }
+  .glossary-terms__synonyms { font-weight: 400; color: var(--neutral-600); }
+  a.term, abbr.term { text-decoration: underline dotted; text-underline-offset: 0.2em; cursor: help; }
+
   /* articles/article_page.html */
   .article__hero { width: 100%; height: auto; border-radius: var(--radius); }
   .article__footer { margin-top: var(--space-12); padding-top: var(--space-4); border-top: 1px solid var(--neutral-200); color: var(--neutral-600); font-size: 0.9em; }
@@ -222,6 +266,8 @@
 
   /* components/footer.html */
   .site-footer { border-top: 1px solid var(--neutral-200); background: var(--neutral-50); padding-block: var(--space-8); font-size: 0.9em; color: var(--neutral-600); }
+  .site-footer__links ul { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+  .site-footer__links a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
   .site-footer__social { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0 0 var(--space-4); padding: 0; }
   .site-footer__partners { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
   .site-footer__partner-logo { height: 40px; width: auto; }

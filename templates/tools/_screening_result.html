@@ -1,0 +1,27 @@
+{% load i18n wagtailcore_tags %}
+{% comment %} tools/_screening_result.html — result partial. Context: results, any_due, any_applies,
+   page (texts), test_labels. {% endcomment %}
+{% if results %}
+<section class="tool-result tool-result--{% if any_due %}due{% elif any_applies %}ok{% else %}na{% endif %}">
+  <h2>{% trans "Your result" %}</h2>
+  <ul class="tool-result__tests">
+    {% for r in results %}
+      <li class="tool-result__test tool-result__test--{{ r.status }}">
+        <span class="tool-result__name">{% if r.test == "mammography" %}{% trans "Mammography" %}{% elif r.test == "ultrasound" %}{% trans "Breast ultrasound" %}{% else %}{% trans "HPV test" %}{% endif %}</span>
+        <span class="tool-result__status">
+          {% if r.status == "not_applicable" %}{% trans "Not recommended at your age" %}
+          {% elif r.status == "due" %}{% trans "Due now" %}
+          {% elif r.next_in_years is None %}{% trans "Done — ask your doctor when to repeat" %}
+          {% else %}{% blocktrans trimmed count years=r.next_in_years %}Next in about {{ years }} year{% plural %}Next in about {{ years }} years{% endblocktrans %}{% endif %}
+        </span>
+        {% if r.applies and r.interval_years %}<span class="tool-result__interval">{% blocktrans trimmed count years=r.interval_years %}every {{ years }} year{% plural %}every {{ years }} years{% endblocktrans %}</span>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <div class="prose">
+    {% if any_due %}{{ page.text_due|richtext }}{% elif any_applies %}{{ page.text_ok|richtext }}{% else %}{{ page.text_not_applicable|richtext }}{% endif %}
+    {% for r in results %}{% if r.test == "hpv" and r.applies %}{{ page.text_hpv_interval|richtext }}{% endif %}{% endfor %}
+  </div>
+  {% if page.where_page and any_due %}<a class="button button--primary" href="{{ page.where_page.url }}">{% trans "Where to go" %}</a>{% endif %}
+</section>
+{% endif %}

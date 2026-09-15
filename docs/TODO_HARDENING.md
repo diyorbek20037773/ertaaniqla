@@ -12,3 +12,6 @@ here. Each item: what, why, where.
 | H-005 | search | Move the uz/ru synonym list to a CMS snippet once editors want to maintain it; add `AutocompleteField` on `summary` and per-locale relevance boosting. | `apps/search/synonyms.py` |
 | H-006 | media | Docker Desktop bind mounts on Windows can return an empty read right after a write, so Django may null image dimensions; code keeps known values. Not an issue on Linux/named volumes. | `apps/media_library/services.py`, `signals.py` |
 | H-007 | media | Poster frame is taken at 1 s; add an editor-chosen poster timestamp and WebM/AV1 renditions if bandwidth data justify it. | `apps/media_library/services.py` |
+| H-008 | directory | Self-hosted OSM tile proxy / cache in nginx for regions with slow access to tile.openstreetmap.org; marker clustering when > 200 institutions. | `docker/nginx`, `static/src/map.js` |
+| H-009 | forms | Turnstile widget needs the client's site key; until then forms rely on honeypot + rate limit only (prod refuses to start without the secret). | `.env` |
+| H-010 | faq | Moderator notification is a single e-mail; add Telegram bot alert (M6 alerts channel) and daily digest of unanswered questions. | `apps/faq/tasks.py` |

@@ -83,7 +83,15 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] OG image per page: `apps/core/og.py` (Pillow, bundled DejaVu, section colour, 1200×630), task `core.generate_og_image` on `page_published` → `BasePage.og_image_generated`; `base.html` `og:image` fallback + width/height
   - [x] `stories`: `StoryIndexPage` (`/uz/hikoyalar/` `/ru/istorii/`, section filter tabs) + `PatientStoryPage` (person_display_name, section, diagnosis_short, summary, hero, body, is_anonymised, consent_obtained, consent_guardian, private consent_document); `clean()` blocks publishing without consent (guardian for children); seeded in both languages
   - [x] Gate: container integration test transcodes a generated 2 s 1280×720 sample → 720p + 480p + poster (`docker exec ertaaniqla-web-1 … pytest -m integration`); publishing a story without consent raises ValidationError; OG task produces a 1200×630 PNG; 31 new UI strings uz+ru; coverage 94 %
-- [ ] M4 — Directory, tools, FAQ, feedback, glossary
+- [x] **M4 — Directory, tools, FAQ, feedback, glossary** — DONE, tagged `m4`
+  - [x] directory: `import_institutions` CSV (upsert by external_id, dry-run, row validation) + `data/institutions.sample.csv` (12 fake rows), HTMX filters (`_results.html` partial), Leaflet map bundle `static/dist/map.js` (D-021) with JSON data island, list fallback
+  - [x] tools: `screening.py` rules (mammography 45–65/2y, ultrasound ≤44/2y, HPV 30–50), `selfcheck.py` scoring; `ToolsIndexPage`, `ScreeningToolPage`, `SelfCheckPage` (women + children) with CMS texts, waffle flags, disclaimer, HTMX results, nothing stored
+  - [x] faq: `Question` (encrypted contact, consent-gated publication, snippet moderation), `FAQPage` form (honeypot, Turnstile, 5/min rate limit, HTMX), moderator e-mail via Celery, `faq.purge_contacts` beat job
+  - [x] feedback: `FeedbackSubmission` + `FeedbackPage`, `feedback.purge_old_submissions` beat job (180 d)
+  - [x] glossary: `GlossaryPage` (letters, section, search) + `glossary_wrap` filter on rich_text blocks (cached, invalidated on Term save)
+  - [x] shared: `apps/core/antispam.py`, `apps/core/forms.py` (AntiSpamFormMixin, aria error attrs), `apps/core/mail.py` (templated Celery e-mail), footer site links (cached), form components
+  - [x] seed: tools index + 3 tool pages, FAQ, feedback, glossary pages in uz+ru (placeholders only); 111 new UI strings uz+ru
+  - [x] Gate: screening boundary tests, self-check scoring, purge jobs (freezegun), rate limit (6th POST → 429), CSV import (idempotent, dry-run, invalid rows), HTMX directory filter + map data, e2e a11y on 10 pages, coverage 93 %
 - [ ] M5 — SEO, a11y, perf, print, blogger kit (structure only; no visual polish)
 - [ ] M5b — Design integration (blocked until Figma arrives)
   - [ ] map Figma tokens → `static/src/tokens.css`
@@ -109,7 +117,15 @@ curl :8001 → /uz/ /ru/ sections, topics, articles, directory all 200; /uz/qaye
 
 ## Next concrete action
 
-Start **M4 — Directory, tools, FAQ, feedback, glossary**: `import_institutions` CSV command +
+Start **M5 — SEO, a11y, performance, print, blogger kit**: JSON-LD (MedicalWebPage/Article
+with reviewedBy, Organization, BreadcrumbList, FAQPage, VideoObject, MedicalClinic), sitemaps
+per language (Wagtail sitemap + Site), share bar (Telegram first), `MaterialsPage` (blogger
+kit: downloads, captions uz/ru, hashtags), Yandex.Metrika behind a consent banner
+(`apps/analytics`), accessibility toolbar (font ×1.25/×1.5, contrast, reduced motion;
+localStorage), full print stylesheets, image `srcset`/WebP renditions, per-view cache with
+signal invalidation + nav fragment cache, bundle-size test, pa11y-ci config.
+
+(M4 note kept for history:) Start **M4 — Directory, tools, FAQ, feedback, glossary**: `import_institutions` CSV command +
 `data/institutions.sample.csv` (fake), Leaflet map (self-hosted JS via npm, OSM tiles) + HTMX
 region/type filters on `DirectoryPage`; `apps/tools` (screening helper — table-driven rules
 mammography 45–65/2y, ultrasound <45/2y, HPV 30–50; women's symptom self-check; children's

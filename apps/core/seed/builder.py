@@ -206,8 +206,12 @@ class Seeder:
     def model_for(self, kind: str) -> type[Page]:
         from apps.articles.models import ArticlePage
         from apps.directory.models import DirectoryPage
+        from apps.faq.models import FAQPage
+        from apps.feedback.models import FeedbackPage
+        from apps.glossary.models import GlossaryPage
         from apps.sections.models import SectionIndexPage, TopicIndexPage
         from apps.stories.models import StoryIndexPage
+        from apps.tools.models import ScreeningToolPage, SelfCheckPage, ToolsIndexPage
 
         return {
             "section": SectionIndexPage,
@@ -215,6 +219,12 @@ class Seeder:
             "article": ArticlePage,
             "directory": DirectoryPage,
             "stories": StoryIndexPage,
+            "tools": ToolsIndexPage,
+            "screening": ScreeningToolPage,
+            "selfcheck": SelfCheckPage,
+            "faq": FAQPage,
+            "feedback": FeedbackPage,
+            "glossary": GlossaryPage,
         }[kind]
 
     def upsert_page(self, node: Node, lang: str, parent: Any, source: Any | None) -> Any:
@@ -236,6 +246,7 @@ class Seeder:
         self.ctx.pages[(node.key, lang)] = page.pk
         # body in pass 1 too, so a freshly created page never publishes empty
         changed = self.apply_body(page, node, lang, publish=False) or changed
+        changed = self.apply_streams(page, node, lang) or changed
         self._publish(page, changed, count=not is_new)
         return page
 
@@ -254,9 +265,22 @@ class Seeder:
                     "tagline": node.summary.get(lang, ""),
                 }
             )
-        elif node.kind in {"topic", "article"}:
+        elif node.kind in {"topic", "article", "screening", "selfcheck"}:
             fields["summary"] = node.summary.get(lang, "")
+        # per-kind extra fields; callables receive (lang, ctx) so they can resolve page ids
+        for name, value in node.extra.get("fields", {}).items():
+            fields[name] = value(lang, self.ctx) if callable(value) else value
         return fields
+
+    def apply_streams(self, page: Any, node: Node, lang: str) -> bool:
+        """Extra StreamFields declared in `node.extra["streams"]` (e.g. self-check items)."""
+        changed = False
+        for field_name, builder in node.extra.get("streams", {}).items():
+            data = [block for block in builder(lang, self.ctx) if block]
+            if not _stream_equal(page, field_name, data):
+                setattr(page, field_name, json.dumps(data))
+                changed = True
+        return changed
 
     def apply_body(self, page: Any, node: Node, lang: str, publish: bool) -> bool:
         if node.body is None:

@@ -1,0 +1,22 @@
+{% load i18n wagtailcore_tags %}
+{% comment %} faq/_form.html — question form or thank-you (HTMX partial). Context: page, form, submitted. {% endcomment %}
+{% if submitted %}
+  <div class="form-success" role="status" tabindex="-1">
+    <h2>{% trans "Thank you, your question has been sent." %}</h2>
+    <div class="prose">{{ page.thanks_text|richtext }}</div>
+  </div>
+{% else %}
+  <h2>{% trans "Ask a doctor" %}</h2>
+  {% if page.form_intro %}<div class="prose">{{ page.form_intro|richtext }}</div>{% endif %}
+  <form method="post" action="{{ page.url }}#question-form" hx-post="{{ page.url }}" hx-target="#question-form" hx-swap="innerHTML" novalidate>
+    {% csrf_token %}
+    {% include "components/form_errors.html" %}
+    {% for field in form.visible_fields %}
+      {% if field.name != "website" %}{% include "components/form_field.html" with field=field %}{% endif %}
+    {% endfor %}
+    <div class="hp-wrap" aria-hidden="true">{{ form.website }}</div>
+    {% include "components/turnstile.html" %}
+    <p class="tool-form__note">{% trans "We never publish names or contacts. Contacts are deleted 90 days after the answer." %}</p>
+    <button type="submit" class="button button--primary">{% trans "Send question" %}</button>
+  </form>
+{% endif %}

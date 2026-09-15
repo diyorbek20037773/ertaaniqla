@@ -28,6 +28,10 @@ PAGES = [
     ("article-care-children-uz", "/uz/bolalar/parvarish/"),
     ("directory-uz", "/uz/ayollar/qayerga-murojaat/"),
     ("stories-ru", "/ru/istorii/"),
+    ("tools-screening-uz", "/uz/vositalar/skrining/"),
+    ("tools-selfcheck-children-ru", "/ru/instrumenty/priznaki-u-detey/"),
+    ("faq-uz", "/uz/savol-javob/"),
+    ("glossary-ru", "/ru/slovar/"),
 ]
 
 

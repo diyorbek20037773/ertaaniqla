@@ -25,6 +25,10 @@ PAGES = [
     "/uz/ayollar/ogohlik/belgilar/",
     "/ru/zhenskiy/kuda-obratitsya/",
     "/uz/qidiruv/?q=skrining",
+    "/uz/vositalar/skrining/",
+    "/uz/vositalar/oz-tekshiruv/",
+    "/ru/voprosy-otvety/",
+    "/uz/lugat/",
 ]
 
 

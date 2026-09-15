@@ -1,0 +1,21 @@
+{% load i18n wagtailcore_tags %}
+{% comment %} feedback/_form.html — feedback form or thank-you (HTMX partial). Context: page, form, submitted. {% endcomment %}
+{% if submitted %}
+  <div class="form-success" role="status" tabindex="-1">
+    <h2>{% trans "Thank you, your message has been sent." %}</h2>
+    <div class="prose">{{ page.thanks_text|richtext }}</div>
+  </div>
+{% else %}
+  <form method="post" action="{{ page.url }}#feedback-form" hx-post="{{ page.url }}" hx-target="#feedback-form" hx-swap="innerHTML" novalidate>
+    {% csrf_token %}
+    {% include "components/form_errors.html" %}
+    {{ form.page_url }}
+    {% for field in form.visible_fields %}
+      {% if field.name != "website" %}{% include "components/form_field.html" with field=field %}{% endif %}
+    {% endfor %}
+    <div class="hp-wrap" aria-hidden="true">{{ form.website }}</div>
+    {% include "components/turnstile.html" %}
+    <p class="tool-form__note">{% trans "Messages are deleted after 180 days." %}</p>
+    <button type="submit" class="button button--primary">{% trans "Send" %}</button>
+  </form>
+{% endif %}

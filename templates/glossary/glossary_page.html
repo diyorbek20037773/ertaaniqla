@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} glossary/glossary_page.html — Context: page, terms, groups [(letter, [Term])],
+   section_filter, query. Plain GET filter form (no JS needed). {% endcomment %}
+{% block content %}
+<div class="container">
+  <header class="page-header"><h1>{{ page.title }}</h1></header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  <form class="filter-form" method="get" action="{{ page.url }}" role="search">
+    <div class="filter-form__field">
+      <label for="glossary-q">{% trans "Find a term" %}</label>
+      <input id="glossary-q" type="search" name="q" value="{{ query }}" maxlength="60" class="search-form__input">
+    </div>
+    <div class="filter-form__field">
+      <label for="glossary-section">{% trans "Section" %}</label>
+      <select id="glossary-section" name="section">
+        <option value="" {% if not section_filter %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="women" {% if section_filter == "women" %}selected{% endif %}>{% trans "Women's cancer" %}</option>
+        <option value="children" {% if section_filter == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>
+      </select>
+    </div>
+    <button type="submit" class="button button--primary">{% trans "Show" %}</button>
+  </form>
+  {% if groups %}
+    <nav class="glossary-letters" aria-label="{% trans 'Letters' %}">
+      {% for letter, items in groups %}<a href="#letter-{{ letter|urlencode }}">{{ letter }}</a>{% endfor %}
+    </nav>
+    {% for letter, items in groups %}
+      <section class="glossary-group" id="letter-{{ letter|urlencode }}">
+        <h2>{{ letter }}</h2>
+        <dl class="glossary-terms__list">
+          {% for term in items %}
+            <dt class="glossary-terms__term" id="term-{{ term.pk }}">{{ term.term }}{% if term.synonyms %} <span class="glossary-terms__synonyms">({{ term.synonyms }})</span>{% endif %}</dt>
+            <dd class="glossary-terms__definition">{{ term.definition|richtext }}</dd>
+          {% endfor %}
+        </dl>
+      </section>
+    {% endfor %}
+  {% else %}
+    <p class="placeholder">{% trans "No terms found." %}</p>
+  {% endif %}
+</div>
+{% endblock %}

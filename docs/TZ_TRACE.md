@@ -27,9 +27,9 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | W-04 | Симптомы — признаки, которые нельзя игнорировать | ArticlePage, `symptom_list` placeholder | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | W-05 | Самообследование груди — пошаговое руководство (F13) | `steps` block on Symptoms + `print.css` | `tests/articles/test_blocks.py::test_steps_auto_number_and_deadline` | M2 | wip (steps block + placeholder steps seeded; print CSS skeleton; interactive polish M2) |
 | W-06 | Скрининг → Кому и как часто: маммография 45–65 раз в 2 года; УЗИ до 45 раз в 2 года; ВПЧ-тест 30–50; призывы к самообследованию | ArticlePage with `table` + `two_columns`, facts verbatim `[[VERIFY: doctor]]` | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
-| W-07 | Скрининг → Где пройти: СВП; районные поликлиники (кабинеты онконастороженности); Центр здоровья матери и ребёнка и филиалы; бесплатно в рамках гос. программы | ArticlePage + `institution_list` block | `tests/sections/test_seed.py`, `tests/articles/test_blocks.py::test_institution_list_filters` | M1/M4 | done (list; map/HTMX M4) |
+| W-07 | Скрининг → Где пройти: СВП; районные поликлиники (кабинеты онконастороженности); Центр здоровья матери и ребёнка и филиалы; бесплатно в рамках гос. программы | ArticlePage + `institution_list` block (free only) + CTA to the directory | `tests/sections/test_seed.py`, `tests/articles/test_blocks.py::test_institution_list_filters` | M1/M4 | done |
 | W-08 | Организация лечения — 4-step route 01 Первичный приём / 02 Направление на диагностику / 03 Онколог-онкогинеколог (даты ПП-402 → `[[VERIFY: PP-402 referral deadlines]]`) / 04 Лечение (F12) | `steps` block with `deadline` per step, seeded 4 steps | `tests/sections/test_seed.py::test_patient_route_has_four_steps_with_pp402_deadline` | M1/M4 | done (route page; tools page M4) |
-| W-09 | Куда обратиться — directory (map + list, region filter) (F11) | `apps/directory` `DirectoryPage` | `tests/directory/test_models.py` | M4 | wip (DirectoryPage list + GET filters, D-010; map + HTMX + CSV M4) |
+| W-09 | Куда обратиться — directory (map + list, region filter) (F11) | `directory.DirectoryPage`: HTMX region/type/section/free filters, Leaflet map (`static/src/map.js`, OSM tiles, circle markers by section), list fallback, `import_institutions` CSV + `data/institutions.sample.csv` | `tests/directory/test_models.py`, `tests/directory/test_import_and_map.py` | M4 | done |
 | W-10 | Государственная поддержка — бесплатный скрининг; возможности в кабинетах онконастороженности; права и обязанности пациентов и врачей | ArticlePage callout placeholder with the 3 bullets | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | W-11 | Уход и поддержка — 3 columns verbatim (Физическое здоровье ×4 / Эмоциональная поддержка ×4 / Практические вопросы ×4) | `three_columns` block seeded verbatim | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
 | W-12 | Жизнь после рака — 3 columns verbatim (Наблюдение ×3 / Возвращение ×3 / Долгосрочное здоровье ×3) | `three_columns` block seeded verbatim | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |
@@ -61,27 +61,27 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | F2 | Mobile adaptation | mobile-first CSS, 390 px screenshots | `tests/e2e/test_screens.py` | M1 | done (wireframe; design M5b) |
 | F3 | Video (long + short vertical) | `media_library.Video` snippet (kind, source, file/external, poster, VTT uz/ru, transcript, status, renditions), Celery `transcode_video` (ffmpeg 720p/480p H.264 + poster, queue `media`), `video` block / `components/video.html` | `tests/media_library/test_services.py` (status machine, integration transcode of a 2 s sample), `tests/media_library/test_video.py` | M3 | done |
 | F4 | Infographics / galleries, downloadable | `image_gallery` block (alt text, captions, download link), `document_download` block; EXIF/GPS stripped on upload; MIME sniffed | `tests/articles/test_blocks.py::test_image_gallery_render`, `tests/media_library/test_services.py` | M3 | done |
-| F5 | Feedback forms | `apps/feedback` | `tests/feedback` | M4 | todo |
+| F5 | Feedback forms | `feedback.FeedbackPage` (kind, text, encrypted contact, page_url, UA; honeypot + Turnstile + 5/min rate limit), snippet for moderators, purge after 180 d (beat) | `tests/feedback/test_feedback.py` | M4 | done |
 | F6 | Navigation: mega-menu per section, breadcrumbs, sitemap | `apps/core/navigation.py`, `components/nav.html`, `breadcrumbs.html` | `tests/sections/test_models.py::test_navigation_structure_and_cache` | M1/M5 | wip (mega-menu + breadcrumbs done; sitemap per language M5) |
 | F7 | Speed optimisation | caching §4.5, budgets §4.6 | `tests/perf/test_budgets.py` | M5 | todo |
 | F8 | Stable operation: admin, updates, bug-fix, data protection | M6 DevOps + §8 security | M6 gate | M6 | todo |
 | F9 | Social distribution: OG tags, share buttons, blogger materials | OG tags in `base.html`; OG image generated per page on publish (`apps/core/og.py`, task `core.generate_og_image`); share bar + `MaterialsPage` → M5 | `tests/core/test_og.py`; M5 | M3/M5 | wip (share bar + materials M5) |
 | F10 | Patient stories with consent | `stories.PatientStoryPage.clean()` (consent_obtained; consent_guardian for children; private consent document), `StoryIndexPage` `/uz/hikoyalar/` `/ru/istorii/` | `tests/stories/test_consent.py`, `tests/media_library/test_private_documents.py` | M3 | done |
-| F11 | Where-to-go directory with regions | `apps/directory` | `tests/directory` | M4 | todo |
-| F12 | 4-step patient route component | `steps` block | `tests/articles/test_blocks.py::test_steps_auto_number_and_deadline` | M2/M4 | wip (block done; tools page M4) |
+| F11 | Where-to-go directory with regions | `apps/directory` (14 regions migration, Institution snippet, DirectoryPage, CSV import, map) | `tests/directory/*` | M4 | done |
+| F12 | 4-step patient route component | `steps` block (deadline per step) seeded on «Организация лечения»; tools index links to it; printable via `print.css` | `tests/sections/test_seed.py::test_patient_route_has_four_steps_with_pp402_deadline` | M1/M4 | done (D-023: no duplicate tool page) |
 | F13 | Step-by-step self-exam guide | `steps` block on Symptoms + `print.css` | `tests/sections/test_seed.py` | M2/M5 | wip (steps + placeholders + print skeleton; interactive M2) |
-| F14 | Parents' glossary | `apps/glossary` Term + tooltip tag | `tests/glossary` | M4 | todo |
-| F15 | Questions-to-ask-the-doctor checklists (both sections) | `faq_accordion` block | `tests/articles/test_blocks.py::test_faq_accordion_uses_details` | M2/M5 | wip (faq_accordion block + placeholders; print M5) |
-| F16 | Support groups / psychological help contacts | `Institution.kind=psych_support|ngo` + care pages | `tests/directory` | M4 | todo |
+| F14 | Parents' glossary | `glossary.Term` (translatable snippet), `GlossaryPage` `/uz/lugat/` `/ru/slovar/` (letters, section, `?q=`), `glossary_wrap` filter on rich_text blocks (first occurrence → link + title) | `tests/glossary/*` | M4 | done |
+| F15 | Questions-to-ask-the-doctor checklists (both sections) | `faq_accordion` block seeded on diagnostics + care pages (placeholders); printable (`print.css` keeps `<details>` open) | `tests/articles/test_blocks.py::test_faq_accordion_uses_details`, `tests/sections/test_seed.py` | M2/M5 | done (structure; print polish M5) |
+| F16 | Support groups / psychological help contacts | `Institution.kind=psych_support\|ngo` in the directory (sample rows), care pages list them via `institution_list` | `tests/directory/test_import_and_map.py` | M4 | done (real contacts = client data) |
 | F17 | Statistics blocks (Uzbekistan) | `stat` block, home stats strip; values = placeholders until doctors provide data | `tests/articles/test_blocks.py::test_stat_render`, `tests/home/test_home.py` | M2 | done (structure) |
 
 ## E. Recommended additions A1–A8 (spec §2.5)
 
 | ID | Feature | Impl | Test | M | Status |
 |---|---|---|---|---|---|
-| A1 | Screening eligibility helper | `apps/tools/screening.py` (table-driven) | `tests/tools/test_screening.py` (every boundary) | M4 | todo |
-| A2 | Self-check checklists (women; children warning signs) | `apps/tools/selfcheck.py` | `tests/tools/test_selfcheck.py` | M4 | todo |
-| A3 | Ask-a-question + moderated FAQ | `apps/faq` | `tests/faq` | M4 | todo |
+| A1 | Screening eligibility helper | `apps/tools/screening.py` (rules table verbatim from TZ), `ScreeningToolPage` (form age + last tests, HTMX result, CMS texts, disclaimer, waffle `tools_screening`) | `tests/tools/test_screening.py` (every boundary), `tests/tools/test_pages.py` | M4 | done |
+| A2 | Self-check checklists (women; children warning signs) | `apps/tools/selfcheck.py` + `SelfCheckPage` (items StreamField with urgency, result texts per level, Alpine live count, server scoring, waffle `tools_selfcheck`) — items are placeholders until doctors fill them | `tests/tools/test_selfcheck.py`, `tests/tools/test_pages.py` | M4 | done |
+| A3 | Ask-a-question + moderated FAQ | `faq.Question` (encrypted contact, consent, status machine, snippet moderation), `FAQPage` `/uz/savol-javob/` `/ru/voprosy-otvety/` (honeypot, Turnstile, rate limit, HTMX), moderator e-mail (Celery), purge 90 d (beat) | `tests/faq/test_faq.py` | M4 | done |
 | A4 | Full-text search (FTS, uz/ru, accent-insensitive) | `apps/search` (services, synonyms, translit), core migration `ertaaniqla` config, HTMX + non-JS form | `tests/search/test_search.py`, `tests/search/test_translit.py` | M2 | done |
 | A5 | Printable/PDF key pages | print CSS | `tests/e2e/test_print.py` | M5 | todo |
 | A6 | Telegram deep links + blogger materials page | `share.html`, `MaterialsPage` | `tests/core/test_seo.py` | M5 | todo |
@@ -101,7 +101,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | E-07 | Docker multi-stage, compose dev/prod, Makefile §15, CI quality job | `docker/`, `compose*.yml`, `Makefile`, `.github/workflows/ci.yml` | CI | M0 | wip |
 | E-08 | Coverage ≥ 85 %, ruff, mypy strict on core/tools/directory/feedback | `pyproject.toml` | CI | M0 | wip |
 | E-09 | Translations complete uz+ru (CI check) | `scripts/check_translations.py` | CI | M0 | wip |
-| E-10 | Data residency in Uzbekistan, backups in UZ, retention 90/180 d | RUNBOOK, purge jobs | `tests/faq`, `tests/feedback` | M4/M6 | todo |
+| E-10 | Data residency in Uzbekistan, backups in UZ, retention 90/180 d | retention: `faq.purge_contacts` (90 d after answer) + `feedback.purge_old_submissions` (180 d) on Celery beat; residency/backups → RUNBOOK (M6) | `tests/faq/test_faq.py::test_purge_contacts_after_90_days`, `tests/feedback/test_feedback.py::test_purge_after_180_days` | M4/M6 | wip (jobs done; hosting M6) |
 | E-11 | Wireframe-only UI until Figma; tokens + components only (D-003) | `static/src/tokens.css`, `static/src/components.css`, `templates/components/` | — | all | wip (M1: tokens.css + components.css + templates/components) |
 | E-12 | COMPONENT_INVENTORY.md (ru+uz) for the designer | `docs/COMPONENT_INVENTORY.md` | — | M1 | done (kept current every milestone) |
 

@@ -1,0 +1,9 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/disclaimer.html — medical disclaimer box for tool pages (spec §8).
+   Context: text (html, optional — falls back to the site setting).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n core_tags %}
+<aside class="disclaimer" role="note">
+  <span class="sr-only">{% trans "Important" %}:</span>
+  {% if text %}{{ text }}{% else %}<p>{{ settings.core.SiteSettings|localized:"disclaimer" }}</p>{% endif %}
+</aside>

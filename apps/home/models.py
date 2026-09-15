@@ -59,6 +59,10 @@ class HomePage(BasePage):
         "articles.ArticlePage",
         "directory.DirectoryPage",
         "stories.StoryIndexPage",
+        "tools.ToolsIndexPage",
+        "faq.FAQPage",
+        "feedback.FeedbackPage",
+        "glossary.GlossaryPage",
     ]
     template = "home/home_page.html"
 

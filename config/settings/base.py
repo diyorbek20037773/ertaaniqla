@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import environ
+from celery.schedules import crontab
 from csp.constants import NONCE, NONE, SELF
 from django.utils.translation import gettext_lazy as _
 
@@ -400,7 +401,12 @@ CELERY_TASK_ROUTES = {
     "core.generate_og_image": {"queue": "media"},
 }
 CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
-    # populated by apps in later milestones via apps.core.celery_schedule
+    # PII retention (spec §8): question contacts 90 d after the answer, feedback 180 d
+    "faq-purge-contacts": {"task": "faq.purge_contacts", "schedule": crontab(hour=3, minute=0)},
+    "feedback-purge": {
+        "task": "feedback.purge_old_submissions",
+        "schedule": crontab(hour=3, minute=15),
+    },
 }
 
 # ---------------------------------------------------------------------------

@@ -11,13 +11,9 @@ from django.test import Client
 from django.utils.html import strip_tags
 from wagtail.models import Locale, Page, Site
 
-from apps.articles.models import ArticlePage
 from apps.core.seed import tree
 from apps.core.seed.builder import Seeder
-from apps.directory.models import DirectoryPage
 from apps.home.models import HomePage
-from apps.sections.models import SectionIndexPage, TopicIndexPage
-from apps.stories.models import StoryIndexPage
 
 pytestmark = pytest.mark.django_db
 
@@ -25,13 +21,7 @@ pytestmark = pytest.mark.django_db
 def page_for(key: str, lang: str) -> Page:
     node = next(n for n in tree.iter_nodes() if n.key == key)
     locale = Locale.objects.get(language_code=lang)
-    model = {
-        "section": SectionIndexPage,
-        "topic": TopicIndexPage,
-        "article": ArticlePage,
-        "directory": DirectoryPage,
-        "stories": StoryIndexPage,
-    }[node.kind]
+    model = Seeder().model_for(node.kind)
     candidates = model.objects.filter(locale=locale, slug=node.slug[lang], live=True)
     section_key = key.split(".")[0]
     for page in candidates:

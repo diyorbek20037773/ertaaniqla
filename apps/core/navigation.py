@@ -84,5 +84,48 @@ def get_navigation(language_code: str) -> list[NavSection]:
     return nav
 
 
+SITE_LINK_TYPES: tuple[tuple[str, str], ...] = (
+    ("tools", "tools.ToolsIndexPage"),
+    ("stories", "stories.StoryIndexPage"),
+    ("faq", "faq.FAQPage"),
+    ("glossary", "glossary.GlossaryPage"),
+    ("feedback", "feedback.FeedbackPage"),
+)
+
+
+def site_links_cache_key(language_code: str) -> str:
+    return f"sitelinks:{language_code}"
+
+
+def build_site_links(language_code: str) -> list[NavItem]:
+    """Root-level utility pages (tools, stories, FAQ, glossary, feedback) for the footer."""
+    from django.apps import apps as django_apps
+    from wagtail.models import Locale
+
+    try:
+        locale = Locale.objects.get(language_code=language_code)
+    except Locale.DoesNotExist:
+        return []
+    links: list[NavItem] = []
+    for _key, label in SITE_LINK_TYPES:
+        model = django_apps.get_model(label)
+        page = model.objects.live().filter(locale=locale).first()
+        if page is not None:
+            links.append(NavItem(title=str(page.title), url=str(page.url or "")))
+    return links
+
+
+def get_site_links(language_code: str) -> list[NavItem]:
+    key = site_links_cache_key(language_code)
+    cached = cache.get(key)
+    if cached is not None:
+        return list(cached)
+    links = build_site_links(language_code)
+    cache.set(key, links, NAV_CACHE_SECONDS)
+    return links
+
+
 def invalidate_navigation() -> None:
-    cache.delete_many([nav_cache_key(code) for code, _ in settings.LANGUAGES])
+    keys = [nav_cache_key(code) for code, _ in settings.LANGUAGES]
+    keys += [site_links_cache_key(code) for code, _ in settings.LANGUAGES]
+    cache.delete_many(keys)

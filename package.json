@@ -5,15 +5,16 @@
   "description": "Tailwind + HTMX + Alpine build for Erta aniqla (no Node at runtime)",
   "scripts": {
     "build": "npm run build:css && npm run build:js",
-    "build:css": "tailwindcss -i static/src/input.css -o static/dist/main.css --minify",
-    "build:js": "esbuild static/src/main.js --bundle --minify --format=iife --target=es2018 --outfile=static/dist/main.js",
+    "build:css": "tailwindcss -i static/src/input.css -o static/dist/main.css --minify && esbuild static/src/map.css --bundle --minify --loader:.png=dataurl --outfile=static/dist/map.css",
+    "build:js": "esbuild static/src/main.js --bundle --minify --format=iife --target=es2018 --outfile=static/dist/main.js && esbuild static/src/map.js --bundle --minify --format=iife --target=es2018 --outfile=static/dist/map.js",
     "watch": "concurrently \"npm:watch:css\" \"npm:watch:js\"",
     "watch:css": "tailwindcss -i static/src/input.css -o static/dist/main.css --watch",
-    "watch:js": "esbuild static/src/main.js --bundle --format=iife --target=es2018 --outfile=static/dist/main.js --watch"
+    "watch:js": "esbuild static/src/main.js static/src/map.js --bundle --format=iife --target=es2018 --outdir=static/dist --watch"
   },
   "dependencies": {
     "alpinejs": "^3.14.9",
-    "htmx.org": "^2.0.4"
+    "htmx.org": "^2.0.4",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "axe-core": "^4.10.2",

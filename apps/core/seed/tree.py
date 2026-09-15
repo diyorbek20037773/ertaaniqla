@@ -1308,7 +1308,167 @@ STORIES = Node(
     body=intro_stories,
 )
 
-TREE: list[Node] = [WOMEN, CHILDREN, STORIES]
+
+# ---------------------------------------------------------------------------
+# Tools (A1, A2), FAQ (A3), feedback (F5), glossary (F14) — root-level pages
+# ---------------------------------------------------------------------------
+PLACEHOLDER_HTML = f"<p>{TODO} {VERIFY}</p>"
+
+
+def _where_page(lang: str, ctx: SeedContext) -> int | None:
+    return ctx.page_id("women.directory", lang)
+
+
+def intro_tools(lang: str, ctx: SeedContext) -> Body:
+    return [
+        callout(
+            "info",
+            t(lang, "Bu asboblar tashxis qoʻymaydi", "Эти инструменты не ставят диагноз"),
+            p(
+                t(
+                    lang,
+                    "Ular faqat keyingi qadamni tanlashga yordam beradi: qachon skriningga borish, shifokorga qachon murojaat qilish. Hech narsa saqlanmaydi.",
+                    "Они лишь помогают выбрать следующий шаг: когда идти на скрининг, когда обратиться к врачу. Ничего не сохраняется.",
+                ),
+                TODO,
+            ),
+        )
+    ]
+
+
+def selfcheck_items(lang: str, ctx: SeedContext) -> Body:
+    """Placeholder checklist items — doctors define the real signs (never written by us)."""
+    labels = {
+        "uz": ["belgi", "belgi", "belgi"],
+        "ru": ["признак", "признак", "признак"],
+    }[lang if lang in ("uz", "ru") else "uz"]
+    return [
+        {
+            "type": "item",
+            "value": {"text": f"{TODO} {labels[i]} {i + 1} {VERIFY}", "urgency": urgency},
+        }
+        for i, urgency in enumerate(["urgent", "soon", "routine"])
+    ]
+
+
+SCREENING_FIELDS = {
+    "text_due": PLACEHOLDER_HTML,
+    "text_ok": PLACEHOLDER_HTML,
+    "text_not_applicable": PLACEHOLDER_HTML,
+    "text_hpv_interval": PLACEHOLDER_HTML,
+    "disclaimer": "",
+    "where_page_id": _where_page,
+}
+SELFCHECK_FIELDS = {
+    "result_none": PLACEHOLDER_HTML,
+    "result_routine": PLACEHOLDER_HTML,
+    "result_soon": PLACEHOLDER_HTML,
+    "result_urgent": PLACEHOLDER_HTML,
+    "disclaimer": "",
+    "where_page_id": _where_page,
+}
+
+TOOLS = Node(
+    key="tools",
+    kind="tools",
+    title={"uz": "Foydali asboblar", "ru": "Полезные инструменты"},
+    slug={"uz": "vositalar", "ru": "instrumenty"},
+    summary={
+        "uz": "Skrining kerakmi? Belgilarni tekshirish — keyingi qadamni tanlashga yordam",
+        "ru": "Пора ли на скрининг? Проверка признаков — помощь в выборе следующего шага",
+    },
+    body=intro_tools,
+    children=[
+        Node(
+            key="tools.screening",
+            kind="screening",
+            title={"uz": "Menga skrining kerakmi?", "ru": "Пора ли мне на скрининг?"},
+            slug={"uz": "skrining", "ru": "skrining"},
+            summary={
+                "uz": "Yoshingiz va oxirgi tekshiruvlaringizga qarab — qaysi test va qachon (mammografiya 45–65, UTT 45 gacha, HPV 30–50).",
+                "ru": "По возрасту и дате последних обследований — какой тест и когда (маммография 45–65, УЗИ до 45, ВПЧ 30–50).",
+            },
+            extra={"fields": SCREENING_FIELDS},
+        ),
+        Node(
+            key="tools.selfcheck_women",
+            kind="selfcheck",
+            title={"uz": "Belgilarni oʻzim tekshiraman", "ru": "Проверить симптомы"},
+            slug={"uz": "oz-tekshiruv", "ru": "samoproverka"},
+            summary={
+                "uz": "Ayollar uchun belgilar roʻyxati: nimani sezganingizni belgilang — shifokorga qachon borishni bilib oling.",
+                "ru": "Чек-лист симптомов для женщин: отметьте, что заметили — узнайте, когда идти к врачу.",
+            },
+            extra={
+                "fields": {**SELFCHECK_FIELDS, "kind": "women"},
+                "streams": {"items": selfcheck_items},
+            },
+        ),
+        Node(
+            key="tools.selfcheck_children",
+            kind="selfcheck",
+            title={"uz": "Bolalardagi xavotirli belgilar", "ru": "Тревожные признаки у ребёнка"},
+            slug={"uz": "bolalar-belgilari", "ru": "priznaki-u-detey"},
+            summary={
+                "uz": "Ota-onalar uchun roʻyxat: bolangizda sezgan belgilarni belgilang.",
+                "ru": "Чек-лист для родителей: отметьте признаки, которые заметили у ребёнка.",
+            },
+            extra={
+                "fields": {**SELFCHECK_FIELDS, "kind": "children"},
+                "streams": {"items": selfcheck_items},
+            },
+        ),
+    ],
+)
+
+FAQ = Node(
+    key="faq",
+    kind="faq",
+    title={"uz": "Shifokorga savol", "ru": "Вопрос врачу"},
+    slug={"uz": "savol-javob", "ru": "voprosy-otvety"},
+    summary={
+        "uz": "Savol bering — shifokorlar javob beradi. Javoblar anonim eʼlon qilinadi.",
+        "ru": "Задайте вопрос — ответят врачи. Ответы публикуются анонимно.",
+    },
+    extra={
+        "fields": {
+            "form_intro": f"<p>{TODO}</p>",
+            "thanks_text": lambda lang, ctx: p(
+                t(
+                    lang,
+                    "Rahmat! Shifokorlar javobini tayyorlagach, u (roziligingiz bilan) shu sahifada anonim eʼlon qilinadi.",
+                    "Спасибо! Когда врачи подготовят ответ, он (с вашего согласия) будет анонимно опубликован на этой странице.",
+                ),
+                TODO,
+            ),
+        }
+    },
+)
+
+FEEDBACK = Node(
+    key="feedback",
+    kind="feedback",
+    title={"uz": "Qayta aloqa", "ru": "Обратная связь"},
+    slug={"uz": "qayta-aloqa", "ru": "obratnaya-svyaz"},
+    summary={
+        "uz": "Sayt haqida fikr, xatolik yoki hamkorlik taklifi",
+        "ru": "Отзыв о сайте, ошибка или предложение о сотрудничестве",
+    },
+    extra={"fields": {"thanks_text": f"<p>{TODO}</p>"}},
+)
+
+GLOSSARY = Node(
+    key="glossary",
+    kind="glossary",
+    title={"uz": "Lugʻat", "ru": "Словарь"},
+    slug={"uz": "lugat", "ru": "slovar"},
+    summary={
+        "uz": "Tibbiy atamalar oddiy tilda — ota-onalar va bemorlar uchun",
+        "ru": "Медицинские термины простыми словами — для родителей и пациентов",
+    },
+)
+
+TREE: list[Node] = [WOMEN, CHILDREN, STORIES, TOOLS, FAQ, FEEDBACK, GLOSSARY]
 
 HOME = {
     "title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},

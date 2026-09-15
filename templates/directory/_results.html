@@ -1,0 +1,17 @@
+{% load i18n %}
+{% comment %} directory/_results.html — results list + map data island (HTMX partial).
+   Context: institutions (list), map_data (JSON string). {% endcomment %}
+<script type="application/json" id="map-data">{{ map_data|safe }}</script>
+<section class="institution-list" aria-live="polite">
+  <h2 class="sr-only">{% trans "Results" %}</h2>
+  {% if institutions %}
+    <p class="institution-list__count">{% blocktrans trimmed count counter=institutions|length %}{{ counter }} institution{% plural %}{{ counter }} institutions{% endblocktrans %}</p>
+    <div class="institution-list__items">
+      {% for institution in institutions %}
+        {% include "components/institution_card.html" with institution=institution %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="institution-list__empty">{% trans "No institutions match the selected filters yet." %}</p>
+  {% endif %}
+</section>

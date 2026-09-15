@@ -4,6 +4,7 @@ services, free-under-state-programme flag, `DirectoryPage`. CSV import, map and 
 
 from __future__ import annotations
 
+import json
 from decimal import Decimal
 from typing import Any
 
@@ -236,8 +237,22 @@ class DirectoryPage(BasePage):
     def get_body_text(self) -> str:
         return stream_plain_text(self.intro)
 
+    def serve(self, request: Any, *args: Any, **kwargs: Any) -> Any:
+        """HTMX filter requests get the results partial (list + map data)."""
+        from django.template.response import TemplateResponse
+
+        if request.headers.get("HX-Request"):
+            response = TemplateResponse(
+                request, "directory/_results.html", self.get_context(request, *args, **kwargs)
+            )
+            response["Vary"] = "HX-Request, Accept-Language, Cookie"
+            return response
+        return super().serve(request, *args, **kwargs)
+
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
-        from apps.directory.services import filter_institutions, region_list
+        from django.utils.translation import get_language
+
+        from apps.directory.services import filter_institutions, map_payload, region_list
 
         context = super().get_context(request, *args, **kwargs)
         region = request.GET.get("region", "")
@@ -246,13 +261,15 @@ class DirectoryPage(BasePage):
             "" if self.default_section == InstitutionSections.BOTH else self.default_section
         )
         free_only = request.GET.get("free") == "1"
+        institutions = list(
+            filter_institutions(region=region, kind=kind, section=section, free_only=free_only)
+        )
         context.update(
             {
-                "institutions": list(
-                    filter_institutions(
-                        region=region, kind=kind, section=section, free_only=free_only
-                    )
-                ),
+                "institutions": institutions,
+                "map_data": json.dumps(
+                    map_payload(institutions, get_language() or "uz"), ensure_ascii=False
+                ).replace("</", r"<\/"),
                 "regions": region_list(),
                 "kinds": InstitutionKind.choices,
                 "filter": {

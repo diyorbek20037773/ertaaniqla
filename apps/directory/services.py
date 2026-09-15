@@ -54,3 +54,37 @@ def institutions_for_block(value: Mapping[str, Any]) -> list[Institution]:
 
 def region_list() -> list[Region]:
     return list(Region.objects.all())
+
+
+def map_payload(institutions: list[Institution], language: str) -> list[dict[str, Any]]:
+    """Marker data for map.js (only institutions with coordinates)."""
+    from django.utils.translation import gettext as _
+
+    free_label = _("Free under the state programme")
+    payload: list[dict[str, Any]] = []
+    for item in institutions:
+        if item.lat is None or item.lng is None:
+            continue
+        payload.append(
+            {
+                "id": item.pk,
+                "name": item.name_for(language),
+                "kind": str(item.get_kind_display()),
+                "address": ", ".join(
+                    part
+                    for part in (
+                        item.region.name_for(language),
+                        item.district_for(language),
+                        item.address_for(language),
+                    )
+                    if part
+                ),
+                "phone": item.phone,
+                "lat": float(item.lat),
+                "lng": float(item.lng),
+                "sections": item.sections,
+                "free": item.free_under_state_programme,
+                "free_label": free_label,
+            }
+        )
+    return payload

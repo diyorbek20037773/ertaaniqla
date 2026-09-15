@@ -13,7 +13,7 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import SafeString
 from wagtail.models import Locale, Page, Site
 
-from apps.core.navigation import get_navigation
+from apps.core.navigation import get_navigation, get_site_links
 
 register = template.Library()
 
@@ -75,6 +75,12 @@ def main_nav(context: dict[str, Any]) -> dict[str, Any]:
         "page": context.get("page"),
         "section_key": context.get("section_key", ""),
     }
+
+
+@register.simple_tag
+def site_links() -> list[Any]:
+    """Footer links to the root-level utility pages of the current language (cached)."""
+    return get_site_links(_current_language())
 
 
 @register.inclusion_tag("components/breadcrumbs.html", takes_context=True)

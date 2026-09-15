@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} tools/tools_index_page.html — Context: page, tools (flag-enabled live children). {% endcomment %}
+{% block content %}
+<div class="container">
+  <header class="page-header"><h1>{{ page.title }}</h1></header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  <section class="cards-grid" aria-label="{% trans 'Tools' %}">
+    <div class="cards-grid__items">
+      {% for tool in tools %}
+        {% include "components/card.html" with title=tool.title url=tool.url text=tool.summary tag="h2" %}
+      {% empty %}
+        <p class="placeholder">{% trans "Tools will appear here after medical sign-off." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+  {% include "components/disclaimer.html" with text=page.disclaimer|richtext %}
+</div>
+{% endblock %}

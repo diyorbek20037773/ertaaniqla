@@ -1,0 +1,7 @@
+New question #{{ question_id }} ({{ section }}, {{ language }})
+
+"{{ excerpt }}…"
+
+Open in the CMS to answer: {{ cms_url }}
+
+— Erta aniqla

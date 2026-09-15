@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 14:06+0500\n"
+"POT-Creation-Date: 2026-09-15 15:02+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -304,6 +304,13 @@ msgstr "maqolalar"
 msgid "Core"
 msgstr "Asosiy"
 
+msgid "Spam check failed."
+msgstr "Spam tekshiruvi oʻtmadi."
+
+#| msgid "Please wait a minute and try again."
+msgid "Please confirm you are not a robot and try again."
+msgstr "Robot emasligingizni tasdiqlang va qayta urinib koʻring."
+
 msgid "created at"
 msgstr "yaratilgan vaqti"
 
@@ -326,7 +333,6 @@ msgstr ""
 "Sahifa Telegram/Facebook’da ulashilganda koʻrsatiladi. Boʻsh boʻlsa "
 "avtomatik yaratiladi."
 
-#| msgid "social sharing image"
 msgid "generated sharing image"
 msgstr "avtomatik yaratilgan ulashish rasmi"
 
@@ -583,11 +589,181 @@ msgstr ""
 msgid "directory page (where to go)"
 msgstr "katalog sahifasi (qayerga murojaat qilish)"
 
+msgid "Free under the state programme"
+msgstr "Davlat dasturi boʻyicha bepul"
+
 msgid "Questions & FAQ"
 msgstr "Savollar va javoblar"
 
+msgid "Section"
+msgstr "Boʻlim"
+
+msgid ""
+"I agree to the processing of my data as described in the privacy policy"
+msgstr ""
+"Maxfiylik siyosatida tavsiflanganidek, maʼlumotlarim qayta ishlanishiga "
+"roziman"
+
+msgid "Your name (optional)"
+msgstr "Ismingiz (ixtiyoriy)"
+
+msgid "Phone or e-mail (optional, for a private reply)"
+msgstr "Telefon yoki e-mail (ixtiyoriy, shaxsiy javob uchun)"
+
+#| msgid "Question"
+msgid "Your question"
+msgstr "Savolingiz"
+
+msgid "My question may be published anonymously with the answer"
+msgstr "Savolim javob bilan birga anonim eʼlon qilinishi mumkin"
+
+msgid "Please describe your question in a few words."
+msgstr "Savolingizni bir necha soʻz bilan tasvirlang."
+
+msgid "Other"
+msgstr "Boshqa"
+
+msgid "New"
+msgstr "Yangi"
+
+#| msgid "consent document (private)"
+msgid "Answered (private)"
+msgstr "Javob berilgan (shaxsiy)"
+
+#| msgid "published"
+msgid "Published"
+msgstr "Eʼlon qilingan"
+
+msgid "Rejected"
+msgstr "Rad etilgan"
+
+msgid "name (optional)"
+msgstr "ism (ixtiyoriy)"
+
+msgid "contact (optional, encrypted)"
+msgstr "aloqa (ixtiyoriy, shifrlangan)"
+
+msgid "Phone or e-mail. Encrypted at rest, deleted 90 days after the answer."
+msgstr ""
+"Telefon yoki e-mail. Shifrlangan holda saqlanadi, javobdan 90 kun oʻtgach "
+"oʻchiriladi."
+
+msgid "section"
+msgstr "boʻlim"
+
+#| msgid "Question"
+msgid "question"
+msgstr "savol"
+
+msgid "may be published anonymously"
+msgstr "anonim eʼlon qilinishi mumkin"
+
+#| msgid "Language"
+msgid "language"
+msgstr "til"
+
+msgid "status"
+msgstr "holat"
+
+#| msgid "published"
+msgid "question as published"
+msgstr "eʼlon qilinadigan savol matni"
+
+msgid "Edited/anonymised wording shown on the site (empty = original text)."
+msgstr "Saytda koʻrsatiladigan tahrirlangan/anonim matn (boʻsh = asl matn)."
+
+#| msgid "Answer"
+msgid "answer"
+msgstr "javob"
+
+msgid "answered by"
+msgstr "javob bergan"
+
+msgid "answered at"
+msgstr "javob berilgan vaqt"
+
+#| msgid "published"
+msgid "published at"
+msgstr "eʼlon qilingan vaqt"
+
+msgid "contact purged at"
+msgstr "aloqa oʻchirilgan vaqt"
+
+#| msgid "Location"
+msgid "Moderation"
+msgstr "Moderatsiya"
+
+msgid "Submitted"
+msgstr "Yuborilgan"
+
+#| msgid "FAQ accordion / questions to ask the doctor"
+msgid "question to a doctor"
+msgstr "shifokorga savol"
+
+#| msgid "FAQ accordion / questions to ask the doctor"
+msgid "questions to a doctor"
+msgstr "shifokorga savollar"
+
+msgid "text above the form"
+msgstr "forma ustidagi matn"
+
+msgid "thank-you text"
+msgstr "minnatdorchilik matni"
+
+#| msgid "section index page"
+msgid "questions & answers page"
+msgstr "savol-javob sahifasi"
+
 msgid "Feedback"
 msgstr "Qayta aloqa"
+
+msgid "What is it about?"
+msgstr "Nima haqida?"
+
+msgid "Your message"
+msgstr "Xabaringiz"
+
+msgid "Phone or e-mail (optional, if you want a reply)"
+msgstr "Telefon yoki e-mail (ixtiyoriy, javob kerak boʻlsa)"
+
+msgid "Please write a few words."
+msgstr "Bir necha soʻz yozing."
+
+#| msgid "Search the site"
+msgid "Feedback about the site"
+msgstr "Sayt haqida fikr"
+
+msgid "Something is broken"
+msgstr "Nimadir ishlamayapti"
+
+msgid "Partnership / volunteering"
+msgstr "Hamkorlik / koʻngillilik"
+
+msgid "message"
+msgstr "xabar"
+
+#| msgid "home page"
+msgid "page"
+msgstr "sahifa"
+
+msgid "browser"
+msgstr "brauzer"
+
+msgid "handled"
+msgstr "koʻrib chiqilgan"
+
+msgid "Submission"
+msgstr "Murojaat"
+
+msgid "feedback submission"
+msgstr "qayta aloqa xabari"
+
+msgid "feedback submissions"
+msgstr "qayta aloqa xabarlari"
+
+#| msgid "Feedback"
+msgid "feedback page"
+msgstr "qayta aloqa sahifasi"
 
 msgid "Glossary"
 msgstr "Lugʻat"
@@ -600,9 +776,6 @@ msgstr "atama"
 
 msgid "definition"
 msgstr "taʼrif"
-
-msgid "section"
-msgstr "boʻlim"
 
 msgid "synonyms"
 msgstr "sinonimlar"
@@ -617,6 +790,10 @@ msgstr "lugʻat atamasi"
 
 msgid "glossary terms"
 msgstr "lugʻat atamalari"
+
+#| msgid "glossary term"
+msgid "glossary page"
+msgstr "lugʻat sahifasi"
 
 msgid "Home"
 msgstr "Bosh sahifa"
@@ -765,9 +942,6 @@ msgstr "subtitrlar (uz, VTT)"
 msgid "subtitles (ru, VTT)"
 msgstr "subtitrlar (ru, VTT)"
 
-msgid "status"
-msgstr "holat"
-
 msgid "renditions"
 msgstr "versiyalar"
 
@@ -858,7 +1032,6 @@ msgstr "mavzu sahifasi"
 msgid "Stories"
 msgstr "Hikoyalar"
 
-#| msgid "topic index page"
 msgid "stories index page"
 msgstr "hikoyalar sahifasi"
 
@@ -881,7 +1054,6 @@ msgstr "surat"
 msgid "story"
 msgstr "hikoya"
 
-#| msgid "synonyms"
 msgid "anonymised"
 msgstr "anonimlashtirilgan"
 
@@ -929,6 +1101,113 @@ msgstr ""
 
 msgid "Tools"
 msgstr "Vositalar"
+
+msgid "Never"
+msgstr "Hech qachon"
+
+msgid "Less than a year ago"
+msgstr "Bir yildan kam vaqt oldin"
+
+msgid "About a year ago"
+msgstr "Taxminan bir yil oldin"
+
+msgid "2 years ago"
+msgstr "2 yil oldin"
+
+msgid "3 years ago or more"
+msgstr "3 yil va undan koʻp vaqt oldin"
+
+#| msgid "e.g. mammography"
+msgid "Mammography"
+msgstr "Mammografiya"
+
+msgid "Breast ultrasound"
+msgstr "Koʻkrak UTT"
+
+msgid "HPV test"
+msgstr "HPV-test"
+
+msgid "Your age"
+msgstr "Yoshingiz"
+
+#, python-format
+msgid "Last %(test)s"
+msgstr "Oxirgi %(test)s"
+
+msgid "Tick everything you have noticed"
+msgstr "Sezgan barcha belgilarni belgilang"
+
+#| msgid "medical disclaimer (uz)"
+msgid "disclaimer"
+msgstr "ogohlantirish"
+
+#| msgid "site settings"
+msgid "Empty = site setting."
+msgstr "Boʻsh = sayt sozlamasi."
+
+#| msgid "stories index page"
+msgid "tools index page"
+msgstr "asboblar sahifasi"
+
+msgid "text when a test is due"
+msgstr "tekshiruv vaqti kelganda matn"
+
+msgid "text when tests are up to date"
+msgstr "tekshiruvlar oʻz vaqtida boʻlsa matn"
+
+msgid "text when no test applies at this age"
+msgstr "bu yoshda tekshiruv tavsiya etilmasa matn"
+
+msgid "HPV test interval note"
+msgstr "HPV-test davriyligi haqida eslatma"
+
+msgid "The TZ gives no interval for the HPV test — the doctor decides."
+msgstr "TZda HPV-test davriyligi koʻrsatilmagan — shifokor hal qiladi."
+
+msgid "'where to go' page"
+msgstr "«qayerga murojaat qilish» sahifasi"
+
+#| msgid "Results"
+msgid "Result texts"
+msgstr "Natija matnlari"
+
+msgid "screening helper page"
+msgstr "skrining yordamchisi sahifasi"
+
+#| msgid "Symptom"
+msgid "Sign / symptom"
+msgstr "Belgi / simptom"
+
+msgid "Urgency if ticked"
+msgstr "Belgilansa shoshilinchlik"
+
+msgid "Women's symptom self-check"
+msgstr "Ayollar uchun belgilarni oʻz-oʻzini tekshirish"
+
+msgid "Warning signs in children (for parents)"
+msgstr "Bolalardagi xavotirli belgilar (ota-onalar uchun)"
+
+msgid "checklist"
+msgstr "roʻyxat"
+
+msgid "checklist items"
+msgstr "roʻyxat bandlari"
+
+msgid "result: nothing ticked"
+msgstr "natija: hech narsa belgilanmagan"
+
+msgid "result: routine"
+msgstr "natija: odatiy"
+
+#| msgid "Results"
+msgid "result: soon"
+msgstr "natija: tez orada"
+
+msgid "result: urgent"
+msgstr "natija: shoshilinch"
+
+msgid "self-check page"
+msgstr "oʻz-oʻzini tekshirish sahifasi"
 
 msgid "Users"
 msgstr "Foydalanuvchilar"
@@ -1015,17 +1294,21 @@ msgstr "Tashqi saytdan kontent yuklanadi."
 msgid "Open on"
 msgstr "Ochish:"
 
+#| msgid "Both sections"
+msgid "Site sections"
+msgstr "Sayt boʻlimlari"
+
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
 msgstr "Prezidentning PQ-402 va PQ-186-sonli qarorlari asosida yaratilgan."
 
 msgid "Partners"
 msgstr "Hamkorlar"
 
+msgid "Please correct the errors below."
+msgstr "Quyidagi xatolarni tuzating."
+
 msgid "Erta aniqla — home"
 msgstr "Erta aniqla — bosh sahifa"
-
-msgid "Free under the state programme"
-msgstr "Davlat dasturi boʻyicha bepul"
 
 msgid "Website"
 msgstr "Veb-sayt"
@@ -1078,18 +1361,6 @@ msgstr ""
 "Tizimga kirishga muvaffaqiyatsiz urinishlar juda koʻp. Bir soatdan soʻng "
 "qayta urinib koʻring yoki administratorga murojaat qiling."
 
-msgid "Filter institutions"
-msgstr "Muassasalarni filtrlash"
-
-msgid "Section"
-msgstr "Boʻlim"
-
-msgid "All"
-msgstr "Barchasi"
-
-msgid "Show"
-msgstr "Koʻrsatish"
-
 msgid "Results"
 msgstr "Natijalar"
 
@@ -1098,8 +1369,69 @@ msgid "%(counter)s institution"
 msgid_plural "%(counter)s institutions"
 msgstr[0] "%(counter)s ta muassasa"
 
+msgid "Filter institutions"
+msgstr "Muassasalarni filtrlash"
+
+msgid "All"
+msgstr "Barchasi"
+
+msgid "Show"
+msgstr "Koʻrsatish"
+
+msgid "Loading…"
+msgstr "Yuklanmoqda…"
+
 msgid "Map will be shown here."
 msgstr "Bu yerda xarita koʻrsatiladi."
+
+#| msgid "institutions"
+msgid "Map of institutions"
+msgstr "Muassasalar xaritasi"
+
+msgid "Thank you, your question has been sent."
+msgstr "Rahmat, savolingiz yuborildi."
+
+msgid "Ask a doctor"
+msgstr "Shifokorga savol bering"
+
+msgid ""
+"We never publish names or contacts. Contacts are deleted 90 days after the "
+"answer."
+msgstr ""
+"Ism va aloqa maʼlumotlari hech qachon eʼlon qilinmaydi. Aloqa maʼlumotlari "
+"javobdan 90 kun oʻtgach oʻchiriladi."
+
+#| msgid "Question"
+msgid "Send question"
+msgstr "Savolni yuborish"
+
+msgid "Answered questions"
+msgstr "Javob berilgan savollar"
+
+msgid "Filter by section"
+msgstr "Boʻlim boʻyicha filtrlash"
+
+#| msgid "Articles will appear here."
+msgid "Answered questions will appear here."
+msgstr "Javob berilgan savollar shu yerda paydo boʻladi."
+
+msgid "Thank you, your message has been sent."
+msgstr "Rahmat, xabaringiz yuborildi."
+
+msgid "Messages are deleted after 180 days."
+msgstr "Xabarlar 180 kundan keyin oʻchiriladi."
+
+msgid "Send"
+msgstr "Yuborish"
+
+msgid "Find a term"
+msgstr "Atamani topish"
+
+msgid "Letters"
+msgstr "Harflar"
+
+msgid "No terms found."
+msgstr "Atamalar topilmadi."
 
 msgid "Open section"
 msgstr "Boʻlimni ochish"
@@ -1147,13 +1479,55 @@ msgstr "Insonning roziligi bilan eʼlon qilingan."
 msgid "Name and details changed."
 msgstr "Ism va tafsilotlar oʻzgartirilgan."
 
-#| msgid "Filter institutions"
-msgid "Filter by section"
-msgstr "Boʻlim boʻyicha filtrlash"
-
-#| msgid "Articles will appear here."
 msgid "Stories will appear here."
 msgstr "Hikoyalar shu yerda paydo boʻladi."
+
+#| msgid "%(counter)s result"
+#| msgid_plural "%(counter)s results"
+msgid "Your result"
+msgstr "Sizning natijangiz"
+
+msgid "Not recommended at your age"
+msgstr "Sizning yoshingizda tavsiya etilmaydi"
+
+msgid "Due now"
+msgstr "Hozir oʻtish kerak"
+
+#| msgid "Soon — see a doctor within days"
+msgid "Done — ask your doctor when to repeat"
+msgstr "Oʻtilgan — qachon takrorlashni shifokordan soʻrang"
+
+#, python-format
+msgid "Next in about %(years)s year"
+msgid_plural "Next in about %(years)s years"
+msgstr[0] "Keyingisi taxminan %(years)s yildan keyin"
+
+#, python-format
+msgid "every %(years)s year"
+msgid_plural "every %(years)s years"
+msgstr[0] "har %(years)s yilda"
+
+msgid "Where to go"
+msgstr "Qayerga murojaat qilish"
+
+msgid "No warning signs ticked"
+msgstr "Xavotirli belgilar belgilanmagan"
+
+#, python-format
+msgid "%(checked)s of %(total)s ticked"
+msgstr "%(total)s tadan %(checked)s tasi belgilangan"
+
+msgid "Nothing you enter is stored."
+msgstr "Kiritgan maʼlumotlaringiz saqlanmaydi."
+
+msgid "Check"
+msgstr "Tekshirish"
+
+msgid "Show result"
+msgstr "Natijani koʻrsatish"
+
+msgid "Tools will appear here after medical sign-off."
+msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
 
 #~ msgid ""
 #~ "This site is an information and education resource. It does not make a "

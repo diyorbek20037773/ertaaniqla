@@ -1,0 +1,8 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/turnstile.html — Cloudflare Turnstile widget (only when TURNSTILE_SITE_KEY set).
+   Context: TURNSTILE_SITE_KEY, request (csp_nonce). The script host is allowed in CSP.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% if TURNSTILE_SITE_KEY %}
+  <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}" data-language="{{ LANGUAGE_CODE }}"></div>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ request.csp_nonce }}"></script>
+{% endif %}

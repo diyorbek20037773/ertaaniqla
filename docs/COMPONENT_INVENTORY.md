@@ -15,7 +15,7 @@
 > `templates/components/*.html` / `templates/blocks/*.html` (tuzilma) fayllarida. Figma
 > dizaynini qo'llash = faqat shu fayllarni o'zgartirish, **Python o'zgarmaydi**.
 
-Last updated: 2026-09-15 (M3). Screenshots at 390 px: `tests/e2e/screenshots/`.
+Last updated: 2026-09-15 (M4). Screenshots at 390 px: `tests/e2e/screenshots/`.
 
 ## 1. Design tokens / Токены / Tokenlar — `static/src/tokens.css`
 
@@ -41,7 +41,13 @@ Editors may override `--brand`/`--brand-soft` per section from the CMS (`Section
 | `sections/section_index_page.html` | SectionIndexPage | заголовок с эмодзи, tagline, intro-блоки, сетка карточек подразделов (h2) | Bo'lim sarlavhasi, tagline, intro, bo'limchalar kartalari | 5–7 cards |
 | `sections/topic_index_page.html` | TopicIndexPage | заголовок, summary, intro, сетка карточек статей (картинка, заголовок, summary, время чтения) | Mavzu sarlavhasi, maqola kartalari | empty state («Articles will appear here») |
 | `articles/article_page.html` | ArticlePage | заголовок, summary, page-meta (время чтения, бейдж «Проверено врачом»), hero image, блоки body, дисклеймер | Maqola sahifasi | with/without hero image, verified badge |
-| `directory/directory_page.html` | DirectoryPage | заголовок, intro, форма фильтров (регион, тип, раздел, бесплатно), счётчик, карточки учреждений, заглушка карты | Muassasalar katalogi | empty results; map placeholder (M4: Leaflet + HTMX) |
+| `directory/directory_page.html` + `_results.html` | DirectoryPage | заголовок, intro, форма фильтров (регион, тип, раздел, бесплатно; HTMX), карта Leaflet (`#map`, маркеры по цвету раздела, попап), счётчик, карточки учреждений | Muassasalar katalogi | empty results; no coordinates; loading indicator |
+| `tools/tools_index_page.html` | ToolsIndexPage | заголовок, intro, карточки инструментов, дисклеймер | Asboblar sahifasi | flag-off (tool hidden) |
+| `tools/screening_tool_page.html` + `_screening_result.html` | ScreeningToolPage | форма (возраст + 3 селекта «когда в последний раз»), результат по тестам (статус: пора / через N лет / не показано), текст из CMS, кнопка «Куда обратиться», дисклеймер | Skrining yordamchisi | before submit / due / ok / not applicable / errors |
+| `tools/self_check_page.html` + `_self_check_result.html` | SelfCheckPage | чек-лист (fieldset), живой счётчик (Alpine), результат уровня none/routine/soon/urgent + текст из CMS, кнопка «Куда обратиться» | O'z-o'zini tekshirish | 4 levels; nothing ticked |
+| `faq/faq_page.html` + `_form.html` | FAQPage | форма вопроса (имя, контакт, раздел, текст, согласия, honeypot, Turnstile), благодарность, вкладки-фильтр, список Q&A (`<details>`, автор/организация/дата) | Savol-javob sahifasi | success / errors / 429; empty list |
+| `feedback/feedback_page.html` + `_form.html` | FeedbackPage | форма (тип, текст, контакт, скрытый page_url, согласие), благодарность | Qayta aloqa | success / errors / 429 |
+| `glossary/glossary_page.html` | GlossaryPage | поиск + фильтр раздела, навигация по буквам, группы `<dl>` с якорями `#term-<id>` | Lug'at sahifasi | no terms found |
 | `search/search.html` + `search/_results.html` | search view (`/uz/qidiruv/?q=`, `/ru/poisk/?q=`) | заголовок, форма поиска, счётчик, список результатов (заголовок, summary, метка языка, цвет раздела), пустое состояние, подсказка | Qidiruv sahifasi | no query / results / empty; HTMX partial = `_results.html` |
 | `stories/story_index_page.html` | StoryIndexPage (`/uz/hikoyalar/`) | заголовок, intro, вкладки-фильтр (все / женский / детский), сетка карточек историй (фото, имя, summary) | Hikoyalar sahifasi | empty state; filter active |
 | `stories/patient_story_page.html` | PatientStoryPage | eyebrow «История пациента», имя (псевдоним) + диагноз, summary, page-meta, фото, блоки, подпись о согласии/анонимизации | Bemor hikoyasi | anonymised on/off; section colour |
@@ -68,6 +74,9 @@ Each partial documents its context variables in a header comment. CSS block of t
 | `embed_frame.html` | iframe YouTube/Telegram; **click-to-load** фасад для Instagram/TikTok; `<noscript>` ссылка | Provayder iframe / bosib yuklash fasadi | `embed{provider,src,vertical,click_to_load}` | facade / loaded / no-JS |
 | `institution_card.html` | Карточка учреждения: название, тип, «бесплатно по госпрограмме», адрес, телефон, часы, услуги, сайт, дата проверки | Muassasa kartasi | `institution` | free badge on/off; no phone/hours |
 | `filter-tabs` (CSS in stories) | Вкладки фильтра раздела (aria-current) | Bo'lim filtr tugmalari | links | active / inactive |
+| `form_field.html` / `form_errors.html` | Поле формы (label, help, inline error, aria-describedby) / сводка ошибок (role=alert, ссылки на поля) | Forma maydoni / xatolar ro'yxati | `field` / `form` | error / checkbox |
+| `turnstile.html` | Виджет Cloudflare Turnstile (только при ключе) | Turnstile vidjeti | `TURNSTILE_SITE_KEY` | present / absent |
+| `disclaimer.html` | Медицинский дисклеймер на страницах инструментов | Tibbiy ogohlantirish | `text` (fallback: site setting) | custom / default |
 | `search_form.html` | Поле поиска (GET-форма; на странице поиска — HTMX «поиск при вводе») | Qidiruv maydoni | `query, autofocus, results_target` | plain / HTMX live |
 | `footer.html` | Подвал: дисклеймер (обязателен), горячая линия, соцсети, текст, ПП-402/186, логотипы партнёров (Агентство, Яндекс, Hamroh) | Pastki qism | `SiteSettings` | logos present / placeholders |
 

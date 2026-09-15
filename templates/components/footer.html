@@ -7,6 +7,12 @@
 {% with s=settings.core.SiteSettings %}
 <footer class="site-footer" role="contentinfo">
   <div class="container">
+    {% site_links as links %}
+    {% if links %}
+      <nav class="site-footer__links" aria-label="{% trans 'Site sections' %}">
+        <ul>{% for link in links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul>
+      </nav>
+    {% endif %}
     <p class="site-footer__disclaimer">{{ s|localized:"disclaimer" }}</p>
     {% if s.hotline_phone %}
       <p class="site-footer__hotline">{% trans "Hotline" %}: <a href="{{ s.hotline_phone|phone_href }}">{{ s.hotline_phone|phone_display }}</a>

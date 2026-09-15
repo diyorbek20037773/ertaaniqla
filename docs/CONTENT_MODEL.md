@@ -38,6 +38,10 @@ per language. `seed_content` (`apps/core/seed/`) creates/updates the whole tree 
 | `DirectoryPage` | directory | `intro`, `default_section` | GET filters `region`, `kind`, `section`, `free=1` |
 | `Institution`, `Region` (14, migration), `Service` (8, migration) | directory | per spec §4.3 | snippet; CSV import + map in M4 |
 | `Video` | media_library | `title`, `kind`, `source`, `file`, `external_url`, `poster`, `duration`, `doctor_name/org`, `transcript`, `subtitles_uz/ru`, `status`, `renditions` | `clean()` validates provider URL; transcoding M3 |
+| `ToolsIndexPage`, `ScreeningToolPage` (result texts, where_page, disclaimer), `SelfCheckPage` (kind, items StreamField, result_* texts) | tools | waffle flags `tools_screening` / `tools_selfcheck`; logic in `screening.py` / `selfcheck.py` | POST + HTMX partials, nothing stored |
+| `FAQPage`, `Question` (snippet) | faq | encrypted contact, status new/answered/published/rejected, consent_to_publish | purge 90 d after answer |
+| `FeedbackPage`, `FeedbackSubmission` (snippet) | feedback | kind, encrypted contact, page_url, UA | purge 180 d |
+| `GlossaryPage` | glossary | letters, section, `?q=` | `glossary_wrap` filter |
 | `Term` | glossary | `term`, `definition`, `section`, `synonyms` | translatable snippet |
 | `SiteSettings` | core | hotline ×2, socials ×5, footer/disclaimer/legal (uz+ru), emergency banner, partner logos ×3, Metrika id | `{{ settings.core.SiteSettings|localized:"field" }}` |
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 14:06+0500\n"
+"POT-Creation-Date: 2026-09-15 15:02+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -301,6 +301,13 @@ msgstr "статьи"
 msgid "Core"
 msgstr "Ядро"
 
+msgid "Spam check failed."
+msgstr "Проверка на спам не пройдена."
+
+#| msgid "Please wait a minute and try again."
+msgid "Please confirm you are not a robot and try again."
+msgstr "Подтвердите, что вы не робот, и попробуйте снова."
+
 msgid "created at"
 msgstr "создано"
 
@@ -323,7 +330,6 @@ msgstr ""
 "Показывается при публикации ссылки в Telegram/Facebook. Если пусто — "
 "создаётся автоматически."
 
-#| msgid "social sharing image"
 msgid "generated sharing image"
 msgstr "сгенерированное изображение для соцсетей"
 
@@ -576,11 +582,181 @@ msgstr "Предварительно выбирает фильтр раздел�
 msgid "directory page (where to go)"
 msgstr "страница справочника (куда обратиться)"
 
+msgid "Free under the state programme"
+msgstr "Бесплатно по госпрограмме"
+
 msgid "Questions & FAQ"
 msgstr "Вопросы и ответы"
 
+msgid "Section"
+msgstr "Раздел"
+
+msgid ""
+"I agree to the processing of my data as described in the privacy policy"
+msgstr ""
+"Я согласен(на) на обработку моих данных согласно политике конфиденциальности"
+
+msgid "Your name (optional)"
+msgstr "Ваше имя (необязательно)"
+
+msgid "Phone or e-mail (optional, for a private reply)"
+msgstr "Телефон или e-mail (необязательно, для личного ответа)"
+
+#| msgid "Question"
+msgid "Your question"
+msgstr "Ваш вопрос"
+
+msgid "My question may be published anonymously with the answer"
+msgstr "Мой вопрос можно опубликовать анонимно вместе с ответом"
+
+msgid "Please describe your question in a few words."
+msgstr "Опишите ваш вопрос в нескольких словах."
+
+msgid "Other"
+msgstr "Другое"
+
+msgid "New"
+msgstr "Новый"
+
+#| msgid "consent document (private)"
+msgid "Answered (private)"
+msgstr "Отвечен (приватно)"
+
+#| msgid "published"
+msgid "Published"
+msgstr "Опубликован"
+
+msgid "Rejected"
+msgstr "Отклонён"
+
+msgid "name (optional)"
+msgstr "имя (необязательно)"
+
+msgid "contact (optional, encrypted)"
+msgstr "контакт (необязательно, зашифрован)"
+
+msgid "Phone or e-mail. Encrypted at rest, deleted 90 days after the answer."
+msgstr ""
+"Телефон или e-mail. Хранится зашифрованным, удаляется через 90 дней после "
+"ответа."
+
+msgid "section"
+msgstr "раздел"
+
+#| msgid "Question"
+msgid "question"
+msgstr "вопрос"
+
+msgid "may be published anonymously"
+msgstr "можно опубликовать анонимно"
+
+#| msgid "Language"
+msgid "language"
+msgstr "язык"
+
+msgid "status"
+msgstr "статус"
+
+#| msgid "published"
+msgid "question as published"
+msgstr "вопрос в опубликованном виде"
+
+msgid "Edited/anonymised wording shown on the site (empty = original text)."
+msgstr ""
+"Отредактированная/анонимная формулировка для сайта (пусто = исходный текст)."
+
+#| msgid "Answer"
+msgid "answer"
+msgstr "ответ"
+
+msgid "answered by"
+msgstr "ответил(а)"
+
+msgid "answered at"
+msgstr "время ответа"
+
+#| msgid "published"
+msgid "published at"
+msgstr "время публикации"
+
+msgid "contact purged at"
+msgstr "контакт удалён"
+
+#| msgid "Location"
+msgid "Moderation"
+msgstr "Модерация"
+
+msgid "Submitted"
+msgstr "Отправлено"
+
+#| msgid "FAQ accordion / questions to ask the doctor"
+msgid "question to a doctor"
+msgstr "вопрос врачу"
+
+#| msgid "FAQ accordion / questions to ask the doctor"
+msgid "questions to a doctor"
+msgstr "вопросы врачу"
+
+msgid "text above the form"
+msgstr "текст над формой"
+
+msgid "thank-you text"
+msgstr "текст благодарности"
+
+#| msgid "section index page"
+msgid "questions & answers page"
+msgstr "страница вопросов и ответов"
+
 msgid "Feedback"
 msgstr "Обратная связь"
+
+msgid "What is it about?"
+msgstr "О чём сообщение?"
+
+msgid "Your message"
+msgstr "Ваше сообщение"
+
+msgid "Phone or e-mail (optional, if you want a reply)"
+msgstr "Телефон или e-mail (необязательно, если хотите ответ)"
+
+msgid "Please write a few words."
+msgstr "Напишите несколько слов."
+
+#| msgid "Search the site"
+msgid "Feedback about the site"
+msgstr "Отзыв о сайте"
+
+msgid "Something is broken"
+msgstr "Что-то не работает"
+
+msgid "Partnership / volunteering"
+msgstr "Сотрудничество / волонтёрство"
+
+msgid "message"
+msgstr "сообщение"
+
+#| msgid "home page"
+msgid "page"
+msgstr "страница"
+
+msgid "browser"
+msgstr "браузер"
+
+msgid "handled"
+msgstr "обработано"
+
+msgid "Submission"
+msgstr "Обращение"
+
+msgid "feedback submission"
+msgstr "сообщение обратной связи"
+
+msgid "feedback submissions"
+msgstr "сообщения обратной связи"
+
+#| msgid "Feedback"
+msgid "feedback page"
+msgstr "страница обратной связи"
 
 msgid "Glossary"
 msgstr "Словарь"
@@ -594,9 +770,6 @@ msgstr "термин"
 msgid "definition"
 msgstr "определение"
 
-msgid "section"
-msgstr "раздел"
-
 msgid "synonyms"
 msgstr "синонимы"
 
@@ -609,6 +782,10 @@ msgstr "термин глоссария"
 
 msgid "glossary terms"
 msgstr "термины глоссария"
+
+#| msgid "glossary term"
+msgid "glossary page"
+msgstr "страница словаря"
 
 msgid "Home"
 msgstr "Главная"
@@ -755,9 +932,6 @@ msgstr "субтитры (uz, VTT)"
 msgid "subtitles (ru, VTT)"
 msgstr "субтитры (ru, VTT)"
 
-msgid "status"
-msgstr "статус"
-
 msgid "renditions"
 msgstr "версии"
 
@@ -846,7 +1020,6 @@ msgstr "страница темы"
 msgid "Stories"
 msgstr "Истории"
 
-#| msgid "topic index page"
 msgid "stories index page"
 msgstr "страница историй"
 
@@ -868,7 +1041,6 @@ msgstr "фото"
 msgid "story"
 msgstr "история"
 
-#| msgid "synonyms"
 msgid "anonymised"
 msgstr "анонимизировано"
 
@@ -916,6 +1088,113 @@ msgstr ""
 
 msgid "Tools"
 msgstr "Инструменты"
+
+msgid "Never"
+msgstr "Никогда"
+
+msgid "Less than a year ago"
+msgstr "Меньше года назад"
+
+msgid "About a year ago"
+msgstr "Около года назад"
+
+msgid "2 years ago"
+msgstr "2 года назад"
+
+msgid "3 years ago or more"
+msgstr "3 года назад и более"
+
+#| msgid "e.g. mammography"
+msgid "Mammography"
+msgstr "Маммография"
+
+msgid "Breast ultrasound"
+msgstr "УЗИ молочных желёз"
+
+msgid "HPV test"
+msgstr "ВПЧ-тест"
+
+msgid "Your age"
+msgstr "Ваш возраст"
+
+#, python-format
+msgid "Last %(test)s"
+msgstr "Последняя %(test)s"
+
+msgid "Tick everything you have noticed"
+msgstr "Отметьте всё, что вы заметили"
+
+#| msgid "medical disclaimer (uz)"
+msgid "disclaimer"
+msgstr "дисклеймер"
+
+#| msgid "site settings"
+msgid "Empty = site setting."
+msgstr "Пусто = настройка сайта."
+
+#| msgid "stories index page"
+msgid "tools index page"
+msgstr "страница инструментов"
+
+msgid "text when a test is due"
+msgstr "текст, когда обследование пора пройти"
+
+msgid "text when tests are up to date"
+msgstr "текст, когда обследования актуальны"
+
+msgid "text when no test applies at this age"
+msgstr "текст, когда в этом возрасте обследование не показано"
+
+msgid "HPV test interval note"
+msgstr "примечание об интервале ВПЧ-теста"
+
+msgid "The TZ gives no interval for the HPV test — the doctor decides."
+msgstr "В ТЗ интервал ВПЧ-теста не указан — решает врач."
+
+msgid "'where to go' page"
+msgstr "страница «куда обратиться»"
+
+#| msgid "Results"
+msgid "Result texts"
+msgstr "Тексты результата"
+
+msgid "screening helper page"
+msgstr "страница помощника по скринингу"
+
+#| msgid "Symptom"
+msgid "Sign / symptom"
+msgstr "Признак / симптом"
+
+msgid "Urgency if ticked"
+msgstr "Срочность, если отмечено"
+
+msgid "Women's symptom self-check"
+msgstr "Самопроверка симптомов для женщин"
+
+msgid "Warning signs in children (for parents)"
+msgstr "Тревожные признаки у детей (для родителей)"
+
+msgid "checklist"
+msgstr "чек-лист"
+
+msgid "checklist items"
+msgstr "пункты чек-листа"
+
+msgid "result: nothing ticked"
+msgstr "результат: ничего не отмечено"
+
+msgid "result: routine"
+msgstr "результат: планово"
+
+#| msgid "Results"
+msgid "result: soon"
+msgstr "результат: скоро"
+
+msgid "result: urgent"
+msgstr "результат: срочно"
+
+msgid "self-check page"
+msgstr "страница самопроверки"
 
 msgid "Users"
 msgstr "Пользователи"
@@ -1002,17 +1281,21 @@ msgstr "Загружает содержимое со стороннего сай
 msgid "Open on"
 msgstr "Открыть в"
 
+#| msgid "Both sections"
+msgid "Site sections"
+msgstr "Разделы сайта"
+
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
 msgstr "Создан в соответствии с Постановлениями Президента ПП-402 и ПП-186."
 
 msgid "Partners"
 msgstr "Партнёры"
 
+msgid "Please correct the errors below."
+msgstr "Исправьте ошибки ниже."
+
 msgid "Erta aniqla — home"
 msgstr "Эрта аниқла — главная"
-
-msgid "Free under the state programme"
-msgstr "Бесплатно по госпрограмме"
 
 msgid "Website"
 msgstr "Сайт"
@@ -1067,18 +1350,6 @@ msgstr ""
 "Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к"
 " администратору."
 
-msgid "Filter institutions"
-msgstr "Фильтр учреждений"
-
-msgid "Section"
-msgstr "Раздел"
-
-msgid "All"
-msgstr "Все"
-
-msgid "Show"
-msgstr "Показать"
-
 msgid "Results"
 msgstr "Результаты"
 
@@ -1089,8 +1360,69 @@ msgstr[0] "%(counter)s учреждение"
 msgstr[1] "%(counter)s учреждения"
 msgstr[2] "%(counter)s учреждений"
 
+msgid "Filter institutions"
+msgstr "Фильтр учреждений"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
 msgid "Map will be shown here."
 msgstr "Здесь будет карта."
+
+#| msgid "institutions"
+msgid "Map of institutions"
+msgstr "Карта учреждений"
+
+msgid "Thank you, your question has been sent."
+msgstr "Спасибо, ваш вопрос отправлен."
+
+msgid "Ask a doctor"
+msgstr "Спросить врача"
+
+msgid ""
+"We never publish names or contacts. Contacts are deleted 90 days after the "
+"answer."
+msgstr ""
+"Мы никогда не публикуем имена и контакты. Контакты удаляются через 90 дней "
+"после ответа."
+
+#| msgid "Question"
+msgid "Send question"
+msgstr "Отправить вопрос"
+
+msgid "Answered questions"
+msgstr "Отвеченные вопросы"
+
+msgid "Filter by section"
+msgstr "Фильтр по разделу"
+
+#| msgid "Articles will appear here."
+msgid "Answered questions will appear here."
+msgstr "Здесь появятся отвеченные вопросы."
+
+msgid "Thank you, your message has been sent."
+msgstr "Спасибо, ваше сообщение отправлено."
+
+msgid "Messages are deleted after 180 days."
+msgstr "Сообщения удаляются через 180 дней."
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Find a term"
+msgstr "Найти термин"
+
+msgid "Letters"
+msgstr "Буквы"
+
+msgid "No terms found."
+msgstr "Термины не найдены."
 
 msgid "Open section"
 msgstr "Открыть раздел"
@@ -1140,13 +1472,59 @@ msgstr "Опубликовано с согласия человека."
 msgid "Name and details changed."
 msgstr "Имя и детали изменены."
 
-#| msgid "Filter institutions"
-msgid "Filter by section"
-msgstr "Фильтр по разделу"
-
-#| msgid "Articles will appear here."
 msgid "Stories will appear here."
 msgstr "Здесь появятся истории."
+
+#| msgid "%(counter)s result"
+#| msgid_plural "%(counter)s results"
+msgid "Your result"
+msgstr "Ваш результат"
+
+msgid "Not recommended at your age"
+msgstr "В вашем возрасте не рекомендуется"
+
+msgid "Due now"
+msgstr "Пора пройти"
+
+#| msgid "Soon — see a doctor within days"
+msgid "Done — ask your doctor when to repeat"
+msgstr "Пройдено — когда повторить, уточните у врача"
+
+#, python-format
+msgid "Next in about %(years)s year"
+msgid_plural "Next in about %(years)s years"
+msgstr[0] "Следующее примерно через %(years)s год"
+msgstr[1] "Следующее примерно через %(years)s года"
+msgstr[2] "Следующее примерно через %(years)s лет"
+
+#, python-format
+msgid "every %(years)s year"
+msgid_plural "every %(years)s years"
+msgstr[0] "раз в %(years)s год"
+msgstr[1] "раз в %(years)s года"
+msgstr[2] "раз в %(years)s лет"
+
+msgid "Where to go"
+msgstr "Куда обратиться"
+
+msgid "No warning signs ticked"
+msgstr "Тревожные признаки не отмечены"
+
+#, python-format
+msgid "%(checked)s of %(total)s ticked"
+msgstr "отмечено %(checked)s из %(total)s"
+
+msgid "Nothing you enter is stored."
+msgstr "Введённые данные не сохраняются."
+
+msgid "Check"
+msgstr "Проверить"
+
+msgid "Show result"
+msgstr "Показать результат"
+
+msgid "Tools will appear here after medical sign-off."
+msgstr "Инструменты появятся здесь после медицинского согласования."
 
 #~ msgid ""
 #~ "This site is an information and education resource. It does not make a "

@@ -13,6 +13,16 @@ def client() -> Client:
     return Client()
 
 
+@pytest.fixture(autouse=True)
+def _clear_cache() -> Any:
+    """Rate-limit counters, nav/glossary/waffle caches must not leak between tests."""
+    from django.core.cache import cache
+
+    cache.clear()
+    yield
+    cache.clear()
+
+
 @pytest.fixture
 def user(db, django_user_model):
     return django_user_model.objects.create_user(
