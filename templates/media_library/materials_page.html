@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+{% comment %} media_library/materials_page.html — blogger kit. Context: page, items (material blocks),
+   audience_filter. Each material: image (download original), document, video, caption (copy),
+   hashtags (copy). {% endcomment %}
+{% block content %}
+<div class="container">
+  <header class="page-header"><h1>{{ page.title }}</h1></header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  <nav class="filter-tabs" aria-label="{% trans 'Filter by audience' %}">
+    <a href="{{ page.url }}" {% if not audience_filter %}aria-current="true"{% endif %}>{% trans "All" %}</a>
+    <a href="{{ page.url }}?audience=bloggers" {% if audience_filter == "bloggers" %}aria-current="true"{% endif %}>{% trans "Volunteer bloggers" %}</a>
+    <a href="{{ page.url }}?audience=relatives" {% if audience_filter == "relatives" %}aria-current="true"{% endif %}>{% trans "Husbands, children, relatives" %}</a>
+    <a href="{{ page.url }}?audience=parents" {% if audience_filter == "parents" %}aria-current="true"{% endif %}>{% trans "Parents" %}</a>
+    <a href="{{ page.url }}?audience=clinics" {% if audience_filter == "clinics" %}aria-current="true"{% endif %}>{% trans "Clinics (print)" %}</a>
+  </nav>
+  <div class="materials">
+    {% for item in items %}
+      {% with m=item.value %}
+      <article class="material" data-section="{{ m.section }}">
+        <h2 class="material__title">{{ m.title }}</h2>
+        {% if m.description %}<div class="material__description prose">{{ m.description }}</div>{% endif %}
+        {% if m.image %}
+          {% image m.image width-600 as preview %}
+          <img class="material__image" src="{{ preview.url }}" alt="{{ preview.alt }}" width="{{ preview.width }}" height="{{ preview.height }}" loading="lazy">
+          {% image m.image original as full %}
+          <a class="button button--secondary" href="{{ full.url }}" download>{% trans "Download image" %}</a>
+        {% endif %}
+        {% if m.document %}<a class="button button--secondary" href="{{ m.document.url }}" download>{% trans "Download" %} ({{ m.document.file_extension|upper }})</a>{% endif %}
+        {% if m.video %}
+          {% include "components/video.html" with video=m.video caption="" transcript="" %}
+          {% with r720=m.video.renditions.720p %}{% if r720.url %}<a class="button button--secondary" href="{{ r720.url }}" download>{% trans "Download video" %}</a>{% endif %}{% endwith %}
+        {% endif %}
+        {% if m.caption %}
+          <div class="material__caption" x-data="copyButton">
+            <h3>{% trans "Ready caption" %}</h3>
+            <pre class="material__text">{{ m.caption }}</pre>
+            <button type="button" class="button button--secondary" data-copy="{{ m.caption }}" @click="copy" :aria-pressed="copied">{% trans "Copy caption" %}</button>
+            <span x-show="copied" x-cloak role="status">{% trans "Copied" %}</span>
+          </div>
+        {% endif %}
+        {% if m.hashtags %}
+          <p class="material__hashtags" x-data="copyButton">{{ m.hashtags }}
+            <button type="button" class="button button--secondary" data-copy="{{ m.hashtags }}" @click="copy" :aria-pressed="copied">{% trans "Copy hashtags" %}</button>
+            <span x-show="copied" x-cloak role="status">{% trans "Copied" %}</span>
+          </p>
+        {% endif %}
+      </article>
+      {% endwith %}
+    {% empty %}
+      <p class="placeholder">{% trans "Materials will appear here." %}</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -89,6 +89,7 @@ SITE_LINK_TYPES: tuple[tuple[str, str], ...] = (
     ("stories", "stories.StoryIndexPage"),
     ("faq", "faq.FAQPage"),
     ("glossary", "glossary.GlossaryPage"),
+    ("materials", "media_library.MaterialsPage"),
     ("feedback", "feedback.FeedbackPage"),
 )
 

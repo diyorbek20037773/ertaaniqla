@@ -23,6 +23,7 @@ from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from apps.core.models import TimeStampedModel
+from apps.media_library.materials import MaterialsPage  # noqa: F401 - registers the page type
 
 
 class PortalImage(AbstractImage):

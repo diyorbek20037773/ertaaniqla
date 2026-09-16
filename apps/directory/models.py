@@ -264,6 +264,14 @@ class DirectoryPage(BasePage):
         institutions = list(
             filter_institutions(region=region, kind=kind, section=section, free_only=free_only)
         )
+        # JSON-LD MedicalClinic entries mirror the visible (filtered) list — spec §10
+        from apps.core import seo
+
+        language = get_language() or "uz"
+        context["jsonld"] = [
+            *context.get("jsonld", []),
+            *(seo.clinic_ld(i, language) for i in institutions[:50]),
+        ]
         context.update(
             {
                 "institutions": institutions,

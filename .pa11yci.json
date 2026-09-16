@@ -1,0 +1,21 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 60000,
+    "wait": 500,
+    "viewport": { "width": 390, "height": 844 },
+    "headers": { "X-E2E": "1" },
+    "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage"] },
+    "ignore": ["notice", "warning"]
+  },
+  "urls": [
+    "http://localhost:8001/uz/",
+    "http://localhost:8001/ru/zhenskiy/",
+    "http://localhost:8001/uz/bolalar/",
+    "http://localhost:8001/uz/ayollar/ogohlik/belgilar/",
+    "http://localhost:8001/ru/zhenskiy/kuda-obratitsya/",
+    "http://localhost:8001/uz/vositalar/skrining/",
+    "http://localhost:8001/uz/savol-javob/",
+    "http://localhost:8001/uz/lugat/"
+  ]
+}

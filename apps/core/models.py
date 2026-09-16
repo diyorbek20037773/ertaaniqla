@@ -56,6 +56,13 @@ class BasePage(Page):
         editable=False,
         help_text=_("Rendered automatically on publish when no sharing image is chosen."),
     )
+    story_image_generated = models.ImageField(
+        _("generated story image (1080×1920)"),
+        upload_to="story/",
+        blank=True,
+        editable=False,
+        help_text=_("Vertical image for Instagram/TikTok stories, rendered on publish."),
+    )
     noindex = models.BooleanField(
         _("hide from search engines"),
         default=False,
@@ -144,10 +151,43 @@ class BasePage(Page):
                 return ""
         return ""
 
+    @property
+    def story_image_generated_url(self) -> str:
+        if self.story_image_generated:
+            try:
+                return str(self.story_image_generated.url)
+            except ValueError:  # pragma: no cover - file missing on disk
+                return ""
+        return ""
+
+    # --- structured data (spec §10) ------------------------------------------------------------
+    jsonld_article = False  # subclasses that are articles set True
+
+    def get_jsonld(self, request: Any) -> list[dict[str, Any]]:
+        """JSON-LD graph items for this page; subclasses extend."""
+        from apps.core import seo
+        from apps.core.templatetags.core_tags import site_root_url
+
+        base = site_root_url(request)
+        language = str(self.locale.language_code)
+        settings_obj = None
+        try:
+            settings_obj = SiteSettings.for_request(request)
+        except Exception:  # pragma: no cover - no Site configured
+            settings_obj = None
+        crumbs = list(self.get_ancestors(inclusive=True).live().filter(depth__gte=2).specific())
+        items = [
+            seo.organization_ld(base, language, settings_obj),
+            seo.breadcrumb_ld(crumbs, base),
+            seo.page_ld(self, base, language, article=self.jsonld_article),
+        ]
+        return [item for item in items if item]
+
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context: dict[str, Any] = super().get_context(request, *args, **kwargs)
         context["section"] = self.get_section()
         context["section_key"] = self.section_key
+        context["jsonld"] = self.get_jsonld(request)
         return context
 
 
@@ -181,6 +221,15 @@ class SiteSettings(BaseSiteSetting):
     emergency_banner_ru = models.CharField(_("emergency banner (ru)"), max_length=300, blank=True)
     emergency_banner_link = models.URLField(_("emergency banner link"), blank=True)
     metrika_id = models.CharField(_("Yandex.Metrika counter id"), max_length=32, blank=True)
+    privacy_page = models.ForeignKey(
+        "wagtailcore.Page",
+        verbose_name=_("privacy policy page"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_("Linked from the consent banner and every form."),
+    )
     legal_text_uz = RichTextField(_("legal / privacy text (uz)"), blank=True, editor="default")
     legal_text_ru = RichTextField(_("legal / privacy text (ru)"), blank=True, editor="default")
     partner_agency_logo = models.ForeignKey(
@@ -252,6 +301,7 @@ class SiteSettings(BaseSiteSetting):
             heading=_("Partner logos"),
         ),
         FieldPanel("metrika_id"),
+        FieldPanel("privacy_page"),
     ]
 
     class Meta:

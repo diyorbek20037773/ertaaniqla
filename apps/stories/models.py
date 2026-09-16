@@ -143,6 +143,8 @@ class PatientStoryPage(BasePage):
         verbose_name = _("patient story")
         verbose_name_plural = _("patient stories")
 
+    jsonld_article = True
+
     def get_body_text(self) -> str:
         return f"{self.summary} {stream_plain_text(self.body)}"
 

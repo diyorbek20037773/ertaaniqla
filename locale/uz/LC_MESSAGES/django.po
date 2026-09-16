@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 15:02+0500\n"
+"POT-Creation-Date: 2026-09-15 15:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -307,7 +307,6 @@ msgstr "Asosiy"
 msgid "Spam check failed."
 msgstr "Spam tekshiruvi oʻtmadi."
 
-#| msgid "Please wait a minute and try again."
 msgid "Please confirm you are not a robot and try again."
 msgstr "Robot emasligingizni tasdiqlang va qayta urinib koʻring."
 
@@ -339,6 +338,14 @@ msgstr "avtomatik yaratilgan ulashish rasmi"
 msgid "Rendered automatically on publish when no sharing image is chosen."
 msgstr ""
 "Ulashish rasmi tanlanmagan boʻlsa, eʼlon qilinganda avtomatik yaratiladi."
+
+#| msgid "generated sharing image"
+msgid "generated story image (1080×1920)"
+msgstr "avtomatik yaratilgan story rasmi (1080×1920)"
+
+msgid "Vertical image for Instagram/TikTok stories, rendered on publish."
+msgstr ""
+"Instagram/TikTok storilari uchun vertikal rasm, eʼlon qilinganda yaratiladi."
 
 msgid "hide from search engines"
 msgstr "qidiruv tizimlaridan yashirish"
@@ -413,6 +420,12 @@ msgstr "banner havolasi"
 
 msgid "Yandex.Metrika counter id"
 msgstr "Yandex.Metrika hisoblagich ID"
+
+msgid "privacy policy page"
+msgstr "maxfiylik siyosati sahifasi"
+
+msgid "Linked from the consent banner and every form."
+msgstr "Rozilik banneri va har bir formadan havola qilinadi."
 
 msgid "legal / privacy text (uz)"
 msgstr "huquqiy / maxfiylik matni (uz)"
@@ -610,7 +623,6 @@ msgstr "Ismingiz (ixtiyoriy)"
 msgid "Phone or e-mail (optional, for a private reply)"
 msgstr "Telefon yoki e-mail (ixtiyoriy, shaxsiy javob uchun)"
 
-#| msgid "Question"
 msgid "Your question"
 msgstr "Savolingiz"
 
@@ -626,11 +638,9 @@ msgstr "Boshqa"
 msgid "New"
 msgstr "Yangi"
 
-#| msgid "consent document (private)"
 msgid "Answered (private)"
 msgstr "Javob berilgan (shaxsiy)"
 
-#| msgid "published"
 msgid "Published"
 msgstr "Eʼlon qilingan"
 
@@ -651,28 +661,24 @@ msgstr ""
 msgid "section"
 msgstr "boʻlim"
 
-#| msgid "Question"
 msgid "question"
 msgstr "savol"
 
 msgid "may be published anonymously"
 msgstr "anonim eʼlon qilinishi mumkin"
 
-#| msgid "Language"
 msgid "language"
 msgstr "til"
 
 msgid "status"
 msgstr "holat"
 
-#| msgid "published"
 msgid "question as published"
 msgstr "eʼlon qilinadigan savol matni"
 
 msgid "Edited/anonymised wording shown on the site (empty = original text)."
 msgstr "Saytda koʻrsatiladigan tahrirlangan/anonim matn (boʻsh = asl matn)."
 
-#| msgid "Answer"
 msgid "answer"
 msgstr "javob"
 
@@ -682,25 +688,21 @@ msgstr "javob bergan"
 msgid "answered at"
 msgstr "javob berilgan vaqt"
 
-#| msgid "published"
 msgid "published at"
 msgstr "eʼlon qilingan vaqt"
 
 msgid "contact purged at"
 msgstr "aloqa oʻchirilgan vaqt"
 
-#| msgid "Location"
 msgid "Moderation"
 msgstr "Moderatsiya"
 
 msgid "Submitted"
 msgstr "Yuborilgan"
 
-#| msgid "FAQ accordion / questions to ask the doctor"
 msgid "question to a doctor"
 msgstr "shifokorga savol"
 
-#| msgid "FAQ accordion / questions to ask the doctor"
 msgid "questions to a doctor"
 msgstr "shifokorga savollar"
 
@@ -710,7 +712,6 @@ msgstr "forma ustidagi matn"
 msgid "thank-you text"
 msgstr "minnatdorchilik matni"
 
-#| msgid "section index page"
 msgid "questions & answers page"
 msgstr "savol-javob sahifasi"
 
@@ -729,7 +730,6 @@ msgstr "Telefon yoki e-mail (ixtiyoriy, javob kerak boʻlsa)"
 msgid "Please write a few words."
 msgstr "Bir necha soʻz yozing."
 
-#| msgid "Search the site"
 msgid "Feedback about the site"
 msgstr "Sayt haqida fikr"
 
@@ -742,7 +742,6 @@ msgstr "Hamkorlik / koʻngillilik"
 msgid "message"
 msgstr "xabar"
 
-#| msgid "home page"
 msgid "page"
 msgstr "sahifa"
 
@@ -761,7 +760,6 @@ msgstr "qayta aloqa xabari"
 msgid "feedback submissions"
 msgstr "qayta aloqa xabarlari"
 
-#| msgid "Feedback"
 msgid "feedback page"
 msgstr "qayta aloqa sahifasi"
 
@@ -791,7 +789,6 @@ msgstr "lugʻat atamasi"
 msgid "glossary terms"
 msgstr "lugʻat atamalari"
 
-#| msgid "glossary term"
 msgid "glossary page"
 msgstr "lugʻat sahifasi"
 
@@ -846,6 +843,53 @@ msgstr "tanlangan video"
 
 msgid "Media library"
 msgstr "Media kutubxona"
+
+msgid "Volunteer bloggers"
+msgstr "Bloger-koʻngillilar"
+
+msgid "Husbands, children, relatives"
+msgstr "Turmush oʻrtoqlar, farzandlar, yaqinlar"
+
+msgid "Parents"
+msgstr "Ota-onalar"
+
+msgid "Clinics (print)"
+msgstr "Klinikalar (chop etish)"
+
+msgid "Audience"
+msgstr "Auditoriya"
+
+msgid "Infographic / story image"
+msgstr "Infografika / story rasmi"
+
+msgid "Document (PDF, ZIP…)"
+msgstr "Hujjat (PDF, ZIP…)"
+
+#| msgid "video"
+msgid "Short video"
+msgstr "Qisqa video"
+
+#| msgid "Caption"
+msgid "Ready caption"
+msgstr "Tayyor matn"
+
+msgid "Text bloggers can paste as is."
+msgstr "Blogerlar shundayligicha joylashi mumkin boʻlgan matn."
+
+msgid "Hashtags"
+msgstr "Xeshteglar"
+
+msgid "#ertaaniqla #skrining …"
+msgstr "#ertaaniqla #skrining …"
+
+msgid "Material"
+msgstr "Material"
+
+msgid "materials"
+msgstr "materiallar"
+
+msgid "materials page (blogger kit)"
+msgstr "materiallar sahifasi (bloger toʻplami)"
 
 msgid "credit / source"
 msgstr "muallif / manba"
@@ -1117,7 +1161,6 @@ msgstr "2 yil oldin"
 msgid "3 years ago or more"
 msgstr "3 yil va undan koʻp vaqt oldin"
 
-#| msgid "e.g. mammography"
 msgid "Mammography"
 msgstr "Mammografiya"
 
@@ -1137,15 +1180,12 @@ msgstr "Oxirgi %(test)s"
 msgid "Tick everything you have noticed"
 msgstr "Sezgan barcha belgilarni belgilang"
 
-#| msgid "medical disclaimer (uz)"
 msgid "disclaimer"
 msgstr "ogohlantirish"
 
-#| msgid "site settings"
 msgid "Empty = site setting."
 msgstr "Boʻsh = sayt sozlamasi."
 
-#| msgid "stories index page"
 msgid "tools index page"
 msgstr "asboblar sahifasi"
 
@@ -1167,14 +1207,12 @@ msgstr "TZda HPV-test davriyligi koʻrsatilmagan — shifokor hal qiladi."
 msgid "'where to go' page"
 msgstr "«qayerga murojaat qilish» sahifasi"
 
-#| msgid "Results"
 msgid "Result texts"
 msgstr "Natija matnlari"
 
 msgid "screening helper page"
 msgstr "skrining yordamchisi sahifasi"
 
-#| msgid "Symptom"
 msgid "Sign / symptom"
 msgstr "Belgi / simptom"
 
@@ -1199,7 +1237,6 @@ msgstr "natija: hech narsa belgilanmagan"
 msgid "result: routine"
 msgstr "natija: odatiy"
 
-#| msgid "Results"
 msgid "result: soon"
 msgstr "natija: tez orada"
 
@@ -1270,6 +1307,13 @@ msgstr "Yuklab olish"
 msgid "No institutions match the selected filters yet."
 msgstr "Tanlangan filtrlarga mos muassasalar hozircha yoʻq."
 
+msgid "High contrast"
+msgstr "Yuqori kontrast"
+
+#| msgid "Send question"
+msgid "Reduce motion"
+msgstr "Animatsiyani kamaytirish"
+
 msgid "Breadcrumbs"
 msgstr "Yoʻl koʻrsatkichi"
 
@@ -1285,6 +1329,25 @@ msgstr "Tinchlantirish"
 msgid "Note"
 msgstr "Eslatma"
 
+msgid "Cookies and analytics"
+msgstr "Cookie va analitika"
+
+msgid ""
+"We use Yandex.Metrika to count visits (with IP anonymisation) only if you "
+"agree. No advertising trackers."
+msgstr ""
+"Tashriflarni hisoblash uchun Yandex.Metrika faqat roziligingiz bilan "
+"ishlatiladi (IP anonimlashtiriladi). Reklama trekerlari yoʻq."
+
+msgid "Privacy policy"
+msgstr "Maxfiylik siyosati"
+
+msgid "Agree"
+msgstr "Roziman"
+
+msgid "Decline"
+msgstr "Rad etish"
+
 msgid "Load content"
 msgstr "Kontentni yuklash"
 
@@ -1294,7 +1357,6 @@ msgstr "Tashqi saytdan kontent yuklanadi."
 msgid "Open on"
 msgstr "Ochish:"
 
-#| msgid "Both sections"
 msgid "Site sections"
 msgstr "Sayt boʻlimlari"
 
@@ -1342,6 +1404,18 @@ msgstr "Sayt boʻylab qidirish"
 msgid "e.g. mammography"
 msgstr "masalan, mammografiya"
 
+msgid "Share"
+msgstr "Ulashish"
+
+msgid "Copy link"
+msgstr "Havolani nusxalash"
+
+msgid "Link copied"
+msgstr "Havola nusxalandi"
+
+msgid "Story image (Instagram / TikTok)"
+msgstr "Story rasmi (Instagram / TikTok)"
+
 msgid "Timing"
 msgstr "Muddat"
 
@@ -1384,7 +1458,6 @@ msgstr "Yuklanmoqda…"
 msgid "Map will be shown here."
 msgstr "Bu yerda xarita koʻrsatiladi."
 
-#| msgid "institutions"
 msgid "Map of institutions"
 msgstr "Muassasalar xaritasi"
 
@@ -1401,7 +1474,6 @@ msgstr ""
 "Ism va aloqa maʼlumotlari hech qachon eʼlon qilinmaydi. Aloqa maʼlumotlari "
 "javobdan 90 kun oʻtgach oʻchiriladi."
 
-#| msgid "Question"
 msgid "Send question"
 msgstr "Savolni yuborish"
 
@@ -1411,7 +1483,6 @@ msgstr "Javob berilgan savollar"
 msgid "Filter by section"
 msgstr "Boʻlim boʻyicha filtrlash"
 
-#| msgid "Articles will appear here."
 msgid "Answered questions will appear here."
 msgstr "Javob berilgan savollar shu yerda paydo boʻladi."
 
@@ -1438,6 +1509,32 @@ msgstr "Boʻlimni ochish"
 
 msgid "Key figures"
 msgstr "Asosiy raqamlar"
+
+#| msgid "Filter by section"
+msgid "Filter by audience"
+msgstr "Auditoriya boʻyicha filtrlash"
+
+#| msgid "Download"
+msgid "Download image"
+msgstr "Rasmni yuklab olish"
+
+#| msgid "Download"
+msgid "Download video"
+msgstr "Videoni yuklab olish"
+
+#| msgid "Caption"
+msgid "Copy caption"
+msgstr "Matnni nusxalash"
+
+msgid "Copied"
+msgstr "Nusxalandi"
+
+msgid "Copy hashtags"
+msgstr "Xeshteglarni nusxalash"
+
+#| msgid "Stories will appear here."
+msgid "Materials will appear here."
+msgstr "Materiallar shu yerda paydo boʻladi."
 
 #, python-format
 msgid "%(counter)s result"
@@ -1482,8 +1579,6 @@ msgstr "Ism va tafsilotlar oʻzgartirilgan."
 msgid "Stories will appear here."
 msgstr "Hikoyalar shu yerda paydo boʻladi."
 
-#| msgid "%(counter)s result"
-#| msgid_plural "%(counter)s results"
 msgid "Your result"
 msgstr "Sizning natijangiz"
 
@@ -1493,7 +1588,6 @@ msgstr "Sizning yoshingizda tavsiya etilmaydi"
 msgid "Due now"
 msgstr "Hozir oʻtish kerak"
 
-#| msgid "Soon — see a doctor within days"
 msgid "Done — ask your doctor when to repeat"
 msgstr "Oʻtilgan — qachon takrorlashni shifokordan soʻrang"
 

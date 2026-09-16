@@ -183,6 +183,12 @@ class FAQPage(BasePage):
         section = request.GET.get("section", "")
         context["section_filter"] = section if section in QuestionSection.values else ""
         context["questions"] = self.published_questions(context["section_filter"])
+        # FAQPage JSON-LD mirrors the visible (filtered) Q&A list — spec §10
+        from apps.core import seo
+
+        faq = seo.faq_ld(context["questions"])
+        if faq:
+            context["jsonld"] = [*context.get("jsonld", []), faq]
         context["form"] = kwargs.get("form") or QuestionForm(request=request)
         context["submitted"] = kwargs.get("submitted", False)
         return context

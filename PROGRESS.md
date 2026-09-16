@@ -42,6 +42,8 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - D-004 In-house `EncryptedTextField` (Fernet). D-005 custom User/Image/Document models in M0.
 - D-006 static Celery beat schedule. D-007 CMS at `/cms/`. D-008 Turnstile. D-009 FTS config `ertaaniqla`.
 - D-010 DirectoryPage inside women section + short-URL redirects. D-011 provider iframes, no oEmbed. D-012 two banners (site + home). D-013 women care/after `show_in_menus=False`. D-014 `<details>` nav/accordions. D-015 regions/services/locales via data migrations.
+- D-016…D-026 (M2–M4): bilingual search, OG task, video pipeline, consent in `clean()`, upload hardening, Leaflet bundle, tool texts in CMS, no separate route page, anti-spam stack, retention jobs, glossary tooltips.
+- D-027 Alpine CSP build. D-028 page cache = version-bump middleware. D-029 Metrika only after consent. D-030 share bar order + story image. D-031 `MaterialsPage` in media_library. D-032 pa11y/Lighthouse CI job.
 
 ## Milestones
 
@@ -92,7 +94,20 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] shared: `apps/core/antispam.py`, `apps/core/forms.py` (AntiSpamFormMixin, aria error attrs), `apps/core/mail.py` (templated Celery e-mail), footer site links (cached), form components
   - [x] seed: tools index + 3 tool pages, FAQ, feedback, glossary pages in uz+ru (placeholders only); 111 new UI strings uz+ru
   - [x] Gate: screening boundary tests, self-check scoring, purge jobs (freezegun), rate limit (6th POST → 429), CSV import (idempotent, dry-run, invalid rows), HTMX directory filter + map data, e2e a11y on 10 pages, coverage 93 %
-- [ ] M5 — SEO, a11y, perf, print, blogger kit (structure only; no visual polish)
+- [x] **M5 — SEO, a11y, perf, print, blogger kit** — DONE, tagged `m5` (structure only, D-003)
+  - [x] JSON-LD `@graph` per page (`apps/core/seo.py`, `BasePage.get_jsonld`): Organization (+ContactPoint), BreadcrumbList, MedicalWebPage/Article with reviewedBy + lastReviewed, FAQPage, VideoObject (video blocks), MedicalClinic (directory ≤ 50); `{% jsonld %}` on every page incl. search view
+  - [x] sitemaps per language: `/sitemap.xml` index → `/uz/sitemap.xml`, `/ru/sitemap.xml` (`apps/core/sitemaps.py`, skips noindex + flag-off tools); robots.txt; canonical; OG/Twitter; Yandex/Google site verification via env; favicon.svg (+ lazy `/favicon.ico` redirect)
+  - [x] share bar `{% share_bar %}` (Telegram, WhatsApp, Facebook, copy link, story image 1080×1920 generated on publish → `BasePage.story_image_generated`; migrations `*_story_image_and_privacy`)
+  - [x] `MaterialsPage` (blogger kit) `/uz/materiallar/` `/ru/materialy/` — `apps/media_library/materials.py`, audience filter, copy caption/hashtags, seeded uz+ru
+  - [x] Yandex.Metrika behind consent banner (`components/consent_banner.html`, `static/src/analytics.js`, `SiteSettings.metrika_id` + `privacy_page`); no GA/GTM
+  - [x] accessibility toolbar (`components/a11y_toolbar.html`, `static/src/a11y.js`, tokens react to `html[data-font-scale|data-contrast|data-reduce-motion]`, early nonce'd apply in `base.html`)
+  - [x] full `print.css` (article, patient route, self-exam steps, checklists, tools, glossary; chrome hidden, accordions expanded, site-name footer)
+  - [x] images: Wagtail `{% picture %}` WebP + JPEG `srcset` in cards/hero; `core.prefetch_renditions` task on publish
+  - [x] anonymous page cache `apps/core/cache.PageCacheMiddleware` (version bump on publish/unpublish/move/delete/settings; nonce swap; `PAGE_CACHE_SECONDS` 0 dev/test, 300 prod), nav/footer/glossary fragment caches
+  - [x] Alpine switched to CSP build (D-027): `copyButton`, `embedFacade`, `selfCheck` in `main.js`; htmx indicator CSS in components.css; e2e asserts zero CSP console errors
+  - [x] CI job `a11y-perf`: seeded preview server → `pa11y-ci` (8 URLs, WCAG2AA) + Lighthouse CI (3 URLs, LCP < 2.5 s, CLS < 0.1, TBT < 200 ms); `make pa11y`, `make lighthouse`; `tests/perf/test_budgets.py` (CSS ≤ 40 KB gz, JS ≤ 50 KB gz, HTML ≤ 60 KB gz)
+  - [x] docs: TZ_TRACE (F6, F7, F9, F13, F15, W-05, W-13, C-12, A5–A8 → done), DECISIONS D-027…D-032, TODO_HARDENING H-011…H-014, CONTENT_MODEL (MaterialsPage, SEO), COMPONENT_INVENTORY (share, toolbar, consent, materials, picture)
+  - [x] Gate: `tests/core/test_seo.py` (JSON-LD structure per type, sitemaps, share, story image, WebP), `tests/core/test_page_cache.py` (publish → next request MISS with new content), `tests/perf/test_budgets.py`, `tests/media_library/test_materials.py`, `tests/e2e/test_print.py` (print media + toolbar persistence), `tests/e2e/test_csp_alpine.py`; pa11y-ci 8/8 · Lighthouse local: perf 0.98/0.99/0.98, a11y 1.00, LCP 2.1/2.0/2.1 s, CLS 0, TBT 130/48/86 ms
 - [ ] M5b — Design integration (blocked until Figma arrives)
   - [ ] map Figma tokens → `static/src/tokens.css`
   - [ ] restyle each partial in `templates/components/` (no Python changes)
@@ -102,22 +117,45 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - [ ] M7 — Editors, workflow, UAT, launch checklist
 - [ ] FINAL REPORT → docs/FINAL_REPORT_uz.md
 
-## Last command run
+## Last command run (2026-09-16)
 
 ```
-.venv/Scripts/python -m pytest --cov      → all passed, coverage 94.65 % (gate 85 %)
-E2E_BASE_URL=http://localhost:8001 pytest tests/e2e -m e2e → 11 passed (screenshots written)
-ruff check / format --check              → clean
-mypy                                     → Success: no issues found in 70 source files
+.venv/Scripts/python -m pytest --cov      → 328 selected: all passed (1 skipped: ffmpeg on host), coverage 92 % (gate 85 %)
+E2E_BASE_URL=http://localhost:8001 pytest tests/e2e -m e2e → 35 passed (screens, axe on 11 pages, CSP/Alpine, print, toolbar)
+ruff check / format --check              → clean (181 files)
+mypy                                     → Success: no issues found in 110 source files
 scripts/check_translations.py            → translations: uz + ru complete
-manage.py check --deploy (prod env)      → no issues
-manage.py seed_content (dev DB, 2nd run) → created=0 updated=0 unchanged=52
-curl :8001 → /uz/ /ru/ sections, topics, articles, directory all 200; /uz/qayerga-murojaat/ 301
+manage.py check --deploy (prod env, subprocess test) → no issues
+npm run build                            → main.css 29.6 KB raw, main.js 135.8 KB raw (gz budgets pass in tests/perf)
+npx pa11y-ci                             → 8/8 URLs passed, 0 errors
+npx @lhci/cli autorun (CHROME_PATH=playwright chromium) → all assertions passed (see M5 gate line)
+curl :8001 → /uz/materiallar/ /ru/materialy/ /sitemap.xml /robots.txt 200; /favicon.ico 301 → /static/favicon.svg
 ```
+
+Fixes made while closing M5: rate-limit tests frozen in time (django-ratelimit window boundary
+flake), `/favicon.ico` redirect made lazy (ManifestStaticFilesStorage broke `check --deploy`).
 
 ## Next concrete action
 
-Start **M5 — SEO, a11y, performance, print, blogger kit**: JSON-LD (MedicalWebPage/Article
+Start **M6 — Production DevOps** (AUTOPILOT gate): `compose.prod.yml` limits/logging (web 4 GB,
+db 4 GB + tuned postgres conf, redis 512 MB, worker 2 GB; `restart: unless-stopped`; json-file
+50m×5); `docker/nginx/` (nginx.conf, sites/ertaaniqla.conf, snippets/{security,cache,gzip}.conf:
+TLS 1.2/1.3 + OCSP, brotli/gzip, `/static/` 1y immutable, `/media/` 30d + mp4 byte-range,
+micro-cache 10 s for anonymous HTML keyed on lang cookie, rate zones 30 r/s general · 5 r/m
+`/cms/login/` · 10 r/m form POST, `client_max_body_size 512m` only on `/cms/`, 444 for unknown
+hosts, dotfile block, maintenance flag `/srv/maintenance.flag`, `/metrics` basic-auth);
+certbot service + renew hook; `scripts/bootstrap_vps.sh` (docker, ufw, fail2ban,
+unattended-upgrades, swap 4 GB, sysctl, clone, restore); `backup` container (`pg_dump -Fc` +
+restic to S3-compatible in UZ, retention 7d/4w/6m, weekly restore test script, alert on
+failure); Prometheus exporters (nginx, postgres, redis, node) + Grafana dashboards JSON +
+alert rules → Telegram (profile `monitoring`); CI: build → syft SBOM → trivy → push GHCR →
+deploy over SSH (`docker compose pull && run --rm migrate && up -d --no-deps --wait web worker
+beat`) → smoke `/readyz/` + 3 pages → Telegram; rollback workflow_dispatch; staging compose
+project; `docs/RUNBOOK.md` + `docs/SECURITY.md`. Gate: `compose config` valid, prod image
+builds, `check --deploy` green, backup → restore into scratch container (run it), `nginx -t`
+in a container, commit + tag `m6`.
+
+(M5 note kept for history:) Start **M5 — SEO, a11y, performance, print, blogger kit**: JSON-LD (MedicalWebPage/Article
 with reviewedBy, Organization, BreadcrumbList, FAQPage, VideoObject, MedicalClinic), sitemaps
 per language (Wagtail sitemap + Site), share bar (Telegram first), `MaterialsPage` (blogger
 kit: downloads, captions uz/ru, hashtags), Yandex.Metrika behind a consent banner

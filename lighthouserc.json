@@ -1,0 +1,65 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "http://localhost:8001/uz/",
+        "http://localhost:8001/uz/ayollar/",
+        "http://localhost:8001/uz/ayollar/ogohlik/belgilar/"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "formFactor": "mobile",
+        "screenEmulation": {
+          "mobile": true,
+          "width": 390,
+          "height": 844,
+          "deviceScaleFactor": 2
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 150,
+          "throughputKbps": 1600,
+          "cpuSlowdownMultiplier": 4
+        },
+        "extraHeaders": "{\"X-E2E\": \"1\"}"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": [
+          "error",
+          {
+            "maxNumericValue": 2500
+          }
+        ],
+        "cumulative-layout-shift": [
+          "error",
+          {
+            "maxNumericValue": 0.1
+          }
+        ],
+        "total-blocking-time": [
+          "error",
+          {
+            "maxNumericValue": 200
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "categories:performance": [
+          "warn",
+          {
+            "minScore": 0.9
+          }
+        ]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

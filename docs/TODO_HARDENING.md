@@ -15,3 +15,8 @@ here. Each item: what, why, where.
 | H-008 | directory | Self-hosted OSM tile proxy / cache in nginx for regions with slow access to tile.openstreetmap.org; marker clustering when > 200 institutions. | `docker/nginx`, `static/src/map.js` |
 | H-009 | forms | Turnstile widget needs the client's site key; until then forms rely on honeypot + rate limit only (prod refuses to start without the secret). | `.env` |
 | H-010 | faq | Moderator notification is a single e-mail; add Telegram bot alert (M6 alerts channel) and daily digest of unanswered questions. | `apps/faq/tasks.py` |
+| H-011 | perf | Page cache stores full HTML per (language, path, query); add an allow-list of query keys (`q`, `region`, `kind`, `page`) so random query strings cannot fill Redis; nginx micro-cache in M6 gives the second layer. | `apps/core/cache.py` |
+| H-012 | seo | `VideoObject.uploadDate` uses the page's first-published date; add `Video.published_at` once editors need the true recording date. | `apps/core/seo.py` |
+| H-013 | a11y | Toolbar contrast theme is token-level (neutral palette inverted); revisit with the designer's palette (M5b) and add a WCAG AAA check to pa11y. | `static/src/tokens.css` |
+| H-014 | analytics | Server-side event log (page views without cookies) as a Metrika-free fallback; spec lists it as optional. | `apps/analytics` |
+

@@ -698,6 +698,74 @@ T: dict[str, tuple[str, str]] = {
         "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi.",
         "Инструменты появятся здесь после медицинского согласования.",
     ),
+    # M5 — SEO, share, analytics, a11y, materials
+    "generated story image (1080×1920)": (
+        "avtomatik yaratilgan story rasmi (1080×1920)",
+        "сгенерированное изображение для сторис (1080×1920)",
+    ),
+    "Vertical image for Instagram/TikTok stories, rendered on publish.": (
+        "Instagram/TikTok storilari uchun vertikal rasm, eʼlon qilinganda yaratiladi.",
+        "Вертикальное изображение для сторис Instagram/TikTok, создаётся при публикации.",
+    ),
+    "privacy policy page": ("maxfiylik siyosati sahifasi", "страница политики конфиденциальности"),
+    "Linked from the consent banner and every form.": (
+        "Rozilik banneri va har bir formadan havola qilinadi.",
+        "Ссылка из баннера согласия и каждой формы.",
+    ),
+    "Volunteer bloggers": ("Bloger-koʻngillilar", "Блогеры-волонтёры"),
+    "Husbands, children, relatives": (
+        "Turmush oʻrtoqlar, farzandlar, yaqinlar",
+        "Мужья, дети, близкие",
+    ),
+    "Parents": ("Ota-onalar", "Родители"),
+    "Clinics (print)": ("Klinikalar (chop etish)", "Клиники (печать)"),
+    "Audience": ("Auditoriya", "Аудитория"),
+    "Infographic / story image": (
+        "Infografika / story rasmi",
+        "Инфографика / изображение для сторис",
+    ),
+    "Document (PDF, ZIP…)": ("Hujjat (PDF, ZIP…)", "Документ (PDF, ZIP…)"),
+    "Short video": ("Qisqa video", "Короткое видео"),
+    "Ready caption": ("Tayyor matn", "Готовая подпись"),
+    "Text bloggers can paste as is.": (
+        "Blogerlar shundayligicha joylashi mumkin boʻlgan matn.",
+        "Текст, который блогеры могут вставить как есть.",
+    ),
+    "Hashtags": ("Xeshteglar", "Хэштеги"),
+    "#ertaaniqla #skrining …": ("#ertaaniqla #skrining …", "#ertaaniqla #скрининг …"),
+    "Material": ("Material", "Материал"),
+    "materials": ("materiallar", "материалы"),
+    "materials page (blogger kit)": (
+        "materiallar sahifasi (bloger toʻplami)",
+        "страница материалов (набор блогера)",
+    ),
+    "High contrast": ("Yuqori kontrast", "Высокий контраст"),
+    "Reduce motion": ("Animatsiyani kamaytirish", "Меньше анимации"),
+    "Cookies and analytics": ("Cookie va analitika", "Cookie и аналитика"),
+    "We use Yandex.Metrika to count visits (with IP anonymisation) only if you agree. No advertising trackers.": (
+        "Tashriflarni hisoblash uchun Yandex.Metrika faqat roziligingiz bilan ishlatiladi (IP anonimlashtiriladi). Reklama trekerlari yoʻq.",
+        "Мы используем Яндекс.Метрику для подсчёта посещений (с анонимизацией IP) только с вашего согласия. Рекламных трекеров нет.",
+    ),
+    "Privacy policy": ("Maxfiylik siyosati", "Политика конфиденциальности"),
+    "Agree": ("Roziman", "Согласен(на)"),
+    "Decline": ("Rad etish", "Отклонить"),
+    "Share": ("Ulashish", "Поделиться"),
+    "Copy link": ("Havolani nusxalash", "Скопировать ссылку"),
+    "Link copied": ("Havola nusxalandi", "Ссылка скопирована"),
+    "Story image (Instagram / TikTok)": (
+        "Story rasmi (Instagram / TikTok)",
+        "Картинка для сторис (Instagram / TikTok)",
+    ),
+    "Filter by audience": ("Auditoriya boʻyicha filtrlash", "Фильтр по аудитории"),
+    "Download image": ("Rasmni yuklab olish", "Скачать изображение"),
+    "Download video": ("Videoni yuklab olish", "Скачать видео"),
+    "Copy caption": ("Matnni nusxalash", "Скопировать подпись"),
+    "Copied": ("Nusxalandi", "Скопировано"),
+    "Copy hashtags": ("Xeshteglarni nusxalash", "Скопировать хэштеги"),
+    "Materials will appear here.": (
+        "Materiallar shu yerda paydo boʻladi.",
+        "Здесь появятся материалы.",
+    ),
 }
 
 # msgid: (uz forms, ru forms)  — uz has 1 plural form, ru has 3

@@ -63,6 +63,7 @@ class HomePage(BasePage):
         "faq.FAQPage",
         "feedback.FeedbackPage",
         "glossary.GlossaryPage",
+        "media_library.MaterialsPage",
     ]
     template = "home/home_page.html"
 

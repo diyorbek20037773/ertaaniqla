@@ -19,6 +19,8 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
 from wagtail.contrib.sitemaps import Sitemap
 
+from apps.core.sitemaps import LocaleSitemap
+
 logger = logging.getLogger("ertaaniqla.core")
 
 
@@ -81,7 +83,7 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
 
 
 def _sitemaps(request: HttpRequest) -> dict[str, type[Sitemap[Any]] | Sitemap[Any]]:
-    return {"pages": Sitemap}
+    return {"pages": LocaleSitemap}
 
 
 def sitemap_index(request: HttpRequest) -> HttpResponse:

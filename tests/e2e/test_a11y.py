@@ -29,6 +29,7 @@ PAGES = [
     "/uz/vositalar/oz-tekshiruv/",
     "/ru/voprosy-otvety/",
     "/uz/lugat/",
+    "/uz/materiallar/",
 ]
 
 

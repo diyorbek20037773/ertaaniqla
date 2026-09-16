@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -56,8 +58,23 @@ class ArticlePage(BasePage):
         verbose_name = _("article")
         verbose_name_plural = _("articles")
 
+    jsonld_article = True
+
     def get_body_text(self) -> str:
         return f"{self.summary} {stream_plain_text(self.body)}"
+
+    def get_jsonld(self, request: Any) -> list[dict[str, Any]]:
+        from apps.core import seo
+        from apps.core.templatetags.core_tags import site_root_url
+
+        items = super().get_jsonld(request)
+        base = site_root_url(request)
+        for child in self.body:
+            if child.block_type == "video" and child.value.get("video"):
+                video = seo.video_ld(child.value["video"], base, self.locale.language_code)
+                if video:
+                    items.append(video)
+        return items
 
     @property
     def block_types(self) -> list[str]:

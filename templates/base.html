@@ -8,6 +8,8 @@
   {% if page.search_description %}<meta name="description" content="{{ page.search_description }}">{% endif %}
   {% if page.noindex %}<meta name="robots" content="noindex, follow">{% endif %}
   <link rel="canonical" href="{% canonical_url %}">
+  <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+  {% site_verification %}
   {% hreflang_links %}
   {% block meta %}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
@@ -20,11 +22,14 @@
     <meta name="twitter:card" content="summary_large_image">
   {% endblock %}
   <link rel="stylesheet" href="{% static 'dist/main.css' %}">
+  <script nonce="{{ request.csp_nonce }}">(function(){try{var s=JSON.parse(localStorage.getItem("ea-a11y")||"{}"),r=document.documentElement;if(s.font&&s.font!=="100")r.setAttribute("data-font-scale",s.font);if(s.contrast)r.setAttribute("data-contrast","high");if(s.motion)r.setAttribute("data-reduce-motion","true")}catch(e){}})();</script>
+  {% jsonld %}
   {% section_style section as section_css %}{% if section_css %}<style nonce="{{ request.csp_nonce }}">{{ section_css }}</style>{% endif %}
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" data-section="{% block section_key %}{{ section_key }}{% endblock %}">
   <a class="skip-link" href="#main">{% trans "Skip to main content" %}</a>
+  {% include "components/a11y_toolbar.html" %}
   {% block header %}{% include "components/header.html" %}{% endblock %}
   {% include "components/banner.html" %}
   <main id="main" tabindex="-1">
@@ -32,6 +37,7 @@
     {% block content %}{% endblock %}
   </main>
   {% block footer %}{% include "components/footer.html" %}{% endblock %}
+  {% include "components/consent_banner.html" with metrika_id=settings.core.SiteSettings.metrika_id|default:YANDEX_METRIKA_ID privacy_url=settings.core.SiteSettings.privacy_page.url %}
   <script src="{% static 'dist/main.js' %}" defer nonce="{{ request.csp_nonce }}"></script>
   {% block extra_js %}{% endblock %}
 </body>

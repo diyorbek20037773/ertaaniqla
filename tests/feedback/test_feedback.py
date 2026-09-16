@@ -49,6 +49,7 @@ def test_external_page_url_is_dropped_and_validation(page, client: Client) -> No
     assert response.status_code == 400
 
 
+@freeze_time("2026-01-01 12:00:00")  # django-ratelimit windows are wall-clock based
 def test_rate_limit(page, client: Client) -> None:
     for _ in range(5):
         client.post(page.url, VALID)

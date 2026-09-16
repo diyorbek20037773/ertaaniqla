@@ -1,0 +1,24 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/share.html — share bar (spec §10): Telegram first, WhatsApp, Facebook, copy link;
+   Instagram / TikTok = copy link + download story image (1080×1920). Rendered by {% share_bar %}.
+   Context: links (list of {key, label, href, download}), url (absolute), title, story_url.
+   Copy uses the Alpine `copyButton` component (main.js, CSP build) + navigator.clipboard with
+   a visible confirmation; non-JS: the link is shown in a read-only input.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<nav class="share" aria-label="{% trans 'Share' %}" x-data="copyButton">
+  <span class="share__label">{% trans "Share" %}:</span>
+  <ul class="share__list">
+    {% for link in links %}
+      <li><a class="share__link share__link--{{ link.key }}" href="{{ link.href }}" {% if link.download %}download{% else %}rel="noopener" target="_blank"{% endif %}>{{ link.label }}</a></li>
+    {% endfor %}
+    <li>
+      <button type="button" class="share__link share__link--copy" data-copy="{{ url }}" @click="copy" :aria-pressed="copied">{% trans "Copy link" %}</button>
+      <span class="share__copied" x-show="copied" x-cloak role="status">{% trans "Link copied" %}</span>
+    </li>
+    {% if story_url %}
+      <li><a class="share__link share__link--story" href="{{ story_url }}" download>{% trans "Story image (Instagram / TikTok)" %}</a></li>
+    {% endif %}
+  </ul>
+  <noscript><label class="share__fallback">{% trans "Link" %}: <input type="text" readonly value="{{ url }}"></label></noscript>
+</nav>

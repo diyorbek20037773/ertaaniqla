@@ -1,0 +1,19 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/consent_banner.html — analytics consent (spec §8, A7). Shown until the visitor
+   decides; decision stored in localStorage ("ea-consent" = "yes" | "no"). Yandex.Metrika is
+   loaded by static/src/analytics.js only after "yes". Context: metrika_id (str), privacy_url.
+   Renders nothing when no Metrika id is configured.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+{% if metrika_id %}
+<div class="consent" data-component="consent" data-metrika-id="{{ metrika_id }}" role="region" aria-label="{% trans 'Cookies and analytics' %}" hidden>
+  <p class="consent__text">
+    {% blocktrans trimmed %}We use Yandex.Metrika to count visits (with IP anonymisation) only if you agree. No advertising trackers.{% endblocktrans %}
+    {% if privacy_url %}<a href="{{ privacy_url }}">{% trans "Privacy policy" %}</a>{% endif %}
+  </p>
+  <div class="consent__actions">
+    <button type="button" class="button button--primary" data-consent="yes">{% trans "Agree" %}</button>
+    <button type="button" class="button button--secondary" data-consent="no">{% trans "Decline" %}</button>
+  </div>
+</div>
+{% endif %}

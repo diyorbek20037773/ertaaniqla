@@ -6,9 +6,9 @@
    --------------------------------------------------------------------------- {% endcomment %}
 {% load i18n %}
 {% if embed.click_to_load %}
-  <div class="embed embed--{{ embed.provider }}{% if embed.vertical %} embed--vertical{% endif %}" x-data="{ loaded: false }">
-    <template x-if="!loaded">
-      <button type="button" class="embed__facade" @click="loaded = true">
+  <div class="embed embed--{{ embed.provider }}{% if embed.vertical %} embed--vertical{% endif %}" x-data="embedFacade">
+    <template x-if="idle">
+      <button type="button" class="embed__facade" @click="load">
         <span class="embed__provider">{{ embed.provider|capfirst }}</span>
         <span class="embed__cta">{% trans "Load content" %}</span>
         <span class="embed__notice">{% trans "Loads content from a third-party site." %}</span>

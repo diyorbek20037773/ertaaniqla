@@ -12,14 +12,15 @@
     "watch:js": "esbuild static/src/main.js static/src/map.js --bundle --format=iife --target=es2018 --outdir=static/dist --watch"
   },
   "dependencies": {
-    "alpinejs": "^3.14.9",
     "htmx.org": "^2.0.4",
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
+    "@alpinejs/csp": "^3.17.3",
     "axe-core": "^4.10.2",
     "concurrently": "^9.1.2",
     "esbuild": "^0.25.0",
+    "pa11y-ci": "^4.1.1",
     "tailwindcss": "^3.4.17"
   }
 }

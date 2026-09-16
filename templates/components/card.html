@@ -7,8 +7,7 @@
 {% load wagtailimages_tags %}
 <article class="card">
   {% if image %}
-    {% image image fill-640x360 as img %}
-    <img class="card__image" src="{{ img.url }}" alt="{{ img.alt }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy">
+    {% picture image format-{webp,jpeg} fill-{400x225,640x360} sizes="(max-width: 40rem) 100vw, 24rem" class="card__image" loading="lazy" %}
   {% elif icon %}
     <span class="card__icon" data-icon="{{ icon }}" aria-hidden="true">[{{ icon }}]</span>
   {% endif %}

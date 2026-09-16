@@ -106,6 +106,7 @@ class Seeder:
             "title": tree.HOME["title"][lang],
             "hero_title": tree.HOME["hero_title"][lang],
             "hero_subtitle": tree.HOME["hero_subtitle"][lang],
+            "search_description": tree.HOME["search_description"][lang][:255],
         }
         changed = self._set_fields(home, fields)
         stats = [
@@ -209,6 +210,7 @@ class Seeder:
         from apps.faq.models import FAQPage
         from apps.feedback.models import FeedbackPage
         from apps.glossary.models import GlossaryPage
+        from apps.media_library.materials import MaterialsPage
         from apps.sections.models import SectionIndexPage, TopicIndexPage
         from apps.stories.models import StoryIndexPage
         from apps.tools.models import ScreeningToolPage, SelfCheckPage, ToolsIndexPage
@@ -225,6 +227,7 @@ class Seeder:
             "faq": FAQPage,
             "feedback": FeedbackPage,
             "glossary": GlossaryPage,
+            "materials": MaterialsPage,
         }[kind]
 
     def upsert_page(self, node: Node, lang: str, parent: Any, source: Any | None) -> Any:

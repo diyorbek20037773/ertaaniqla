@@ -12,8 +12,11 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.templatetags.static import static as static_url
 from django.urls import include, path
+from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import RedirectView
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -24,6 +27,11 @@ urlpatterns = [
     path("healthz/", core_views.healthz, name="healthz"),
     path("readyz/", core_views.readyz, name="readyz"),
     path("robots.txt", core_views.robots_txt, name="robots_txt"),
+    # lazy: ManifestStaticFilesStorage cannot resolve hashes at import time (before collectstatic)
+    path(
+        "favicon.ico",
+        RedirectView.as_view(url=lazy(static_url, str)("favicon.svg"), permanent=True),
+    ),
     path("sitemap.xml", core_views.sitemap_index, name="sitemap_index"),
     path("", core_views.language_redirect, name="language_redirect"),
     path("i18n/", include("django.conf.urls.i18n")),

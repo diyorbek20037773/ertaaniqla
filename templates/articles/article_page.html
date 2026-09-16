@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags wagtailimages_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags core_tags %}
 {# articles/article_page.html — Context: page (ArticlePage), section, section_key. #}
 {% block og_type %}article{% endblock %}
 {% block content %}
@@ -9,12 +9,12 @@
     {% if page.summary %}<p class="page-header__lead">{{ page.summary }}</p>{% endif %}
     {% include "components/page_meta.html" %}
     {% if page.hero_image %}
-      {% image page.hero_image width-1200 as hero %}
-      <img class="article__hero" src="{{ hero.url }}" alt="{{ hero.alt }}" width="{{ hero.width }}" height="{{ hero.height }}">
+      {% picture page.hero_image format-{webp,jpeg} width-{400,800,1200} sizes="(max-width: 72rem) 100vw, 72rem" class="article__hero" %}
     {% endif %}
   </header>
   <div class="article__body">
     {% for block in page.body %}{% include_block block %}{% endfor %}
   </div>
+  {% share_bar %}
 </article>
 {% endblock %}

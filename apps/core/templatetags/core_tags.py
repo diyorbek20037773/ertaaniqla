@@ -77,6 +77,63 @@ def main_nav(context: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+@register.inclusion_tag("components/share.html", takes_context=True)
+def share_bar(context: dict[str, Any]) -> dict[str, Any]:
+    """Share links (spec §10): Telegram first, then WhatsApp, Facebook; copy link + story image."""
+    from urllib.parse import quote
+
+    page = context.get("page")
+    request = context.get("request")
+    base = site_root_url(request)
+    url = f"{base}{page.url}" if page is not None and getattr(page, "pk", None) else base
+    title = str(getattr(page, "title", "") or "Erta aniqla")
+    encoded_url, encoded_title = quote(url, safe=""), quote(title, safe="")
+    links = [
+        {
+            "key": "telegram",
+            "label": "Telegram",
+            "href": f"https://t.me/share/url?url={encoded_url}&text={encoded_title}",
+        },
+        {
+            "key": "whatsapp",
+            "label": "WhatsApp",
+            "href": f"https://wa.me/?text={encoded_title}%20{encoded_url}",
+        },
+        {
+            "key": "facebook",
+            "label": "Facebook",
+            "href": f"https://www.facebook.com/sharer/sharer.php?u={encoded_url}",
+        },
+    ]
+    story = getattr(page, "story_image_generated_url", "")
+    return {
+        "links": links,
+        "url": url,
+        "title": title,
+        "story_url": f"{base}{story}" if story else "",
+    }
+
+
+@register.simple_tag(takes_context=True)
+def jsonld(context: dict[str, Any]) -> SafeString:
+    """`<script type="application/ld+json">` with the page's graph (empty for non-page views)."""
+    from apps.core import seo
+
+    items = context.get("jsonld")
+    if not items:
+        request = context.get("request")
+        base = site_root_url(request)
+        items = [seo.organization_ld(base, _current_language())]
+    return seo.jsonld_script(seo.graph(list(items)))
+
+
+@register.simple_tag
+def site_verification() -> SafeString:
+    from apps.core import seo
+
+    return seo.site_verification_tags()
+
+
 @register.simple_tag
 def site_links() -> list[Any]:
     """Footer links to the root-level utility pages of the current language (cached)."""

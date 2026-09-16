@@ -51,6 +51,7 @@ Editors may override `--brand`/`--brand-soft` per section from the CMS (`Section
 | `search/search.html` + `search/_results.html` | search view (`/uz/qidiruv/?q=`, `/ru/poisk/?q=`) | заголовок, форма поиска, счётчик, список результатов (заголовок, summary, метка языка, цвет раздела), пустое состояние, подсказка | Qidiruv sahifasi | no query / results / empty; HTMX partial = `_results.html` |
 | `stories/story_index_page.html` | StoryIndexPage (`/uz/hikoyalar/`) | заголовок, intro, вкладки-фильтр (все / женский / детский), сетка карточек историй (фото, имя, summary) | Hikoyalar sahifasi | empty state; filter active |
 | `stories/patient_story_page.html` | PatientStoryPage | eyebrow «История пациента», имя (псевдоним) + диагноз, summary, page-meta, фото, блоки, подпись о согласии/анонимизации | Bemor hikoyasi | anonymised on/off; section colour |
+| `media_library/materials_page.html` | MaterialsPage (`/uz/materiallar/`) | заголовок, intro, вкладки аудитории (все / блогеры / близкие / родители / клиники), карточки материалов: картинка + «Скачать», документ, короткое видео + «Скачать видео», готовая подпись + «Копировать», хэштеги + «Копировать» | Bloger-kit sahifasi | empty state; filter active; item without image/video |
 | `404.html`, `429.html`, `500.html`, `core/lockout.html` | errors | текст + ссылка на главную | Xato sahifalari | — |
 
 ## 3. Components / Компоненты / Komponentlar — `templates/components/`
@@ -78,7 +79,11 @@ Each partial documents its context variables in a header comment. CSS block of t
 | `turnstile.html` | Виджет Cloudflare Turnstile (только при ключе) | Turnstile vidjeti | `TURNSTILE_SITE_KEY` | present / absent |
 | `disclaimer.html` | Медицинский дисклеймер на страницах инструментов | Tibbiy ogohlantirish | `text` (fallback: site setting) | custom / default |
 | `search_form.html` | Поле поиска (GET-форма; на странице поиска — HTMX «поиск при вводе») | Qidiruv maydoni | `query, autofocus, results_target` | plain / HTMX live |
-| `footer.html` | Подвал: дисклеймер (обязателен), горячая линия, соцсети, текст, ПП-402/186, логотипы партнёров (Агентство, Яндекс, Hamroh) | Pastki qism | `SiteSettings` | logos present / placeholders |
+| `footer.html` | Подвал: дисклеймер (обязателен), горячая линия, соцсети, текст, ПП-402/186, логотипы партнёров (Агентство, Яндекс, Hamroh), ссылки на страницы сайта | Pastki qism | `SiteSettings`, `{% site_links %}` | logos present / placeholders |
+| `share.html` (`{% share_bar %}`) | Панель «Поделиться»: Telegram (первый), WhatsApp, Facebook, «Копировать ссылку» (подтверждение), «Картинка для сторис (Instagram/TikTok)» 1080×1920 | «Ulashish» paneli: Telegram birinchi, nusxalash, storis rasmi | `links[{key,label,href,download}]`, `url`, `title`, `story_url` | copied / not copied; no-JS (read-only input); no story image |
+| `a11y_toolbar.html` | Панель доступности: A / A+ / A++ (×1.25 / ×1.5), высокий контраст, меньше движения; состояние в `localStorage` | Maxsus imkoniyatlar paneli | — (`static/src/a11y.js`, `html[data-font-scale|data-contrast|data-reduce-motion]`) | each button `aria-pressed` on/off |
+| `consent_banner.html` | Баннер согласия на Яндекс.Метрику (появляется только при заданном id; ссылка на политику конфиденциальности) | Metrika uchun rozilik banneri | `metrika_id`, `privacy_url` | hidden (no id / decided) / visible; agree / decline |
+| Wagtail `{% picture %}` (in `card.html`, hero) | Адаптивное изображение: WebP + JPEG, `srcset` 400/800, `sizes`, `loading="lazy"`, width/height | Moslashuvchan rasm | image, formats, sizes | — |
 
 ## 4. Content blocks / Блоки контента / Kontent bloklari — `templates/blocks/`
 
@@ -109,8 +114,9 @@ Blocks are the editor's building kit (`apps/articles/blocks.py`). Each maps to a
 
 - Mobile 390 px first; desktop ≥ 1024 px (`64rem`) shows the mega-menu inline.
 - No JS: menu and accordions work through `<details>`; embeds show a link.
-- Accessibility toolbar (M5): font ×1.25 / ×1.5, high contrast (`html[data-contrast="high"]`), reduced motion.
-- Print (`static/src/print.css`): article, steps, symptom list, FAQ checklist print without navigation.
+- Accessibility toolbar (`a11y_toolbar.html`): font ×1.25 / ×1.5 (`html[data-font-scale]`), high contrast (`html[data-contrast="high"]` — neutral palette inverted, brand colours kept), reduced motion (`html[data-reduce-motion]`). The design must work in all three.
+- Print (`static/src/print.css`, tested in `tests/e2e/test_print.py`): article, patient route, self-exam steps, symptom list, question checklists, tool results, glossary — chrome hidden, accordions expanded, `ertaaniqla.uz` footer note.
+- Consent banner (`consent_banner.html`) is fixed at the bottom on first visit; JSON-LD, OG/Twitter tags and share bar are on every page (`base.html`).
 - Placeholders `[[TODO: content — copywriter]]` / `[[VERIFY: doctor]]` appear in content until the copywriter replaces them — style `.placeholder` only.
 
 ## 6. What the designer must deliver / Что нужно от дизайнера / Dizaynerdan kerak

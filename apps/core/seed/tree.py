@@ -1468,7 +1468,32 @@ GLOSSARY = Node(
     },
 )
 
-TREE: list[Node] = [WOMEN, CHILDREN, STORIES, TOOLS, FAQ, FEEDBACK, GLOSSARY]
+MATERIALS = Node(
+    key="materials",
+    kind="materials",
+    title={"uz": "Tarqatish uchun materiallar", "ru": "Материалы для распространения"},
+    slug={"uz": "materiallar", "ru": "materialy"},
+    summary={
+        "uz": "Bloger-koʻngillilar, oila aʼzolari va klinikalar uchun infografika, qisqa videolar, tayyor matnlar va xeshteglar",
+        "ru": "Инфографика, короткие видео, готовые подписи и хэштеги для блогеров-волонтёров, семей и клиник",
+    },
+    body=lambda lang, ctx: [
+        callout(
+            "info",
+            t(lang, "Bu materiallardan erkin foydalaning", "Используйте эти материалы свободно"),
+            p(
+                t(
+                    lang,
+                    "Yuklab oling, ijtimoiy tarmoqlarda tarqating, klinikada chop eting. Manba: ertaaniqla.uz.",
+                    "Скачивайте, распространяйте в соцсетях, печатайте в клинике. Источник: ertaaniqla.uz.",
+                ),
+                TODO,
+            ),
+        )
+    ],
+)
+
+TREE: list[Node] = [WOMEN, CHILDREN, STORIES, TOOLS, FAQ, FEEDBACK, GLOSSARY, MATERIALS]
 
 HOME = {
     "title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},
@@ -1477,6 +1502,11 @@ HOME = {
     "hero_subtitle": {
         "uz": f"Portalning asosiy gʻoyasi — erta aniqlash. Tushunarli tilda ishonchli tibbiy maʼlumotlar. {TODO}",
         "ru": f"Ключевая идея портала — раннее выявление. Достоверная медицинская информация на понятном языке. {TODO}",
+    },
+    # <meta name="description"> of the home page (site description, not medical content)
+    "search_description": {
+        "uz": "Ayollar va bolalar saratonini erta aniqlash haqida ishonchli maʼlumot: belgilar, skrining, bemor yoʻli, qayerga murojaat qilish.",
+        "ru": "Достоверная информация о раннем выявлении женского и детского рака: симптомы, скрининг, маршрут пациента, куда обратиться.",
     },
 }
 

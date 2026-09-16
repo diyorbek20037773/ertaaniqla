@@ -11,7 +11,7 @@
   {% for block in page.intro %}{% include_block block %}{% endfor %}
 
   <form class="tool-form" method="post" action="{{ page.url }}" hx-post="{{ page.url }}" hx-target="#selfcheck-result" hx-swap="innerHTML"
-        x-data="{ count: 0 }" @change="count = $el.querySelectorAll('input[type=checkbox]:checked').length">
+        x-data="checklist" @change="recount">
     {% csrf_token %}
     {% include "components/form_errors.html" %}
     <p class="tool-form__note">{% trans "Nothing you enter is stored." %}</p>
@@ -21,7 +21,7 @@
         <div class="checklist__item">{{ choice.tag }}<label for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label></div>
       {% endfor %}
     </fieldset>
-    <p class="tool-form__count" aria-live="polite" x-text="count ? count + ' ✓' : ''"></p>
+    <p class="tool-form__count" aria-live="polite" x-text="label"></p>
     <button type="submit" class="button button--primary">{% trans "Show result" %}</button>
   </form>
 

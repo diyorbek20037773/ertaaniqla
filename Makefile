@@ -11,7 +11,7 @@ DATE         ?= $(shell date +%Y-%m-%d)
 SERVICE      ?= web
 
 .PHONY: help dev down shell migrate makemigrations seed messages compilemessages \
-        lint fmt type test check translations e2e lighthouse build deploy backup restore logs \
+        lint fmt type test check translations e2e lighthouse pa11y build deploy backup restore logs \
         install frontend frontend-watch superuser
 
 help: ## list targets
@@ -74,8 +74,11 @@ check: lint type test translations ## lint + type + test + translations
 e2e: ## playwright e2e (needs a running server at $${E2E_BASE_URL:-http://localhost:8000})
 	$(UV) pytest tests/e2e -m e2e --browser chromium
 
-lighthouse: ## lighthouse-ci against local
+lighthouse: ## lighthouse-ci against local (.lighthouseci/ reports)
 	npx --yes @lhci/cli@0.14 autorun --config=lighthouserc.json
+
+pa11y: ## pa11y-ci (WCAG 2.1 AA) against local :8001 (.pa11yci.json)
+	npx pa11y-ci
 
 frontend: ## build tailwind + js once
 	npm run build

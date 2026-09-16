@@ -112,6 +112,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
+    "apps.core.cache.PageCacheMiddleware",  # anonymous HTML cache (PAGE_CACHE_SECONDS)
     "axes.middleware.AxesMiddleware",
     "waffle.middleware.WaffleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
@@ -439,6 +440,9 @@ METRICS_BASIC_AUTH = env("METRICS_BASIC_AUTH", default="")
 YANDEX_METRIKA_ID = env("YANDEX_METRIKA_ID", default="")
 YANDEX_WEBMASTER_VERIFICATION = env("YANDEX_WEBMASTER_VERIFICATION", default="")
 GOOGLE_SITE_VERIFICATION = env("GOOGLE_SITE_VERIFICATION", default="")
+
+# Anonymous page cache (spec §4.5); 0 disables (dev/test), prod sets 300
+PAGE_CACHE_SECONDS = env.int("PAGE_CACHE_SECONDS", default=0)
 
 # Data retention (days) — spec §8
 PII_RETENTION_QUESTION_CONTACT_DAYS = 90

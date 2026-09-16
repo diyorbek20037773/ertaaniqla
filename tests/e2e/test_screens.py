@@ -32,6 +32,7 @@ PAGES = [
     ("tools-selfcheck-children-ru", "/ru/instrumenty/priznaki-u-detey/"),
     ("faq-uz", "/uz/savol-javob/"),
     ("glossary-ru", "/ru/slovar/"),
+    ("materials-uz", "/uz/materiallar/"),
 ]
 
 

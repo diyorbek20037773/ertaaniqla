@@ -43,7 +43,8 @@ per language. `seed_content` (`apps/core/seed/`) creates/updates the whole tree 
 | `FeedbackPage`, `FeedbackSubmission` (snippet) | feedback | kind, encrypted contact, page_url, UA | purge 180 d |
 | `GlossaryPage` | glossary | letters, section, `?q=` | `glossary_wrap` filter |
 | `Term` | glossary | `term`, `definition`, `section`, `synonyms` | translatable snippet |
-| `SiteSettings` | core | hotline ×2, socials ×5, footer/disclaimer/legal (uz+ru), emergency banner, partner logos ×3, Metrika id | `{{ settings.core.SiteSettings|localized:"field" }}` |
+| `MaterialsPage` | media_library | `intro`, `materials` (StreamField `material`: title, audience bloggers/relatives/parents/clinics, section, description, image, document, video, caption, hashtags) | blogger kit `/uz/materiallar/` `/ru/materialy/`; `?audience=` filter |
+| `SiteSettings` | core | hotline ×2, socials ×5, footer/disclaimer/legal (uz+ru), emergency banner, partner logos ×3, Metrika id, `privacy_page`, Yandex/Google verification | `{{ settings.core.SiteSettings|localized:"field" }}` |
 
 ## Blocks (`apps/articles/blocks.py`)
 
@@ -66,5 +67,18 @@ Redis (`nav:<lang>`), invalidated by `page_published` / `page_unpublished` / `po
 ## Template tags (`core_tags`)
 
 `{% main_nav %}`, `{% breadcrumbs %}`, `{% lang_switch %}`, `{% hreflang_links %}`,
-`{% canonical_url %}`, `{% section_style section %}`; filters `phone_display`, `phone_href`,
-`localized`. `article_tags`: `link_href`, `resolve_step_links`.
+`{% canonical_url %}`, `{% section_style section %}`, `{% share_bar %}`, `{% jsonld %}`,
+`{% site_verification %}`, `{% site_links %}`; filters `phone_display`, `phone_href`,
+`localized`. `article_tags`: `link_href`, `resolve_step_links`. Images use Wagtail's
+`{% picture %}` (WebP + JPEG, `srcset`), renditions prefetched on publish
+(`core.prefetch_renditions`).
+
+## SEO & structured data (`apps/core/seo.py`)
+
+`BasePage.get_jsonld(request)` returns a `@graph`: `Organization` (hotline as `ContactPoint`),
+`BreadcrumbList`, `MedicalWebPage` (+ `Article` when `jsonld_article = True`, with `reviewedBy`
+/ `lastReviewed` from the verified badge, `about` = section). Page types extend it: `FAQPage`
+→ `FAQPage`, `ArticlePage` → `VideoObject` per video block (stories are `Article` too),
+`DirectoryPage` → `MedicalClinic` per listed institution (≤ 50). Sitemaps: `/sitemap.xml` index → `/<lang>/sitemap.xml`
+(`apps/core/sitemaps.py`, skips `noindex` pages and flag-off tools). OG image (1200×630) and
+story image (1080×1920) are rendered on publish (`core.generate_og_image`).

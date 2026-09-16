@@ -1,0 +1,15 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/a11y_toolbar.html — accessibility toolbar (spec §9, A8): font size ×1 / ×1.25 / ×1.5,
+   high contrast, reduce motion. State in localStorage ("ea-a11y"), applied as data attributes
+   on <html> by static/src/a11y.js (also very early by the nonce'd inline script in base.html).
+   No context needed. Buttons are real <button>s with aria-pressed.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<div class="a11y-toolbar" data-component="a11y-toolbar" role="group" aria-label="{% trans 'Accessibility' %}">
+  <span class="a11y-toolbar__label">{% trans "Accessibility" %}:</span>
+  <button type="button" data-a11y="font" data-value="100" aria-pressed="true">A</button>
+  <button type="button" data-a11y="font" data-value="125" aria-pressed="false">A+</button>
+  <button type="button" data-a11y="font" data-value="150" aria-pressed="false">A++</button>
+  <button type="button" data-a11y="contrast" aria-pressed="false">{% trans "High contrast" %}</button>
+  <button type="button" data-a11y="motion" aria-pressed="false">{% trans "Reduce motion" %}</button>
+</div>

@@ -43,8 +43,7 @@ WAGTAIL_2FA_REQUIRED = True  # never optional in prod (spec §8)
 WAFFLE_FLAG_DEFAULT = False  # tools go live only after medical sign-off (spec M4)
 
 # Anonymous HTML is cached per view (apps.core.cache) — 5 min, stale-while-revalidate 1 h
-PAGE_CACHE_SECONDS = 300
-PAGE_CACHE_SWR_SECONDS = 3600
+PAGE_CACHE_SECONDS = env.int("PAGE_CACHE_SECONDS", default=300)
 
 # Sentry: errors + 10% performance, PII scrubbed
 _dsn = env("SENTRY_DSN", default="")

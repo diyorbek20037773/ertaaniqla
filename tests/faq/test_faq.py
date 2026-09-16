@@ -95,6 +95,7 @@ def test_turnstile_required_when_configured(page, client: Client, monkeypatch) -
     assert Question.objects.count() == 1
 
 
+@freeze_time("2026-01-01 12:00:00")  # django-ratelimit windows are wall-clock based
 def test_rate_limit_after_five_posts(page, client: Client) -> None:
     for _ in range(5):
         assert client.post(page.url, VALID).status_code == 200

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 15:02+0500\n"
+"POT-Creation-Date: 2026-09-15 15:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -304,7 +304,6 @@ msgstr "Ядро"
 msgid "Spam check failed."
 msgstr "Проверка на спам не пройдена."
 
-#| msgid "Please wait a minute and try again."
 msgid "Please confirm you are not a robot and try again."
 msgstr "Подтвердите, что вы не робот, и попробуйте снова."
 
@@ -335,6 +334,15 @@ msgstr "сгенерированное изображение для соцсе�
 
 msgid "Rendered automatically on publish when no sharing image is chosen."
 msgstr "Создаётся автоматически при публикации, если изображение не выбрано."
+
+#| msgid "generated sharing image"
+msgid "generated story image (1080×1920)"
+msgstr "сгенерированное изображение для сторис (1080×1920)"
+
+msgid "Vertical image for Instagram/TikTok stories, rendered on publish."
+msgstr ""
+"Вертикальное изображение для сторис Instagram/TikTok, создаётся при "
+"публикации."
 
 msgid "hide from search engines"
 msgstr "скрыть от поисковых систем"
@@ -408,6 +416,12 @@ msgstr "ссылка баннера"
 
 msgid "Yandex.Metrika counter id"
 msgstr "ID счётчика Яндекс.Метрики"
+
+msgid "privacy policy page"
+msgstr "страница политики конфиденциальности"
+
+msgid "Linked from the consent banner and every form."
+msgstr "Ссылка из баннера согласия и каждой формы."
 
 msgid "legal / privacy text (uz)"
 msgstr "правовой текст / политика (uz)"
@@ -602,7 +616,6 @@ msgstr "Ваше имя (необязательно)"
 msgid "Phone or e-mail (optional, for a private reply)"
 msgstr "Телефон или e-mail (необязательно, для личного ответа)"
 
-#| msgid "Question"
 msgid "Your question"
 msgstr "Ваш вопрос"
 
@@ -618,11 +631,9 @@ msgstr "Другое"
 msgid "New"
 msgstr "Новый"
 
-#| msgid "consent document (private)"
 msgid "Answered (private)"
 msgstr "Отвечен (приватно)"
 
-#| msgid "published"
 msgid "Published"
 msgstr "Опубликован"
 
@@ -643,21 +654,18 @@ msgstr ""
 msgid "section"
 msgstr "раздел"
 
-#| msgid "Question"
 msgid "question"
 msgstr "вопрос"
 
 msgid "may be published anonymously"
 msgstr "можно опубликовать анонимно"
 
-#| msgid "Language"
 msgid "language"
 msgstr "язык"
 
 msgid "status"
 msgstr "статус"
 
-#| msgid "published"
 msgid "question as published"
 msgstr "вопрос в опубликованном виде"
 
@@ -665,7 +673,6 @@ msgid "Edited/anonymised wording shown on the site (empty = original text)."
 msgstr ""
 "Отредактированная/анонимная формулировка для сайта (пусто = исходный текст)."
 
-#| msgid "Answer"
 msgid "answer"
 msgstr "ответ"
 
@@ -675,25 +682,21 @@ msgstr "ответил(а)"
 msgid "answered at"
 msgstr "время ответа"
 
-#| msgid "published"
 msgid "published at"
 msgstr "время публикации"
 
 msgid "contact purged at"
 msgstr "контакт удалён"
 
-#| msgid "Location"
 msgid "Moderation"
 msgstr "Модерация"
 
 msgid "Submitted"
 msgstr "Отправлено"
 
-#| msgid "FAQ accordion / questions to ask the doctor"
 msgid "question to a doctor"
 msgstr "вопрос врачу"
 
-#| msgid "FAQ accordion / questions to ask the doctor"
 msgid "questions to a doctor"
 msgstr "вопросы врачу"
 
@@ -703,7 +706,6 @@ msgstr "текст над формой"
 msgid "thank-you text"
 msgstr "текст благодарности"
 
-#| msgid "section index page"
 msgid "questions & answers page"
 msgstr "страница вопросов и ответов"
 
@@ -722,7 +724,6 @@ msgstr "Телефон или e-mail (необязательно, если хо�
 msgid "Please write a few words."
 msgstr "Напишите несколько слов."
 
-#| msgid "Search the site"
 msgid "Feedback about the site"
 msgstr "Отзыв о сайте"
 
@@ -735,7 +736,6 @@ msgstr "Сотрудничество / волонтёрство"
 msgid "message"
 msgstr "сообщение"
 
-#| msgid "home page"
 msgid "page"
 msgstr "страница"
 
@@ -754,7 +754,6 @@ msgstr "сообщение обратной связи"
 msgid "feedback submissions"
 msgstr "сообщения обратной связи"
 
-#| msgid "Feedback"
 msgid "feedback page"
 msgstr "страница обратной связи"
 
@@ -783,7 +782,6 @@ msgstr "термин глоссария"
 msgid "glossary terms"
 msgstr "термины глоссария"
 
-#| msgid "glossary term"
 msgid "glossary page"
 msgstr "страница словаря"
 
@@ -838,6 +836,53 @@ msgstr "избранное видео"
 
 msgid "Media library"
 msgstr "Медиатека"
+
+msgid "Volunteer bloggers"
+msgstr "Блогеры-волонтёры"
+
+msgid "Husbands, children, relatives"
+msgstr "Мужья, дети, близкие"
+
+msgid "Parents"
+msgstr "Родители"
+
+msgid "Clinics (print)"
+msgstr "Клиники (печать)"
+
+msgid "Audience"
+msgstr "Аудитория"
+
+msgid "Infographic / story image"
+msgstr "Инфографика / изображение для сторис"
+
+msgid "Document (PDF, ZIP…)"
+msgstr "Документ (PDF, ZIP…)"
+
+#| msgid "video"
+msgid "Short video"
+msgstr "Короткое видео"
+
+#| msgid "Caption"
+msgid "Ready caption"
+msgstr "Готовая подпись"
+
+msgid "Text bloggers can paste as is."
+msgstr "Текст, который блогеры могут вставить как есть."
+
+msgid "Hashtags"
+msgstr "Хэштеги"
+
+msgid "#ertaaniqla #skrining …"
+msgstr "#ertaaniqla #скрининг …"
+
+msgid "Material"
+msgstr "Материал"
+
+msgid "materials"
+msgstr "материалы"
+
+msgid "materials page (blogger kit)"
+msgstr "страница материалов (набор блогера)"
 
 msgid "credit / source"
 msgstr "автор / источник"
@@ -1104,7 +1149,6 @@ msgstr "2 года назад"
 msgid "3 years ago or more"
 msgstr "3 года назад и более"
 
-#| msgid "e.g. mammography"
 msgid "Mammography"
 msgstr "Маммография"
 
@@ -1124,15 +1168,12 @@ msgstr "Последняя %(test)s"
 msgid "Tick everything you have noticed"
 msgstr "Отметьте всё, что вы заметили"
 
-#| msgid "medical disclaimer (uz)"
 msgid "disclaimer"
 msgstr "дисклеймер"
 
-#| msgid "site settings"
 msgid "Empty = site setting."
 msgstr "Пусто = настройка сайта."
 
-#| msgid "stories index page"
 msgid "tools index page"
 msgstr "страница инструментов"
 
@@ -1154,14 +1195,12 @@ msgstr "В ТЗ интервал ВПЧ-теста не указан — реш�
 msgid "'where to go' page"
 msgstr "страница «куда обратиться»"
 
-#| msgid "Results"
 msgid "Result texts"
 msgstr "Тексты результата"
 
 msgid "screening helper page"
 msgstr "страница помощника по скринингу"
 
-#| msgid "Symptom"
 msgid "Sign / symptom"
 msgstr "Признак / симптом"
 
@@ -1186,7 +1225,6 @@ msgstr "результат: ничего не отмечено"
 msgid "result: routine"
 msgstr "результат: планово"
 
-#| msgid "Results"
 msgid "result: soon"
 msgstr "результат: скоро"
 
@@ -1257,6 +1295,13 @@ msgstr "Скачать"
 msgid "No institutions match the selected filters yet."
 msgstr "Учреждений по выбранным фильтрам пока нет."
 
+msgid "High contrast"
+msgstr "Высокий контраст"
+
+#| msgid "Send question"
+msgid "Reduce motion"
+msgstr "Меньше анимации"
+
 msgid "Breadcrumbs"
 msgstr "Хлебные крошки"
 
@@ -1272,6 +1317,25 @@ msgstr "Успокоение"
 msgid "Note"
 msgstr "Примечание"
 
+msgid "Cookies and analytics"
+msgstr "Cookie и аналитика"
+
+msgid ""
+"We use Yandex.Metrika to count visits (with IP anonymisation) only if you "
+"agree. No advertising trackers."
+msgstr ""
+"Мы используем Яндекс.Метрику для подсчёта посещений (с анонимизацией IP) "
+"только с вашего согласия. Рекламных трекеров нет."
+
+msgid "Privacy policy"
+msgstr "Политика конфиденциальности"
+
+msgid "Agree"
+msgstr "Согласен(на)"
+
+msgid "Decline"
+msgstr "Отклонить"
+
 msgid "Load content"
 msgstr "Загрузить содержимое"
 
@@ -1281,7 +1345,6 @@ msgstr "Загружает содержимое со стороннего сай
 msgid "Open on"
 msgstr "Открыть в"
 
-#| msgid "Both sections"
 msgid "Site sections"
 msgstr "Разделы сайта"
 
@@ -1331,6 +1394,18 @@ msgstr "Поиск по сайту"
 msgid "e.g. mammography"
 msgstr "например, маммография"
 
+msgid "Share"
+msgstr "Поделиться"
+
+msgid "Copy link"
+msgstr "Скопировать ссылку"
+
+msgid "Link copied"
+msgstr "Ссылка скопирована"
+
+msgid "Story image (Instagram / TikTok)"
+msgstr "Картинка для сторис (Instagram / TikTok)"
+
 msgid "Timing"
 msgstr "Сроки"
 
@@ -1375,7 +1450,6 @@ msgstr "Загрузка…"
 msgid "Map will be shown here."
 msgstr "Здесь будет карта."
 
-#| msgid "institutions"
 msgid "Map of institutions"
 msgstr "Карта учреждений"
 
@@ -1392,7 +1466,6 @@ msgstr ""
 "Мы никогда не публикуем имена и контакты. Контакты удаляются через 90 дней "
 "после ответа."
 
-#| msgid "Question"
 msgid "Send question"
 msgstr "Отправить вопрос"
 
@@ -1402,7 +1475,6 @@ msgstr "Отвеченные вопросы"
 msgid "Filter by section"
 msgstr "Фильтр по разделу"
 
-#| msgid "Articles will appear here."
 msgid "Answered questions will appear here."
 msgstr "Здесь появятся отвеченные вопросы."
 
@@ -1429,6 +1501,32 @@ msgstr "Открыть раздел"
 
 msgid "Key figures"
 msgstr "Ключевые цифры"
+
+#| msgid "Filter by section"
+msgid "Filter by audience"
+msgstr "Фильтр по аудитории"
+
+#| msgid "Download"
+msgid "Download image"
+msgstr "Скачать изображение"
+
+#| msgid "Download"
+msgid "Download video"
+msgstr "Скачать видео"
+
+#| msgid "Caption"
+msgid "Copy caption"
+msgstr "Скопировать подпись"
+
+msgid "Copied"
+msgstr "Скопировано"
+
+msgid "Copy hashtags"
+msgstr "Скопировать хэштеги"
+
+#| msgid "Stories will appear here."
+msgid "Materials will appear here."
+msgstr "Здесь появятся материалы."
 
 #, python-format
 msgid "%(counter)s result"
@@ -1475,8 +1573,6 @@ msgstr "Имя и детали изменены."
 msgid "Stories will appear here."
 msgstr "Здесь появятся истории."
 
-#| msgid "%(counter)s result"
-#| msgid_plural "%(counter)s results"
 msgid "Your result"
 msgstr "Ваш результат"
 
@@ -1486,7 +1582,6 @@ msgstr "В вашем возрасте не рекомендуется"
 msgid "Due now"
 msgstr "Пора пройти"
 
-#| msgid "Soon — see a doctor within days"
 msgid "Done — ask your doctor when to repeat"
 msgstr "Пройдено — когда повторить, уточните у врача"
 
