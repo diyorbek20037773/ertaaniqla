@@ -1,0 +1,195 @@
+# Site config (spec §11.2). Rendered by the nginx image's envsubst with:
+#   DOMAIN      primary host, e.g. ertaaniqla.uz  (staging: staging.ertaaniqla.uz)
+#   DOMAIN_ALT  secondary hosts redirected to DOMAIN, e.g. "www.ertaaniqla.uz oncoportal.uz www.oncoportal.uz"
+# Certificates: /etc/letsencrypt/live/${DOMAIN}/ (docker/scripts/init_letsencrypt.sh creates a
+# self-signed placeholder first so nginx can start before the real certificate exists).
+
+# --- 80: ACME challenge + redirect to https --------------------------------------------------
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ${DOMAIN} ${DOMAIN_ALT};
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        default_type text/plain;
+    }
+    location / {
+        return 301 https://${DOMAIN}$request_uri;
+    }
+}
+
+# --- 443: secondary hosts → canonical ---------------------------------------------------------
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name ${DOMAIN_ALT};
+    ssl_certificate     /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+    include /etc/nginx/snippets/tls.conf;
+    return 301 https://${DOMAIN}$request_uri;
+}
+
+# --- 443: the site ----------------------------------------------------------------------------
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name ${DOMAIN};
+
+    ssl_certificate     /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/${DOMAIN}/chain.pem;
+    include /etc/nginx/snippets/tls.conf;
+    include /etc/nginx/snippets/security.conf;
+
+    root /srv/static;
+    charset utf-8;
+
+    limit_req zone=general burst=60 nodelay;
+    limit_conn per_ip 40;
+
+    # dotfiles, VCS, env, editor backups → 404 (spec §11.2)
+    location ~ /\.(?!well-known) { return 404; }
+    location ~* \.(env|sql|bak|swp|log)$ { return 404; }
+
+    # maintenance flag: `touch /srv/ertaaniqla/maintenance/maintenance.flag` → 503 page
+    set $maintenance 0;
+    if (-f /srv/maintenance/maintenance.flag) { set $maintenance 1; }
+    if ($maintenance = 1) { return 503; }
+    error_page 503 @maintenance;
+    location @maintenance {
+        root /srv/maintenance;
+        rewrite ^(.*)$ /maintenance.html break;
+        add_header Retry-After 300 always;
+        add_header Cache-Control "no-store" always;
+        include /etc/nginx/snippets/security.conf;
+    }
+
+    include /etc/nginx/snippets/cache.conf;
+
+    # --- health (no cache, no rate limit) — nginx uses /healthz/, deploy uses /readyz/ -------
+    location = /healthz/ {
+        limit_req zone=general burst=200 nodelay;
+        access_log off;
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+        add_header Cache-Control "no-store" always;
+        include /etc/nginx/snippets/security.conf;
+    }
+    location = /readyz/ {
+        access_log off;
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+        add_header Cache-Control "no-store" always;
+        include /etc/nginx/snippets/security.conf;
+    }
+
+    # --- Prometheus metrics: Django basic-auth + internal networks only ---------------------
+    location = /metrics {
+        allow 10.0.0.0/8;
+        allow 172.16.0.0/12;
+        allow 192.168.0.0/16;
+        deny all;
+        access_log off;
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+    }
+
+    # --- CMS: large uploads, login brute-force zone, optional IP allow-list -----------------
+    location = /cms/login/ {
+        include /etc/nginx/snippets/cms_allowlist.conf;
+        limit_req zone=cms_login burst=5 nodelay;
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+    }
+    location ^~ /cms/ {
+        include /etc/nginx/snippets/cms_allowlist.conf;
+        client_max_body_size 512m;
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_request_buffering off;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_cache off;
+    }
+    location ^~ /django-admin/ {
+        include /etc/nginx/snippets/cms_allowlist.conf;
+        limit_req zone=cms_login burst=10 nodelay;
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+    }
+    # private documents are permission-checked by Django (serve_view)
+    location ^~ /documents/ {
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+        proxy_max_temp_file_size 0;
+    }
+
+    # --- public forms: POST rate zone (question, feedback, search is GET) --------------------
+    location ~ ^/(uz|ru)/(savol-javob|voprosy-otvety|qayta-aloqa|obratnaya-svyaz)/ {
+        limit_req zone=general burst=60 nodelay;
+        limit_req zone=form_post burst=5 nodelay;   # keyed on $post_limit_key → POST only
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_cache off;
+    }
+
+    # --- everything else: Django with a 10 s micro-cache for anonymous HTML ------------------
+    location / {
+        proxy_pass http://django;
+        include /etc/nginx/snippets/proxy.conf;
+
+        proxy_cache html;
+        proxy_cache_key "$scheme$host$request_uri$lang_cookie$http_hx_request";
+        proxy_cache_valid 200 301 302 10s;
+        proxy_cache_valid 404 5s;
+        proxy_cache_bypass $cache_bypass $auth_bypass $method_bypass;
+        proxy_no_cache    $cache_bypass $auth_bypass $method_bypass;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        proxy_cache_background_update on;
+        proxy_cache_lock on;
+        # responses with Set-Cookie (CSRF forms, sessions) are never stored (nginx default)
+        proxy_hide_header X-Page-Cache;
+    }
+}
+
+# --- staging.<DOMAIN>: proxied to the staging compose project, basic auth ---------------------
+# The upstream is resolved lazily (variable + resolver) so nginx starts even when the staging
+# stack is down. Users: STAGING_HTPASSWD file (htpasswd format, see RUNBOOK §7).
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name ${STAGING_DOMAIN};
+
+    ssl_certificate     /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+    include /etc/nginx/snippets/tls.conf;
+    include /etc/nginx/snippets/security.conf;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+
+    client_max_body_size 512m;
+    limit_req zone=general burst=60 nodelay;
+
+    auth_basic "staging";
+    auth_basic_user_file /etc/nginx/staging.htpasswd;
+
+    location ^~ /.well-known/acme-challenge/ { auth_basic off; root /var/www/certbot; }
+    location = /healthz/ { auth_basic off; set $staging http://${STAGING_UPSTREAM}; proxy_pass $staging; include /etc/nginx/snippets/proxy.conf; }
+
+    location / {
+        set $staging http://${STAGING_UPSTREAM};
+        proxy_pass $staging;
+        include /etc/nginx/snippets/proxy.conf;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+}

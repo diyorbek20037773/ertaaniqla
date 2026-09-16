@@ -1,0 +1,42 @@
+# Rollback (spec §11.3): redeploy a previously built image tag to staging or prod.
+# Run from the Actions tab: choose the environment and the 12-char image tag (git SHA prefix,
+# see the CI build job or `docker compose ... images` on the server). Migrations are NOT
+# reverted (expand/contract rule keeps the previous image compatible with the schema).
+name: Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        options: [staging, prod]
+        required: true
+      tag:
+        description: Image tag to deploy (12-char git SHA or "latest")
+        type: string
+        required: true
+
+jobs:
+  rollback:
+    name: rollback ${{ inputs.environment }} → ${{ inputs.tag }}
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    concurrency: deploy-${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Redeploy image
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER || 'deploy' }}
+          IMAGE_BASE: ghcr.io/${{ github.repository }}/web
+          SMOKE_URL: https://${{ inputs.environment == 'prod' && vars.PROD_DOMAIN || vars.STAGING_DOMAIN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ALERT_CHAT_ID: ${{ secrets.TELEGRAM_ALERT_CHAT_ID }}
+          APP_RELEASE: rollback-${{ inputs.tag }}
+        run: |
+          IMAGE_BASE="${IMAGE_BASE,,}" bash docker/scripts/deploy.sh "${{ inputs.environment }}" "${{ inputs.tag }}"

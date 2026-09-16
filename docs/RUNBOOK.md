@@ -1,0 +1,178 @@
+# RUNBOOK — Erta aniqla operations
+
+Audience: the one developer/SRE. Every procedure here has been run at least once (M6 gate).
+Spec references: `docs/ENGINEERING_SPEC.md` §11. Threat model: `docs/SECURITY.md`.
+
+| Item | Value |
+|---|---|
+| Hosts | `ertaaniqla.uz` (canonical), `www.ertaaniqla.uz`, `oncoportal.uz`, `www.oncoportal.uz` → 301 to canonical; staging `staging.ertaaniqla.uz` |
+| Server | 1 VPS in Uzbekistan (8 vCPU / 16 GB / 1 TB NVMe), Ubuntu 22.04/24.04, Docker + Compose |
+| Layout | `/srv/ertaaniqla/prod` and `/srv/ertaaniqla/staging` = git checkouts; each has its own `.env` (chmod 600) and compose project (`ertaaniqla-prod`, `ertaaniqla-staging`) |
+| Compose | `docker compose -p ertaaniqla-<env> -f compose.yml -f compose.prod.yml [--profile monitoring]` — alias below as `dc` |
+| Images | `ghcr.io/<org>/ertaaniqla/web:<12-char sha>` built by CI; `:latest` = last green main |
+| Data | volumes `pgdata`, `redisdata`, `media`, `static`, `letsencrypt`, `backups`, `nginx-cache`, `prometheus-data`, `grafana-data` |
+| RPO / RTO | 24 h / 2 h (nightly dump + restic; restore procedure below) |
+| Data residency | VPS and the restic bucket **must** be inside Uzbekistan (ЗРУ-547, `docs/SECURITY.md`) |
+
+```bash
+# on the server, as the deploy user
+cd /srv/ertaaniqla/prod
+alias dc='docker compose -p ertaaniqla-prod -f compose.yml -f compose.prod.yml'
+```
+
+## 1. Deploy
+
+### 1.1 Normal (CI/CD)
+
+1. Merge to `main` → CI: quality → frontend → a11y-perf → build (trivy, SBOM, `nginx -t`, compose config) → **deploy-staging** (automatic) → **deploy-prod** (waits for approval on the GitHub `prod` environment).
+2. Deploy = `docker/scripts/deploy.sh <env> <tag>` over SSH: `pull` → `run --rm migrate` (migrations + `check --deploy`) → `up -d --no-deps --wait web` (new container must pass `/healthz/` before nginx routes to it) → `up -d worker beat backup nginx` → smoke test (`/readyz/` + 5 pages) → Telegram message.
+3. Migrations must be **expand/contract** (spec §11.3): the previous image must still work with the new schema, so a rollback never needs a DB restore.
+
+GitHub configuration (Settings → Environments `staging`, `prod`):
+`vars.DEPLOY_HOST`, `vars.DEPLOY_USER` (=`deploy`), `vars.STAGING_DOMAIN`, `vars.PROD_DOMAIN`;
+secrets `DEPLOY_SSH_KEY` (private key of the deploy user), `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALERT_CHAT_ID`.
+`prod` environment: required reviewers = you.
+
+### 1.2 Manual deploy from a laptop
+
+```bash
+DEPLOY_HOST=vps.example.uz IMAGE_BASE=ghcr.io/<org>/ertaaniqla/web SMOKE_URL=https://ertaaniqla.uz \
+  make deploy ENV=prod TAG=<12-char sha>
+```
+
+### 1.3 Deploy from scratch (new VPS, ≤ 1 h)
+
+```bash
+# as root on the fresh VPS
+curl -fsSL https://raw.githubusercontent.com/<org>/ertaaniqla/main/scripts/bootstrap_vps.sh | \
+  REPO=https://github.com/<org>/ertaaniqla.git ENV_NAME=prod SSH_PUBKEY="ssh-ed25519 AAAA… you" \
+  SSH_ALLOW_FROM="<your ip>/32" bash
+```
+The script installs Docker, creates `deploy`, hardens sshd, ufw (22 restricted / 80 / 443), fail2ban, unattended-upgrades, 4 GB swap, sysctl, clones the repo and prints the remaining steps:
+
+1. Fill `/srv/ertaaniqla/prod/.env` (every variable is documented in `.env.example`; generate `DJANGO_SECRET_KEY`, `PII_ENCRYPTION_KEYS`, `POSTGRES_PASSWORD`, `METRICS_BASIC_AUTH`, `GRAFANA_ADMIN_PASSWORD`; paste Turnstile, Sentry, restic, Telegram values from the password manager).
+2. `export WEB_IMAGE=ghcr.io/<org>/ertaaniqla/web:<tag>; dc pull; dc up -d db redis`.
+3. Data: `make restore DATE=latest` (see §3) **or** first install: `dc run --rm web python manage.py seed_content --lang uz,ru && dc run --rm web python manage.py import_institutions data/institutions.csv && dc run --rm web python manage.py createsuperuser`.
+4. TLS: `DOMAIN=ertaaniqla.uz DOMAIN_ALT="www.ertaaniqla.uz oncoportal.uz www.oncoportal.uz" LETSENCRYPT_EMAIL=… make tls-init` (placeholder cert → nginx up → real cert → reload; renewal is automatic, `nginx-reloader` reloads nginx after each renewal).
+5. `make prod-up` (adds the monitoring profile). `bash docker/scripts/smoke.sh https://ertaaniqla.uz`.
+6. Point DNS (A/AAAA for all four hosts + staging) at the VPS. Optional Cloudflare in front (DNS + DDoS only, "Full (strict)" TLS mode) — the origin works without it.
+
+Timing on a clean VPS: bootstrap 10 min, image pull 3 min, restore 5 min, TLS 2 min, monitoring 3 min.
+
+## 2. Rollback
+
+* GitHub → Actions → **Rollback** → environment + previous image tag (12-char sha from the CI run or `dc images web`). Same zero-downtime path, then smoke test.
+* Manual: `make deploy ENV=prod TAG=<previous sha>`.
+* Rollback never reverts migrations. If a migration itself is the problem, restore the DB (§3) **and** roll back the image, then fix forward.
+
+## 3. Backups & restore
+
+* `backup` container (same image as web) runs `docker/scripts/backup_cron.sh`: **02:00 Asia/Tashkent** `backup.sh` → `pg_dump -Fc` into the `backups` volume (`/backups/ertaaniqla-<UTC stamp>.dump`, `latest.dump` symlink, 7 local copies) → `restic backup` of dump + `/srv/media` (raw video uploads excluded) to `RESTIC_REPOSITORY` → `restic forget --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --prune` → `restic check` (5 % data). Success writes `backup.prom` for the `BackupTooOld` alert (> 26 h). Failure → Telegram.
+* **Weekly restore test** Sunday 03:30: `restore_test.sh` restores `latest.dump` into a scratch database `ertaaniqla_restore_test` on the same server, counts `wagtailcore_page` (≥ 10), drops it, writes `restore_test.prom`; failure → Telegram + `RestoreTestTooOld` alert after 8 days.
+* Run now: `make backup` · `make restore-test`.
+
+### 3.1 Restore (disaster)
+
+```bash
+make maintenance-on                                  # nginx serves the maintenance page
+dc stop web worker beat
+make restore DATE=2026-09-14                         # newest local dump of that day; "latest"; or a path
+#   no local dump → fetched from the newest restic snapshot of that day (needs RESTIC_* in .env)
+#   the target DB is dropped and recreated, then pg_restore --jobs=2; prints the page count
+dc run --rm backup restic restore latest --target / --include /srv/media   # media, if lost
+dc up -d web worker beat
+make maintenance-off
+bash docker/scripts/smoke.sh https://ertaaniqla.uz
+```
+Restore into a scratch container (what the M6 gate ran):
+`docker run -d --name scratch --network ertaaniqla-prod_default -e POSTGRES_PASSWORD=x postgres:16-alpine` then
+`dc run --rm -e PGPASSWORD=x backup /scripts/restore.sh latest postgres://postgres:x@scratch:5432/check`.
+
+### 3.2 Media
+
+Media lives in the `media` volume (`/srv/media` in containers) and in every restic snapshot. Raw video uploads (`videos/source/`) are excluded — only transcoded renditions matter; editors can re-upload.
+
+## 4. Incident response
+
+| Symptom | First look | Action |
+|---|---|---|
+| Telegram: `SiteDown` / smoke failed | `dc ps`, `dc logs --tail 200 nginx web`, `curl -sI https://ertaaniqla.uz/healthz/` | `dc up -d --wait web`; if the image is bad → Rollback (§2) |
+| `High5xxRate` | Sentry (release = git sha), `dc logs web` (JSON, `request_id`) | roll back if it started with a deploy; otherwise fix forward |
+| `HighLatencyP95` | Grafana overview (DB connections, cache hit ratio, CPU) | check slow queries (`log_min_duration_statement=500` → `dc logs db`), Redis up?, page cache enabled (`PAGE_CACHE_SECONDS`) |
+| `PostgresDown` / `RedisDown` | `dc logs db redis`, disk space | `dc up -d db redis`; if disk full → §5 |
+| `DiskAlmostFull` | `df -h`, `docker system df`, `/backups`, media size | `docker system prune -f`, lower `BACKUP_RETENTION_DAILY`, move media to S3 (`MEDIA_STORAGE=s3`) |
+| `BackupTooOld` | `dc logs backup` | fix credentials / bucket, `make backup` |
+| `CertificateExpiringSoon` | `dc logs certbot nginx-reloader` | `dc run --rm certbot renew --force-renewal && dc exec nginx nginx -s reload` |
+| `CeleryQueueBacklog` | `dc logs worker`, ffmpeg errors | `dc restart worker`; stuck video → set status `failed` in CMS and re-upload |
+| CMS lockout (axes) | `dc run --rm web python manage.py axes_reset` | rotate the password if brute force is suspected |
+| Defacement / suspicious edit | Wagtail revision history (`/cms/pages/<id>/history/`) | revert revision, disable the user, rotate secrets (§6) |
+| Spam through forms | `dc logs web \| grep ratelimited`, Turnstile dashboard | lower `FORM_RATE`, block IPs in nginx `cms_allowlist`-style snippet, temporary `waffle` flag off |
+
+Maintenance page: `make maintenance-on` / `make maintenance-off` (nginx checks the flag on every request; 503 + `Retry-After`).
+
+Logs: JSON on stdout for every container (`dc logs -f --tail 200 web`), request id in `X-Request-Id` (nginx) = `request_id` (Django). nginx access log anonymises the last IPv4 octet.
+
+## 5. Routine operations
+
+| When | What |
+|---|---|
+| Daily (automatic) | backup 02:00; certbot renew check every 12 h; Dependabot PRs Monday |
+| Weekly (automatic) | restore test Sunday 03:30; base image rebuild + trivy (GitHub `Weekly rebuild`, Monday 02:00 UTC) |
+| Weekly (you, 10 min) | Grafana overview; Sentry new issues; merge Dependabot PRs after CI green |
+| Monthly | `docker system prune -f`; check disk (`df -h`, `docker system df`); review `pip-audit` output in CI |
+| Quarterly | full restore drill into a scratch container (§3.1) and a **timed** rebuild on a throw-away VPS (§1.3); rotate `METRICS_BASIC_AUTH` and Grafana password |
+| Before launch | `docs/LAUNCH_CHECKLIST.md` (M7) |
+
+Useful commands:
+```bash
+dc ps; dc top web                              # state
+dc exec web python manage.py shell             # Django shell
+dc run --rm web python manage.py rebuild_search
+dc run --rm web python manage.py purge_pii     # manual retention run (beat does it nightly)
+dc exec redis redis-cli info memory
+docker exec ertaaniqla-prod-db-1 psql -U ertaaniqla -c 'select count(*) from wagtailcore_page'
+ssh -L 3000:127.0.0.1:3000 deploy@vps          # Grafana at http://localhost:3000
+```
+
+## 6. Secret rotation
+
+| Secret | How |
+|---|---|
+| `DJANGO_SECRET_KEY` | new 64-char value in `.env` → `dc up -d web worker beat`. Sessions and password-reset links are invalidated; users log in again. |
+| `PII_ENCRYPTION_KEYS` (Fernet) | **prepend** the new key (comma-separated, newest first) → `dc up -d web worker beat` → `dc run --rm web python manage.py rotate_pii_keys` (re-encrypts every row with the newest key) → remove the old key from `.env` → restart. Never remove the old key before the rotation command finished. |
+| `POSTGRES_PASSWORD` | `dc exec db psql -U ertaaniqla -c "ALTER USER ertaaniqla PASSWORD 'new'"` → update `.env` → `dc up -d` (web, worker, beat, backup, postgres-exporter read it) |
+| `RESTIC_PASSWORD` | `dc run --rm backup restic key add` (enter new) → update `.env` → `restic key remove <old id>` |
+| `TURNSTILE_*`, `SENTRY_DSN`, `TELEGRAM_*`, `METRICS_BASIC_AUTH`, `GRAFANA_ADMIN_PASSWORD` | update `.env` → `dc up -d` for the services that use them |
+| Deploy SSH key | new key pair → `authorized_keys` of `deploy` → GitHub secret `DEPLOY_SSH_KEY` → remove the old line |
+| CMS user compromise | Wagtail → Users → disable; `dc run --rm web python manage.py changepassword <user>`; check revisions; rotate `DJANGO_SECRET_KEY` |
+
+## 7. Staging
+
+Same VPS, second compose project, no public ports. The **production nginx** serves
+`https://staging.<DOMAIN>` (certificate includes it — `STAGING_DOMAIN` in `.env`, added by
+`init_letsencrypt.sh`), proxies to `ertaaniqla-staging-web-1:8000` on the prod network and
+requires HTTP basic auth (`X-Robots-Tag: noindex`).
+
+```bash
+# once
+sudo -u deploy git clone <repo> /srv/ertaaniqla/staging && cd /srv/ertaaniqla/staging
+cp .env.example .env      # ENVIRONMENT=staging, own POSTGRES_PASSWORD/SECRET_KEY/PII keys,
+                          # DJANGO_ALLOWED_HOSTS=staging.ertaaniqla.uz, SITE_BASE_URL=https://staging.ertaaniqla.uz,
+                          # RESTIC_REPOSITORY empty (local dumps only)
+docker run --rm httpd:2.4-alpine htpasswd -nbB editor 's3cret' > /srv/ertaaniqla/staging.htpasswd
+# in the PROD .env:  STAGING_DOMAIN=staging.ertaaniqla.uz  STAGING_HTPASSWD=/srv/ertaaniqla/staging.htpasswd
+cd /srv/ertaaniqla/prod && dc up -d nginx     # picks up the htpasswd mount + vhost
+
+# run / update (CI does this on every push to main via deploy.sh staging)
+cd /srv/ertaaniqla/staging
+docker compose -p ertaaniqla-staging -f compose.yml -f compose.prod.yml -f compose.staging.yml up -d
+```
+`compose.staging.yml` parks nginx/certbot/nginx-reloader in an unused profile, joins the web
+container to `ertaaniqla-prod_default`, and keeps backups local. Seed it with
+`seed_content` or a copy of prod (`make restore` inside the staging project with a prod dump).
+
+## 8. Scaling notes
+
+* `docker compose up -d --scale web=2` works (stateless web; sessions in Redis; nginx upstream resolves both).
+* PgBouncer only when connections exceed ~200 (TODO_HARDENING H-004).
+* Media to S3-compatible storage inside Uzbekistan: set `MEDIA_STORAGE=s3` + `S3_*`, run `dc run --rm web python manage.py migrate_media_to_s3` (M8 if needed) — `django-storages` is already wired.

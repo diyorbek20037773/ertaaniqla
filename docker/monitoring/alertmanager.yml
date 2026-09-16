@@ -1,0 +1,32 @@
+# Alertmanager → Telegram (spec §11.5). Token / chat id come from the environment
+# (compose.prod.yml fills the __PLACEHOLDERS__ with sed at container start).
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: telegram
+  group_by: ["alertname"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - matchers: ["severity = critical"]
+      receiver: telegram
+      repeat_interval: 1h
+
+receivers:
+  - name: telegram
+    telegram_configs:
+      - bot_token: "__TELEGRAM_BOT_TOKEN__"
+        chat_id: __TELEGRAM_ALERT_CHAT_ID__
+        parse_mode: HTML
+        send_resolved: true
+        message: |
+          {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} <b>{{ .CommonLabels.alertname }}</b> ({{ .CommonLabels.severity }})
+          {{ range .Alerts }}• {{ .Annotations.summary }}{{ if .Labels.instance }} — {{ .Labels.instance }}{{ end }}
+          {{ end }}
+
+inhibit_rules:
+  - source_matchers: ["alertname = SiteDown"]
+    target_matchers: ["alertname =~ High5xxRate|HighLatencyP95"]
+    equal: ["project"]

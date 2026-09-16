@@ -12,7 +12,8 @@ SERVICE      ?= web
 
 .PHONY: help dev down shell migrate makemigrations seed messages compilemessages \
         lint fmt type test check translations e2e lighthouse pa11y build deploy backup restore logs \
-        install frontend frontend-watch superuser
+        install frontend frontend-watch superuser nginx-test compose-check restore-test ops-check \
+        prod-up prod-down tls-init maintenance-on maintenance-off
 
 help: ## list targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -89,14 +90,42 @@ frontend-watch: ## watch tailwind + js
 build: ## docker build (multi-stage, includes tailwind)
 	docker build -f docker/web/Dockerfile -t ertaaniqla/web:local --build-arg APP_RELEASE=$$(git rev-parse --short HEAD) .
 
-deploy: ## deploy ENV=staging|prod over ssh (see docs/RUNBOOK.md)
-	bash docker/scripts/deploy.sh $(ENV)
+deploy: ## deploy ENV=staging|prod over ssh (DEPLOY_HOST, IMAGE_BASE, TAG; see docs/RUNBOOK.md)
+	bash docker/scripts/deploy.sh $(ENV) $(TAG)
 
-backup: ## run a backup now
+backup: ## run a backup now (prod compose)
 	$(COMPOSE_PROD) run --rm backup /scripts/backup.sh
 
-restore: ## restore DATE=YYYY-MM-DD (see docs/RUNBOOK.md)
+restore: ## restore DATE=YYYY-MM-DD|latest into the live DB — disaster path, see docs/RUNBOOK.md
 	$(COMPOSE_PROD) run --rm backup /scripts/restore.sh $(DATE)
+
+restore-test: ## restore the latest dump into a scratch DB, count pages, drop it
+	$(COMPOSE_PROD) run --rm backup /scripts/restore_test.sh
+
+nginx-test: ## nginx -t for docker/nginx inside the nginx image
+	bash docker/scripts/nginx_test.sh
+
+compose-check: ## validate compose.yml + compose.prod.yml (+ profiles)
+	$(COMPOSE_PROD) --profile monitoring --profile clamav config --quiet && echo "compose config OK"
+
+ops-check: nginx-test compose-check ## M6 gate: nginx -t, compose config, prometheus/alertmanager configs
+	docker run --rm -v "$$(pwd -W 2>/dev/null || pwd)/docker/monitoring:/m:ro" --entrypoint sh prom/prometheus:v2.55.1 -c 'sed "s|__METRICS_USER__|u|;s|__METRICS_PASS__|p|;s|__DOMAIN__|example.uz|g" /m/prometheus.yml > /tmp/p.yml && cp /m/alert_rules.yml /tmp/ && sed -i "s|/etc/prometheus/alert_rules.yml|/tmp/alert_rules.yml|" /tmp/p.yml && promtool check config /tmp/p.yml'
+	docker run --rm -v "$$(pwd -W 2>/dev/null || pwd)/docker/monitoring:/m:ro" --entrypoint sh prom/alertmanager:v0.27.0 -c 'sed "s|__TELEGRAM_BOT_TOKEN__|1:a|;s|__TELEGRAM_ALERT_CHAT_ID__|1|" /m/alertmanager.yml > /tmp/a.yml && amtool check-config /tmp/a.yml'
+
+prod-up: ## start the production stack on this host (+ monitoring profile)
+	$(COMPOSE_PROD) --profile monitoring up -d
+
+prod-down: ## stop the production stack (volumes are kept)
+	$(COMPOSE_PROD) --profile monitoring down
+
+tls-init: ## first certificate: DOMAIN=... DOMAIN_ALT="..." LETSENCRYPT_EMAIL=... make tls-init
+	COMPOSE="$(COMPOSE_PROD)" bash docker/scripts/init_letsencrypt.sh
+
+maintenance-on: ## serve the maintenance page (nginx flag)
+	touch docker/nginx/maintenance/maintenance.flag
+
+maintenance-off: ## back to normal
+	rm -f docker/nginx/maintenance/maintenance.flag
 
 logs: ## tail logs SERVICE=web
 	$(COMPOSE_DEV) logs -f --tail=200 $(SERVICE)

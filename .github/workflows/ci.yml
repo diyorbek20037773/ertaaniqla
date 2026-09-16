@@ -155,7 +155,7 @@ jobs:
           uv run python manage.py migrate --noinput
           uv run python manage.py seed_content --lang uz,ru
           uv run python manage.py import_institutions data/institutions.sample.csv
-          uv run python manage.py collectstatic --noinput
+          uv run python manage.py collectstatic --noinput --ignore=src
       - name: Start preview server on :8001
         run: |
           nohup uv run python manage.py runserver 0.0.0.0:8001 --noreload > /tmp/preview.log 2>&1 &
@@ -213,3 +213,76 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: "1"
           ignore-unfixed: true
+      - name: SBOM (syft, SPDX JSON)
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+          upload-artifact: true
+      - name: nginx -t (prod config in the nginx image)
+        run: bash docker/scripts/nginx_test.sh
+      - name: compose config (prod + profiles)
+        run: |
+          cp .env.example .env
+          docker compose -f compose.yml -f compose.prod.yml --profile monitoring --profile clamav config --quiet
+      - name: Prometheus / Alertmanager config check
+        run: |
+          docker run --rm -v "$PWD/docker/monitoring:/m:ro" --entrypoint sh prom/prometheus:v2.55.1 -c \
+            'sed "s|__METRICS_USER__|u|;s|__METRICS_PASS__|p|;s|__DOMAIN__|example.uz|g" /m/prometheus.yml > /tmp/p.yml && cp /m/alert_rules.yml /tmp/ && sed -i "s|/etc/prometheus/alert_rules.yml|/tmp/alert_rules.yml|" /tmp/p.yml && promtool check config /tmp/p.yml'
+          docker run --rm -v "$PWD/docker/monitoring:/m:ro" --entrypoint sh prom/alertmanager:v0.27.0 -c \
+            'sed "s|__TELEGRAM_BOT_TOKEN__|1:a|;s|__TELEGRAM_ALERT_CHAT_ID__|1|" /m/alertmanager.yml > /tmp/a.yml && amtool check-config /tmp/a.yml'
+
+  # --- staging: every push to the default branch (spec §11.3) ------------------------------
+  deploy-staging:
+    name: deploy → staging
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    environment:
+      name: staging
+      url: https://${{ vars.STAGING_DOMAIN }}
+    concurrency: deploy-staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER || 'deploy' }}
+          IMAGE_BASE: ghcr.io/${{ github.repository }}/web
+          SMOKE_URL: https://${{ vars.STAGING_DOMAIN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ALERT_CHAT_ID: ${{ secrets.TELEGRAM_ALERT_CHAT_ID }}
+          APP_RELEASE: ${{ github.sha }}
+        run: |
+          IMAGE_BASE="${IMAGE_BASE,,}" bash docker/scripts/deploy.sh staging "${GITHUB_SHA::12}"
+
+  # --- production: manual approval on the `prod` environment ------------------------------
+  deploy-prod:
+    name: deploy → prod (approval)
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    environment:
+      name: prod
+      url: https://${{ vars.PROD_DOMAIN }}
+    concurrency: deploy-prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER || 'deploy' }}
+          IMAGE_BASE: ghcr.io/${{ github.repository }}/web
+          SMOKE_URL: https://${{ vars.PROD_DOMAIN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ALERT_CHAT_ID: ${{ secrets.TELEGRAM_ALERT_CHAT_ID }}
+          APP_RELEASE: ${{ github.sha }}
+        run: |
+          IMAGE_BASE="${IMAGE_BASE,,}" bash docker/scripts/deploy.sh prod "${GITHUB_SHA::12}"

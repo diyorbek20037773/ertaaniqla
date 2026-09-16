@@ -19,4 +19,8 @@ here. Each item: what, why, where.
 | H-012 | seo | `VideoObject.uploadDate` uses the page's first-published date; add `Video.published_at` once editors need the true recording date. | `apps/core/seo.py` |
 | H-013 | a11y | Toolbar contrast theme is token-level (neutral palette inverted); revisit with the designer's palette (M5b) and add a WCAG AAA check to pa11y. | `static/src/tokens.css` |
 | H-014 | analytics | Server-side event log (page views without cookies) as a Metrika-free fallback; spec lists it as optional. | `apps/analytics` |
-
+| H-015 | nginx | Brotli: switch to an nginx build with `ngx_brotli` (or serve whitenoise's `.br` files) once assets grow; today gzip + `gzip_static`. | `docker/nginx` |
+| H-016 | ops | External uptime check (Uptime-Kuma on another host or a free monitor) — the in-host blackbox probe cannot see a full VPS outage. | RUNBOOK §5 |
+| H-017 | ops | Loki + promtail for log search (optional in the spec); today `docker compose logs` + Sentry. | `compose.prod.yml` profile `logs` |
+| H-018 | ops | Page-cache query allow-list (H-011) also at nginx level (`proxy_cache_key` without unknown query args). | `docker/nginx/templates` |
+| H-019 | security | ZAP baseline scan in CI against the preview server (optional in the spec §12). | `.github/workflows/ci.yml` |

@@ -1,0 +1,28 @@
+# Staging overrides (spec §11.3): same VPS, separate compose project + DB + media, no public
+# ports — the production nginx proxies https://staging.<DOMAIN> to this stack behind basic auth.
+#   docker compose -p ertaaniqla-staging --env-file .env -f compose.yml -f compose.prod.yml -f compose.staging.yml up -d
+# Services that only make sense once per host are parked in an unused profile.
+services:
+  web:
+    networks:
+      - default
+      - prod   # so ertaaniqla-prod-nginx-1 can reach ertaaniqla-staging-web-1:8000
+    environment:
+      ENVIRONMENT: staging
+      PAGE_CACHE_SECONDS: ${PAGE_CACHE_SECONDS:-60}
+
+  nginx:
+    profiles: ["unused-on-staging"]
+  certbot:
+    profiles: ["unused-on-staging"]
+  nginx-reloader:
+    profiles: ["unused-on-staging"]
+  backup:
+    environment:
+      RESTIC_REPOSITORY: ""     # staging is never backed up off-site; local dumps only
+      BACKUP_AT: "04:00"
+
+networks:
+  prod:
+    external: true
+    name: ${PROD_NETWORK:-ertaaniqla-prod_default}

@@ -1,0 +1,92 @@
+# Alert rules (spec §11.5): 5xx rate > 1 %, p95 > 1 s, disk > 80 %, backup age > 26 h,
+# certificate expiry < 14 d, Celery queue > 100, plus "target down" basics.
+groups:
+  - name: ertaaniqla
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 3m
+        labels: {severity: critical}
+        annotations:
+          summary: "{{ $labels.job }} target {{ $labels.instance }} is down"
+
+      - alert: SiteDown
+        expr: probe_success{job="blackbox-https"} == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: "Public probe failing: {{ $labels.instance }}"
+
+      - alert: High5xxRate
+        expr: |
+          sum(rate(django_http_responses_total_by_status_view_method_total{status=~"5.."}[5m]))
+            / sum(rate(django_http_responses_total_by_status_view_method_total[5m])) > 0.01
+        for: 5m
+        labels: {severity: critical}
+        annotations:
+          summary: "5xx rate above 1 % for 5 min"
+
+      - alert: HighLatencyP95
+        expr: |
+          histogram_quantile(0.95, sum(rate(django_http_requests_latency_seconds_by_view_method_bucket[5m])) by (le)) > 1
+        for: 10m
+        labels: {severity: warning}
+        annotations:
+          summary: "p95 request latency above 1 s"
+
+      - alert: DiskAlmostFull
+        expr: |
+          (1 - node_filesystem_avail_bytes{fstype!~"tmpfs|overlay|squashfs"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay|squashfs"}) > 0.80
+        for: 15m
+        labels: {severity: warning}
+        annotations:
+          summary: "Disk {{ $labels.mountpoint }} above 80 %"
+
+      - alert: BackupTooOld
+        expr: (time() - ertaaniqla_backup_last_success_timestamp) > 26 * 3600 or absent(ertaaniqla_backup_last_success_timestamp)
+        for: 30m
+        labels: {severity: critical}
+        annotations:
+          summary: "Last successful backup is older than 26 h (or never ran)"
+
+      - alert: RestoreTestTooOld
+        expr: (time() - ertaaniqla_restore_test_last_success_timestamp) > 8 * 86400 or absent(ertaaniqla_restore_test_last_success_timestamp)
+        for: 1h
+        labels: {severity: warning}
+        annotations:
+          summary: "Weekly restore test has not succeeded in 8 days"
+
+      - alert: CertificateExpiringSoon
+        expr: (probe_ssl_earliest_cert_expiry{job="blackbox-https"} - time()) / 86400 < 14
+        for: 1h
+        labels: {severity: warning}
+        annotations:
+          summary: "TLS certificate for {{ $labels.instance }} expires in < 14 days"
+
+      - alert: CeleryQueueBacklog
+        expr: max(redis_key_size{key=~"default|media"}) > 100
+        for: 10m
+        labels: {severity: warning}
+        annotations:
+          summary: "Celery queue {{ $labels.key }} has > 100 pending tasks"
+
+      - alert: PostgresDown
+        expr: pg_up == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "PostgreSQL is not reachable"
+
+      - alert: RedisDown
+        expr: redis_up == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "Redis is not reachable"
+
+      - alert: HostMemoryPressure
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) > 0.90
+        for: 10m
+        labels: {severity: warning}
+        annotations:
+          summary: "Host memory usage above 90 %"

@@ -1,0 +1,25 @@
+# Dependency updates (spec §8): Python (uv lockfile via pip ecosystem), npm, GitHub Actions,
+# Docker base images. Grouped weekly PRs keep the one-person review load small.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule: {interval: weekly, day: monday, time: "06:00", timezone: Asia/Tashkent}
+    groups:
+      python-minor: {update-types: [minor, patch]}
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /
+    schedule: {interval: weekly, day: monday, time: "06:00", timezone: Asia/Tashkent}
+    groups:
+      npm-minor: {update-types: [minor, patch]}
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: {interval: monthly}
+  - package-ecosystem: docker
+    directory: /docker/web
+    schedule: {interval: weekly}
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule: {interval: monthly}

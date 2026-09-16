@@ -47,3 +47,8 @@ tests/e2e/a11y/
 
 # Lighthouse CI reports
 .lighthouseci/
+
+# deploy artefacts
+.deploy.env
+docker/nginx/staging.htpasswd
+.lighthouseci/

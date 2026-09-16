@@ -13,6 +13,7 @@
 - `winget` is not on PATH inside the PowerShell tool: call `$env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe`. GNU make / ffmpeg winget installs were re-run 2026-09-15 (verify with `Get-Command make, ffmpeg` after refreshing PATH).
 - Node 22 available; `npm run build` → `static/dist/` (CSS 2.6 KB gz, JS 37.7 KB gz; budgets 40/50 KB).
 - Host port 8000 is taken by another compose project (`uvaleniya`); `.env` sets `WEB_PORT=8001` and `INSTALL_DEV=1` (dev image with debug toolbar).
+- Docker on Windows/Git Bash: prefix `MSYS_NO_PATHCONV=1` when passing `-e VAR=/path` or `-v` (otherwise `/tmp/...` becomes `C:/Users/...` **inside the container/bind mount** — this once created a `C:` directory in the repo that broke the image build context).
 - Tools without make: `.venv/Scripts/ruff`, `.venv/Scripts/mypy`, `.venv/Scripts/python -m pytest --cov`, `.venv/Scripts/python scripts/check_translations.py`.
 
 ## DESIGN RULE (developer instruction, 2026-09-15 — applies to every milestone)
@@ -44,6 +45,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - D-010 DirectoryPage inside women section + short-URL redirects. D-011 provider iframes, no oEmbed. D-012 two banners (site + home). D-013 women care/after `show_in_menus=False`. D-014 `<details>` nav/accordions. D-015 regions/services/locales via data migrations.
 - D-016…D-026 (M2–M4): bilingual search, OG task, video pipeline, consent in `clean()`, upload hardening, Leaflet bundle, tool texts in CMS, no separate route page, anti-spam stack, retention jobs, glossary tooltips.
 - D-027 Alpine CSP build. D-028 page cache = version-bump middleware. D-029 Metrika only after consent. D-030 share bar order + story image. D-031 `MaterialsPage` in media_library. D-032 pa11y/Lighthouse CI job.
+- D-033 nginx official image + envsubst templates, gzip only. D-034 pg_dump + restic, weekly restore test into scratch DB. D-035 bash-loop scheduler. D-036 monitoring compose profile. D-037 staging = 2nd compose project behind prod nginx. D-038 PG client 16 pinned. D-039 TLS placeholder bootstrap.
 
 ## Milestones
 
@@ -113,31 +115,49 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [ ] restyle each partial in `templates/components/` (no Python changes)
   - [ ] screenshot-compare (Playwright, 390 px + 1280 px) against Figma exports
   - [ ] re-run pa11y/axe + Lighthouse budgets; update COMPONENT_INVENTORY.md
-- [ ] M6 — Production DevOps
+- [x] **M6 — Production DevOps** — DONE, tagged `m6`
+  - [x] `compose.prod.yml`: nginx (templates + envsubst, `DOMAIN`/`DOMAIN_ALT`/`STAGING_*`), certbot + `nginx-reloader`, limits (web 4g, db 4g + tuned postgres flags, worker 2g, redis 640m, backup 1g), json-file 50m×5, `backup` container, `clamav` profile, **`monitoring` profile** (prometheus, alertmanager→Telegram, grafana on 127.0.0.1:3000, nginx/postgres/redis/node/blackbox exporters); `compose.staging.yml` (no ports, joins prod network)
+  - [x] `docker/nginx/`: `nginx.conf` (JSON anonymised log, rate zones general 30r/s · cms_login 5r/m · form_post 10r/m POST-only, micro-cache, 444 default vhost, stub_status :8080), `templates/ertaaniqla.conf.template` (80→443, alt hosts→canonical, TLS 1.2/1.3 + OCSP, maintenance flag → 503 page, `/healthz/` `/readyz/` `/metrics` (internal), `/cms/` 512m + allow-list, forms zone, micro-cache 10 s, staging vhost with basic auth + lazy upstream), snippets (security headers, cache: static 1y immutable / media 30d / mp4 byte-range + throttle / **404 for `/media/documents/` and `/media/videos/source/`**, gzip + gzip_static, proxy, tls, cms_allowlist), `maintenance/maintenance.html` (uz+ru)
+  - [x] scripts: `backup.sh` (pg_dump -Fc + restic 7d/4w/6m + check + textfile metrics), `restore.sh` (local dump / restic snapshot → drop+create → pg_restore, page count), `restore_test.sh` (weekly, scratch DB), `backup_cron.sh` (loop scheduler, Asia/Tashkent), `notify.sh` (Telegram), `init_letsencrypt.sh` (placeholder cert → real cert), `nginx_test.sh` (`nginx -t` in the image), `deploy.sh` (ssh: pull → migrate → `up --wait web` → worker/beat/backup/nginx → smoke), `smoke.sh`, `scripts/bootstrap_vps.sh` (docker, deploy user, sshd, ufw, fail2ban, unattended-upgrades, swap, sysctl, clone)
+  - [x] monitoring: `prometheus.yml` (placeholders filled by sed at start), `alert_rules.yml` (12 rules: TargetDown, SiteDown, High5xxRate >1 %, HighLatencyP95 >1 s, DiskAlmostFull >80 %, BackupTooOld >26 h, RestoreTestTooOld, CertificateExpiringSoon <14 d, CeleryQueueBacklog >100, PostgresDown, RedisDown, HostMemoryPressure), `alertmanager.yml` (Telegram), `blackbox.yml`, Grafana provisioning + `ertaaniqla-overview.json` (18 panels)
+  - [x] CI: `build` job + SBOM (syft) + `nginx -t` + compose config + promtool/amtool; `deploy-staging` (auto on main) → `deploy-prod` (environment approval); `rollback.yml` (workflow_dispatch env + tag); `weekly-rebuild.yml` (base image + trivy → :latest); `.github/dependabot.yml`
+  - [x] image: Postgres client pinned to **16** (PGDG; Debian trixie ships 17 → dumps unrestorable on PG16, found by the gate); `collectstatic --ignore=src` (manifest storage choked on `static/src/map.css` `@import`)
+  - [x] commands (spec §6/§8, were missing): `purge_pii` (+ `--dry-run`), `rotate_pii_keys`, `check_links` (+ `--external`) with tests
+  - [x] `.env.example`: DOMAIN/DOMAIN_ALT/STAGING_*/LETSENCRYPT_EMAIL/WEB_IMAGE/GRAFANA_*/BACKUP_AT…, plus previously undocumented MEDIA_ROOT, DJANGO_EMAIL_BACKEND, DEV_LOCMEM_CACHE, TEST_DATABASE_URL (now enforced by `tests/ops/test_ops_config.py::test_env_example_documents_every_setting`)
+  - [x] Makefile: `restore-test`, `nginx-test`, `compose-check`, `ops-check`, `prod-up/down`, `tls-init`, `maintenance-on/off`; `deploy` takes `TAG`
+  - [x] docs: `docs/RUNBOOK.md` (deploy, rollback, backup/restore, incident table, routine ops, secret rotation, staging, scaling), `docs/SECURITY.md` (assets, 7 threat classes → controls, reporting, accepted risks), ADR-0004, DECISIONS D-033…D-039, TODO_HARDENING H-015…H-019, TZ_TRACE F8 + E-01/E-05/E-07/E-10 → done
+  - [x] Gate (run 2026-09-16 on this machine): `docker compose -f compose.yml -f compose.prod.yml --profile monitoring --profile clamav config` valid (+ staging stack); prod image builds (`ertaaniqla/web:local`, pg_dump 16.15); `check --deploy` green (test); `nginx -t` in `nginx:1.27-alpine` → "syntax is ok / test is successful"; promtool 12 rules OK, amtool OK; **backup → restore into a scratch `postgres:16-alpine` container: 71 pages, 12 institutions, 6 terms**; restic path (local repo) backup + forget + check OK; `restore_test.sh` → "OK (71 pages)"; `tests/ops` 17 passed
 - [ ] M7 — Editors, workflow, UAT, launch checklist
 - [ ] FINAL REPORT → docs/FINAL_REPORT_uz.md
 
-## Last command run (2026-09-16)
+## Last command run (2026-09-16, M6 close)
 
 ```
-.venv/Scripts/python -m pytest --cov      → 328 selected: all passed (1 skipped: ffmpeg on host), coverage 92 % (gate 85 %)
-E2E_BASE_URL=http://localhost:8001 pytest tests/e2e -m e2e → 35 passed (screens, axe on 11 pages, CSP/Alpine, print, toolbar)
-ruff check / format --check              → clean (181 files)
-mypy                                     → Success: no issues found in 110 source files
-scripts/check_translations.py            → translations: uz + ru complete
-manage.py check --deploy (prod env, subprocess test) → no issues
-npm run build                            → main.css 29.6 KB raw, main.js 135.8 KB raw (gz budgets pass in tests/perf)
-npx pa11y-ci                             → 8/8 URLs passed, 0 errors
-npx @lhci/cli autorun (CHROME_PATH=playwright chromium) → all assertions passed (see M5 gate line)
-curl :8001 → /uz/materiallar/ /ru/materialy/ /sitemap.xml /robots.txt 200; /favicon.ico 301 → /static/favicon.svg
+.venv/Scripts/python -m pytest --cov      → 349 passed, 1 skipped (ffmpeg on host), coverage 92 % (gate 85 %)
+ruff check / format --check              → clean (189 files) · mypy → Success: 113 source files
+docker build -f docker/web/Dockerfile    → ertaaniqla/web:local OK; pg_dump (PostgreSQL) 16.15 (PGDG)
+docker compose … compose.prod.yml --profile monitoring --profile clamav config --quiet → OK; + compose.staging.yml → OK
+bash docker/scripts/nginx_test.sh        → nginx: configuration file /etc/nginx/nginx.conf test is successful
+promtool check config / amtool check-config → SUCCESS (12 rules)
+backup.sh (dev DB) → dump 512 K; restore.sh latest → scratch postgres:16 container → "wagtailcore_page rows: 71"
+backup.sh with RESTIC_REPOSITORY=/tmp/restic-repo → snapshot + forget + check OK; restore_test.sh → OK (71 pages)
 ```
-
-Fixes made while closing M5: rate-limit tests frozen in time (django-ratelimit window boundary
-flake), `/favicon.ico` redirect made lazy (ManifestStaticFilesStorage broke `check --deploy`).
 
 ## Next concrete action
 
-Start **M6 — Production DevOps** (AUTOPILOT gate): `compose.prod.yml` limits/logging (web 4 GB,
+Start **M7 — Editors, workflow, UAT, launch checklist** (AUTOPILOT gate): Wagtail groups
+Editor / Medical Reviewer / Admin with permissions (data migration in `apps/users`); 2-step
+workflow (editor → medical reviewer → publish) as a Wagtail `Workflow` with two `GroupApprovalTask`s
+assigned to the root of both language trees; approving as reviewer sets `medically_verified`,
+`last_reviewed_by/at` (task/hook) → «Проверено врачом» badge; 2FA enforced for all staff
+(`CMS_2FA_REQUIRED`, verify middleware + test); `docs/EDITOR_GUIDE_ru.md` + `_uz.md` with
+Playwright screenshots of the CMS (`tests/e2e/screenshots/cms-*.png`); `docs/LAUNCH_CHECKLIST.md`;
+`tests/perf/locustfile.py` (200 users, 5 min) + a short run summary in PROGRESS; final
+`TZ_TRACE.md` pass (every row done / not done + reason). Gate: e2e "editor creates article in
+ru, translates to uz, reviewer approves, page live in both languages"; permission tests; full
+check + e2e; commit + tag `m7-release-candidate`. Then FINAL REPORT → `docs/FINAL_REPORT_uz.md`.
+
+(M6 note kept for history:) Start **M6 — Production DevOps** (AUTOPILOT gate): `compose.prod.yml` limits/logging (web 4 GB,
 db 4 GB + tuned postgres conf, redis 512 MB, worker 2 GB; `restart: unless-stopped`; json-file
 50m×5); `docker/nginx/` (nginx.conf, sites/ertaaniqla.conf, snippets/{security,cache,gzip}.conf:
 TLS 1.2/1.3 + OCSP, brotli/gzip, `/static/` 1y immutable, `/media/` 30d + mp4 byte-range,

@@ -38,10 +38,17 @@ ENV PYTHONUNBUFFERED=1 \
     APP_RELEASE=${APP_RELEASE} \
     MEDIA_ROOT=/srv/media
 
-# ffmpeg (video transcoding), libmagic (MIME validation), postgres client (backups),
-# gettext (compilemessages), curl (healthcheck), restic (backups)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        ffmpeg libmagic1 postgresql-client gettext curl restic tini \
+# ffmpeg (video transcoding), libmagic (MIME validation), postgres client **16** from PGDG
+# (must match the server major for pg_dump/pg_restore — Debian ships 17), gettext
+# (compilemessages), curl (healthcheck), restic (backups)
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
+    && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/pgdg.gpg \
+    && . /etc/os-release \
+    && echo "deb [signed-by=/usr/share/keyrings/pgdg.gpg] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \
+        > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
+        ffmpeg libmagic1 postgresql-client-16 gettext restic tini \
+    && apt-get purge -y gnupg && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 1000 app && useradd --uid 1000 --gid app --create-home app \
     && mkdir -p /srv/media /app/staticfiles /backups && chown -R app:app /srv/media /app /backups
@@ -57,7 +64,7 @@ RUN chmod +x /scripts/*.sh \
        python manage.py compilemessages --ignore=node_modules \
     && DJANGO_SECRET_KEY=build-only PII_ENCRYPTION_KEYS=build-only TURNSTILE_SECRET_KEY=build-only \
        DJANGO_SETTINGS_MODULE=config.settings.build \
-       python manage.py collectstatic --noinput \
+       python manage.py collectstatic --noinput --ignore=src \
     && chown -R app:app /app/staticfiles
 
 USER app
