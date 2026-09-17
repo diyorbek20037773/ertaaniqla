@@ -127,35 +127,49 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] Makefile: `restore-test`, `nginx-test`, `compose-check`, `ops-check`, `prod-up/down`, `tls-init`, `maintenance-on/off`; `deploy` takes `TAG`
   - [x] docs: `docs/RUNBOOK.md` (deploy, rollback, backup/restore, incident table, routine ops, secret rotation, staging, scaling), `docs/SECURITY.md` (assets, 7 threat classes → controls, reporting, accepted risks), ADR-0004, DECISIONS D-033…D-039, TODO_HARDENING H-015…H-019, TZ_TRACE F8 + E-01/E-05/E-07/E-10 → done
   - [x] Gate (run 2026-09-16 on this machine): `docker compose -f compose.yml -f compose.prod.yml --profile monitoring --profile clamav config` valid (+ staging stack); prod image builds (`ertaaniqla/web:local`, pg_dump 16.15); `check --deploy` green (test); `nginx -t` in `nginx:1.27-alpine` → "syntax is ok / test is successful"; promtool 12 rules OK, amtool OK; **backup → restore into a scratch `postgres:16-alpine` container: 71 pages, 12 institutions, 6 terms**; restic path (local repo) backup + forget + check OK; `restore_test.sh` → "OK (71 pages)"; `tests/ops` 17 passed
-- [ ] M7 — Editors, workflow, UAT, launch checklist
+- [x] **M7 — Editors, workflow, UAT, launch checklist** — DONE, tagged `m7-release-candidate`
+  - [x] roles `apps/users/roles.py` (Editor / Medical Reviewer / Admin; page perms on tree root, collection + snippet perms; Wagtail default "Editors"/"Moderators" groups removed while empty); `ensure_roles()` runs on post_migrate + `manage.py setup_roles` (D-040)
+  - [x] `MedicalReviewTask` (only group members act — superusers cannot fake a review) + "Medical review" workflow on the root page (all locales); `WAGTAIL_FINISH_WORKFLOW_ACTION = apps.users.workflows.publish_with_medical_review` stamps `medically_verified`/`last_reviewed_by`/`last_reviewed_at` then publishes (D-041)
+  - [x] review fields `editable=False` + `exclude_fields_in_copy` (translations/copies start unreviewed; localize does not sync them); read-only `templates/core/panels/review_status.html`
+  - [x] BUG FOUND: `PortalImage`/`PortalDocument` lacked `choose_*` permissions → non-superusers could not use choosers (migration media_library 0006)
+  - [x] BUG FOUND: django-otp 1.7 + wagtail-2fa 1.8 → code form always "Please select a device." (nobody could pass 2FA). Fix `apps/users/otp.py` (D-042)
+  - [x] `create_demo_staff` (dev / staging-UAT only, D-043); e2e `tests/e2e/test_cms_workflow.py` (editor ru article → uz translation → reviewer approves → live in both with badge) + CMS screenshots `cms-01…10`
+  - [x] `docs/EDITOR_GUIDE_ru.md` + `_uz.md`, `docs/LAUNCH_CHECKLIST.md`, RUNBOOK §5.1, `find_placeholders` command
+  - [x] `tests/perf/locustfile.py` + local run (below)
+  - [x] client answers (`TUSHUNTIRISH_uz (2).md`, untracked file of the developer) → DECISIONS D-044…D-048; TZ_TRACE section G; final trace pass (only CL-01 uz-Cyrl todo, E-11 blocked by Figma, M7-08 UAT needs people)
+- [ ] **M7b — Uzbek Cyrillic (client answer D-047)** — NEXT
+  - [ ] design: runtime transliteration of the uz (Latin) tree under `/oz/` (gov.uz convention: /uz Latin, /oz Cyrillic), hreflang `uz-Cyrl`, language switch 3 entries, sitemap `/oz/sitemap.xml`; no third editorial tree (one medical review covers both scripts) → DECISIONS D-049
+  - [ ] `apps/core/uzcyrl.py` (draft saved in scratchpad `uzcyrl_draft.py` — REWRITE cleanly, it has dead branches): word rules (sh ш, ch ч, oʻ ў, gʻ ғ, yo ё, yu ю, ya я, ye е, e→э word-initial/after vowel, ʼ→ъ), loanword EXCEPTIONS, case preservation; `transliterate_html` skipping script/style/code/`data-no-translit`, alt/title/aria-label/meta content
+  - [ ] middleware `apps/core/middleware.UzCyrillicMiddleware` before LocaleMiddleware: `/oz/…` → path_info `/uz/…`, flag `request.uz_script="cyrl"`; response: text/html transliterated, internal `/uz/` links → `/oz/` (except elements with `data-script-keep`), `lang="uz-Cyrl"`, redirects rewritten; XML sitemap locs rewritten; cache transliterated output by md5
+  - [ ] lang_switch + hreflang_links + canonical aware of the flag; sitemap index lists `/oz/sitemap.xml`; search under /oz/
+  - [ ] tests: table-driven translit, html skipping, middleware (200 for every live uz page under /oz/, links, redirect, lang attr, hreflang, canonical, HTMX partials, page cache), e2e screenshot; translations of new UI strings (language name «Ўзбекча»)
+- [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [ ] FINAL REPORT → docs/FINAL_REPORT_uz.md
 
-## Last command run (2026-09-16, M6 close)
+## Last command run (2026-09-17, M7 close)
 
 ```
-.venv/Scripts/python -m pytest --cov      → 349 passed, 1 skipped (ffmpeg on host), coverage 92 % (gate 85 %)
-ruff check / format --check              → clean (189 files) · mypy → Success: 113 source files
-docker build -f docker/web/Dockerfile    → ertaaniqla/web:local OK; pg_dump (PostgreSQL) 16.15 (PGDG)
-docker compose … compose.prod.yml --profile monitoring --profile clamav config --quiet → OK; + compose.staging.yml → OK
-bash docker/scripts/nginx_test.sh        → nginx: configuration file /etc/nginx/nginx.conf test is successful
-promtool check config / amtool check-config → SUCCESS (12 rules)
-backup.sh (dev DB) → dump 512 K; restore.sh latest → scratch postgres:16 container → "wagtailcore_page rows: 71"
-backup.sh with RESTIC_REPOSITORY=/tmp/restic-repo → snapshot + forget + check OK; restore_test.sh → OK (71 pages)
+ruff check . / ruff format --check .     → All checks passed · 206 files already formatted
+mypy                                     → Success: no issues found in 121 source files
+pytest --cov                             → 378 passed, 1 skipped (ffmpeg on host), coverage 91 %
+scripts/check_translations.py            → translations: uz + ru complete
+pytest tests/e2e -m e2e (dev :8001)      → 36 passed (incl. test_cms_workflow: login via TOTP, ru→uz, approve, live + badge)
+locust 200 users, 5 min, spawn 20/s against ertaaniqla/web:local with config.settings.prod, gunicorn 9 workers,
+  Docker Desktop on the dev laptop (NOT the production VPS), anonymous page cache 300 s:
+  28 736 requests, 0 failures, 96.8 req/s; page p50 12 ms · p95 32 ms · p99 75 ms · max 510 ms;
+  search htmx p95 28 ms; directory filter p95 30 ms → budget OK (exit 0)
 ```
 
 ## Next concrete action
 
-Start **M7 — Editors, workflow, UAT, launch checklist** (AUTOPILOT gate): Wagtail groups
-Editor / Medical Reviewer / Admin with permissions (data migration in `apps/users`); 2-step
-workflow (editor → medical reviewer → publish) as a Wagtail `Workflow` with two `GroupApprovalTask`s
-assigned to the root of both language trees; approving as reviewer sets `medically_verified`,
-`last_reviewed_by/at` (task/hook) → «Проверено врачом» badge; 2FA enforced for all staff
-(`CMS_2FA_REQUIRED`, verify middleware + test); `docs/EDITOR_GUIDE_ru.md` + `_uz.md` with
-Playwright screenshots of the CMS (`tests/e2e/screenshots/cms-*.png`); `docs/LAUNCH_CHECKLIST.md`;
-`tests/perf/locustfile.py` (200 users, 5 min) + a short run summary in PROGRESS; final
-`TZ_TRACE.md` pass (every row done / not done + reason). Gate: e2e "editor creates article in
-ru, translates to uz, reviewer approves, page live in both languages"; permission tests; full
-check + e2e; commit + tag `m7-release-candidate`. Then FINAL REPORT → `docs/FINAL_REPORT_uz.md`.
+Start **M7b — Uzbek Cyrillic** (plan in the milestone list above). Gate: `/oz/` version of every
+live uz page returns 200 with Cyrillic text and `lang="uz-Cyrl"`, links stay inside `/oz/`, hreflang
+has uz / uz-Cyrl / ru, `make check` + e2e green, commit + tag `m7b`. Then FINAL REPORT →
+`docs/FINAL_REPORT_uz.md` (Uzbek, AUTOPILOT § FINAL REPORT, print it in chat).
+
+(M7 note kept for history:) Start **M7 — Editors, workflow, UAT, launch checklist** (AUTOPILOT gate): Wagtail groups
+Editor / Medical Reviewer / Admin, 2-step workflow, badge, 2FA, editor guides, launch checklist,
+locust, final TZ_TRACE pass; gate e2e ru→uz→approve, commit + tag `m7-release-candidate`.
 
 (M6 note kept for history:) Start **M6 — Production DevOps** (AUTOPILOT gate): `compose.prod.yml` limits/logging (web 4 GB,
 db 4 GB + tuned postgres conf, redis 512 MB, worker 2 GB; `restart: unless-stopped`; json-file

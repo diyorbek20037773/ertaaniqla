@@ -24,3 +24,6 @@ here. Each item: what, why, where.
 | H-017 | ops | Loki + promtail for log search (optional in the spec); today `docker compose logs` + Sentry. | `compose.prod.yml` profile `logs` |
 | H-018 | ops | Page-cache query allow-list (H-011) also at nginx level (`proxy_cache_key` without unknown query args). | `docker/nginx/templates` |
 | H-019 | security | ZAP baseline scan in CI against the preview server (optional in the spec §12). | `.github/workflows/ci.yml` |
+| H-020 | workflow | An admin who publishes directly (bypassing "Medical review") keeps the previous badge and date. Option: reset `medically_verified` on any publish not produced by the workflow finish action, once editors confirm they want that. | `apps/users/workflows.py` |
+| H-021 | security | Drop `apps/users/otp.py` (DeviceAwareTokenForm) when wagtail-2fa supports django-otp ≥ 1.7; the 2FA tests will tell. | `apps/users/otp.py` |
+| H-022 | cms | Wagtail's Uzbek admin translation is partial (mixed uz/en labels); editors can switch the admin language to Russian in *Account → Preferences*. Contribute missing strings upstream or ship a local `.po`. | `locale/` |

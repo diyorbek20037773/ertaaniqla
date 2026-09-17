@@ -6,11 +6,13 @@ from io import StringIO
 from typing import Any
 
 import pytest
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.management import call_command
 from django.test import Client
-from django.utils import timezone
+from django.utils import timezone, translation
+from django.utils.translation import gettext
 from wagtail.models import GroupApprovalTask, Locale, Page, Workflow, WorkflowPage, WorkflowTask
 
 from apps.articles.models import ArticlePage
@@ -167,7 +169,8 @@ def test_review_fields_not_in_page_form(editor, article) -> None:
     html = client.get(f"/cms/pages/{article.pk}/edit/").content.decode()
     assert 'name="medically_verified"' not in html
     assert 'name="last_reviewed_by"' not in html
-    assert "Not medically verified yet." in html
+    with translation.override(settings.LANGUAGE_CODE):  # CMS falls back to the site language
+        assert gettext("Not medically verified yet.") in html
 
 
 # --- workflow -----------------------------------------------------------------------------------

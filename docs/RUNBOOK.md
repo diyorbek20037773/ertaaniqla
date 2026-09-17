@@ -132,7 +132,26 @@ dc run --rm web python manage.py purge_pii     # manual retention run (beat does
 dc exec redis redis-cli info memory
 docker exec ertaaniqla-prod-db-1 psql -U ertaaniqla -c 'select count(*) from wagtailcore_page'
 ssh -L 3000:127.0.0.1:3000 deploy@vps          # Grafana at http://localhost:3000
+dc run --rm web python manage.py find_placeholders --fail   # launch gate: no [[TODO]]/[[VERIFY]] live
 ```
+
+### 5.1 CMS users, roles and 2FA
+
+Roles are the groups **Editor**, **Medical Reviewer**, **Admin** (`apps/users/roles.py`, DECISIONS
+D-040/D-041); they and the "Medical review" workflow are re-ensured after every `migrate`
+(`manage.py setup_roles` does the same by hand; it never removes permissions).
+
+```bash
+dc exec web python manage.py createsuperuser                       # developer account
+dc exec web python manage.py shell -c "from apps.users.models import User; from django.contrib.auth.models import Group; u=User.objects.get(username='NAME'); u.groups.set([Group.objects.get(name='Editor')])"
+# lost phone: delete the user's TOTP device(s); at the next login they enrol a new one
+dc exec web python manage.py shell -c "from django_otp.plugins.otp_totp.models import TOTPDevice; TOTPDevice.objects.filter(user__username='NAME').delete()"
+dc run --rm web python manage.py axes_reset_username NAME           # unlock after 5 failed logins
+```
+
+- A user is in **one** role. Doctors get *Organisation* filled (shown in the badge).
+- `create_demo_staff` is for dev and **staging UAT only** (`--allow-non-debug`); it refuses prod
+  settings unless `ENVIRONMENT=staging`. Remove demo users before launch (LAUNCH_CHECKLIST §3).
 
 ## 6. Secret rotation
 

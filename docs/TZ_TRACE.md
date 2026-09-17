@@ -15,7 +15,7 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | S-03 | Women's section top menu = 5 items: Осведомленность, Скрининг, Организация лечения, Куда обратиться, Государственная поддержка | Care & Support / Life after cancer are pages in the subtree, `show_in_menus` editor-controlled | `apps/core/seed/tree.py` (D-013), `SectionIndexPage.get_menu_items` | `tests/sections/test_seed.py::test_women_menu_has_the_five_tz_items` | M1 | done |
 | S-04 | Children's section top menu = 5 items: Об онкозаболеваниях у детей, Диагностика и лечение, Уход и поддержка, Информация для семьи, Жизнь после рака | — | same | `tests/sections/test_seed.py::test_children_menu_has_the_five_tz_items` | M1 | done |
 | S-05 | Home page presents both sections equally; key idea "раннее выявление" as CMS hero slogan | `HomePage.hero_*` fields | `apps/home` HomePage (hero, section cards, stats, featured) | `tests/home/test_home.py` | M2 | done |
-| S-06 | Domain ertaaniqla.uz (+ oncoportal.uz mentioned in TZ §IV) | canonical = ertaaniqla.uz, alias redirects 301 | `docker/nginx`, `CANONICAL_DOMAIN` | `tests/core/test_infra.py` (M6 nginx test) | M6 | todo |
+| S-06 | Domain ertaaniqla.uz (+ oncoportal.uz mentioned in TZ §IV) | canonical = ertaaniqla.uz, alias hosts (`DOMAIN_ALT`) 301 → canonical; buying the domains = client (LAUNCH_CHECKLIST §1) | `docker/nginx/templates/ertaaniqla.conf.template`, `.env.example` `DOMAIN`/`DOMAIN_ALT` | `tests/ops/test_ops_config.py::test_nginx_config_requirements` | M6 | done |
 
 ## B. Section 1 — women's cancer pages (TZ §2.1, spec §2.2)
 
@@ -93,17 +93,34 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 | ID | Rule | Impl | Test | M | Status |
 |---|---|---|---|---|---|
 | E-01 | Layout §4.2, settings split, env-only config | `config/settings/*`, `.env.example` (every `env()` key documented — tested) | `tests/core/test_settings_prod.py`, `tests/ops/test_ops_config.py::test_env_example_documents_every_setting` | M0/M6 | done |
-| E-02 | `/healthz` `/readyz`, request-id, JSON logs | `apps/core/views.py`, `middleware.py` | `tests/core/test_infra.py` | M0 | wip |
-| E-03 | Admin not at `/admin/`; CMS at `/cms/`; 2FA; axes lockout | `config/urls.py`, settings | `tests/core/test_infra.py` | M0/M7 | wip |
-| E-04 | PII encrypted at rest, key rotation | `apps/core/fields.py` | `tests/core/test_fields.py` | M0 | wip |
+| E-02 | `/healthz` `/readyz`, request-id, JSON logs | `apps/core/views.py`, `middleware.py`, `apps/core/logging.py` | `tests/core/test_infra.py` (healthz, readyz, request id), `tests/core/test_views_degraded.py` | M0 | done |
+| E-03 | Admin not at `/admin/`; CMS at `/cms/`; 2FA; axes lockout | `config/urls.py`, settings (axes 5 attempts / 1 h), wagtail-2fa + `apps/users/otp.py` (D-042) | `tests/core/test_infra.py::test_old_admin_url_is_not_used`, `tests/users/test_2fa.py`, `tests/core/test_settings_prod.py` | M0/M7 | done |
+| E-04 | PII encrypted at rest, key rotation | `apps/core/fields.py`, `rotate_pii_keys` command | `tests/core/test_fields.py`, `tests/core/test_commands_ops.py::test_rotate_pii_keys_re_encrypts_with_newest_key` | M0/M6 | done |
 | E-05 | CSP nonce, security headers | Django CSP (nonce) + nginx `snippets/security.conf` (HSTS, nosniff, frame DENY, referrer, permissions), TLS 1.2/1.3 + OCSP | `tests/core/test_infra.py`, `tests/ops/test_ops_config.py::test_nginx_config_requirements` | M0/M6 | done |
 | E-06 | FTS config with unaccent | `apps/core/migrations/0001`, `apps/search` | `tests/search` | M0/M2 | done |
 | E-07 | Docker multi-stage, compose dev/prod/staging, Makefile §15, CI quality → frontend → a11y-perf → build (trivy, SBOM) → deploy staging → prod (approval), rollback, weekly rebuild | `docker/`, `compose*.yml`, `Makefile`, `.github/workflows/*.yml` | `tests/ops/test_ops_config.py::test_ci_pipeline_shape`; CI | M0/M6 | done |
-| E-08 | Coverage ≥ 85 %, ruff, mypy strict on core/tools/directory/feedback | `pyproject.toml` | CI | M0 | wip |
-| E-09 | Translations complete uz+ru (CI check) | `scripts/check_translations.py` | CI | M0 | wip |
-| E-10 | Data residency in Uzbekistan, backups in UZ, retention 90/180 d | RUNBOOK §0 + SECURITY §1 (VPS + restic bucket in UZ), backups §3; retention: `faq.purge_contacts` (90 d after answer) + `feedback.purge_old_submissions` (180 d) on Celery beat; residency/backups → RUNBOOK (M6) | `tests/faq/test_faq.py::test_purge_contacts_after_90_days`, `tests/feedback/test_feedback.py::test_purge_after_180_days` | M4/M6 | wip (jobs done; hosting M6) |
-| E-11 | Wireframe-only UI until Figma; tokens + components only (D-003) | `static/src/tokens.css`, `static/src/components.css`, `templates/components/` | — | all | wip (M1: tokens.css + components.css + templates/components) |
+| E-08 | Coverage ≥ 85 %, ruff, mypy strict on core/tools/directory/feedback | `pyproject.toml` (`fail_under = 85`, mypy strict modules) | CI `quality` job; M7 run: 91 % | M0 | done |
+| E-09 | Translations complete uz+ru (CI check) | `scripts/check_translations.py`, `scripts/fill_translations.py` | CI `quality` job (fails on untranslated/fuzzy) | M0 | done |
+| E-10 | Data residency in Uzbekistan, backups in UZ, retention 90/180 d | Retention: `faq.purge_contacts` (90 d after answer) + `feedback.purge_old_submissions` (180 d) on Celery beat, `purge_pii` command; hosting is provider-agnostic. **Client answer (D-044): VPS need not be in UZ** — legal confirmation of ZRU-547 localisation is a client launch item | `tests/faq/test_faq.py::test_purge_contacts_after_90_days`, `tests/feedback/test_feedback.py::test_purge_after_180_days`, `tests/core/test_commands_ops.py::test_purge_pii_dry_run_then_real` | M4/M6 | done (retention) · residency = client decision D-044 |
+| E-11 | Wireframe-only UI until Figma; tokens + components only (D-003) | `static/src/tokens.css`, `static/src/components.css`, `templates/components/`; hand-off `docs/COMPONENT_INVENTORY.md` | `tests/e2e/test_screens.py`, `tests/e2e/test_a11y.py` | all | not done — **blocked: Figma design not delivered** (M5b) |
 | E-12 | COMPONENT_INVENTORY.md (ru+uz) for the designer | `docs/COMPONENT_INVENTORY.md` | — | M1 | done (kept current every milestone) |
+
+## G. Editors, workflow, launch (spec §1.1, §13 M7) and client answers
+
+| ID | Requirement | Impl | Test | M | Status |
+|---|---|---|---|---|---|
+| M7-01 | Roles Editor / Medical Reviewer / Admin with permissions | `apps/users/roles.py` (post_migrate + `setup_roles`), D-040 | `tests/users/test_roles.py` (perms per role, CMS access, idempotent) | M7 | done |
+| M7-02 | Workflow editor → medical reviewer → publish | `MedicalReviewTask` + "Medical review" workflow on the root page, `apps/users/workflows.py` finish action, D-041 | `tests/users/test_roles.py::test_editor_submits_reviewer_approves_publishes_with_badge`, `::test_rejection_does_not_publish_or_verify`, `tests/e2e/test_cms_workflow.py` | M7 | done |
+| M7-03 | «Проверено врачом / Shifokor tekshirgan» badge with reviewer + date | `BasePage.verified_badge`, review fields workflow-only, `templates/core/panels/review_status.html` | `tests/sections/test_models.py::test_verified_badge`, `tests/users/test_roles.py::test_copies_and_translations_start_unreviewed`, e2e | M1/M7 | done |
+| M7-04 | 2FA mandatory for all CMS staff | wagtail-2fa + `DeviceAwareTokenForm` (D-042), `WAGTAIL_2FA_REQUIRED` forced in prod | `tests/users/test_2fa.py`, e2e login through TOTP | M7 | done |
+| M7-05 | Editor guides ru + uz with screenshots | `docs/EDITOR_GUIDE_ru.md`, `docs/EDITOR_GUIDE_uz.md`, `tests/e2e/screenshots/cms-*.png` | screenshots regenerated by `tests/e2e/test_cms_workflow.py` | M7 | done |
+| M7-06 | Launch checklist | `docs/LAUNCH_CHECKLIST.md`, `find_placeholders` command | `tests/core/test_commands_ops.py::test_find_placeholders_*` | M7 | done |
+| M7-07 | Load test 200 users / 5 min, no errors, p95 < 300 ms cached | `tests/perf/locustfile.py` (budget enforced via exit code) | local run in PROGRESS.md (M7); staging run = LAUNCH_CHECKLIST §6 | M7 | done (local) |
+| M7-08 | UAT with copywriter / designer | `create_demo_staff` (D-043), LAUNCH_CHECKLIST §6 UAT on phones | `tests/users/test_demo_staff.py` | M7 | not done — needs people (copywriter, doctors, designer); tooling ready |
+| CL-01 | Client: Uzbek in **Cyrillic and Latin** (D-047) | M7b | — | M7b | todo |
+| CL-02 | Client: DMED out of scope (D-045) | ADR-0002 closed | — | — | done (no work) |
+| CL-03 | Client: institution list from Ministry of Health via CSV (D-046) | `import_institutions`, EDITOR_GUIDE §9 | `tests/directory/test_import_and_map.py` | M4 | done (data = client) |
+| CL-04 | Client: video on own server + YouTube (D-048) | `Video.source`, transcoding | `tests/media_library/*` | M3 | done |
 
 ## Decisions column summary
 

@@ -91,3 +91,37 @@ def test_check_links_reports_broken_internal_link(seeded, monkeypatch) -> None:
     with pytest.raises(SystemExit):
         call_command("check_links", stdout=out)
     assert "BROKEN /uz/bu-sahifa-yoq/ → HTTP 404" in out.getvalue()
+
+
+def test_find_placeholders_lists_seeded_pages_and_fails(seeded) -> None:
+    from io import StringIO
+
+    from django.core.management import CommandError, call_command
+
+    out = StringIO()
+    call_command("find_placeholders", stdout=out)
+    text = out.getvalue()
+    assert "/ru/zhenskiy/osvedomlennost/simptomy/" in text
+    assert "VERIFY=" in text
+    with pytest.raises(CommandError, match="still contain placeholders"):
+        call_command("find_placeholders", "--fail", stdout=StringIO())
+
+
+def test_find_placeholders_clean_content(seeded) -> None:
+    from io import StringIO
+
+    from django.core.management import call_command
+    from wagtail.models import Page
+
+    from apps.core.management.commands.find_placeholders import count_placeholders
+    from apps.core.models import SiteSettings
+
+    assert count_placeholders({"a": ["[[TODO: x]]", "[[VERIFY: y]] [[VERIFY: z]]"]}) == {
+        "TODO": 1,
+        "VERIFY": 2,
+    }
+    Page.objects.update(live=False)  # rolled back with the test transaction
+    SiteSettings.objects.all().delete()
+    out = StringIO()
+    call_command("find_placeholders", "--fail", stdout=out)
+    assert "no placeholders on live content" in out.getvalue()

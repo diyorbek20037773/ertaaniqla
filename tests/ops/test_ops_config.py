@@ -89,6 +89,9 @@ def test_nginx_config_requirements() -> None:
     assert "location ^~ /media/videos/source/ { return 404; }" in snippets
     # maintenance flag, health endpoints, staging vhost
     assert "maintenance.flag" in site and "return 503" in site
+    # alternate hosts (www., oncoportal.uz — TZ §IV) → canonical domain
+    assert "server_name ${DOMAIN_ALT};" in site
+    assert "return 301 https://${DOMAIN}$request_uri;" in site
     assert "location = /healthz/" in site and "location = /readyz/" in site
     assert "auth_basic_user_file /etc/nginx/staging.htpasswd" in site
     # anonymised access log

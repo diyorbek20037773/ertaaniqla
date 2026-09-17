@@ -52,3 +52,4 @@ tests/e2e/a11y/
 .deploy.env
 docker/nginx/staging.htpasswd
 .lighthouseci/
+.locust/
