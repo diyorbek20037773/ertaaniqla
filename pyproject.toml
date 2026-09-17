@@ -32,6 +32,11 @@ dependencies = [
     "django-waffle>=4.2",
     "django-extensions>=3.2",
     "cryptography>=43.0",
+    "opentelemetry-sdk>=1.30",
+    "opentelemetry-exporter-otlp-proto-http>=1.30",
+    "opentelemetry-instrumentation-django>=0.51b0",
+    "opentelemetry-instrumentation-celery>=0.51b0",
+    "opentelemetry-instrumentation-psycopg>=0.51b0",
 ]
 
 [dependency-groups]
@@ -149,6 +154,7 @@ markers = [
 filterwarnings = ["ignore::DeprecationWarning:wagtail.*"]
 
 [tool.coverage.run]
+relative_files = true  # coverage.xml paths from the repo root (SonarQube, any checkout path)
 source = ["apps"]
 omit = ["*/migrations/*", "*/tests/*", "*/management/commands/seed_*.py"]
 branch = true

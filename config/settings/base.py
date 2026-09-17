@@ -109,6 +109,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django_otp.middleware.OTPMiddleware",
+    "apps.core.audit.AuditContextMiddleware",  # actor + IP for audit signal receivers
     "wagtail_2fa.middleware.VerifyUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -472,7 +473,7 @@ LOGGING: dict[str, Any] = {
     "formatters": {
         "json": {
             "()": "pythonjsonlogger.json.JsonFormatter",
-            "format": "%(asctime)s %(levelname)s %(name)s %(request_id)s %(message)s",
+            "format": "%(asctime)s %(levelname)s %(name)s %(request_id)s %(trace_id)s %(message)s",
         },
         "plain": {"format": "%(levelname)s %(name)s [%(request_id)s] %(message)s"},
     },
