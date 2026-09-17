@@ -11,6 +11,7 @@ IMAGE="${NGINX_IMAGE:-nginx:1.27-alpine}"
 docker run --rm --add-host web:127.0.0.1 \
   -e DOMAIN="${DOMAIN}" -e DOMAIN_ALT="${DOMAIN_ALT}" \
   -e STAGING_DOMAIN="staging.${DOMAIN}" -e STAGING_UPSTREAM="ertaaniqla-staging-web-1:8000" \
+  -e SONAR_DOMAIN="sonar.${DOMAIN}" -e SONAR_UPSTREAM="ertaaniqla-sonarqube-sonarqube-1:9000" \
   -v "$(pwd -W 2>/dev/null || pwd)/docker/nginx/staging.htpasswd.example:/etc/nginx/staging.htpasswd:ro" \
   -v "$(pwd -W 2>/dev/null || pwd)/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro" \
   -v "$(pwd -W 2>/dev/null || pwd)/docker/nginx/snippets:/etc/nginx/snippets:ro" \
@@ -23,6 +24,6 @@ docker run --rm --add-host web:127.0.0.1 \
     openssl req -x509 -nodes -newkey rsa:2048 -days 1 -subj "/CN=$DOMAIN" \
       -keyout $LIVE/privkey.pem -out $LIVE/fullchain.pem >/dev/null 2>&1
     cp $LIVE/fullchain.pem $LIVE/chain.pem
-    envsubst "\$DOMAIN \$DOMAIN_ALT \$STAGING_DOMAIN \$STAGING_UPSTREAM" < /etc/nginx/templates/ertaaniqla.conf.template > /etc/nginx/conf.d/ertaaniqla.conf
+    envsubst "\$DOMAIN \$DOMAIN_ALT \$STAGING_DOMAIN \$STAGING_UPSTREAM \$SONAR_DOMAIN \$SONAR_UPSTREAM" < /etc/nginx/templates/ertaaniqla.conf.template > /etc/nginx/conf.d/ertaaniqla.conf
     nginx -t
   '

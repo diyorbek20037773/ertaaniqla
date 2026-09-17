@@ -1,3 +1,7 @@
+# `pre-commit install` installs both hook types (local stage of the pipeline, RUNBOOK §9):
+#   commit → ruff/format/secrets checks · push → ruff + mypy + unit tests (full gate: make ci-local)
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -29,3 +33,9 @@ repos:
         entry: bash -c 'grep -rnE "NotImplementedError|# TODO|\[\[TODO" apps config --include=*.py | grep -v "seed_content" | grep -v "migrations" && exit 1 || exit 0'
         language: system
         pass_filenames: false
+      - id: pre-push-gate
+        name: pre-push gate (ruff, mypy, pytest -x)
+        entry: bash -c 'uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pytest -x -q --no-cov'
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

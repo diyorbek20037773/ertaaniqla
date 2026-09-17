@@ -125,6 +125,8 @@ net.ipv4.ip_local_port_range = 10240 65535
 net.ipv4.tcp_fin_timeout = 15
 fs.file-max = 2097152
 fs.inotify.max_user_watches = 524288
+# SonarQube's embedded Elasticsearch (compose.sonarqube.yml, ADR-0005)
+vm.max_map_count = 524288
 SYSCTL
 sysctl --system >/dev/null
 timedatectl set-timezone Asia/Tashkent || true

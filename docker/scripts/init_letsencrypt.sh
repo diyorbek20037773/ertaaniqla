@@ -10,6 +10,7 @@ set -euo pipefail
 : "${DOMAIN:?DOMAIN is required}"
 DOMAIN_ALT="${DOMAIN_ALT:-}"
 STAGING_DOMAIN="${STAGING_DOMAIN:-}"      # included in the certificate when set
+SONAR_DOMAIN="${SONAR_DOMAIN:-}"          # included in the certificate when set (ADR-0005)
 LETSENCRYPT_EMAIL="${LETSENCRYPT_EMAIL:?LETSENCRYPT_EMAIL is required}"
 STAGING="${LETSENCRYPT_STAGING:-0}"     # 1 = Let's Encrypt staging CA (no rate limits)
 COMPOSE="${COMPOSE:-docker compose -f compose.yml -f compose.prod.yml}"
@@ -34,7 +35,7 @@ sleep 3
 
 echo "== 3/4 requesting the certificate"
 DOMAIN_ARGS="-d ${DOMAIN}"
-for alt in ${DOMAIN_ALT} ${STAGING_DOMAIN}; do DOMAIN_ARGS="${DOMAIN_ARGS} -d ${alt}"; done
+for alt in ${DOMAIN_ALT} ${STAGING_DOMAIN} ${SONAR_DOMAIN}; do DOMAIN_ARGS="${DOMAIN_ARGS} -d ${alt}"; done
 STAGING_ARG=""; [[ "${STAGING}" == "1" ]] && STAGING_ARG="--staging"
 ${COMPOSE} run --rm --entrypoint sh certbot -c "
   set -e

@@ -13,7 +13,7 @@ SERVICE      ?= web
 .PHONY: help dev down shell migrate makemigrations seed messages compilemessages \
         lint fmt type test check translations e2e lighthouse pa11y build deploy backup restore logs \
         install frontend frontend-watch superuser nginx-test compose-check restore-test ops-check \
-        prod-up prod-down tls-init maintenance-on maintenance-off
+        prod-up prod-down tls-init maintenance-on maintenance-off ci-local sonar sonar-up
 
 help: ## list targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -72,6 +72,12 @@ translations: ## fail on untranslated uz/ru strings
 
 check: lint type test translations ## lint + type + test + translations
 
+ci-local: check frontend build ## pre-push gate: what CI runs first (check + tailwind + docker image)
+	@echo "ci-local OK — safe to git push"
+
+sonar: ## SonarQube scan from this machine (SONAR_HOST_URL, SONAR_TOKEN; run make test first for coverage)
+	docker run --rm -e SONAR_HOST_URL -e SONAR_TOKEN -v "$$(pwd -W 2>/dev/null || pwd):/usr/src" sonarsource/sonar-scanner-cli:11 -Dsonar.projectVersion=$$(git rev-parse --short HEAD)
+
 e2e: ## playwright e2e (needs a running server at $${E2E_BASE_URL:-http://localhost:8000})
 	$(UV) pytest tests/e2e -m e2e --browser chromium
 
@@ -105,8 +111,9 @@ restore-test: ## restore the latest dump into a scratch DB, count pages, drop it
 nginx-test: ## nginx -t for docker/nginx inside the nginx image
 	bash docker/scripts/nginx_test.sh
 
-compose-check: ## validate compose.yml + compose.prod.yml (+ profiles)
+compose-check: ## validate compose.yml + compose.prod.yml (+ profiles) + compose.sonarqube.yml
 	$(COMPOSE_PROD) --profile monitoring --profile clamav config --quiet && echo "compose config OK"
+	docker compose -f compose.sonarqube.yml config --quiet && echo "sonarqube compose config OK"
 
 ops-check: nginx-test compose-check ## M6 gate: nginx -t, compose config, prometheus/alertmanager configs
 	docker run --rm -v "$$(pwd -W 2>/dev/null || pwd)/docker/monitoring:/m:ro" --entrypoint sh prom/prometheus:v2.55.1 -c 'sed "s|__METRICS_USER__|u|;s|__METRICS_PASS__|p|;s|__DOMAIN__|example.uz|g" /m/prometheus.yml > /tmp/p.yml && cp /m/alert_rules.yml /tmp/ && sed -i "s|/etc/prometheus/alert_rules.yml|/tmp/alert_rules.yml|" /tmp/p.yml && promtool check config /tmp/p.yml'
@@ -114,6 +121,9 @@ ops-check: nginx-test compose-check ## M6 gate: nginx -t, compose config, promet
 
 prod-up: ## start the production stack on this host (+ monitoring profile)
 	$(COMPOSE_PROD) --profile monitoring up -d
+
+sonar-up: ## start self-hosted SonarQube on this host (separate compose project, ADR-0005)
+	docker compose -p ertaaniqla-sonarqube --env-file .env -f compose.sonarqube.yml up -d
 
 prod-down: ## stop the production stack (volumes are kept)
 	$(COMPOSE_PROD) --profile monitoring down
