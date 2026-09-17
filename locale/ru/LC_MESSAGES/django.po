@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 09:36+0500\n"
+"POT-Creation-Date: 2026-09-17 11:46+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -301,6 +301,96 @@ msgstr "статьи"
 msgid "Core"
 msgstr "Ядро"
 
+msgid "Login"
+msgstr "Вход"
+
+msgid "Logged in"
+msgstr "Вошёл в систему"
+
+msgid "Logout"
+msgstr "Выход"
+
+msgid "Logged out"
+msgstr "Вышел из системы"
+
+msgid "Failed login"
+msgstr "Неудачный вход"
+
+msgid "Failed login attempt"
+msgstr "Неудачная попытка входа"
+
+msgid "Account lockout"
+msgstr "Блокировка учётной записи"
+
+msgid "Locked out after repeated failed logins"
+msgstr "Заблокирован после повторных неудачных попыток входа"
+
+msgid "Password change"
+msgstr "Смена пароля"
+
+msgid "Password changed"
+msgstr "Пароль изменён"
+
+msgid "User created"
+msgstr "Пользователь создан"
+
+msgid "User account created"
+msgstr "Учётная запись создана"
+
+msgid "User deleted"
+msgstr "Пользователь удалён"
+
+msgid "User account deleted"
+msgstr "Учётная запись удалена"
+
+msgid "Superuser flag"
+msgstr "Признак суперпользователя"
+
+msgid "Superuser status changed"
+msgstr "Статус суперпользователя изменён"
+
+msgid "Staff flag"
+msgstr "Признак сотрудника"
+
+msgid "Staff status changed"
+msgstr "Статус сотрудника изменён"
+
+msgid "Active flag"
+msgstr "Признак активности"
+
+msgid "Account activated or deactivated"
+msgstr "Учётная запись активирована или деактивирована"
+
+msgid "Roles"
+msgstr "Роли"
+
+msgid "Role (group) membership changed"
+msgstr "Изменено членство в роли (группе)"
+
+msgid "Role permissions"
+msgstr "Права роли"
+
+msgid "Role permissions changed"
+msgstr "Права роли изменены"
+
+msgid "2FA device added"
+msgstr "Добавлено устройство 2FA"
+
+msgid "Two-factor device added"
+msgstr "Добавлено устройство двухфакторной аутентификации"
+
+msgid "2FA device removed"
+msgstr "Удалено устройство 2FA"
+
+msgid "Two-factor device removed"
+msgstr "Удалено устройство двухфакторной аутентификации"
+
+msgid "Personal data viewed"
+msgstr "Просмотр персональных данных"
+
+msgid "Record with encrypted contact data opened"
+msgstr "Открыта запись с зашифрованными контактными данными"
+
 msgid "Spam check failed."
 msgstr "Проверка на спам не пройдена."
 
@@ -358,8 +448,6 @@ msgstr "дата проверки"
 msgid "medically verified"
 msgstr "проверено врачом"
 
-#| msgid ""
-#| "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
 msgid ""
 "Shows the 'Verified by a doctor' badge. Set by the medical review workflow."
 msgstr ""
@@ -1259,7 +1347,6 @@ msgstr "пользователи"
 msgid "Request changes"
 msgstr "Запросить правки"
 
-#| msgid "medically verified"
 msgid "Approve as medically verified"
 msgstr "Одобрить как проверенное врачом"
 
@@ -1273,11 +1360,9 @@ msgstr ""
 "Участники выбранных групп (врачи) одобряют страницу; одобрение отмечает её "
 "как проверенную врачом с именем проверяющего и датой."
 
-#| msgid "Medical review"
 msgid "medical review task"
 msgstr "этап медицинской проверки"
 
-#| msgid "Medical review"
 msgid "medical review tasks"
 msgstr "этапы медицинской проверки"
 
@@ -1451,11 +1536,9 @@ msgstr ""
 " администратору."
 
 #, python-format
-#| msgid "Verified by a doctor"
 msgid "Verified by a doctor: %(name)s, %(date)s."
 msgstr "Проверено врачом: %(name)s, %(date)s."
 
-#| msgid "medically verified"
 msgid "Not medically verified yet."
 msgstr "Ещё не проверено врачом."
 

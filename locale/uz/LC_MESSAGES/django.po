@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 09:36+0500\n"
+"POT-Creation-Date: 2026-09-17 11:46+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -304,6 +304,96 @@ msgstr "maqolalar"
 msgid "Core"
 msgstr "Asosiy"
 
+msgid "Login"
+msgstr "Kirish"
+
+msgid "Logged in"
+msgstr "Tizimga kirdi"
+
+msgid "Logout"
+msgstr "Chiqish"
+
+msgid "Logged out"
+msgstr "Tizimdan chiqdi"
+
+msgid "Failed login"
+msgstr "Muvaffaqiyatsiz kirish"
+
+msgid "Failed login attempt"
+msgstr "Muvaffaqiyatsiz kirish urinishi"
+
+msgid "Account lockout"
+msgstr "Hisob bloklandi"
+
+msgid "Locked out after repeated failed logins"
+msgstr "Bir necha marta notoʻgʻri kirishdan soʻng bloklandi"
+
+msgid "Password change"
+msgstr "Parol almashtirish"
+
+msgid "Password changed"
+msgstr "Parol almashtirildi"
+
+msgid "User created"
+msgstr "Foydalanuvchi yaratildi"
+
+msgid "User account created"
+msgstr "Foydalanuvchi hisobi yaratildi"
+
+msgid "User deleted"
+msgstr "Foydalanuvchi oʻchirildi"
+
+msgid "User account deleted"
+msgstr "Foydalanuvchi hisobi oʻchirildi"
+
+msgid "Superuser flag"
+msgstr "Superfoydalanuvchi belgisi"
+
+msgid "Superuser status changed"
+msgstr "Superfoydalanuvchi maqomi oʻzgartirildi"
+
+msgid "Staff flag"
+msgstr "Xodim belgisi"
+
+msgid "Staff status changed"
+msgstr "Xodim maqomi oʻzgartirildi"
+
+msgid "Active flag"
+msgstr "Faollik belgisi"
+
+msgid "Account activated or deactivated"
+msgstr "Hisob faollashtirildi yoki oʻchirib qoʻyildi"
+
+msgid "Roles"
+msgstr "Rollar"
+
+msgid "Role (group) membership changed"
+msgstr "Rol (guruh) aʼzoligi oʻzgartirildi"
+
+msgid "Role permissions"
+msgstr "Rol ruxsatlari"
+
+msgid "Role permissions changed"
+msgstr "Rol ruxsatlari oʻzgartirildi"
+
+msgid "2FA device added"
+msgstr "2FA qurilmasi qoʻshildi"
+
+msgid "Two-factor device added"
+msgstr "Ikki bosqichli autentifikatsiya qurilmasi qoʻshildi"
+
+msgid "2FA device removed"
+msgstr "2FA qurilmasi oʻchirildi"
+
+msgid "Two-factor device removed"
+msgstr "Ikki bosqichli autentifikatsiya qurilmasi oʻchirildi"
+
+msgid "Personal data viewed"
+msgstr "Shaxsiy maʼlumotlar koʻrildi"
+
+msgid "Record with encrypted contact data opened"
+msgstr "Shifrlangan aloqa maʼlumotlari bor yozuv ochildi"
+
 msgid "Spam check failed."
 msgstr "Spam tekshiruvi oʻtmadi."
 
@@ -329,7 +419,7 @@ msgid ""
 "Shown when the page is shared in Telegram/Facebook. Generated automatically "
 "if empty."
 msgstr ""
-"Sahifa Telegram/Facebook’da ulashilganda koʻrsatiladi. Boʻsh boʻlsa "
+"Sahifa Telegram/Facebookʼda ulashilganda koʻrsatiladi. Boʻsh boʻlsa "
 "avtomatik yaratiladi."
 
 msgid "generated sharing image"
@@ -362,8 +452,6 @@ msgstr "tekshirilgan sana"
 msgid "medically verified"
 msgstr "tibbiy tasdiqlangan"
 
-#| msgid ""
-#| "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
 msgid ""
 "Shows the 'Verified by a doctor' badge. Set by the medical review workflow."
 msgstr ""
@@ -1271,7 +1359,6 @@ msgstr "foydalanuvchilar"
 msgid "Request changes"
 msgstr "Tuzatish soʻrash"
 
-#| msgid "medically verified"
 msgid "Approve as medically verified"
 msgstr "Shifokor tekshirgan deb tasdiqlash"
 
@@ -1286,11 +1373,9 @@ msgstr ""
 "sahifani tekshiruvchining ismi va sanasi bilan «shifokor tekshirgan» deb "
 "belgilaydi."
 
-#| msgid "Medical review"
 msgid "medical review task"
 msgstr "tibbiy tekshiruv bosqichi"
 
-#| msgid "Medical review"
 msgid "medical review tasks"
 msgstr "tibbiy tekshiruv bosqichlari"
 
@@ -1462,11 +1547,9 @@ msgstr ""
 "qayta urinib koʻring yoki administratorga murojaat qiling."
 
 #, python-format
-#| msgid "Verified by a doctor"
 msgid "Verified by a doctor: %(name)s, %(date)s."
 msgstr "Shifokor tekshirgan: %(name)s, %(date)s."
 
-#| msgid "medically verified"
 msgid "Not medically verified yet."
 msgstr "Hali shifokor tomonidan tekshirilmagan."
 
