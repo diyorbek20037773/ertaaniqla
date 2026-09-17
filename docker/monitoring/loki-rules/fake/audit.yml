@@ -1,0 +1,34 @@
+# Loki ruler alerts on the security audit stream (apps/core/audit.py, ADR-0005).
+# Tenant directory "fake" = single-tenant Loki (auth_enabled: false).
+groups:
+  - name: audit
+    interval: 1m
+    rules:
+      - alert: CmsAccountLockout
+        expr: sum(count_over_time({service="web"} |= "ertaaniqla.audit" | json | event="auth.lockout" [10m])) > 0
+        labels:
+          severity: critical
+        annotations:
+          summary: "CMS account locked out after repeated failed logins (django-axes)"
+          description: "Grafana → Explore → Loki: {service=\"web\"} |= \"auth.lockout\""
+
+      - alert: CmsLoginFailuresSpike
+        expr: sum(count_over_time({service="web"} |= "ertaaniqla.audit" | json | event="auth.login_failed" [15m])) > 20
+        labels:
+          severity: warning
+        annotations:
+          summary: "More than 20 failed CMS logins in 15 minutes (possible brute force)"
+
+      - alert: PrivilegeChange
+        expr: sum(count_over_time({service=~"web|worker"} |= "ertaaniqla.audit" | json | event=~"user.superuser_changed|user.staff_changed|user.groups_changed" [5m])) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "A CMS user's privileges changed — confirm it was expected"
+
+      - alert: AppErrorLogSpike
+        expr: sum by (service) (count_over_time({project=~"ertaaniqla-prod", service=~"web|worker|beat"} | json | levelname="ERROR" [10m])) > 25
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.service }}: more than 25 ERROR log lines in 10 minutes"

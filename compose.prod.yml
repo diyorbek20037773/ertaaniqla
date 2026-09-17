@@ -9,6 +9,14 @@ x-logging: &logging
     max-size: "50m"
     max-file: "5"
 
+# OpenTelemetry (ADR-0005): traces go to Jaeger when OTEL_EXPORTER_OTLP_ENDPOINT is set in .env
+# (http://jaeger:4318 with the monitoring profile). 10 % head sampling, children follow parents.
+x-otel: &otel
+  OTEL_TRACES_SAMPLER: ${OTEL_TRACES_SAMPLER:-parentbased_traceidratio}
+  OTEL_TRACES_SAMPLER_ARG: ${OTEL_TRACES_SAMPLER_ARG:-0.1}
+  OTEL_METRICS_EXPORTER: none
+  OTEL_LOGS_EXPORTER: none
+
 services:
   db:
     command:
@@ -48,6 +56,7 @@ services:
 
   web:
     environment:
+      <<: *otel
       DJANGO_SETTINGS_MODULE: config.settings.prod
       MEDIA_ROOT: /srv/media
       PAGE_CACHE_SECONDS: ${PAGE_CACHE_SECONDS:-300}
@@ -61,6 +70,7 @@ services:
 
   worker:
     environment:
+      <<: *otel
       DJANGO_SETTINGS_MODULE: config.settings.prod
       MEDIA_ROOT: /srv/media
     deploy:
@@ -71,6 +81,7 @@ services:
 
   beat:
     environment:
+      <<: *otel
       DJANGO_SETTINGS_MODULE: config.settings.prod
     logging: *logging
 
@@ -84,6 +95,8 @@ services:
       DOMAIN_ALT: ${DOMAIN_ALT:-www.ertaaniqla.uz oncoportal.uz www.oncoportal.uz}
       STAGING_DOMAIN: ${STAGING_DOMAIN:-staging.ertaaniqla.uz}
       STAGING_UPSTREAM: ${STAGING_UPSTREAM:-ertaaniqla-staging-web-1:8000}
+      SONAR_DOMAIN: ${SONAR_DOMAIN:-sonar.ertaaniqla.uz}
+      SONAR_UPSTREAM: ${SONAR_UPSTREAM:-ertaaniqla-sonarqube-sonarqube-1:9000}
       NGINX_ENVSUBST_TEMPLATE_DIR: /etc/nginx/templates
       NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx/conf.d
     volumes:
@@ -282,6 +295,79 @@ services:
     restart: unless-stopped
     logging: *logging
 
+  # --- logs + traces (monitoring profile, ADR-0005) ---------------------------------------
+  # Loki/Jaeger run as uid 10001; named volumes are created root-owned → fix once per start.
+  monitoring-init:
+    image: busybox:1.37
+    profiles: ["monitoring"]
+    command: ["sh", "-c", "chown -R 10001:10001 /loki /badger"]
+    volumes:
+      - loki-data:/loki
+      - jaeger-data:/badger
+    restart: "no"
+    logging: *logging
+
+  loki:
+    image: grafana/loki:3.7.0
+    profiles: ["monitoring"]
+    command: ["-config.file=/etc/loki/loki.yml"]
+    volumes:
+      - ./docker/monitoring/loki.yml:/etc/loki/loki.yml:ro
+      - ./docker/monitoring/loki-rules:/etc/loki/rules:ro
+      - loki-data:/loki
+    depends_on:
+      monitoring-init:
+        condition: service_completed_successfully
+    expose:
+      - "3100"   # distroless image: no shell for a healthcheck; Alloy retries pushes until ready
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    restart: unless-stopped
+    logging: *logging
+
+  # ships every container's stdout (docker json-file) to Loki; docker socket read-only
+  alloy:
+    image: grafana/alloy:v1.19.2
+    profiles: ["monitoring"]
+    command: ["run", "--server.http.listen-addr=0.0.0.0:12345", "--storage.path=/var/lib/alloy/data", "--disable-reporting", "/etc/alloy/config.alloy"]
+    volumes:
+      - ./docker/monitoring/alloy.config:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - alloy-data:/var/lib/alloy/data
+    depends_on:
+      - loki
+    expose:
+      - "12345"
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    restart: unless-stopped
+    logging: *logging
+
+  jaeger:
+    image: jaegertracing/jaeger:2.21.0
+    profiles: ["monitoring"]
+    command: ["--config", "/etc/jaeger/config.yml"]
+    volumes:
+      - ./docker/monitoring/jaeger.yml:/etc/jaeger/config.yml:ro
+      - jaeger-data:/badger
+    depends_on:
+      monitoring-init:
+        condition: service_completed_successfully
+    expose:
+      - "4318"    # OTLP/HTTP from web, worker, beat
+    ports:
+      - "127.0.0.1:16686:16686"   # UI over an SSH tunnel: ssh -L 16686:127.0.0.1:16686 vps
+    deploy:
+      resources:
+        limits:
+          memory: 768m
+    restart: unless-stopped
+    logging: *logging
+
 volumes:
   letsencrypt:
   certbot-www:
@@ -291,3 +377,6 @@ volumes:
   prometheus-data:
   alertmanager-data:
   grafana-data:
+  loki-data:
+  alloy-data:
+  jaeger-data:
