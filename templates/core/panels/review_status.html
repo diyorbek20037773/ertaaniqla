@@ -1,0 +1,19 @@
+{% load i18n %}
+{% comment %}
+Read-only medical review status in the page editor (Settings tab).
+Context: self.instance — the page (BasePage). Values are written by the medical review workflow only.
+{% endcomment %}
+{% with page=self.instance %}
+<div class="help-block help-info">
+  {% if page.medically_verified %}
+    <p>
+      {% blocktrans trimmed with name=page.last_reviewed_by.display_name|default:"—" date=page.last_reviewed_at|date:"d.m.Y"|default:"—" %}
+        Verified by a doctor: {{ name }}, {{ date }}.
+      {% endblocktrans %}
+    </p>
+  {% else %}
+    <p>{% trans "Not medically verified yet." %}</p>
+  {% endif %}
+  <p>{% trans "The badge is set automatically when a medical reviewer approves the page in the “Medical review” workflow. Submit the page for moderation to request a review." %}</p>
+</div>
+{% endwith %}

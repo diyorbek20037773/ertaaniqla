@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 15:20+0500\n"
+"POT-Creation-Date: 2026-09-17 09:36+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,7 +335,6 @@ msgstr "сгенерированное изображение для соцсе�
 msgid "Rendered automatically on publish when no sharing image is chosen."
 msgstr "Создаётся автоматически при публикации, если изображение не выбрано."
 
-#| msgid "generated sharing image"
 msgid "generated story image (1080×1920)"
 msgstr "сгенерированное изображение для сторис (1080×1920)"
 
@@ -359,9 +358,13 @@ msgstr "дата проверки"
 msgid "medically verified"
 msgstr "проверено врачом"
 
-msgid "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
+#| msgid ""
+#| "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
+msgid ""
+"Shows the 'Verified by a doctor' badge. Set by the medical review workflow."
 msgstr ""
-"Показывает бейдж «Проверено врачом». Устанавливает медицинский рецензент."
+"Показывает отметку «Проверено врачом». Устанавливается процессом медицинской"
+" проверки."
 
 msgid "Medical review"
 msgstr "Медицинская проверка"
@@ -858,11 +861,9 @@ msgstr "Инфографика / изображение для сторис"
 msgid "Document (PDF, ZIP…)"
 msgstr "Документ (PDF, ZIP…)"
 
-#| msgid "video"
 msgid "Short video"
 msgstr "Короткое видео"
 
-#| msgid "Caption"
 msgid "Ready caption"
 msgstr "Готовая подпись"
 
@@ -1255,6 +1256,31 @@ msgstr "пользователь"
 msgid "users"
 msgstr "пользователи"
 
+msgid "Request changes"
+msgstr "Запросить правки"
+
+#| msgid "medically verified"
+msgid "Approve as medically verified"
+msgstr "Одобрить как проверенное врачом"
+
+msgid "Approve with comment"
+msgstr "Одобрить с комментарием"
+
+msgid ""
+"Members of the chosen groups (doctors) approve the page; approval marks it "
+"as medically verified with the reviewer's name and date."
+msgstr ""
+"Участники выбранных групп (врачи) одобряют страницу; одобрение отмечает её "
+"как проверенную врачом с именем проверяющего и датой."
+
+#| msgid "Medical review"
+msgid "medical review task"
+msgstr "этап медицинской проверки"
+
+#| msgid "Medical review"
+msgid "medical review tasks"
+msgstr "этапы медицинской проверки"
+
 msgid "Erta aniqla"
 msgstr "Эрта аниқла"
 
@@ -1298,7 +1324,6 @@ msgstr "Учреждений по выбранным фильтрам пока �
 msgid "High contrast"
 msgstr "Высокий контраст"
 
-#| msgid "Send question"
 msgid "Reduce motion"
 msgstr "Меньше анимации"
 
@@ -1425,6 +1450,24 @@ msgstr ""
 "Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к"
 " администратору."
 
+#, python-format
+#| msgid "Verified by a doctor"
+msgid "Verified by a doctor: %(name)s, %(date)s."
+msgstr "Проверено врачом: %(name)s, %(date)s."
+
+#| msgid "medically verified"
+msgid "Not medically verified yet."
+msgstr "Ещё не проверено врачом."
+
+msgid ""
+"The badge is set automatically when a medical reviewer approves the page in "
+"the “Medical review” workflow. Submit the page for moderation to request a "
+"review."
+msgstr ""
+"Отметка ставится автоматически, когда медицинский эксперт одобряет страницу "
+"в процессе «Медицинская проверка». Чтобы запросить проверку, отправьте "
+"страницу на модерацию."
+
 msgid "Results"
 msgstr "Результаты"
 
@@ -1502,19 +1545,15 @@ msgstr "Открыть раздел"
 msgid "Key figures"
 msgstr "Ключевые цифры"
 
-#| msgid "Filter by section"
 msgid "Filter by audience"
 msgstr "Фильтр по аудитории"
 
-#| msgid "Download"
 msgid "Download image"
 msgstr "Скачать изображение"
 
-#| msgid "Download"
 msgid "Download video"
 msgstr "Скачать видео"
 
-#| msgid "Caption"
 msgid "Copy caption"
 msgstr "Скопировать подпись"
 
@@ -1524,7 +1563,6 @@ msgstr "Скопировано"
 msgid "Copy hashtags"
 msgstr "Скопировать хэштеги"
 
-#| msgid "Stories will appear here."
 msgid "Materials will appear here."
 msgstr "Здесь появятся материалы."
 

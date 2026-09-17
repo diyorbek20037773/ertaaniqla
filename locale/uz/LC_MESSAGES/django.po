@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 15:20+0500\n"
+"POT-Creation-Date: 2026-09-17 09:36+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -339,7 +339,6 @@ msgid "Rendered automatically on publish when no sharing image is chosen."
 msgstr ""
 "Ulashish rasmi tanlanmagan boʻlsa, eʼlon qilinganda avtomatik yaratiladi."
 
-#| msgid "generated sharing image"
 msgid "generated story image (1080×1920)"
 msgstr "avtomatik yaratilgan story rasmi (1080×1920)"
 
@@ -363,9 +362,13 @@ msgstr "tekshirilgan sana"
 msgid "medically verified"
 msgstr "tibbiy tasdiqlangan"
 
-msgid "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
+#| msgid ""
+#| "Shows the 'Verified by a doctor' badge. Set by the medical reviewer."
+msgid ""
+"Shows the 'Verified by a doctor' badge. Set by the medical review workflow."
 msgstr ""
-"«Shifokor tekshirgan» belgisini koʻrsatadi. Tibbiy rezensent belgilaydi."
+"«Shifokor tekshirgan» belgisini koʻrsatadi. Tibbiy tekshiruv jarayoni "
+"oʻrnatadi."
 
 msgid "Medical review"
 msgstr "Tibbiy tekshiruv"
@@ -865,11 +868,9 @@ msgstr "Infografika / story rasmi"
 msgid "Document (PDF, ZIP…)"
 msgstr "Hujjat (PDF, ZIP…)"
 
-#| msgid "video"
 msgid "Short video"
 msgstr "Qisqa video"
 
-#| msgid "Caption"
 msgid "Ready caption"
 msgstr "Tayyor matn"
 
@@ -1267,6 +1268,32 @@ msgstr "foydalanuvchi"
 msgid "users"
 msgstr "foydalanuvchilar"
 
+msgid "Request changes"
+msgstr "Tuzatish soʻrash"
+
+#| msgid "medically verified"
+msgid "Approve as medically verified"
+msgstr "Shifokor tekshirgan deb tasdiqlash"
+
+msgid "Approve with comment"
+msgstr "Izoh bilan tasdiqlash"
+
+msgid ""
+"Members of the chosen groups (doctors) approve the page; approval marks it "
+"as medically verified with the reviewer's name and date."
+msgstr ""
+"Tanlangan guruhlar aʼzolari (shifokorlar) sahifani tasdiqlaydi; tasdiqlash "
+"sahifani tekshiruvchining ismi va sanasi bilan «shifokor tekshirgan» deb "
+"belgilaydi."
+
+#| msgid "Medical review"
+msgid "medical review task"
+msgstr "tibbiy tekshiruv bosqichi"
+
+#| msgid "Medical review"
+msgid "medical review tasks"
+msgstr "tibbiy tekshiruv bosqichlari"
+
 msgid "Erta aniqla"
 msgstr "Erta aniqla"
 
@@ -1310,7 +1337,6 @@ msgstr "Tanlangan filtrlarga mos muassasalar hozircha yoʻq."
 msgid "High contrast"
 msgstr "Yuqori kontrast"
 
-#| msgid "Send question"
 msgid "Reduce motion"
 msgstr "Animatsiyani kamaytirish"
 
@@ -1435,6 +1461,24 @@ msgstr ""
 "Tizimga kirishga muvaffaqiyatsiz urinishlar juda koʻp. Bir soatdan soʻng "
 "qayta urinib koʻring yoki administratorga murojaat qiling."
 
+#, python-format
+#| msgid "Verified by a doctor"
+msgid "Verified by a doctor: %(name)s, %(date)s."
+msgstr "Shifokor tekshirgan: %(name)s, %(date)s."
+
+#| msgid "medically verified"
+msgid "Not medically verified yet."
+msgstr "Hali shifokor tomonidan tekshirilmagan."
+
+msgid ""
+"The badge is set automatically when a medical reviewer approves the page in "
+"the “Medical review” workflow. Submit the page for moderation to request a "
+"review."
+msgstr ""
+"Belgi tibbiy ekspert sahifani «Tibbiy tekshiruv» jarayonida tasdiqlaganda "
+"avtomatik qoʻyiladi. Tekshiruv soʻrash uchun sahifani moderatsiyaga "
+"yuboring."
+
 msgid "Results"
 msgstr "Natijalar"
 
@@ -1510,19 +1554,15 @@ msgstr "Boʻlimni ochish"
 msgid "Key figures"
 msgstr "Asosiy raqamlar"
 
-#| msgid "Filter by section"
 msgid "Filter by audience"
 msgstr "Auditoriya boʻyicha filtrlash"
 
-#| msgid "Download"
 msgid "Download image"
 msgstr "Rasmni yuklab olish"
 
-#| msgid "Download"
 msgid "Download video"
 msgstr "Videoni yuklab olish"
 
-#| msgid "Caption"
 msgid "Copy caption"
 msgstr "Matnni nusxalash"
 
@@ -1532,7 +1572,6 @@ msgstr "Nusxalandi"
 msgid "Copy hashtags"
 msgstr "Xeshteglarni nusxalash"
 
-#| msgid "Stories will appear here."
 msgid "Materials will appear here."
 msgstr "Materiallar shu yerda paydo boʻladi."
 

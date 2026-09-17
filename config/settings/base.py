@@ -349,6 +349,8 @@ WAGTAIL_ALLOW_UNICODE_SLUGS = False
 WAGTAIL_PASSWORD_RESET_ENABLED = True
 WAGTAIL_MODERATION_ENABLED = False  # legacy moderation off; workflows are used instead
 WAGTAIL_WORKFLOW_ENABLED = True
+# publish + stamp "verified by a doctor" when the medical review task approved (apps.users.roles)
+WAGTAIL_FINISH_WORKFLOW_ACTION = "apps.users.workflows.publish_with_medical_review"
 WAGTAIL_ENABLE_UPDATE_CHECK = False
 WAGTAILADMIN_RICH_TEXT_EDITORS = {
     "default": {

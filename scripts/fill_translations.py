@@ -808,17 +808,13 @@ def fill(lang: str, index: int) -> int:
             forms = P[entry.msgid][index]
             entry.msgstr_plural = dict(enumerate(forms))
             filled += 1
-        elif entry.msgid in T:
-            entry.msgstr = T[entry.msgid][index]
+        elif entry.msgid in T or entry.msgid in F:
+            entry.msgstr = (F.get(entry.msgid) or T[entry.msgid])[index]
             filled += 1
     po.metadata["Language"] = lang
     po.save(str(path))
     return filled
 
-
-if __name__ == "__main__":
-    for lang, index in (("uz", 0), ("ru", 1)):
-        print(f"{lang}: filled {fill(lang, index)}")
 
 # fuzzy entries created by makemessages (wrong guesses) — overwrite with correct text
 F: dict[str, tuple[str, str]] = {
@@ -857,6 +853,41 @@ F: dict[str, tuple[str, str]] = {
     "Section": ("Boʻlim", "Раздел"),
     "Open section": ("Boʻlimni ochish", "Открыть раздел"),
     "Search: %(q)s": ("Qidiruv: %(q)s", "Поиск: %(q)s"),
+    # M7 — roles, medical review workflow
+    "Request changes": ("Tuzatish soʻrash", "Запросить правки"),
+    "Approve with comment": ("Izoh bilan tasdiqlash", "Одобрить с комментарием"),
+    "Approve as medically verified": (
+        "Shifokor tekshirgan deb tasdiqlash",
+        "Одобрить как проверенное врачом",
+    ),
+    "Members of the chosen groups (doctors) approve the page; approval marks it as "
+    "medically verified with the reviewer's name and date.": (
+        "Tanlangan guruhlar aʼzolari (shifokorlar) sahifani tasdiqlaydi; tasdiqlash sahifani "
+        "tekshiruvchining ismi va sanasi bilan «shifokor tekshirgan» deb belgilaydi.",
+        "Участники выбранных групп (врачи) одобряют страницу; одобрение отмечает её как "
+        "проверенную врачом с именем проверяющего и датой.",
+    ),
+    "The badge is set automatically when a medical reviewer approves the page in the "
+    "“Medical review” workflow. Submit the page for moderation to request a review.": (
+        "Belgi tibbiy ekspert sahifani «Tibbiy tekshiruv» jarayonida tasdiqlaganda avtomatik "
+        "qoʻyiladi. Tekshiruv soʻrash uchun sahifani moderatsiyaga yuboring.",
+        "Отметка ставится автоматически, когда медицинский эксперт одобряет страницу в процессе "
+        "«Медицинская проверка». Чтобы запросить проверку, отправьте страницу на модерацию.",
+    ),
+    "Shows the 'Verified by a doctor' badge. Set by the medical review workflow.": (
+        "«Shifokor tekshirgan» belgisini koʻrsatadi. Tibbiy tekshiruv jarayoni oʻrnatadi.",
+        "Показывает отметку «Проверено врачом». Устанавливается процессом медицинской проверки.",
+    ),
+    "medical review task": ("tibbiy tekshiruv bosqichi", "этап медицинской проверки"),
+    "medical review tasks": ("tibbiy tekshiruv bosqichlari", "этапы медицинской проверки"),
+    "Verified by a doctor: %(name)s, %(date)s.": (
+        "Shifokor tekshirgan: %(name)s, %(date)s.",
+        "Проверено врачом: %(name)s, %(date)s.",
+    ),
+    "Not medically verified yet.": (
+        "Hali shifokor tomonidan tekshirilmagan.",
+        "Ещё не проверено врачом.",
+    ),
 }
 
 
@@ -879,4 +910,4 @@ def unfuzzy(lang: str, index: int) -> int:
 
 if __name__ == "__main__":
     for lang, index in (("uz", 0), ("ru", 1)):
-        print(f"{lang}: unfuzzied {unfuzzy(lang, index)}")
+        print(f"{lang}: unfuzzied {unfuzzy(lang, index)}, filled {fill(lang, index)}")

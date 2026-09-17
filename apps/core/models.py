@@ -10,7 +10,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, HelpPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField
 from wagtail.models import Page
@@ -68,30 +68,31 @@ class BasePage(Page):
         default=False,
         help_text=_("Adds a noindex meta tag. Use for drafts-in-public and utility pages."),
     )
+    # Review metadata is written only by the medical-review workflow (apps.users.workflows), never
+    # by the page form: editors cannot fake the badge, and wagtail-localize does not sync
+    # non-editable fields, so every language version is reviewed on its own.
     last_reviewed_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("medically reviewed by"),
         null=True,
         blank=True,
+        editable=False,
         on_delete=models.SET_NULL,
         related_name="+",
     )
-    last_reviewed_at = models.DateField(_("reviewed on"), null=True, blank=True)
+    last_reviewed_at = models.DateField(_("reviewed on"), null=True, blank=True, editable=False)
     medically_verified = models.BooleanField(
         _("medically verified"),
         default=False,
-        help_text=_("Shows the 'Verified by a doctor' badge. Set by the medical reviewer."),
+        editable=False,
+        help_text=_("Shows the 'Verified by a doctor' badge. Set by the medical review workflow."),
     )
 
+    # copies and new translations start unreviewed
+    exclude_fields_in_copy = ["medically_verified", "last_reviewed_by", "last_reviewed_at"]
+
     review_panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel("medically_verified"),
-                FieldPanel("last_reviewed_by"),
-                FieldPanel("last_reviewed_at"),
-            ],
-            heading=_("Medical review"),
-        ),
+        HelpPanel(template="core/panels/review_status.html", heading=_("Medical review")),
     ]
     seo_extra_panels = [FieldPanel("og_image"), FieldPanel("noindex")]
 

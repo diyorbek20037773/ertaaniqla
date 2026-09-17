@@ -40,6 +40,9 @@ class PortalImage(AbstractImage):
     class Meta(AbstractImage.Meta):
         verbose_name = _("image")
         verbose_name_plural = _("images")
+        # Wagtail only declares "choose" on its own concrete Image model; custom models must too,
+        # otherwise non-superusers cannot pick images in choosers (found by M7 role tests).
+        permissions = [("choose_portalimage", "Can choose image")]
 
     @property
     def alt_text(self) -> str:
@@ -68,6 +71,7 @@ class PortalDocument(AbstractDocument):
     class Meta(AbstractDocument.Meta):
         verbose_name = _("document")
         verbose_name_plural = _("documents")
+        permissions = [("choose_portaldocument", "Can choose document")]
 
     def clean(self) -> None:
         super().clean()
