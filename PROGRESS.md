@@ -144,7 +144,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] tests `tests/core/test_uzcyrl.py` (word table, HTML/JSON, every live uz page 200 under /oz/, alternates, search, HTMX directory + map island, forms, page cache shared, switch-off); e2e: screenshots home-oz / article-symptoms-oz, language switch Latin↔Cyrillic, axe on 2 /oz/ pages; pa11y URL added
   - [x] docs: EDITOR_GUIDE ru/uz §5.3, COMPONENT_INVENTORY, TZ_TRACE CL-01 done, TODO_HARDENING H-023
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
-- [ ] FINAL REPORT → docs/FINAL_REPORT_uz.md
+- [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 
 ## Last command run (2026-09-17, M7b close)
 
