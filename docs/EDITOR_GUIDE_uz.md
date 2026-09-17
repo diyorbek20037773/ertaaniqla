@@ -9,7 +9,7 @@
 1. **Sayt tashxis qoʻymaydi.** Har bir tibbiy fikr shifokor tekshiruvidan oʻtadi (6-boʻlim).
    Tekshiruvsiz sahifada «Shifokor tekshirgan» belgisi boʻlmaydi.
 2. **Ikki til versiyasi — oʻzbekcha (lotin) va ruscha.** Har bir sahifa ikkala tilda boʻlishi kerak.
-   Oʻzbek kirill yozuvi alohida versiya sifatida qoʻshiladi (5.3-boʻlim).
+   Oʻzbek kirill versiyasi (`/oz/`) lotin versiyasidan avtomatik hosil qilinadi (5.3-boʻlim).
 3. **Toʻldiruvchi belgilar.** Ishga tushirishda yaratilgan barcha sahifalarda
    `[[TODO: content — copywriter]]` (matnni kopirayter yozadi) va `[[VERIFY: doctor]]` (faktni shifokor
    tekshiradi) belgilari bor. Nashrdan oldin matnda bunday belgi qolmasligi shart.
@@ -87,11 +87,17 @@ Boʻlim sahifalarini koʻchirmang va oʻchirmang: menyu, boʻlim ranglari va man
 
 Saytdagi til almashtirgich tarjima qilingan sahifaga olib boradi; tarjima boʻlmasa — boʻlim bosh sahifasiga.
 
-### 5.3 Oʻzbek kirill yozuvi
+### 5.3 Oʻzbek kirill yozuvi (`/oz/`)
 
-Oʻzbekcha matnning kirill versiyasi lotin versiyasidan hosil qilinadi (12-boʻlim va DECISIONS D-047 / M7b).
-Kirillga alohida tarjima qilish shart emas; oʻzbekcha matnni **lotin** yozuvida, `oʻ gʻ ʼ` belgilarini
-toʻgʻri qoʻyib yozing.
+Saytning kirill versiyasi (`/oz/…`, almashtirgichda «Ўзбекча») har safar sahifa ochilganda oʻzbekcha
+lotin versiyasidan **avtomatik hosil qilinadi** (DECISIONS D-049). Kirillga alohida tarjima qilish va
+shifokorga alohida tekshirtirish shart emas — lotin versiyasini nashr qilish kifoya.
+
+- Oʻzbekcha matnni **lotin** yozuvida, `oʻ gʻ ʼ` belgilarini toʻgʻri qoʻyib yozing (`o' g'` ham boʻladi).
+- Brend nomlari (Telegram, WhatsApp, YouTube…), havolalar, e-mail va `[[TODO]]` belgilari oʻzgartirilmaydi.
+- Agar soʻz kirillda notoʻgʻri chiqsa (odatda «ь», «ц» li oʻzlashma soʻzlar: `sentabr` → «сентябрь»),
+  dasturchiga xabar bering — soʻz istisnolar lugʻatiga qoʻshiladi (`apps/core/uzcyrl.py`).
+- Oʻgirilmasligi kerak boʻlgan qismni (masalan, lotincha nom) dasturchi `translate="no"` bilan belgilaydi.
 
 ### 5.4 Kontent bloklari
 

@@ -33,6 +33,8 @@ PAGES = [
     ("faq-uz", "/uz/savol-javob/"),
     ("glossary-ru", "/ru/slovar/"),
     ("materials-uz", "/uz/materiallar/"),
+    ("home-oz", "/oz/"),  # Uzbek Cyrillic (D-049)
+    ("article-symptoms-oz", "/oz/ayollar/ogohlik/belgilar/"),
 ]
 
 
@@ -73,3 +75,17 @@ def test_language_switch_keeps_page(mobile_page) -> None:
     mobile_page.locator('a.lang-switch__link[hreflang="ru"]').click()
     mobile_page.wait_for_load_state("networkidle")
     assert mobile_page.url.endswith("/ru/zhenskiy/skrining/gde-proyti/")
+
+
+def test_language_switch_to_uzbek_cyrillic_and_back(mobile_page) -> None:
+    mobile_page.goto(BASE_URL + "/uz/ayollar/skrining/qayerda/", wait_until="networkidle")
+    mobile_page.locator("summary.site-nav__toggle-button").click()
+    mobile_page.locator('a.lang-switch__link[hreflang="uz-Cyrl"]').click()
+    mobile_page.wait_for_load_state("networkidle")
+    assert mobile_page.url.endswith("/oz/ayollar/skrining/qayerda/")
+    assert mobile_page.locator("html").get_attribute("lang") == "uz-Cyrl"
+    assert "Скрининг" in mobile_page.locator("main").inner_text()
+    mobile_page.locator("summary.site-nav__toggle-button").click()
+    mobile_page.locator('a.lang-switch__link[hreflang="uz"]').click()
+    mobile_page.wait_for_load_state("networkidle")
+    assert mobile_page.url.endswith("/uz/ayollar/skrining/qayerda/")

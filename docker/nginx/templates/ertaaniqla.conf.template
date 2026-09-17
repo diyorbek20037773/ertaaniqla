@@ -134,7 +134,7 @@ server {
     }
 
     # --- public forms: POST rate zone (question, feedback, search is GET) --------------------
-    location ~ ^/(uz|ru)/(savol-javob|voprosy-otvety|qayta-aloqa|obratnaya-svyaz)/ {
+    location ~ ^/(uz|oz|ru)/(savol-javob|voprosy-otvety|qayta-aloqa|obratnaya-svyaz)/ {
         limit_req zone=general burst=60 nodelay;
         limit_req zone=form_post burst=5 nodelay;   # keyed on $post_limit_key → POST only
         proxy_pass http://django;

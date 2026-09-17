@@ -92,6 +92,7 @@ def test_nginx_config_requirements() -> None:
     # alternate hosts (www., oncoportal.uz — TZ §IV) → canonical domain
     assert "server_name ${DOMAIN_ALT};" in site
     assert "return 301 https://${DOMAIN}$request_uri;" in site
+    assert "^/(uz|oz|ru)/(savol-javob" in site  # form rate zone covers the Cyrillic version
     assert "location = /healthz/" in site and "location = /readyz/" in site
     assert "auth_basic_user_file /etc/nginx/staging.htpasswd" in site
     # anonymised access log

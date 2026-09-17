@@ -62,7 +62,7 @@ Each partial documents its context variables in a header comment. CSS block of t
 |---|---|---|---|---|
 | `header.html` | Шапка: логотип-заглушка, название, горячая линия (tel:), навигация | Sarlavha: logo, nom, ishonch telefoni, navigatsiya | `settings.core.SiteSettings.hotline_phone` | mobile (menu behind toggle) / desktop (inline) |
 | `nav.html` (`{% main_nav %}`) | Мега-меню: 2 раздела × 5 пунктов ТЗ + подпункты; переключатель языка | Mega-menyu: 2 bo'lim × 5 band + ichki bandlar; til almashtirgich | `sections[NavSection{key,title,url,tagline,emoji,items[NavItem{title,url,summary,children}]}]`, `section_key` | mobile `<details>` (no JS), desktop hover panel, active section underline |
-| `lang_switch.html` (`{% lang_switch %}`) | Переключатель uz/ru на перевод текущей страницы | Joriy sahifaning tarjimasiga o'tish | `links[{code,name,url,is_current}]` | current = plain text with `aria-current` |
+| `lang_switch.html` (`{% lang_switch %}`) | Переключатель Oʻzbekcha (латиница) / Ўзбекча (кириллица, `/oz/`) / Русский на ту же страницу | Joriy sahifaning lotin / kirill / rus versiyasiga o'tish | `links[{code,name,url,keep,is_current}]`; названия с `translate="no"` | current = plain text with `aria-current` |
 | `banner.html` | Экстренный баннер сайта (месяц скрининга) | Sayt bo'ylab shoshilinch banner | `SiteSettings.emergency_banner_*` | hidden / text / link |
 | `breadcrumbs.html` (`{% breadcrumbs %}`) | Хлебные крошки от главной | Yo'l ko'rsatkichi | `crumbs[Page]` | hidden on home; last item `aria-current` |
 | `page_meta.html` | Время чтения + бейдж «Проверено врачом: имя, организация (дата)» | O'qish vaqti + «Shifokor tekshirgan» belgisi | `page.reading_time`, `page.verified_badge` | badge on/off |

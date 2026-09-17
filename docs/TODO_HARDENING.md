@@ -27,3 +27,4 @@ here. Each item: what, why, where.
 | H-020 | workflow | An admin who publishes directly (bypassing "Medical review") keeps the previous badge and date. Option: reset `medically_verified` on any publish not produced by the workflow finish action, once editors confirm they want that. | `apps/users/workflows.py` |
 | H-021 | security | Drop `apps/users/otp.py` (DeviceAwareTokenForm) when wagtail-2fa supports django-otp ≥ 1.7; the 2FA tests will tell. | `apps/users/otp.py` |
 | H-022 | cms | Wagtail's Uzbek admin translation is partial (mixed uz/en labels); editors can switch the admin language to Russian in *Account → Preferences*. Contribute missing strings upstream or ship a local `.po`. | `locale/` |
+| H-023 | i18n | Uzbek Cyrillic loanword exceptions (`EXCEPTIONS`/`STEMS` in `apps/core/uzcyrl.py`) are code-managed; move to a CMS snippet with a preview once editors report words, and have a philologist review a sample of `/oz/` pages. | `apps/core/uzcyrl.py` |

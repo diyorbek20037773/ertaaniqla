@@ -61,9 +61,28 @@ def language_redirect(request: HttpRequest) -> HttpResponseRedirect:
     supported = {code for code, _ in settings.LANGUAGES}
     if lang not in supported:
         lang = settings.LANGUAGE_CODE
-    response = HttpResponseRedirect(f"/{lang}/")
+    target = f"/{lang}/"
+    if lang == "uz" and _prefers_uzbek_cyrillic(request):
+        from apps.core.middleware import cyrillic_prefix
+
+        target = cyrillic_prefix()
+    response = HttpResponseRedirect(target)
     response["Vary"] = "Accept-Language, Cookie"
     return response
+
+
+def _prefers_uzbek_cyrillic(request: HttpRequest) -> bool:
+    """Accept-Language names uz-Cyrl before any other Uzbek variant (no language cookie set)."""
+    from django.utils.translation.trans_real import parse_accept_lang_header
+
+    if not getattr(settings, "UZ_CYRILLIC_ENABLED", True):
+        return False
+    if request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME):
+        return False
+    for tag, _quality in parse_accept_lang_header(request.headers.get("Accept-Language", "")):
+        if tag.startswith("uz"):
+            return tag == "uz-cyrl"
+    return False
 
 
 @require_GET
@@ -89,8 +108,13 @@ def _sitemaps(request: HttpRequest) -> dict[str, type[Sitemap[Any]] | Sitemap[An
 def sitemap_index(request: HttpRequest) -> HttpResponse:
     """One sitemap per language (spec §7), listed in the index."""
     base = f"{request.scheme}://{request.get_host()}"
+    prefixes = [f"/{code}/" for code, _ in settings.LANGUAGES]
+    if getattr(settings, "UZ_CYRILLIC_ENABLED", True):
+        from apps.core.middleware import cyrillic_prefix
+
+        prefixes.insert(1, cyrillic_prefix())
     entries = "".join(
-        f"<sitemap><loc>{base}/{code}/sitemap.xml</loc></sitemap>" for code, _ in settings.LANGUAGES
+        f"<sitemap><loc>{base}{prefix}sitemap.xml</loc></sitemap>" for prefix in prefixes
     )
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>'

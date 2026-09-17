@@ -59,9 +59,16 @@ def test_language_switcher_links_to_counterpart(seeded, client: Client) -> None:
 def test_hreflang_and_canonical_in_head(seeded, client: Client) -> None:
     html = client.get("/ru/detskiy/").content.decode()
     # origin = Wagtail Site hostname (canonical domain), not the request host
-    assert '<link rel="alternate" hreflang="uz" href="http://localhost/uz/bolalar/">' in html
+    assert (
+        '<link rel="alternate" hreflang="uz" href="http://localhost/uz/bolalar/" data-script-keep>'
+        in html
+    )
+    assert '<link rel="alternate" hreflang="uz-Cyrl" href="http://localhost/oz/bolalar/">' in html
     assert '<link rel="alternate" hreflang="ru" href="http://localhost/ru/detskiy/">' in html
-    assert '<link rel="alternate" hreflang="x-default" href="http://localhost/uz/bolalar/">' in html
+    assert (
+        '<link rel="alternate" hreflang="x-default" href="http://localhost/uz/bolalar/" '
+        "data-script-keep>" in html
+    )
     assert '<link rel="canonical" href="http://localhost/ru/detskiy/">' in html
 
 

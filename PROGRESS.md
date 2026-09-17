@@ -137,35 +137,31 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] `docs/EDITOR_GUIDE_ru.md` + `_uz.md`, `docs/LAUNCH_CHECKLIST.md`, RUNBOOK §5.1, `find_placeholders` command
   - [x] `tests/perf/locustfile.py` + local run (below)
   - [x] client answers (`TUSHUNTIRISH_uz (2).md`, untracked file of the developer) → DECISIONS D-044…D-048; TZ_TRACE section G; final trace pass (only CL-01 uz-Cyrl todo, E-11 blocked by Figma, M7-08 UAT needs people)
-- [ ] **M7b — Uzbek Cyrillic (client answer D-047)** — NEXT
-  - [ ] design: runtime transliteration of the uz (Latin) tree under `/oz/` (gov.uz convention: /uz Latin, /oz Cyrillic), hreflang `uz-Cyrl`, language switch 3 entries, sitemap `/oz/sitemap.xml`; no third editorial tree (one medical review covers both scripts) → DECISIONS D-049
-  - [ ] `apps/core/uzcyrl.py` (draft saved in scratchpad `uzcyrl_draft.py` — REWRITE cleanly, it has dead branches): word rules (sh ш, ch ч, oʻ ў, gʻ ғ, yo ё, yu ю, ya я, ye е, e→э word-initial/after vowel, ʼ→ъ), loanword EXCEPTIONS, case preservation; `transliterate_html` skipping script/style/code/`data-no-translit`, alt/title/aria-label/meta content
-  - [ ] middleware `apps/core/middleware.UzCyrillicMiddleware` before LocaleMiddleware: `/oz/…` → path_info `/uz/…`, flag `request.uz_script="cyrl"`; response: text/html transliterated, internal `/uz/` links → `/oz/` (except elements with `data-script-keep`), `lang="uz-Cyrl"`, redirects rewritten; XML sitemap locs rewritten; cache transliterated output by md5
-  - [ ] lang_switch + hreflang_links + canonical aware of the flag; sitemap index lists `/oz/sitemap.xml`; search under /oz/
-  - [ ] tests: table-driven translit, html skipping, middleware (200 for every live uz page under /oz/, links, redirect, lang attr, hreflang, canonical, HTMX partials, page cache), e2e screenshot; translations of new UI strings (language name «Ўзбекча»)
+- [x] **M7b — Uzbek Cyrillic (client answer D-047)** — DONE, tagged `m7b`
+  - [x] D-049: runtime transliteration of the uz (Latin) tree under `/oz/`; `apps/core/uzcyrl.py` (letter rules, e/э, ʼ/ъ, sʼh, tsiya→ция, EXCEPTIONS/STEMS, brands + Roman numerals kept, HTML/JSON-aware, `translate="no"` / `data-no-translit` opt-out)
+  - [x] `apps/core/middleware.UzCyrillicMiddleware` (after WhiteNoise): path rewrite, text + URL conversion, `lang="uz-Cyrl"`, Content-Language, Location + sitemap rewrite, converted HTML cached by hash with CSP nonce masked; `UZ_CYRILLIC_ENABLED` (in .env.example)
+  - [x] 3-way language switch + hreflang `uz-Cyrl` (`core_tags.language_versions`, `data-script-keep`), sitemap index `/oz/sitemap.xml`, `/` → `/oz/` for `Accept-Language: uz-Cyrl`, nginx form zone `(uz|oz|ru)`, footer/header placeholders `translate="no"`
+  - [x] tests `tests/core/test_uzcyrl.py` (word table, HTML/JSON, every live uz page 200 under /oz/, alternates, search, HTMX directory + map island, forms, page cache shared, switch-off); e2e: screenshots home-oz / article-symptoms-oz, language switch Latin↔Cyrillic, axe on 2 /oz/ pages; pa11y URL added
+  - [x] docs: EDITOR_GUIDE ru/uz §5.3, COMPONENT_INVENTORY, TZ_TRACE CL-01 done, TODO_HARDENING H-023
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [ ] FINAL REPORT → docs/FINAL_REPORT_uz.md
 
-## Last command run (2026-09-17, M7 close)
+## Last command run (2026-09-17, M7b close)
 
 ```
-ruff check . / ruff format --check .     → All checks passed · 206 files already formatted
-mypy                                     → Success: no issues found in 121 source files
-pytest --cov                             → 378 passed, 1 skipped (ffmpeg on host), coverage 91 %
+ruff check . / format                    → All checks passed
+mypy                                     → Success: no issues found in 122 source files
+pytest --cov                             → 432 passed, 1 skipped (ffmpeg on host), coverage 92 %
 scripts/check_translations.py            → translations: uz + ru complete
-pytest tests/e2e -m e2e (dev :8001)      → 36 passed (incl. test_cms_workflow: login via TOTP, ru→uz, approve, live + badge)
-locust 200 users, 5 min, spawn 20/s against ertaaniqla/web:local with config.settings.prod, gunicorn 9 workers,
-  Docker Desktop on the dev laptop (NOT the production VPS), anonymous page cache 300 s:
-  28 736 requests, 0 failures, 96.8 req/s; page p50 12 ms · p95 32 ms · p99 75 ms · max 510 ms;
-  search htmx p95 28 ms; directory filter p95 30 ms → budget OK (exit 0)
+pytest tests/e2e -m e2e (dev :8001)      → 41 passed (incl. /oz/ screenshots, Latin↔Cyrillic switch, axe on /oz/)
+docker/scripts/nginx_test.sh             → syntax is ok / test is successful
+M7 locust (unchanged): 28 736 req, 0 failures, page p95 32 ms (prod-settings image, dev laptop)
 ```
 
 ## Next concrete action
 
-Start **M7b — Uzbek Cyrillic** (plan in the milestone list above). Gate: `/oz/` version of every
-live uz page returns 200 with Cyrillic text and `lang="uz-Cyrl"`, links stay inside `/oz/`, hreflang
-has uz / uz-Cyrl / ru, `make check` + e2e green, commit + tag `m7b`. Then FINAL REPORT →
-`docs/FINAL_REPORT_uz.md` (Uzbek, AUTOPILOT § FINAL REPORT, print it in chat).
+Write the FINAL REPORT → `docs/FINAL_REPORT_uz.md` (Uzbek, AUTOPILOT § FINAL REPORT) and print it in
+chat. After that only M5b (Figma) and M8 (launch — client inputs, see LAUNCH_CHECKLIST) remain.
 
 (M7 note kept for history:) Start **M7 — Editors, workflow, UAT, launch checklist** (AUTOPILOT gate): Wagtail groups
 Editor / Medical Reviewer / Admin, 2-step workflow, badge, 2FA, editor guides, launch checklist,

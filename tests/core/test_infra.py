@@ -39,6 +39,12 @@ def test_root_honours_language_cookie_over_header(client: Client) -> None:
     assert response["Location"] == "/ru/"
 
 
+def test_root_honours_uzbek_cyrillic_preference(client: Client) -> None:
+    response = client.get("/", HTTP_ACCEPT_LANGUAGE="uz-Cyrl,uz;q=0.9,ru;q=0.8")
+    assert response["Location"] == "/oz/"
+    assert client.get("/", HTTP_ACCEPT_LANGUAGE="uz-Latn,uz-Cyrl;q=0.5")["Location"] == "/uz/"
+
+
 def test_root_ignores_unsupported_language(client: Client) -> None:
     response = client.get("/", HTTP_ACCEPT_LANGUAGE="de")
     assert response["Location"] == "/uz/"
@@ -57,6 +63,7 @@ def test_sitemap_index_lists_languages(client: Client) -> None:
     assert response.status_code == 200
     text = response.content.decode()
     assert "/uz/sitemap.xml" in text
+    assert "/oz/sitemap.xml" in text  # Uzbek Cyrillic (D-049)
     assert "/ru/sitemap.xml" in text
 
 

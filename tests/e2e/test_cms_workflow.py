@@ -96,9 +96,11 @@ def submit_for_moderation(page: Any, screenshot: str | None = None) -> None:
 def fill_article(page: Any, title: str, summary: str, slug: str) -> None:
     page.fill("input[name=title]", title)
     page.fill("input[name=summary]", summary)
-    page.locator("[role=tab][href='#tab-promote']").click()
+    # tab ids are slugs of the translated headings (cached per process) — select by position
+    tabs = page.locator("[role=tab]")
+    tabs.nth(1).click()  # Promote
     page.fill("input[name=slug]", slug)
-    page.locator("[role=tab][href='#tab-content']").click()
+    tabs.nth(0).click()  # Content
 
 
 def approve(page: Any, pid: int, screenshot: str | None = None) -> None:

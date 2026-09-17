@@ -1,7 +1,9 @@
 {% comment %} ---------------------------------------------------------------------------
    components/lang_switch.html — language switcher. Rendered by {% lang_switch %}.
-   Context: links (list of {code, name, url, is_current}); url points to the translated
-   counterpart of the current page (wagtail-localize), else the section root, else /<lang>/.
+   Context: links (list of {code, name, url, keep, is_current}) — uz (Latin), uz-Cyrl (/oz/,
+   DECISIONS D-049), ru; url points to the translated counterpart of the current page
+   (wagtail-localize), else the section root, else /<lang>/. `keep` = Latin link that the
+   Cyrillic middleware must not move to /oz/. Names are never transliterated (translate="no").
    Non-JS: plain links.
    --------------------------------------------------------------------------- {% endcomment %}
 {% load i18n %}
@@ -9,9 +11,9 @@
   {% for link in links %}
     <li>
       {% if link.is_current %}
-        <span class="lang-switch__current" aria-current="true" lang="{{ link.code }}">{{ link.name }}</span>
+        <span class="lang-switch__current" aria-current="true" lang="{{ link.code }}" translate="no">{{ link.name }}</span>
       {% else %}
-        <a class="lang-switch__link" href="{{ link.url }}" hreflang="{{ link.code }}" lang="{{ link.code }}" rel="alternate">{{ link.name }}</a>
+        <a class="lang-switch__link" href="{{ link.url }}" hreflang="{{ link.code }}" lang="{{ link.code }}" rel="alternate" translate="no"{% if link.keep %} data-script-keep{% endif %}>{{ link.name }}</a>
       {% endif %}
     </li>
   {% endfor %}

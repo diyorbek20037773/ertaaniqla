@@ -152,33 +152,66 @@ def breadcrumbs(context: dict[str, Any]) -> dict[str, Any]:
 
 @register.inclusion_tag("components/lang_switch.html", takes_context=True)
 def lang_switch(context: dict[str, Any]) -> dict[str, Any]:
+    return {"links": language_versions(context)}
+
+
+def language_versions(context: dict[str, Any]) -> list[dict[str, Any]]:
+    """Site versions for the switcher and hreflang: uz (Latin), uz-Cyrl (`/oz/`, D-049), ru.
+
+    `keep` marks Latin URLs that the Cyrillic middleware must not rewrite to `/oz/`.
+    """
+    from apps.core.middleware import (
+        CYRILLIC_LANGUAGE_TAG,
+        is_cyrillic_request,
+        latin_to_cyrillic_path,
+    )
+
     page = context.get("page")
-    current = _current_language()
-    links = [
-        {
-            "code": code,
-            "name": name,
-            "url": translated_url(page, code),
-            "is_current": code == current,
-        }
-        for code, name in settings.LANGUAGES
-    ]
-    return {"links": links}
+    request = context.get("request")
+    current = CYRILLIC_LANGUAGE_TAG if is_cyrillic_request(request) else _current_language()
+    versions: list[dict[str, Any]] = []
+    for code, name in settings.LANGUAGES:
+        url = translated_url(page, code)
+        versions.append(
+            {
+                "code": code,
+                "name": name,
+                "url": url,
+                "keep": code == "uz",
+                "is_current": code == current,
+            }
+        )
+        if code == "uz" and getattr(settings, "UZ_CYRILLIC_ENABLED", True):
+            versions.append(
+                {
+                    "code": CYRILLIC_LANGUAGE_TAG,
+                    "name": "Ўзбекча",
+                    "url": latin_to_cyrillic_path(url),
+                    "keep": False,
+                    "is_current": current == CYRILLIC_LANGUAGE_TAG,
+                }
+            )
+    return versions
 
 
 @register.simple_tag(takes_context=True)
 def hreflang_links(context: dict[str, Any]) -> SafeString:
-    """`<link rel="alternate" hreflang>` for every language + x-default (spec §7)."""
-    page = context.get("page")
-    request = context.get("request")
-    base = site_root_url(request)
-    pairs = [(code, base + translated_url(page, code)) for code, _ in settings.LANGUAGES]
-    default_url = dict(pairs)[settings.LANGUAGE_CODE]
+    """`<link rel="alternate" hreflang>` for every site version + x-default (spec §7)."""
+    base = site_root_url(context.get("request"))
+    versions = language_versions(context)
+    default_url = next(base + v["url"] for v in versions if v["code"] == settings.LANGUAGE_CODE)
     links = format_html_join(
-        "\n", '<link rel="alternate" hreflang="{}" href="{}">', ((code, url) for code, url in pairs)
+        "\n",
+        '<link rel="alternate" hreflang="{}" href="{}"{}>',
+        (
+            (v["code"], base + v["url"], SafeString(" data-script-keep" if v["keep"] else ""))
+            for v in versions
+        ),
     )
     return format_html(
-        '{}\n<link rel="alternate" hreflang="x-default" href="{}">', links, default_url
+        '{}\n<link rel="alternate" hreflang="x-default" href="{}" data-script-keep>',
+        links,
+        default_url,
     )
 
 

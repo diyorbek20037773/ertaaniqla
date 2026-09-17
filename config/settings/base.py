@@ -102,6 +102,7 @@ MIDDLEWARE = [
     "apps.core.middleware.RequestIDMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "apps.core.middleware.UzCyrillicMiddleware",  # /oz/ = Uzbek Cyrillic view of /uz/ (D-049)
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -273,6 +274,10 @@ LANGUAGES = [
     ("ru", "Русский"),
 ]
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES
+# Uzbek Cyrillic (client answer D-047): the uz (Latin) tree transliterated at request time under
+# /oz/ (gov.uz convention) — no third editorial tree (D-049, apps.core.middleware)
+UZ_CYRILLIC_ENABLED = env.bool("UZ_CYRILLIC_ENABLED", default=True)
+UZ_CYRILLIC_PREFIX = "oz"
 WAGTAIL_I18N_ENABLED = True
 LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Asia/Tashkent"

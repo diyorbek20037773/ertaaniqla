@@ -30,6 +30,8 @@ PAGES = [
     "/ru/voprosy-otvety/",
     "/uz/lugat/",
     "/uz/materiallar/",
+    "/oz/",  # Uzbek Cyrillic (D-049)
+    "/oz/ayollar/qayerga-murojaat/",
 ]
 
 
