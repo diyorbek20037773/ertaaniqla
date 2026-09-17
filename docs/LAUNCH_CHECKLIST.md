@@ -51,6 +51,10 @@ Owners: **Client** (Project Office / Agency), **Content** (copywriter + doctors)
 
 - [ ] Backups: first nightly `backup.sh` ran; `restic snapshots` lists it; **restore test OK** (`make restore-test`) — Dev
 - [ ] Monitoring profile up; Grafana reachable via SSH tunnel; test alert reaches Telegram — Dev
+- [ ] Loki receives logs (`{project="ertaaniqla-prod"}` in Grafana Explore); *logs & audit* dashboard shows a test failed login; Loki rule `CmsAccountLockout` reaches Telegram once (RUNBOOK §9.3) — Dev
+- [ ] `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318` set; a trace of `/uz/` visible in Jaeger with no query string / IP in its tags (RUNBOOK §9.4) — Dev
+- [ ] SonarQube at `sonar.<DOMAIN>`: admin password changed, *Force user authentication* on, `SONAR_HOST_URL` + `SONAR_TOKEN` in GitHub; first `sonarqube` job green (RUNBOOK §9.2) — Dev
+- [ ] Every developer clone: `uv run pre-commit install` (pre-commit + pre-push hooks) — Dev
 - [ ] External uptime monitor on `https://ertaaniqla.uz/healthz/` (H-016) — Dev
 - [ ] Sentry receives a test event with release = git SHA; PII scrubbed — Dev
 - [ ] Celery worker/beat running: `purge_pii --dry-run` prints counts; transcoding of a sample video works — Dev

@@ -23,7 +23,7 @@ Uzbekistan** — the VPS and the backup bucket must both be in UZ (RUNBOOK §0).
 * **2FA mandatory** for every staff account (`CMS_2FA_REQUIRED=true`, django-otp + wagtail-2fa); strong password validators; 8 h session timeout; `django-axes` lockout (5 failures → 1 h, username + IP); nginx `cms_login` zone 5 r/m per IP; optional IP allow-list (`docker/nginx/snippets/cms_allowlist.conf`).
 * Roles (M7): Editor → Medical reviewer → publish (2-step workflow); editors cannot publish.
 * Every publish is a revision; `Revert` in the page history is the first response (RUNBOOK §4).
-* Detection: Sentry, access log (`request_id`), Telegram alerts on 5xx spikes.
+* Detection: Sentry, access log (`request_id`), Telegram alerts on 5xx spikes; **security audit trail** (`apps/core/audit.py`, ADR-0005) of logins, failed logins, lockouts, role/permission/2FA/flag changes and every CMS action → Loki + Wagtail Site history; Loki ruler alerts on lockouts, login-failure spikes and privilege changes → Telegram.
 
 ### 2.2 Spam and abuse of forms
 * Honeypot field + Cloudflare Turnstile (server-verified) + `django-ratelimit` 5 POST/min/IP (Redis) + nginx `form_post` zone 10 r/m per IP; general 30 r/s burst 60; 40 connections per IP.
@@ -39,22 +39,23 @@ Uzbekistan** — the VPS and the backup bucket must both be in UZ (RUNBOOK §0).
 ### 2.4 PII leak
 * Encryption in transit: TLS 1.2/1.3 only, HSTS preload, OCSP stapling; HTTP → HTTPS 301; secure/HttpOnly/SameSite cookies; `SECURE_PROXY_SSL_HEADER`.
 * Encryption at rest: application-level Fernet (`PII_ENCRYPTION_KEYS`, newest-first key list, `rotate_pii_keys` command — RUNBOOK §6); restic repository encrypted; disk encryption on the VPS if the provider offers it.
-* Logs: JSON, no bodies, no PII; nginx anonymises the last IPv4 octet / IPv6 tail; Sentry `send_default_pii=False` + scrubber (`apps/core/sentry.py`).
+* Logs: JSON, no bodies, no PII; nginx anonymises the last IPv4 octet / IPv6 tail; Sentry `send_default_pii=False` + scrubber (`apps/core/sentry.py`). Central logs (Loki, 30 d, on our VPS): Alloy masks `password/secret/token/authorization` values before shipping. Audit lines carry IP prefixes only and a hash for unknown usernames; opening a question/feedback record that holds a contact is itself audited (`pii.viewed`).
+* Traces (Jaeger, 7 d, on our VPS): spans keep path and route only — query strings (search terms), client IPs, user agents and SQL parameters are removed in `apps/core/tracing.py` (tested).
 * Uploads: libmagic MIME sniffing, EXIF/XMP (GPS!) stripped from images, size limits, raw video never served (nginx 404 on `videos/source/`), documents permission-checked by Django, optional ClamAV profile.
 * Private documents are never cached (`proxy_cache off` under `/documents/`).
 * Backups: `pg_dump` contains encrypted PII columns only; the Fernet key is **not** in the backup — keep it in the password manager (losing it = losing contacts, which is acceptable by design).
 
 ### 2.5 Admin / server takeover
 * SSH: key-only, no root password login, `MaxAuthTries 4`, fail2ban (sshd jail), ufw default deny (22 restricted to your CIDR when `SSH_ALLOW_FROM` is set, else rate-limited; 80; 443).
-* Docker daemon local only; containers run as non-root `app` (uid 1000); `nginx-reloader` is the only container with the docker socket (read-only, exec nginx reload only).
-* Unattended security upgrades; weekly base-image rebuild + Trivy (fail on HIGH/CRITICAL); Dependabot; `pip-audit` in CI; SBOM per image.
+* Docker daemon local only; containers run as non-root `app` (uid 1000); `nginx-reloader` and `alloy` are the only containers with the docker socket (read-only; nginx reload / log discovery).
+* Unattended security upgrades; weekly base-image rebuild + Trivy (fail on HIGH/CRITICAL); Dependabot; `pip-audit` in CI; SBOM per image; self-hosted **SonarQube** quality gate (bugs, vulnerabilities, security hotspots) blocks the image build (ADR-0005). SonarQube requires login ("Force user authentication") and is reachable only through nginx.
 * Secrets: `.env` chmod 600 owned by `deploy`; GitHub secrets scoped per environment; `prod` deploy needs a reviewer approval.
 * Headers: CSP nonce-based (`script-src 'nonce-…'`, `frame-ancestors 'none'`, explicit `frame-src` for YouTube/Telegram/Instagram/TikTok, click-to-load facade for the last two), `X-Content-Type-Options`, `X-Frame-Options DENY`, `Referrer-Policy strict-origin-when-cross-origin`, minimal `Permissions-Policy`. Alpine CSP build → no `unsafe-eval`.
 * `django check --deploy` runs at image start (`migrate` role) and in the test suite with prod settings.
 
 ### 2.6 Supply chain
 * Pinned lockfiles (`uv.lock`, `package-lock.json`); no CDN assets (HTMX/Alpine/Leaflet vendored and bundled); fonts self-hosted; images pinned by tag (Prometheus/Grafana/exporters) — Dependabot proposes updates.
-* Only official images: `python:3.12-slim`, `postgres:16-alpine`, `redis:7-alpine`, `nginx:1.27-alpine`, `certbot/certbot`, `prom/*`, `grafana/grafana`.
+* Only official images: `python:3.12-slim`, `postgres:16-alpine`, `redis:7-alpine`, `nginx:1.27-alpine`, `certbot/certbot`, `prom/*`, `grafana/grafana`, `grafana/loki`, `grafana/alloy`, `jaegertracing/jaeger`, `sonarqube` (community), `busybox` (volume ownership init).
 
 ### 2.7 Availability / data loss
 * Nightly `pg_dump` + restic (7 d / 4 w / 6 m) to a bucket in UZ, `restic check` after each run, weekly automated restore test, `BackupTooOld` / `RestoreTestTooOld` alerts. RPO 24 h, RTO 2 h (RUNBOOK §3).

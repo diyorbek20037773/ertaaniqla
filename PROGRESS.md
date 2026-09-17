@@ -143,6 +143,15 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] 3-way language switch + hreflang `uz-Cyrl` (`core_tags.language_versions`, `data-script-keep`), sitemap index `/oz/sitemap.xml`, `/` → `/oz/` for `Accept-Language: uz-Cyrl`, nginx form zone `(uz|oz|ru)`, footer/header placeholders `translate="no"`
   - [x] tests `tests/core/test_uzcyrl.py` (word table, HTML/JSON, every live uz page 200 under /oz/, alternates, search, HTMX directory + map island, forms, page cache shared, switch-off); e2e: screenshots home-oz / article-symptoms-oz, language switch Latin↔Cyrillic, axe on 2 /oz/ pages; pa11y URL added
   - [x] docs: EDITOR_GUIDE ru/uz §5.3, COMPONENT_INVENTORY, TZ_TRACE CL-01 done, TODO_HARDENING H-023
+- [x] **OPS+ — CI/CD, code analysis, tracing, central logs, audit (developer request 2026-09-17)** — branch `ops/cicd-observability`, ADR-0005, D-050…D-055
+  - [x] developer chose: stay on Compose (no K8s/ArgoCD), SonarQube self-hosted
+  - [x] local: pre-commit installs pre-push hook (ruff, mypy, pytest -x); `make ci-local`, `make sonar`, `make sonar-up`
+  - [x] SonarQube: `sonar-project.properties`, `compose.sonarqube.yml` (26.9 community + PG16), nginx vhost `sonar.<DOMAIN>` (lazy upstream), TLS name, `vm.max_map_count`; CI job `sonarqube` (skipped until `vars.SONAR_HOST_URL`), build/deploy `if` conditions accept skipped but not failed gate; coverage `relative_files = true`
+  - [x] tracing: `apps/core/tracing.py` (OTel Django/psycopg/Celery → OTLP → Jaeger v2), init in `config/wsgi.py` + Celery `worker_process_init`/`beat_init`, span PII scrub, `trace_id` in JSON logs
+  - [x] logs: Loki 3.7 + Alloy 1.19 + `monitoring-init` (volume chown) in profile `monitoring`; Loki ruler audit alerts; Grafana Loki datasource (trace links) + dashboard `ertaaniqla-logs-audit`
+  - [x] audit: `apps/core/audit.py` + `AuditContextMiddleware` + receivers in `CoreConfig.ready` + `apps/core/wagtail_hooks.py`; 15 event types + `cms.*` mirror; 30 new uz/ru strings
+  - [x] docs: ADR-0005, RUNBOOK §4 rows + §9, SECURITY, DECISIONS D-050…D-055, TODO_HARDENING H-017 done + H-024…H-028, LAUNCH_CHECKLIST §5
+  - [x] verified on this machine (2026-09-17): `nginx -t` OK with sonar vhost; `compose config` (prod + profiles, sonarqube) OK; SonarQube stack healthy + real scan → quality gate PASSED; Jaeger v2 healthy, Django request exported, no query string / UA / IP in span tags, `/healthz/` not traced; Loki+Alloy ingest docker logs, `level` label, secret masking, audit LogQL query, ruler rules `health: ok`; Grafana provisions Loki datasource + dashboard and runs the LogQL
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 

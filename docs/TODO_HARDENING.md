@@ -21,10 +21,15 @@ here. Each item: what, why, where.
 | H-014 | analytics | Server-side event log (page views without cookies) as a Metrika-free fallback; spec lists it as optional. | `apps/analytics` |
 | H-015 | nginx | Brotli: switch to an nginx build with `ngx_brotli` (or serve whitenoise's `.br` files) once assets grow; today gzip + `gzip_static`. | `docker/nginx` |
 | H-016 | ops | External uptime check (Uptime-Kuma on another host or a free monitor) — the in-host blackbox probe cannot see a full VPS outage. | RUNBOOK §5 |
-| H-017 | ops | Loki + promtail for log search (optional in the spec); today `docker compose logs` + Sentry. | `compose.prod.yml` profile `logs` |
+| H-017 | ops | ~~Loki + promtail for log search~~ **done 2026-09-17** with Loki + Alloy (ADR-0005, D-053). | `compose.prod.yml` profile `monitoring` |
 | H-018 | ops | Page-cache query allow-list (H-011) also at nginx level (`proxy_cache_key` without unknown query args). | `docker/nginx/templates` |
 | H-019 | security | ZAP baseline scan in CI against the preview server (optional in the spec §12). | `.github/workflows/ci.yml` |
 | H-020 | workflow | An admin who publishes directly (bypassing "Medical review") keeps the previous badge and date. Option: reset `medically_verified` on any publish not produced by the workflow finish action, once editors confirm they want that. | `apps/users/workflows.py` |
 | H-021 | security | Drop `apps/users/otp.py` (DeviceAwareTokenForm) when wagtail-2fa supports django-otp ≥ 1.7; the 2FA tests will tell. | `apps/users/otp.py` |
 | H-022 | cms | Wagtail's Uzbek admin translation is partial (mixed uz/en labels); editors can switch the admin language to Russian in *Account → Preferences*. Contribute missing strings upstream or ship a local `.po`. | `locale/` |
 | H-023 | i18n | Uzbek Cyrillic loanword exceptions (`EXCEPTIONS`/`STEMS` in `apps/core/uzcyrl.py`) are code-managed; move to a CMS snippet with a preview once editors report words, and have a philologist review a sample of `/oz/` pages. | `apps/core/uzcyrl.py` |
+| H-024 | ops | SonarQube shares the 16 GB VPS (3 GB cap). If memory pressure shows in Grafana, move `compose.sonarqube.yml` to a small second VM in UZ; only `SONAR_HOST_URL` changes. | `compose.sonarqube.yml` |
+| H-025 | ops | Jaeger v2 serves only `/api/v3`; Grafana 11's Jaeger datasource cannot read it, so Loki links open the Jaeger UI. Add a Grafana Jaeger/Tempo datasource once Grafana supports the v3 API (or switch to Tempo). | `docker/monitoring/grafana/provisioning` |
+| H-026 | ops | Loki ruler alerts are not unit-tested (rules are checked for shape; LogQL validity was verified once against a running Loki 3.7). Add a `loki` container check to `make ops-check` / CI `build`. | `.github/workflows/ci.yml` |
+| H-027 | audit | `pii.viewed` covers the CMS edit view of Question/FeedbackSubmission; listing columns and CSV exports that show contacts would need the same hook if they are added. | `apps/core/audit.py` |
+| H-028 | ci | SonarQube Community analyses one branch; PR decoration and branch analysis need a paid edition — PRs rely on the other CI gates. | ADR-0005 |

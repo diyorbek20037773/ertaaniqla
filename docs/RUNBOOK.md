@@ -106,11 +106,14 @@ Media lives in the `media` volume (`/srv/media` in containers) and in every rest
 | `CeleryQueueBacklog` | `dc logs worker`, ffmpeg errors | `dc restart worker`; stuck video → set status `failed` in CMS and re-upload |
 | CMS lockout (axes) | `dc run --rm web python manage.py axes_reset` | rotate the password if brute force is suspected |
 | Defacement / suspicious edit | Wagtail revision history (`/cms/pages/<id>/history/`) | revert revision, disable the user, rotate secrets (§6) |
+| Telegram: `CmsAccountLockout` / `CmsLoginFailuresSpike` | Grafana → *logs & audit* (failed logins, `ip` prefix, `username_hash`) | same prefix repeatedly → block it in nginx; a real editor → `axes_reset_username`; if a known account is targeted, rotate its password and check its 2FA devices |
+| Telegram: `PrivilegeChange` | Grafana → *logs & audit*, CMS → Reports → Site history (actor) | unexpected → disable the actor and the target (§6 "CMS user compromise") |
+| Slow page, cause unknown | Jaeger UI (`ssh -L 16686:127.0.0.1:16686`), service `ertaaniqla-web`, sort by duration; or click `trace_id` in a Loki line | N+1 → fix the query; slow external call → add a timeout |
 | Spam through forms | `dc logs web \| grep ratelimited`, Turnstile dashboard | lower `FORM_RATE`, block IPs in nginx `cms_allowlist`-style snippet, temporary `waffle` flag off |
 
 Maintenance page: `make maintenance-on` / `make maintenance-off` (nginx checks the flag on every request; 503 + `Retry-After`).
 
-Logs: JSON on stdout for every container (`dc logs -f --tail 200 web`), request id in `X-Request-Id` (nginx) = `request_id` (Django). nginx access log anonymises the last IPv4 octet.
+Logs: JSON on stdout for every container (`dc logs -f --tail 200 web`), request id in `X-Request-Id` (nginx) = `request_id` (Django), `trace_id` = Jaeger trace. nginx access log anonymises the last IPv4 octet. Searchable history (30 days): Grafana → Explore → Loki or the *logs & audit* dashboard (§9.3).
 
 ## 5. Routine operations
 
@@ -131,7 +134,7 @@ dc run --rm web python manage.py rebuild_search
 dc run --rm web python manage.py purge_pii     # manual retention run (beat does it nightly)
 dc exec redis redis-cli info memory
 docker exec ertaaniqla-prod-db-1 psql -U ertaaniqla -c 'select count(*) from wagtailcore_page'
-ssh -L 3000:127.0.0.1:3000 deploy@vps          # Grafana at http://localhost:3000
+ssh -L 3000:127.0.0.1:3000 -L 16686:127.0.0.1:16686 deploy@vps   # Grafana :3000, Jaeger :16686
 dc run --rm web python manage.py find_placeholders --fail   # launch gate: no [[TODO]]/[[VERIFY]] live
 ```
 
@@ -195,3 +198,79 @@ container to `ertaaniqla-prod_default`, and keeps backups local. Seed it with
 * `docker compose up -d --scale web=2` works (stateless web; sessions in Redis; nginx upstream resolves both).
 * PgBouncer only when connections exceed ~200 (TODO_HARDENING H-004).
 * Media to S3-compatible storage inside Uzbekistan: set `MEDIA_STORAGE=s3` + `S3_*`, run `dc run --rm web python manage.py migrate_media_to_s3` (M8 if needed) — `django-storages` is already wired.
+
+## 9. Delivery pipeline, code analysis, traces, logs, audit (ADR-0005)
+
+```
+local:  git commit (pre-commit: ruff, format, secrets) → git push (pre-push: ruff, mypy, pytest -x)
+        full local gate before a risky push: make ci-local  (check + tailwind + docker image)
+CI:     quality (ruff, mypy, pytest ≥85 %, pip-audit, translations, check --deploy)
+        → sonarqube (scan + quality gate)  ┐
+        → frontend → a11y-perf             ┴→ build (buildx, trivy, SBOM, push ghcr.io, nginx -t, compose/promtool)
+CD:     deploy-staging (auto) → deploy-prod (approval) → smoke → Telegram;  rollback.yml = any tag
+ops:    Prometheus+Alertmanager (metrics) · Loki+Alloy (logs, audit) · Jaeger (traces) · Grafana · Sentry
+```
+
+### 9.1 Local hooks (once per clone)
+
+```bash
+uv run pre-commit install        # installs pre-commit AND pre-push hooks
+make ci-local                    # optional full gate (needs Docker)
+```
+
+### 9.2 SonarQube (self-hosted)
+
+```bash
+# on the VPS, once (vm.max_map_count is set by bootstrap_vps.sh; check: sysctl vm.max_map_count)
+sudo -u deploy git clone <repo> /srv/ertaaniqla/sonarqube && cd /srv/ertaaniqla/sonarqube
+cp .env.example .env && sed -i "s/^SONAR_DB_PASSWORD=.*/SONAR_DB_PASSWORD=$(openssl rand -hex 24)/" .env
+make sonar-up                     # compose project ertaaniqla-sonarqube, joins the prod network
+```
+DNS: `sonar.<DOMAIN>` → the VPS. Certificate: set `SONAR_DOMAIN` in the **prod** `.env` and add the
+name to the existing certificate:
+`dc run --rm certbot certonly --webroot -w /var/www/certbot --expand -d <every existing name> -d sonar.<DOMAIN> && dc exec nginx nginx -s reload`
+(on a fresh VPS `make tls-init` includes `SONAR_DOMAIN` automatically).
+
+First login `https://sonar.<DOMAIN>` as `admin` / `admin` → change the password immediately →
+*Administration → Security*: **Force user authentication = on** → *Projects → Create* `ertaaniqla`
+(main branch `master`) → *My Account → Security*: generate a **project analysis token**.
+GitHub → Settings → Secrets and variables → Actions: variable `SONAR_HOST_URL=https://sonar.<DOMAIN>`,
+secret `SONAR_TOKEN`. From the next push the `sonarqube` job runs; a failed quality gate stops
+the image build. Local scan: `make test && SONAR_HOST_URL=… SONAR_TOKEN=… make sonar`.
+Upgrade: bump the image tag in `compose.sonarqube.yml`, `make sonar-up`, open
+`https://sonar.<DOMAIN>/setup` if it asks for a database migration. No backup needed: every
+result is rebuilt by the next scan.
+
+### 9.3 Logs (Loki + Alloy) and audit
+
+Part of `make prod-up` (profile `monitoring`). Alloy reads every container's stdout through the
+docker socket (read-only) and ships it to Loki (30 days). Labels: `project`, `service`,
+`container`, `stream`, `level`; everything else via `| json`.
+
+```logql
+{project="ertaaniqla-prod", service="web"} | json | levelname="ERROR"
+{project="ertaaniqla-prod", service="web"} |= "ertaaniqla.audit" | json | event="auth.login_failed"
+{project="ertaaniqla-prod", service="nginx"} | json | status >= 500
+{project="ertaaniqla-prod"} |= "<request_id or trace_id>"
+```
+Dashboard *Erta aniqla — logs & audit*: failed logins, lockouts, privilege changes, error volume,
+audit trail, error stream (click `trace_id` → Jaeger). Audit alerts live in
+`docker/monitoring/loki-rules/fake/audit.yml` (Loki ruler → Alertmanager → Telegram).
+
+The same audit events (except unknown usernames and deleted users) are visible without Grafana
+in **CMS → Reports → Site history** ("Login", "Failed login", "Roles", "Personal data viewed", …)
+and in each user's / question's history.
+
+Audit events: `auth.login`, `auth.logout`, `auth.login_failed`, `auth.lockout`,
+`auth.password_changed`, `user.created`, `user.deleted`, `user.superuser_changed`,
+`user.staff_changed`, `user.active_changed`, `user.groups_changed`, `role.permissions_changed`,
+`2fa.device_added`, `2fa.device_removed`, `pii.viewed`, `cms.<wagtail action>`.
+
+### 9.4 Traces (OpenTelemetry → Jaeger)
+
+Enable in the prod `.env`: `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318` → `dc up -d web worker beat`.
+Sampling 10 % (`OTEL_TRACES_SAMPLER_ARG`); switch off instantly with `OTEL_SDK_DISABLED=true`.
+UI: `ssh -L 16686:127.0.0.1:16686 deploy@vps` → http://localhost:16686 (services `ertaaniqla-web`,
+`ertaaniqla-worker`, `ertaaniqla-beat`). Spans: request → SQL statements (no parameters) → Celery
+publish → task. `/healthz/`, `/readyz/`, `/metrics` and static files are not traced. Staging has
+no Jaeger: leave the endpoint empty there.
