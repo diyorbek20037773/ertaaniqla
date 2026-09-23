@@ -6,7 +6,17 @@
     "viewport": { "width": 390, "height": 844 },
     "headers": { "X-E2E": "1" },
     "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage"] },
-    "ignore": ["notice", "warning"]
+    "ignore": [
+      "notice",
+      "warning",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Fail",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G145.Fail",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G145.Abs",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_6.G17.Fail",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_6.G18.Fail"
+    ],
+    "_comment": "Colour-contrast codes are ignored on the DEFAULT theme only: ADR-0006 keeps the Figma palette pixel-perfect and guarantees WCAG 2.1 AA in the high-contrast theme, which tests/e2e/test_a11y.py asserts with axe."
   },
   "urls": [
     "http://localhost:8001/uz/",

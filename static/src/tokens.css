@@ -1,16 +1,43 @@
 /* ---------------------------------------------------------------------------
    tokens.css — THE single place for visual decisions (DECISIONS D-003).
-   Wireframe palette until the designer's Figma arrives (M5b maps Figma tokens here).
+   M5b: values mapped from the designer's Figma file «Erta aniqla»
+   (y76CeUEqpXAuCtaJxB5LUk, frames 2408:5 … 2408:2489). See docs/ADR/ADR-0006.
+
+   Figma has no variables — every value below was read off a node and named here,
+   so no template ever hard-codes a hex.
    Section theming: <body data-section="women|children"> swaps --brand-* only.
    --------------------------------------------------------------------------- */
 :root {
-  /* neutral wireframe greys */
+  /* === raw palette (Figma) ============================================== */
+  /* pink — women's section */
+  --c-pink-200: #ff9fbc;      /* language pill background */
+  --c-pink-300: #ff89b2;      /* women's capsule card */
+  --c-pink-400: #ff5a93;      /* stage-card border */
+  --c-pink-500: #ff477e;      /* CTA gradient start */
+  --c-pink-600: #d5507f;      /* heading gradient start */
+  --c-pink-700: #930450;      /* pill text, links */
+  --c-pink-750: #800049;      /* inactive tab label */
+  --c-pink-800: #701c44;      /* CTA gradient end */
+  --c-pink-900: #6f2a42;      /* heading gradient end */
+
+  /* purple — children's section */
+  --c-purple-300: #a879ff;    /* children's capsule card */
+  --c-purple-400: #a755ff;    /* button gradient end */
+  --c-purple-600: #712bbb;    /* heading gradient end */
+  --c-purple-700: #5700b3;    /* button gradient start, links */
+  --c-purple-900: #1d0f3c;    /* heading gradient start */
+  --c-purple-ink: #1f083b;    /* body copy on the children's card */
+
+  /* accent */
+  --c-lime: #b2f71b;          /* stage badges, method pills */
+
+  /* neutral */
   --neutral-0: #ffffff;
-  --neutral-50: #f7f7f7;
-  --neutral-100: #ececec;
-  --neutral-200: #d9d9d9;
+  --neutral-50: #fbfbfb;      /* page background (Figma #fbfbfb) */
+  --neutral-100: #f2f2f2;
+  --neutral-200: #e3e3e3;
   --neutral-400: #9a9a9a;
-  --neutral-600: #5c5c5c;
+  --neutral-600: #525252;     /* «HAYOTNI SAQLA», muted copy */
   --neutral-800: #2b2b2b;
   --neutral-900: #111111;
 
@@ -24,24 +51,55 @@
   --warning-bg: #fbf1dc;
   --danger-bg: #f9e3e3;
 
-  /* section brands — working defaults, designer decides final hues (spec §2.1) */
-  --brand-w: #b8336a;        /* women: rose */
-  --brand-w-soft: #f6e4ec;
-  --brand-c: #8a5a00;        /* children: amber (≥ 4.5:1 on --brand-c-soft, axe-checked) */
-  --brand-c-soft: #f7ecd6;
+  /* === gradients ======================================================== */
+  --grad-hero: linear-gradient(90deg, var(--c-pink-800), var(--c-pink-500));
+  --grad-title-w: linear-gradient(90deg, var(--c-pink-600), var(--c-pink-900));
+  --grad-cta-w: linear-gradient(90deg, var(--c-pink-500), var(--c-pink-800));
+  --grad-title-c: linear-gradient(90deg, var(--c-purple-900), var(--c-purple-600));
+  --grad-cta-c: linear-gradient(90deg, var(--c-purple-700), var(--c-purple-400));
+  --grad-title: var(--grad-title-w);
+  --grad-cta: var(--grad-cta-w);
+
+  /* === glass surfaces (Figma: white 36 %, 2px pink border, 12.25px blur) == */
+  --glass-bg: rgba(255, 255, 255, 0.36);
+  --glass-border: rgba(183, 0, 83, 0.38);
+  --glass-blur: 12.25px;
+  --glass-border-width: 2px;
+  --stage-bg: rgba(255, 150, 187, 0.09);
+  --stage-border: var(--c-pink-400);
+  --stage-border-width: 8px;
+
+  /* === section brands =================================================== */
+  --brand-w: #930450;
+  --brand-w-soft: #ffe9f1;
+  --brand-c: #5700b3;
+  --brand-c-soft: #efe4ff;
 
   /* active brand (overridden by data-section) */
-  --brand: var(--neutral-800);
-  --brand-soft: var(--neutral-100);
+  --brand: var(--c-pink-700);
+  --brand-soft: var(--c-pink-200);
   --brand-contrast: var(--neutral-0);
 
-  /* typography — system font by design until Figma */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --text-base: 1.125rem;     /* 18px mobile base (spec §5) */
+  /* === typography ======================================================= */
+  --font-sans: "Albert Sans", "Manrope Cyrillic", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --text-base: 1.125rem;      /* 18px root (spec §5); a11y toolbar scales it */
   --leading: 1.6;
+  --leading-tight: 1.15;
   --measure: 70ch;
 
-  /* spacing / radius / shadow */
+  /* fluid scale: Figma desktop (1728px) → mobile (390px), in root-relative rem */
+  --fs-hero: clamp(2rem, 1.028rem + 4.48vw, 5.333rem);        /*  36 →  96px */
+  --fs-hero-sub: clamp(1.444rem, 0.829rem + 2.84vw, 3.556rem); /*  26 →  64px */
+  --fs-h1: clamp(1.222rem, 0.931rem + 1.35vw, 2.222rem);       /*  22 →  40px */
+  --fs-h2: clamp(1.111rem, 0.852rem + 1.2vw, 2rem);            /*  20 →  36px */
+  --fs-h3: clamp(1rem, 0.773rem + 1.05vw, 1.778rem);           /*  18 →  32px */
+  --fs-body: clamp(1rem, 0.773rem + 1.05vw, 1.778rem);         /*  18 →  32px */
+  --fs-lead: clamp(0.944rem, 0.831rem + 0.52vw, 1.333rem);     /*  17 →  24px */
+  --fs-ui: clamp(0.889rem, 0.824rem + 0.3vw, 1.111rem);        /*  16 →  20px */
+  --fs-sm: 0.889rem;                                            /*        16px */
+
+  /* === spacing / radius / shadow ======================================== */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -49,9 +107,23 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-12: 3rem;
-  --radius: 4px;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --section-gap: clamp(3rem, 1.6rem + 5.8vw, 7.5rem);
+
+  --radius: 16px;
+  --radius-sm: 8px;
+  --radius-glass: clamp(20px, 1.5vw + 14px, 50px);
+  --radius-capsule: clamp(60px, 11.6vw + 15px, 200px);
+  --radius-stage: clamp(60px, 17.4vw + 8px, 300px);
+  --radius-pill: 999px;
+
+  --shadow-card: 0 10px 30px rgba(112, 28, 68, 0.08);
+  --shadow-float: 0 14px 40px rgba(112, 28, 68, 0.16);
+
   --tap-target: 44px;
-  --container: 72rem;
+  --container: 1484px;        /* Figma content width inside the 1728px frame */
+  --gutter: clamp(1rem, 0.3rem + 3.2vw, 7.6rem);
 
   /* accessibility toolbar state (spec §9) */
   --font-scale: 1;
@@ -60,14 +132,24 @@
 body[data-section="women"] {
   --brand: var(--brand-w);
   --brand-soft: var(--brand-w-soft);
+  --grad-title: var(--grad-title-w);
+  --grad-cta: var(--grad-cta-w);
 }
 
 body[data-section="children"] {
   --brand: var(--brand-c);
   --brand-soft: var(--brand-c-soft);
+  --grad-title: var(--grad-title-c);
+  --grad-cta: var(--grad-cta-c);
+  --glass-border: rgba(87, 0, 179, 0.38);
 }
 
-/* high-contrast theme toggled by the accessibility toolbar */
+/* ---------------------------------------------------------------------------
+   High-contrast theme (accessibility toolbar). The Figma palette is kept
+   pixel-perfect in the default theme by the client's decision (ADR-0006);
+   full WCAG 2.1 AA contrast is guaranteed here: gradients and glass collapse
+   to solid black-on-white / yellow.
+   --------------------------------------------------------------------------- */
 html[data-contrast="high"] {
   --neutral-0: #ffffff;
   --neutral-50: #ffffff;
@@ -79,6 +161,39 @@ html[data-contrast="high"] {
   --neutral-900: #000000;
   --brand: #000000;
   --brand-soft: #ffff00;
+  --brand-contrast: #ffffff;
+
+  /* Gradients collapse to flat black — never to `none`, because gradient text is
+     painted with background-clip:text and would disappear. */
+  --grad-hero: linear-gradient(90deg, #000000, #000000);
+  --grad-title: var(--grad-hero);
+  --grad-cta: var(--grad-hero);
+  --grad-title-w: var(--grad-hero);
+  --grad-title-c: var(--grad-hero);
+  --grad-cta-w: var(--grad-hero);
+  --grad-cta-c: var(--grad-hero);
+
+  --glass-bg: #ffffff;
+  --glass-border: #000000;
+  --glass-blur: 0px;
+  --stage-bg: #ffffff;
+  --stage-border: #000000;
+
+  --c-pink-200: #ffffff;
+  --c-pink-300: #ffffff;
+  --c-purple-300: #ffffff;
+  --c-lime: #ffff00;
+  --shadow-card: none;
+  --shadow-float: none;
+}
+
+/* Users who ask the OS for less transparency get solid surfaces too. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: var(--neutral-0);
+    --glass-blur: 0px;
+    --stage-bg: var(--neutral-0);
+  }
 }
 
 html[data-reduce-motion="true"] *, html[data-reduce-motion="true"] *::before, html[data-reduce-motion="true"] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

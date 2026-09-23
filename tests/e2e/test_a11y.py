@@ -47,14 +47,21 @@ def axe_page(browser):
     context.close()
 
 
+AXE_TAGS = "['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice']"
+# ADR-0006: the default theme reproduces the Figma palette pixel-perfect, so colour contrast is
+# asserted in the high-contrast theme instead (test_high_contrast_theme_is_aa below).
+AXE_DEFAULT = (
+    "() => axe.run(document, {runOnly: {type: 'tag', values: " + AXE_TAGS + "}, "
+    "rules: {'color-contrast': {enabled: false}}})"
+)
+AXE_CONTRAST_ONLY = "() => axe.run(document, {runOnly: {type: 'rule', values: ['color-contrast']}})"
+
+
 @pytest.mark.parametrize("path", PAGES)
 def test_no_serious_violations(axe_page, path: str) -> None:
     response = axe_page.goto(BASE_URL + path, wait_until="networkidle")
     assert response is not None and response.status == 200
-    result = axe_page.evaluate(
-        "() => axe.run(document, {runOnly: {type: 'tag', "
-        "values: ['wcag2a', 'wcag2aa', 'wcag21aa', 'best-practice']}})"
-    )
+    result = axe_page.evaluate(AXE_DEFAULT)
     REPORT_DIR.mkdir(exist_ok=True)
     name = path.strip("/").replace("/", "_").replace("?", "_").replace("=", "_") or "home"
     (REPORT_DIR / f"{name}.json").write_text(
@@ -63,3 +70,18 @@ def test_no_serious_violations(axe_page, path: str) -> None:
     serious = [v for v in result["violations"] if v["impact"] in {"serious", "critical"}]
     summary = [(v["id"], v["impact"], len(v["nodes"])) for v in serious]
     assert not serious, summary
+
+
+@pytest.mark.parametrize("path", ["/uz/", "/uz/ayollar/ogohlik/belgilar/", "/uz/bolalar/"])
+def test_high_contrast_theme_is_aa(axe_page, path: str) -> None:
+    """ADR-0006: the high-contrast theme must pass WCAG 2.1 AA colour contrast."""
+    response = axe_page.goto(BASE_URL + path, wait_until="networkidle")
+    assert response is not None and response.status == 200
+    axe_page.click('[data-a11y="contrast"]')
+    assert axe_page.get_attribute("html", "data-contrast") == "high"
+    try:
+        result = axe_page.evaluate(AXE_CONTRAST_ONLY)
+        violations = [(v["id"], len(v["nodes"])) for v in result["violations"]]
+        assert not violations, violations
+    finally:
+        axe_page.click('[data-a11y="contrast"]')

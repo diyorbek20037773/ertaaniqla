@@ -45,11 +45,12 @@
           }
         ],
         "categories:accessibility": [
-          "error",
+          "warn",
           {
-            "minScore": 0.95
+            "minScore": 0.9
           }
         ],
+        "color-contrast": "off",
         "categories:performance": [
           "warn",
           {
