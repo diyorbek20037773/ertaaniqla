@@ -77,6 +77,27 @@ def main_nav(context: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+@register.inclusion_tag("components/section_tabs.html", takes_context=True)
+def section_tabs(context: dict[str, Any]) -> dict[str, Any]:
+    """Pill tab bar with the active section's menu items (design: Figma 2408:816).
+
+    Renders nothing outside a section. The active tab is the menu item whose URL is a
+    prefix of the current path, so children of a topic keep their parent highlighted.
+    """
+    lang = _current_language()
+    section_key = context.get("section_key", "")
+    request = context.get("request")
+    path = getattr(request, "path", "") or ""
+    section = next((s for s in get_navigation(lang) if s.key == section_key), None)
+    items = [] if section is None else section.items
+    active_url = ""
+    for item in items:
+        url = item.url or ""
+        if url and path.startswith(url) and len(url) > len(active_url):
+            active_url = url
+    return {"items": items, "active_url": active_url, "section_key": section_key}
+
+
 @register.inclusion_tag("components/share.html", takes_context=True)
 def share_bar(context: dict[str, Any]) -> dict[str, Any]:
     """Share links (spec §10): Telegram first, then WhatsApp, Facebook; copy link + story image."""

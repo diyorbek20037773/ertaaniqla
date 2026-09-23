@@ -5,26 +5,134 @@
    --------------------------------------------------------------------------- */
 @layer components {
   /* --- generic ------------------------------------------------------------- */
-  .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--space-4); }
+  .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
   .prose { max-width: var(--measure); }
   .placeholder { color: var(--neutral-600); font-style: italic; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   .skip-link { position: absolute; left: var(--space-2); top: -100px; z-index: 100; padding: var(--space-2) var(--space-4); background: var(--neutral-900); color: var(--neutral-0); }
   .skip-link:focus { top: var(--space-2); }
-  .button { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-6); border: 2px solid var(--brand); border-radius: var(--radius); text-decoration: none; font-weight: 700; cursor: pointer; }
+  .button { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-6); border: 2px solid var(--brand); border-radius: var(--radius-pill); text-decoration: none; font-weight: 700; cursor: pointer; }
   .button--primary { background: var(--brand); color: var(--brand-contrast); }
   .button--secondary { background: var(--neutral-0); color: var(--brand); }
+
+  /* --- design-system primitives (M5b, Figma → ADR-0006) -------------------- */
+  /* Gradient headline text. Falls back to a flat --brand fill where
+     background-clip:text is unsupported; the high-contrast theme feeds a flat
+     black gradient in, so the text never turns invisible. */
+  .u-gradient-text {
+    background-image: var(--grad-title);
+    color: var(--brand);
+    font-weight: 700;
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .u-gradient-text { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
+
+  /* Glass surface: white 36 %, 2px pink border, 12.25px blur (Figma 2408:246). */
+  .glass {
+    background: var(--glass-bg);
+    border: var(--glass-border-width) solid var(--glass-border);
+    border-radius: var(--radius-glass);
+    padding: clamp(var(--space-4), 2.2vw, var(--space-12));
+  }
+  @supports (backdrop-filter: blur(1px)) {
+    .glass { backdrop-filter: blur(var(--glass-blur)); }
+  }
+
+  /* Pill: the design's single control shape — active = gradient fill,
+     inactive = glass with gradient label. */
+  .pill {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    min-height: var(--tap-target);
+    padding: var(--space-3) clamp(var(--space-4), 1.6vw, var(--space-8));
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-ui); font-weight: 500; line-height: 1.2;
+    text-align: center; text-decoration: none; cursor: pointer;
+    border: var(--glass-border-width) solid transparent;
+  }
+  .pill--active, .pill--cta {
+    background-image: var(--grad-cta);
+    color: var(--neutral-0);
+    border-color: transparent;
+  }
+  .pill--ghost {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    color: var(--c-pink-750);
+  }
+  .pill--cta { font-size: var(--fs-h3); padding-inline: clamp(var(--space-6), 3vw, var(--space-16)); }
+  .pill--lg { min-height: clamp(48px, 4vw, 70px); font-size: var(--fs-h3); font-weight: 700; }
+  @supports (backdrop-filter: blur(1px)) {
+    .pill--ghost { backdrop-filter: blur(var(--glass-blur)); }
+  }
+
+  /* Round arrow button that sits on the corner of a card (Figma 2408:15). */
+  .icon-button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: clamp(44px, 5vw, 88px); height: clamp(44px, 5vw, 88px);
+    border-radius: 50%; flex: none;
+  }
+  .icon-button img, .icon-button svg { width: 100%; height: 100%; }
+
+  /* Section heading: 66px flower icon + gradient title (Figma 2408:240). */
+  .section-heading { display: flex; align-items: center; gap: var(--space-4); margin-block: var(--section-gap) var(--space-6); }
+  .section-heading__icon { width: clamp(32px, 3.8vw, 66px); height: clamp(32px, 3.8vw, 66px); flex: none; }
+  .section-heading__title { font-size: var(--fs-h2); margin: 0; text-transform: uppercase; }
+
+  /* Capsule card — the two section cards on the landing page (Figma 2408:48/51). */
+  .capsule-card {
+    position: relative;
+    display: flex; flex-direction: column; gap: var(--space-4);
+    padding: clamp(var(--space-6), 3vw, var(--space-12));
+    border-radius: var(--radius-capsule);
+    background: var(--c-pink-300);
+    color: var(--c-pink-900);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .capsule-card[data-section="children"] { background: var(--c-purple-300); color: var(--c-purple-ink); }
+  .capsule-card__art { margin-top: auto; align-self: center; max-width: 80%; height: auto; }
+
+  /* Stage card — 8px border, tinted fill, very round (Figma 2408:765). */
+  .stage-card {
+    background: var(--stage-bg);
+    border: var(--stage-border-width) solid var(--stage-border);
+    border-radius: var(--radius-stage);
+    padding: clamp(var(--space-6), 3vw, var(--space-12));
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-4);
+  }
+  @supports (backdrop-filter: blur(1px)) {
+    .stage-card { backdrop-filter: blur(var(--glass-blur)); }
+  }
+  .stage-card__badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: clamp(48px, 6vw, 107px); height: clamp(48px, 6vw, 107px);
+    font-size: var(--fs-h1); font-weight: 400; color: var(--neutral-900);
+    background: var(--c-lime);
+    /* eight-pointed star, as drawn in Figma (2408:767) */
+    clip-path: polygon(50% 0%, 61% 13%, 77% 6%, 82% 23%, 98% 24%, 94% 41%, 100% 50%, 94% 59%, 98% 76%, 82% 77%, 77% 94%, 61% 87%, 50% 100%, 39% 87%, 23% 94%, 18% 77%, 2% 76%, 6% 59%, 0% 50%, 6% 41%, 2% 24%, 18% 23%, 23% 6%, 39% 13%);
+  }
+
+  /* Lime label above a method block (MAMMOGRAFIYA / UTT / MRT, Figma 2408:1093). */
+  .label-chip {
+    display: inline-flex; align-items: center; min-height: var(--tap-target);
+    padding: var(--space-2) var(--space-6);
+    border-radius: var(--radius-pill);
+    background: var(--c-lime); color: var(--neutral-900);
+    font-size: var(--fs-h3); font-weight: 500;
+  }
   .block { margin-block: var(--space-8); }
   .page-header { margin-block: var(--space-6) var(--space-8); }
   .page-header__eyebrow { color: var(--brand); font-weight: 700; margin: 0; }
   .page-header__lead { font-size: 1.1em; color: var(--neutral-600); max-width: var(--measure); }
 
-  /* components/header.html */
-  .site-header { border-bottom: 1px solid var(--neutral-200); background: var(--neutral-0); }
+  /* components/header.html — Figma 2408:78: transparent bar, logo · menu · pills */
+  .site-header { background: transparent; padding-block: clamp(var(--space-3), 2.6vw, var(--space-8)); position: relative; z-index: 20; }
   .site-header__inner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); min-height: 56px; }
-  .site-header__brand { display: inline-flex; align-items: center; font-weight: 700; text-decoration: none; color: var(--neutral-900); }
-  .site-header__logo { display: inline-block; width: 40px; height: 40px; border: 1px dashed var(--neutral-400); text-align: center; font-size: 0.6em; line-height: 40px; margin-right: var(--space-2); }
-  .site-header__hotline { margin-left: auto; text-decoration: none; font-weight: 700; }
+  .site-header__brand { display: inline-flex; align-items: center; text-decoration: none; color: var(--neutral-900); }
+  .site-header__logo { display: block; width: clamp(150px, 16vw, 269px); height: auto; }
+  .site-header__hotline { margin-left: auto; text-decoration: none; font-weight: 700; font-size: var(--fs-ui); color: var(--c-pink-700); }
   .site-header__hotline-label { font-weight: 400; color: var(--neutral-600); }
 
   /* components/banner.html */
@@ -48,6 +156,10 @@
   .mega-menu__item > a { font-weight: 700; display: inline-flex; min-height: var(--tap-target); align-items: center; }
   .mega-menu__children { padding-left: var(--space-4); }
   .mega-menu__children a { display: inline-flex; min-height: var(--tap-target); align-items: center; }
+  /* language pill + gradient search pill (Figma 2408:186) */
+  .site-nav__utils { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+  .site-nav__search { text-decoration: none; }
+  .site-nav__search-icon { width: 1em; height: 1em; }
   @media (min-width: 64rem) {
     .site-nav { width: auto; margin-left: auto; }
     .site-nav__toggle-button { display: none; }
@@ -56,13 +168,42 @@
     .site-nav__section { position: relative; }
     .mega-menu__title { border-left: 0; border-bottom: 3px solid transparent; }
     .site-nav__section.is-active .mega-menu__title { border-bottom-color: var(--brand); }
-    .mega-menu__panel { position: absolute; top: 100%; left: 0; z-index: 50; min-width: 22rem; background: var(--neutral-0); border: 1px solid var(--neutral-200); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+    .mega-menu__panel { position: absolute; top: 100%; left: 0; z-index: 50; min-width: 22rem; background: var(--neutral-0); border: 1px solid var(--neutral-200); border-radius: var(--radius); box-shadow: var(--shadow-float); }
+    .mega-menu__title { font-style: italic; font-weight: 500; color: var(--neutral-900); font-size: var(--fs-ui); }
+    .site-nav__section.is-active .mega-menu__title { color: var(--brand); }
   }
 
-  /* components/lang_switch.html */
-  .lang-switch { display: flex; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
-  .lang-switch__current { font-weight: 700; padding: var(--space-2); }
-  .lang-switch__link { display: inline-block; padding: var(--space-2); min-height: var(--tap-target); }
+  /* components/lang_switch.html — Figma 2408:187: one soft pink pill */
+  .lang-switch {
+    display: flex; align-items: center; gap: var(--space-1);
+    list-style: none; margin: 0; padding: var(--space-1) var(--space-2);
+    background: var(--c-pink-200); border-radius: var(--radius-pill);
+  }
+  .lang-switch__current { font-weight: 700; padding: var(--space-2); color: var(--c-pink-700); font-size: var(--fs-ui); }
+  .lang-switch__link { display: inline-flex; align-items: center; padding: var(--space-2); min-height: var(--tap-target); color: var(--c-pink-700); text-decoration: none; font-size: var(--fs-ui); }
+  .lang-switch__link:hover, .lang-switch__link:focus-visible { text-decoration: underline; }
+
+  /* components/section_tabs.html — Figma 2408:817: glass bar, active = gradient pill */
+  .section-tabs { margin-block: var(--space-6); }
+  .section-tabs__list {
+    display: flex; align-items: center; gap: var(--space-2);
+    list-style: none; margin: 0; padding: var(--space-2);
+    background: var(--glass-bg); border: var(--glass-border-width) solid var(--glass-border);
+    border-radius: var(--radius-pill);
+    overflow-x: auto; scrollbar-width: thin;
+  }
+  .section-tabs__item { flex: none; }
+  .section-tabs__link {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: var(--tap-target); padding: var(--space-2) var(--space-6);
+    border-radius: var(--radius-pill);
+    color: var(--c-pink-750); font-size: var(--fs-ui); text-decoration: none; white-space: nowrap;
+  }
+  .section-tabs__link:hover { text-decoration: underline; }
+  .section-tabs__link.is-active { background-image: var(--grad-cta); color: var(--neutral-0); font-weight: 500; text-decoration: none; }
+  @supports (backdrop-filter: blur(1px)) {
+    .section-tabs__list { backdrop-filter: blur(var(--glass-blur)); }
+  }
 
   /* components/breadcrumbs.html */
   .breadcrumbs { font-size: 0.9em; margin-block: var(--space-4); }

@@ -1,16 +1,17 @@
 {% comment %} ---------------------------------------------------------------------------
-   components/header.html — site header (wireframe level, see DECISIONS D-003)
+   components/header.html — site header (design: Figma 2408:78, ADR-0006).
    Context: request, LANGUAGE_CODE, page (optional), section_key, settings.core.SiteSettings
-   States: mobile (menu behind <details> toggle), desktop (menu inline). Section colour comes
-   from `data-section` on <body>. Hotline number comes from Site settings.
+   States: mobile (menu behind <details> toggle), desktop (logo · menu · language + search
+   pills in one row). Section colour comes from `data-section` on <body>. Hotline number
+   comes from Site settings and is kept from the TZ (§II) although Figma has no hotline.
    --------------------------------------------------------------------------- {% endcomment %}
-{% load i18n core_tags %}
+{% load i18n static core_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 <header class="site-header" role="banner">
   <div class="container site-header__inner">
     <a class="site-header__brand" href="/{{ LANGUAGE_CODE }}/" aria-label="{% trans 'Erta aniqla — home' %}">
-      <span class="site-header__logo" aria-hidden="true" translate="no">[logo]</span>
-      <span class="site-header__name">{% trans "Erta aniqla" %}</span>
+      <img class="site-header__logo" src="{% static 'img/figma/logo-asdr.svg' %}" alt="" width="269" height="73" decoding="async">
+      <span class="sr-only">{% trans "Erta aniqla" %}</span>
     </a>
     {% with hotline=settings.core.SiteSettings.hotline_phone %}
       {% if hotline %}
