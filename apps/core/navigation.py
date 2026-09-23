@@ -18,6 +18,7 @@ class NavItem:
     url: str
     summary: str = ""
     children: list[NavItem] = field(default_factory=list)
+    key: str = ""  # only site links carry one (SITE_LINK_TYPES), so templates can pick one out
 
 
 @dataclass
@@ -108,11 +109,11 @@ def build_site_links(language_code: str) -> list[NavItem]:
     except Locale.DoesNotExist:
         return []
     links: list[NavItem] = []
-    for _key, label in SITE_LINK_TYPES:
+    for key, label in SITE_LINK_TYPES:
         model = django_apps.get_model(label)
         page = model.objects.live().filter(locale=locale).first()
         if page is not None:
-            links.append(NavItem(title=str(page.title), url=str(page.url or "")))
+            links.append(NavItem(title=str(page.title), url=str(page.url or ""), key=key))
     return links
 
 

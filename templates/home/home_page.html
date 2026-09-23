@@ -1,55 +1,98 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags wagtailimages_tags %}
-{% comment %} home/home_page.html — Context: page (HomePage), sections (list[SectionIndexPage]),
-   featured_articles, featured_videos, settings. Both sections presented equally (TZ §II). {% endcomment %}
+{% load i18n static wagtailcore_tags wagtailimages_tags core_tags %}
+{% comment %} home/home_page.html — landing page (design: Figma 2408:5, ADR-0006).
+   Context: page (HomePage), sections (list[SectionIndexPage]), featured_articles,
+   featured_videos, settings. Both sections are presented equally (TZ §II): same card
+   size, same arrow affordance, only the colour and the artwork differ.
+   The blobs are decoration and never carry meaning (aria-hidden). {% endcomment %}
 {% block breadcrumbs %}{% endblock %}
+{% block section_tabs %}{% endblock %}
 {% block content %}
-<div class="container">
-  <section class="hero">
-    <h1 class="hero__title">{% if page.hero_title %}{{ page.hero_title }}{% else %}{{ page.title }}{% endif %}</h1>
-    {% if page.hero_subtitle %}<p class="hero__subtitle">{{ page.hero_subtitle }}</p>{% endif %}
+<div class="landing">
+  <div class="landing__blobs" aria-hidden="true">
+    <img src="{% static 'img/figma/blob-5.svg' %}" alt="" class="landing__blob landing__blob--tl" loading="lazy" decoding="async">
+    <img src="{% static 'img/figma/blob-6.svg' %}" alt="" class="landing__blob landing__blob--l" loading="lazy" decoding="async">
+    <img src="{% static 'img/figma/blob-8.svg' %}" alt="" class="landing__blob landing__blob--r" loading="lazy" decoding="async">
+    <img src="{% static 'img/figma/blob-6.svg' %}" alt="" class="landing__blob landing__blob--tr" loading="lazy" decoding="async">
+  </div>
+
+  <div class="container landing__inner">
+    <div class="landing__top">
+      <section class="hero">
+        <h1 class="hero__title u-gradient-text">{% if page.hero_title %}{{ page.hero_title }}{% else %}{{ page.title }}{% endif %}</h1>
+        {% if page.hero_subtitle %}<p class="hero__subtitle">{{ page.hero_subtitle }}</p>{% endif %}
+        <p class="hero__actions">
+          {% if sections %}<a class="pill pill--lg hero__action hero__action--alt" href="{{ sections.0.url }}">{% trans "Read more" %}</a>{% endif %}
+          {% site_links as links %}
+          {% for link in links %}{% if link.key == "feedback" %}
+            <a class="pill pill--lg pill--active hero__action" href="{{ link.url }}">{% trans "Get in touch" %}</a>
+          {% endif %}{% endfor %}
+        </p>
+      </section>
+
+      <section class="landing__sections" aria-label="{% trans 'Sections' %}">
+        {% for section in sections %}
+          <article class="capsule-card" data-section="{{ section.section_key }}">
+            <h2 class="capsule-card__title u-gradient-text">
+              <a class="capsule-card__link" href="{{ section.url }}">{{ section.title }}</a>
+            </h2>
+            {% if section.tagline %}<p class="capsule-card__text">{{ section.tagline }}</p>{% endif %}
+            <img class="icon-button capsule-card__arrow"
+                 src="{% if section.section_key == 'children' %}{% static 'img/figma/btn-arrow-purple.svg' %}{% else %}{% static 'img/figma/btn-arrow-pink.svg' %}{% endif %}"
+                 alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
+            {% if section.section_key == "children" %}
+              <img class="capsule-card__art" src="{% static 'img/figma/children-bow.svg' %}" alt="" aria-hidden="true" width="305" height="309" loading="lazy" decoding="async">
+            {% else %}
+              <img class="capsule-card__art" src="{% static 'img/figma/women-ribbon.png' %}" alt="" aria-hidden="true" width="429" height="461" loading="lazy" decoding="async">
+            {% endif %}
+          </article>
+        {% endfor %}
+      </section>
+    </div>
+
+    {% if quick_checks %}
+      <section class="checks" aria-label="{% trans 'Self-checks' %}">
+        {% for check in quick_checks %}
+          <article class="check-card">
+            <img class="check-card__shape" src="{% static 'img/figma/card-test-1.svg' %}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <h2 class="check-card__title"><a class="check-card__link" href="{{ check.url }}">{{ check.title }}</a></h2>
+            <img class="icon-button check-card__arrow" src="{% static 'img/figma/btn-arrow-pink.svg' %}" alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+
     {% if page.emergency_banner %}<div class="banner banner--home">{{ page.emergency_banner|richtext }}</div>{% endif %}
-  </section>
 
-  <section class="section-cards" aria-label="{% trans 'Sections' %}">
-    {% for section in sections %}
-      <a class="section-card" href="{{ section.url }}" data-section="{{ section.section_key }}">
-        <span class="section-card__emoji" aria-hidden="true">{{ section.emoji }}</span>
-        <span class="section-card__title">{{ section.title }}</span>
-        {% if section.tagline %}<span class="section-card__tagline">{{ section.tagline }}</span>{% endif %}
-        <span class="section-card__cta">{% trans "Open section" %}</span>
-      </a>
-    {% endfor %}
-  </section>
+    {% if page.stats %}
+      <section class="stats-strip" aria-label="{% trans 'Key figures' %}">
+        {% for block in page.stats %}{% include_block block %}{% endfor %}
+      </section>
+    {% endif %}
 
-  {% if page.stats %}
-    <section class="stats-strip" aria-label="{% trans 'Key figures' %}">
-      {% for block in page.stats %}{% include_block block %}{% endfor %}
-    </section>
-  {% endif %}
+    {% if featured_articles %}
+      <section class="featured">
+        <h2>{% trans "Featured articles" %}</h2>
+        <div class="cards-grid__items">
+          {% for article in featured_articles %}
+            {% include "components/card.html" with title=article.title url=article.url text=article.summary image=article.hero_image %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
 
-  {% if featured_articles %}
-    <section class="featured">
-      <h2>{% trans "Featured articles" %}</h2>
-      <div class="cards-grid__items">
-        {% for article in featured_articles %}
-          {% include "components/card.html" with title=article.title url=article.url text=article.summary image=article.hero_image %}
-        {% endfor %}
-      </div>
-    </section>
-  {% endif %}
+    {% if featured_videos %}
+      <section class="featured">
+        <h2>{% trans "Featured videos" %}</h2>
+        <div class="cards-grid__items">
+          {% for video in featured_videos %}
+            {% include "components/card.html" with title=video.title text=video.doctor_name image=video.poster %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
 
-  {% if featured_videos %}
-    <section class="featured">
-      <h2>{% trans "Featured videos" %}</h2>
-      <div class="cards-grid__items">
-        {% for video in featured_videos %}
-          {% include "components/card.html" with title=video.title text=video.doctor_name image=video.poster %}
-        {% endfor %}
-      </div>
-    </section>
-  {% endif %}
-
-  {% for block in page.body %}{% include_block block %}{% endfor %}
+    {% for block in page.body %}{% include_block block %}{% endfor %}
+  </div>
 </div>
 {% endblock %}

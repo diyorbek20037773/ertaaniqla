@@ -15,7 +15,17 @@
 > `templates/components/*.html` / `templates/blocks/*.html` (tuzilma) fayllarida. Figma
 > dizaynini qo'llash = faqat shu fayllarni o'zgartirish, **Python o'zgarmaydi**.
 
-Last updated: 2026-09-15 (M4). Screenshots at 390 px: `tests/e2e/screenshots/`.
+Last updated: 2026-09-23 (M5b — design applied). Screenshots at 390 px: `tests/e2e/screenshots/`.
+
+> **M5b status:** the designer's Figma (`y76CeUEqpXAuCtaJxB5LUk`) is mapped into the tokens
+> below — see `docs/ADR/0006-design-system-figma.md`. Still open: the children's section
+> visuals (client is redesigning the pattern and illustrations → **M5c**) and every page the
+> Figma file does not cover (forms, search, directory, glossary, stories, error pages), which
+> follow the same token language.
+>
+> **Дизайн M5b:** Figma перенесена в токены (ADR-0006). Открыто: визуал детского раздела (M5c)
+> и страницы, которых нет в Figma. / **M5b:** Figma tokenlarga ko'chirildi (ADR-0006). Ochiq:
+> bolalar bo'limi vizuali (M5c) va Figma'da yo'q sahifalar.
 
 ## 1. Design tokens / Токены / Tokenlar — `static/src/tokens.css`
 
@@ -26,8 +36,12 @@ Last updated: 2026-09-15 (M4). Screenshots at 390 px: `tests/e2e/screenshots/`.
 | `--brand-w`, `--brand-w-soft` | Идентичность раздела «Женский рак» 🎗 | «Ayollar saratoni» bo'limi identikasi 🎗 | rose #b8336a |
 | `--brand-c`, `--brand-c-soft` | Идентичность раздела «Детский рак» 🎀 | «Bolalar saratoni» bo'limi identikasi 🎀 | amber #8a5a00 |
 | `--brand`, `--brand-soft`, `--brand-contrast` | Активный цвет раздела; переключается `body[data-section]` | Faol bo'lim rangi; `body[data-section]` orqali almashadi | neutral outside sections |
-| `--font-sans`, `--text-base` (18px), `--leading`, `--measure` (70ch) | Типографика | Tipografika | system font |
-| `--space-1…12`, `--radius`, `--tap-target` (44px), `--container` | Отступы, радиусы, размер касания | Bo'shliqlar, radius, bosish maydoni | 4px grid |
+| `--font-sans`, `--text-base` (18px), `--leading`, `--measure` (70ch) | Типографика | Tipografika | Albert Sans + Manrope (Cyrillic) |
+| `--fs-hero/-sub/-h1/-h2/-h3/-body/-lead/-ui` | Флюидная шкала `clamp()` 390px → 1728px | 390px → 1728px oralig'idagi `clamp()` shkala | 36→96px … 16→20px |
+| `--c-pink-200…900`, `--c-purple-300…900`, `--c-lime` | Палитра Figma (сырые цвета) | Figma paletasi (xom ranglar) | #ff477e … #b2f71b |
+| `--grad-hero/-title/-cta` (+ `-w` / `-c`) | Градиенты заголовков и кнопок | Sarlavha va tugma gradientlari | pink / purple |
+| `--glass-bg/-border/-blur`, `--stage-*` | Стеклянные поверхности и карточки стадий | Shisha yuzalar va bosqich kartalari | white 36 %, blur 12.25px |
+| `--space-1…20`, `--section-gap`, `--radius`, `--radius-glass/-capsule/-stage/-pill`, `--tap-target` (44px), `--container` (1484px), `--gutter` | Отступы, радиусы, размер касания | Bo'shliqlar, radius, bosish maydoni | 4px grid |
 | `--font-scale`, `html[data-contrast="high"]` | Панель доступности (шрифт ×1.25/×1.5, контраст) | Maxsus imkoniyatlar paneli (shrift, kontrast) | — |
 
 Editors may override `--brand`/`--brand-soft` per section from the CMS (`SectionIndexPage.colour_primary/accent`); emitted as a nonce'd `<style>`.

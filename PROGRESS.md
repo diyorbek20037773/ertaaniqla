@@ -169,8 +169,40 @@ M7 locust (unchanged): 28 736 req, 0 failures, page p95 32 ms (prod-settings ima
 
 ## Next concrete action
 
-Write the FINAL REPORT → `docs/FINAL_REPORT_uz.md` (Uzbek, AUTOPILOT § FINAL REPORT) and print it in
-chat. After that only M5b (Figma) and M8 (launch — client inputs, see LAUNCH_CHECKLIST) remain.
+**M5b — Design integration (IN PROGRESS, paused 2026-09-23 on branch `feat/m5b-design-integration`).**
+Figma: `https://www.figma.com/design/y76CeUEqpXAuCtaJxB5LUk/Erta-aniqla` (7 desktop frames, 1728 px,
+no variables). Decisions: `docs/ADR/0006-design-system-figma.md` + D-056…D-060.
+
+Done and committed:
+- **M5b-1** `static/src/tokens.css` (Figma palette, gradients, glass, fluid `clamp()` scale, radii),
+  `static/src/fonts.css` + self-hosted Albert Sans / Manrope-Cyrillic woff2, 18 assets in
+  `static/img/figma/` (svgo'd), `tailwind.config.js`, ADR-0006, CI gate changes
+  (Lighthouse a11y warn 0.90, pa11y contrast ignores, new axe high-contrast e2e test).
+- **M5b-2/3** primitives in `components.css` (`.u-gradient-text`, `.glass`, `.pill*`, `.icon-button`,
+  `.section-heading`, `.capsule-card`, `.stage-card`, `.label-chip`); header with the ASDR logo +
+  language/search pills; `{% section_tabs %}` (`apps/core/templatetags/core_tags.py` +
+  `templates/components/section_tabs.html`) rendering the inner-page pill bar.
+
+Uncommitted/next (verify before trusting — see the blocker below):
+- **M5b-4** landing page rewritten (`templates/home/home_page.html`: blobs, hero, two capsule cards,
+  three check cards from `HomePage.get_quick_checks`), `NavItem.key` added so the hero CTA can find
+  the feedback page, `tests/home/test_home.py` updated to the new markup.
+- **M5b-5** content surfaces restyled (card/callout/steps/symptom/stat/page-header flower icon,
+  buttons, search input, footer), `print.css` flattens glass/gradients, COMPONENT_INVENTORY updated.
+- **Still to do:** M5b-6 (tools, directory, faq, feedback, glossary, search, stories, 404/429/500)
+  and M5b-7 (axe/pa11y/Lighthouse run, print check, e2e screenshots refresh, TZ_TRACE deviation row
+  for the contrast decision, `make check`, tag `m5b`). Children's section visuals = **M5c**, waiting
+  on the client's own Figma frames.
+
+**BLOCKER (2026-09-23):** the Docker daemon started answering `500 Internal Server Error` on every
+API call; restarting Docker Desktop did not fix it, `wsl --shutdown` was not run because the
+developer's other compose project (`uvaleniya`) is on the same engine. Without the compose Postgres
+(5433) the DB tests error out. Last green run before the blocker: `tests/core tests/perf` (171
+passed) and `-k "home or nav or seo or budget or section"` (68 passed). **Re-run the full
+`make check` first thing next session.**
+
+After M5b: FINAL REPORT → `docs/FINAL_REPORT_uz.md` (Uzbek, AUTOPILOT § FINAL REPORT), then M8
+(launch — client inputs, see LAUNCH_CHECKLIST).
 
 (M7 note kept for history:) Start **M7 — Editors, workflow, UAT, launch checklist** (AUTOPILOT gate): Wagtail groups
 Editor / Medical Reviewer / Admin, 2-step workflow, badge, 2FA, editor guides, launch checklist,

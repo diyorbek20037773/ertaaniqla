@@ -13,9 +13,13 @@ pytestmark = pytest.mark.django_db
 
 
 def test_home_shows_both_section_cards(seeded, client: Client) -> None:
+    """Both sections get the same capsule card, only colour and artwork differ (M5b)."""
     html = client.get("/uz/").content.decode()
-    assert 'class="section-card" href="/uz/ayollar/" data-section="women"' in html
-    assert 'class="section-card" href="/uz/bolalar/" data-section="children"' in html
+    assert 'class="capsule-card" data-section="women"' in html
+    assert 'class="capsule-card" data-section="children"' in html
+    assert 'class="capsule-card__link" href="/uz/ayollar/"' in html
+    assert 'class="capsule-card__link" href="/uz/bolalar/"' in html
+    assert html.count('class="capsule-card"') == 2
     assert "Erta aniqla" in html
     assert html.count('class="stat"') == 3
 

@@ -12,6 +12,29 @@
   }
   html { font-size: 12pt; color: #000; background: #fff; }
   body { display: block; }
+  /* M5b: the Figma surfaces are ink-heavy — flatten glass, gradients and blur (ADR-0006). */
+  :root {
+    --glass-bg: #fff;
+    --glass-blur: 0px;
+    --glass-border: #000;
+    --stage-bg: #fff;
+    --stage-border: #000;
+    --stage-border-width: 1px;
+    --grad-hero: none; --grad-cta: none;
+    --shadow-card: none; --shadow-float: none;
+    --radius-glass: 4px; --radius-capsule: 4px; --radius-stage: 4px;
+  }
+  .u-gradient-text, .page-header h1, .stat__value, .capsule-card__title {
+    background: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    color: #000 !important;
+  }
+  .page-header h1::before, .section-heading__title::before, .landing__blobs,
+  .capsule-card__art, .capsule-card__arrow, .check-card__shape, .check-card__arrow,
+  .section-tabs { display: none !important; }
+  .capsule-card, .check-card { background: none !important; box-shadow: none !important; border: 1px solid #000; min-height: 0; }
+  * { backdrop-filter: none !important; }
   .container { max-width: none; padding: 0; }
   a { color: inherit; text-decoration: none; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }

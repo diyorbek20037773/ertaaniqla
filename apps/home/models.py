@@ -78,9 +78,17 @@ class HomePage(BasePage):
 
         return list(SectionIndexPage.objects.child_of(self).live().specific())
 
+    def get_quick_checks(self, request: Any) -> list[Page]:
+        """Flag-enabled tool pages shown as the landing page's check cards (Figma 2408:26)."""
+        from apps.tools.models import ToolsIndexPage
+
+        index = ToolsIndexPage.objects.child_of(self).live().first()
+        return [] if index is None else index.get_tools(request)[:3]
+
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context(request, *args, **kwargs)
         context["sections"] = self.get_sections()
+        context["quick_checks"] = self.get_quick_checks(request)
         context["featured_articles"] = [
             item.article.specific
             for item in self.featured_articles.select_related("article")

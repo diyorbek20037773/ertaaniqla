@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------------------
    components.css — one rule block per partial in templates/components/ and
-   templates/blocks/. Wireframe level only; the designer replaces values in M5b.
+   templates/blocks/. M5b: values come from tokens.css, mapped from Figma (ADR-0006).
    Every colour comes from tokens.css (--brand switches with data-section).
    --------------------------------------------------------------------------- */
 @layer components {
@@ -12,8 +12,8 @@
   .skip-link { position: absolute; left: var(--space-2); top: -100px; z-index: 100; padding: var(--space-2) var(--space-4); background: var(--neutral-900); color: var(--neutral-0); }
   .skip-link:focus { top: var(--space-2); }
   .button { display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-6); border: 2px solid var(--brand); border-radius: var(--radius-pill); text-decoration: none; font-weight: 700; cursor: pointer; }
-  .button--primary { background: var(--brand); color: var(--brand-contrast); }
-  .button--secondary { background: var(--neutral-0); color: var(--brand); }
+  .button--primary { background-image: var(--grad-cta); border-color: transparent; color: var(--neutral-0); }
+  .button--secondary { background: var(--glass-bg); color: var(--brand); border-color: var(--glass-border); }
 
   /* --- design-system primitives (M5b, Figma → ADR-0006) -------------------- */
   /* Gradient headline text. Falls back to a flat --brand fill where
@@ -125,7 +125,18 @@
   .block { margin-block: var(--space-8); }
   .page-header { margin-block: var(--space-6) var(--space-8); }
   .page-header__eyebrow { color: var(--brand); font-weight: 700; margin: 0; }
-  .page-header__lead { font-size: 1.1em; color: var(--neutral-600); max-width: var(--measure); }
+  .page-header__lead { font-size: var(--fs-lead); color: var(--neutral-600); max-width: var(--measure); }
+  /* Figma 2408:240 — the flower icon that opens every section heading. */
+  .page-header h1, .section-heading__title { display: flex; align-items: center; gap: var(--space-3); text-transform: uppercase; }
+  .page-header h1::before, .section-heading__title::before {
+    content: ""; flex: none;
+    width: clamp(28px, 3.4vw, 66px); height: clamp(28px, 3.4vw, 66px);
+    background: url("../img/figma/icon-flower.svg") center / contain no-repeat;
+  }
+  .page-header h1 { background-image: var(--grad-title); color: var(--brand); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .page-header h1 { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
 
   /* components/header.html — Figma 2408:78: transparent bar, logo · menu · pills */
   .site-header { background: transparent; padding-block: clamp(var(--space-3), 2.6vw, var(--space-8)); position: relative; z-index: 20; }
@@ -218,7 +229,9 @@
   .cards-grid__items, .section-cards { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
   @media (min-width: 40rem) { .cards-grid__items, .section-cards { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 64rem) { .cards-grid__items { grid-template-columns: repeat(3, 1fr); } }
-  .card { position: relative; border: 1px solid var(--neutral-200); border-radius: var(--radius); padding: var(--space-4); background: var(--neutral-0); }
+  /* M5b: the content card is the Figma glass surface (2408:246) */
+  .card { position: relative; border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-glass); padding: clamp(var(--space-4), 1.6vw, var(--space-8)); background: var(--glass-bg); }
+  @supports (backdrop-filter: blur(1px)) { .card { backdrop-filter: blur(var(--glass-blur)); } }
   .card__image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); margin-bottom: var(--space-3); }
   .card__icon { display: inline-block; color: var(--brand); margin-bottom: var(--space-2); }
   .card__title { font-size: 1.1em; margin: 0 0 var(--space-2); }
@@ -226,10 +239,46 @@
   .card__link::after { content: ""; position: absolute; inset: 0; }
   .card__meta { font-size: 0.85em; color: var(--neutral-600); margin: var(--space-2) 0 0; }
 
-  /* home/home_page.html */
+  /* home/home_page.html — Figma 2408:5 */
+  .landing { position: relative; overflow-x: clip; }
+  .landing__inner { position: relative; z-index: 1; }
+  .landing__blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: clip; }
+  .landing__blob { position: absolute; width: clamp(140px, 19vw, 324px); height: auto; opacity: 0.9; }
+  .landing__blob--tl { left: -6%; top: -14%; }
+  .landing__blob--l { left: -9%; top: 28%; }
+  .landing__blob--r { right: -6%; top: 34%; }
+  .landing__blob--tr { right: -8%; top: -18%; }
+  .landing__top { display: grid; gap: var(--space-8); grid-template-columns: 1fr; align-items: start; }
   .hero { padding-block: var(--space-8); }
-  .hero__title { font-size: 2em; }
-  .hero__subtitle { font-size: 1.2em; color: var(--neutral-600); max-width: var(--measure); }
+  .hero__title { font-size: var(--fs-hero); line-height: 0.92; text-transform: uppercase; margin-bottom: var(--space-6); }
+  .hero__subtitle { font-size: var(--fs-lead); color: var(--neutral-900); max-width: var(--measure); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block: var(--space-6); }
+  .hero__action { text-decoration: none; }
+  .hero__action--alt { background-image: var(--grad-cta-c); color: var(--neutral-0); }
+
+  /* the two section capsules, presented equally (TZ §II) */
+  .landing__sections { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+  .capsule-card__title { font-size: var(--fs-h1); margin: 0; text-transform: uppercase; }
+  .capsule-card__link { text-decoration: none; color: inherit; }
+  .capsule-card__link::after { content: ""; position: absolute; inset: 0; }
+  .capsule-card__text { font-size: var(--fs-ui); margin: 0; }
+  .capsule-card__arrow { position: absolute; top: var(--space-4); right: var(--space-4); }
+
+  /* the three self-check cards */
+  .checks { display: grid; gap: var(--space-4); grid-template-columns: 1fr; margin-block: var(--section-gap); }
+  .check-card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: clamp(180px, 22vw, 374px); padding: clamp(var(--space-4), 2vw, var(--space-8)); }
+  .check-card__shape { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 0; }
+  .check-card__title { position: relative; z-index: 1; font-size: var(--fs-h2); margin: 0; }
+  .check-card__link { text-decoration: none; color: var(--neutral-900); }
+  .check-card__link::after { content: ""; position: absolute; inset: 0; }
+  .check-card__arrow { position: absolute; top: var(--space-4); right: var(--space-4); z-index: 1; }
+
+  @media (min-width: 64rem) {
+    .landing__top { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--space-12); }
+    .landing__sections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .checks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
   .section-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); border: 2px solid var(--brand); border-radius: var(--radius); text-decoration: none; color: var(--neutral-900); background: var(--brand-soft); }
   .section-card[data-section="women"] { --brand: var(--brand-w); --brand-soft: var(--brand-w-soft); }
   .section-card[data-section="children"] { --brand: var(--brand-c); --brand-soft: var(--brand-c-soft); }
@@ -238,8 +287,9 @@
   .stats-strip { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); margin-block: var(--space-8); }
   .featured { margin-block: var(--space-8); }
 
-  /* components/callout.html */
-  .callout { display: flex; gap: var(--space-3); padding: var(--space-4); border-left: 4px solid var(--info); background: var(--info-bg); border-radius: var(--radius); margin-block: var(--space-6); }
+  /* components/callout.html — Figma «Ogohlik» strip (2408:435): glass + accent border */
+  .callout { display: flex; gap: var(--space-4); align-items: flex-start; padding: clamp(var(--space-4), 1.6vw, var(--space-8)); border: var(--glass-border-width) solid var(--glass-border); border-left: 8px solid var(--info); background: var(--glass-bg); border-radius: var(--radius-glass); margin-block: var(--space-6); }
+  @supports (backdrop-filter: blur(1px)) { .callout { backdrop-filter: blur(var(--glass-blur)); } }
   .callout--warning { border-color: var(--warning); background: var(--warning-bg); }
   .callout--danger { border-color: var(--danger); background: var(--danger-bg); }
   .callout--success { border-color: var(--success); background: var(--success-bg); }
@@ -257,16 +307,17 @@
   .columns__col { border-top: 3px solid var(--brand); padding-top: var(--space-3); }
   .columns__title { margin-top: 0; }
 
-  /* components/steps.html */
+  /* components/steps.html — Figma stage flow (2408:762): lime star badge per step */
   .steps__list { list-style: none; margin: 0; padding: 0; }
-  .steps__item { display: flex; gap: var(--space-4); padding-block: var(--space-4); border-bottom: 1px solid var(--neutral-200); }
-  .steps__number { flex: none; width: 2.5em; height: 2.5em; border-radius: 50%; background: var(--brand); color: var(--brand-contrast); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+  .steps__item { display: flex; gap: var(--space-4); padding-block: var(--space-4); border-bottom: 1px solid var(--glass-border); }
+  .steps__number { flex: none; width: 2.5em; height: 2.5em; background: var(--c-lime); color: var(--neutral-900); display: inline-flex; align-items: center; justify-content: center; font-weight: 700;
+    clip-path: polygon(50% 0%, 61% 13%, 77% 6%, 82% 23%, 98% 24%, 94% 41%, 100% 50%, 94% 59%, 98% 76%, 82% 77%, 77% 94%, 61% 87%, 50% 100%, 39% 87%, 23% 94%, 18% 77%, 2% 76%, 6% 59%, 0% 50%, 6% 41%, 2% 24%, 18% 23%, 23% 6%, 39% 13%); }
   .steps__title { margin-top: 0; }
   .steps__deadline { font-weight: 700; color: var(--warning); }
 
   /* components/symptom_list.html */
   .symptom-list__items { list-style: none; margin: 0; padding: 0; }
-  .symptom { display: flex; gap: var(--space-3); padding: var(--space-3); border-left: 4px solid var(--info); margin-block: var(--space-3); background: var(--neutral-50); }
+  .symptom { display: flex; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-left: 6px solid var(--info); margin-block: var(--space-3); background: var(--glass-bg); border-radius: var(--radius); }
   .symptom--soon { border-color: var(--warning); }
   .symptom--urgent { border-color: var(--danger); }
   .symptom__icon { flex: none; font-weight: 700; width: 2em; text-align: center; }
@@ -276,8 +327,11 @@
   .symptom__urgency { font-size: 0.9em; margin: 0 0 var(--space-2); }
 
   /* components/stat.html */
-  .stat { border: 1px solid var(--neutral-200); padding: var(--space-4); border-radius: var(--radius); text-align: center; }
-  .stat__value { font-size: 2em; font-weight: 700; color: var(--brand); margin: 0; }
+  .stat { border: var(--glass-border-width) solid var(--glass-border); padding: clamp(var(--space-4), 1.4vw, var(--space-8)); border-radius: var(--radius-glass); text-align: center; background: var(--glass-bg); }
+  .stat__value { font-size: var(--fs-h1); font-weight: 700; background-image: var(--grad-title); color: var(--brand); margin: 0; }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .stat__value { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
   .stat__label { margin: 0; }
   .stat__source { font-size: 0.8em; color: var(--neutral-600); margin: var(--space-2) 0 0; }
 
@@ -424,7 +478,7 @@
   .site-nav__search { display: inline-flex; align-items: center; min-height: var(--tap-target); }
   .search-form__label { display: block; font-weight: 700; margin-bottom: var(--space-2); }
   .search-form__row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-  .search-form__input { flex: 1 1 14rem; min-height: var(--tap-target); padding: var(--space-2) var(--space-3); border: 1px solid var(--neutral-400); border-radius: var(--radius); }
+  .search-form__input { flex: 1 1 14rem; min-height: var(--tap-target); padding: var(--space-3) var(--space-6); border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-pill); background: var(--glass-bg); }
   .search-results { list-style: none; margin: var(--space-6) 0; padding: 0; }
   .search-result { padding-block: var(--space-4); border-bottom: 1px solid var(--neutral-200); }
   .search-result[data-section="women"] { border-left: 4px solid var(--brand-w); padding-left: var(--space-3); }
@@ -435,10 +489,11 @@
   .search-results__empty, .search-results__hint { color: var(--neutral-600); }
 
   /* components/footer.html */
-  .site-footer { border-top: 1px solid var(--neutral-200); background: var(--neutral-50); padding-block: var(--space-8); font-size: 0.9em; color: var(--neutral-600); }
+  .site-footer { border-top: var(--glass-border-width) solid var(--glass-border); background: var(--glass-bg); padding-block: var(--space-12); font-size: var(--fs-ui); color: var(--neutral-800); margin-top: var(--section-gap); }
   .site-footer__links ul { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0 0 var(--space-4); padding: 0; }
   .site-footer__links a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
-  .site-footer__social { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+  .site-footer__social { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+  .site-footer__social a { display: inline-flex; align-items: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-6); border-radius: var(--radius-pill); background: var(--c-pink-200); color: var(--c-pink-700); text-decoration: none; }
   .site-footer__partners { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
   .site-footer__partner-logo { height: 40px; width: auto; }
 }
