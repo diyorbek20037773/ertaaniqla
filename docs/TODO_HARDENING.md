@@ -33,3 +33,8 @@ here. Each item: what, why, where.
 | H-026 | ops | Loki ruler alerts are not unit-tested (rules are checked for shape; LogQL validity was verified once against a running Loki 3.7). Add a `loki` container check to `make ops-check` / CI `build`. | `.github/workflows/ci.yml` |
 | H-027 | audit | `pii.viewed` covers the CMS edit view of Question/FeedbackSubmission; listing columns and CSV exports that show contacts would need the same hook if they are added. | `apps/core/audit.py` |
 | H-028 | ci | SonarQube Community analyses one branch; PR decoration and branch analysis need a paid edition — PRs rely on the other CI gates. | ADR-0005 |
+
+## H-029 — Retina-quality Figma assets (M5d)
+Risk-factor icons, screening-method and self-exam illustrations in `static/img/figma/women/*.png`
+are 1× crops of the PNG exports (Figma MCP Starter-plan limit, D-067). Re-export them from Figma as
+SVG (or 2× PNG) with the same file names when MCP calls are available; no template changes needed.
