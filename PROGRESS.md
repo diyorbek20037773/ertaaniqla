@@ -155,7 +155,16 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 
-## Last command run (2026-09-17, M7b close)
+## Last command run (2026-09-24, M5b resume)
+
+```
+ruff check . / format --check            → All checks passed / 217 files already formatted
+mypy                                     → Success: no issues found in 125 source files
+pytest --cov                             → 464 passed, 1 skipped (ffmpeg on host), coverage 92.36 %
+scripts/check_translations.py            → translations: uz + ru complete
+```
+
+## Previous run (2026-09-17, M7b close)
 
 ```
 ruff check . / format                    → All checks passed
@@ -183,23 +192,26 @@ Done and committed:
   language/search pills; `{% section_tabs %}` (`apps/core/templatetags/core_tags.py` +
   `templates/components/section_tabs.html`) rendering the inner-page pill bar.
 
-Uncommitted/next (verify before trusting — see the blocker below):
-- **M5b-4** landing page rewritten (`templates/home/home_page.html`: blobs, hero, two capsule cards,
-  three check cards from `HomePage.get_quick_checks`), `NavItem.key` added so the hero CTA can find
-  the feedback page, `tests/home/test_home.py` updated to the new markup.
+Also committed (b89bb7f):
+- **M5b-4** landing page (`templates/home/home_page.html`: blobs, hero, two capsule cards,
+  three check cards from `HomePage.get_quick_checks`), `NavItem.key`, `tests/home/test_home.py`.
 - **M5b-5** content surfaces restyled (card/callout/steps/symptom/stat/page-header flower icon,
   buttons, search input, footer), `print.css` flattens glass/gradients, COMPONENT_INVENTORY updated.
-- **Still to do:** M5b-6 (tools, directory, faq, feedback, glossary, search, stories, 404/429/500)
-  and M5b-7 (axe/pa11y/Lighthouse run, print check, e2e screenshots refresh, TZ_TRACE deviation row
-  for the contrast decision, `make check`, tag `m5b`). Children's section visuals = **M5c**, waiting
-  on the client's own Figma frames.
 
-**BLOCKER (2026-09-23):** the Docker daemon started answering `500 Internal Server Error` on every
-API call; restarting Docker Desktop did not fix it, `wsl --shutdown` was not run because the
-developer's other compose project (`uvaleniya`) is on the same engine. Without the compose Postgres
-(5433) the DB tests error out. Last green run before the blocker: `tests/core tests/perf` (171
-passed) and `-k "home or nav or seo or budget or section"` (68 passed). **Re-run the full
-`make check` first thing next session.**
+Next:
+- [ ] **M5b-6** tools, directory, faq, feedback, glossary, search, stories, materials,
+  share/a11y toolbar/consent, 404/429/500 — no Figma frames exist for these, so they reuse the
+  primitives (glass, pill, label-chip, gradient heading) only; CSS + template classes, no Python.
+- [ ] **M5b-7** axe/pa11y/Lighthouse run, print check, e2e screenshots refresh, TZ_TRACE deviation
+  row for the contrast decision, `make check`, tag `m5b`. Children's visuals = **M5c** (client Figma).
+
+**Blocker of 2026-09-23 RESOLVED (2026-09-24):** root cause = **C: drive full (0.2 GB free)**;
+Docker's WSL VHD (`%LOCALAPPDATA%\Docker\wsl`, ~42 GB) lives on C:, image export hit ENOSPC and
+the daemon crashed → every API call 500. Fix (developer approved): `npm cache clean --force`,
+`uv cache clean`, %TEMP% files older than 7 days, `docker builder prune` (22 GB inside the VHD).
+C: now ~7.8 GB free. If it recurs: prune again, or move the disk image to D: (Docker Desktop →
+Settings → Resources → Advanced → Disk image location). Also: a stale `ertaaniqla/web:local`
+without dev deps made `migrate` fail (`No module named 'debug_toolbar'`) → rebuild the image.
 
 After M5b: FINAL REPORT → `docs/FINAL_REPORT_uz.md` (Uzbek, AUTOPILOT § FINAL REPORT), then M8
 (launch — client inputs, see LAUNCH_CHECKLIST).
