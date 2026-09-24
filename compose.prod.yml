@@ -150,6 +150,8 @@ services:
       MEDIA_ROOT: /srv/media
       TZ: Asia/Tashkent
     command: ["backup-cron"]
+    healthcheck:
+      disable: true   # not a web role; BackupTooOld / RestoreTestTooOld alerts cover it
     volumes:
       - media:/srv/media:ro
       - backups:/backups
@@ -262,6 +264,8 @@ services:
     profiles: ["monitoring"]
     environment:
       REDIS_ADDR: redis://redis:6379
+      # Celery broker = db 1 (compose.yml CELERY_BROKER_URL); queues are Redis lists
+      REDIS_EXPORTER_CHECK_SINGLE_KEYS: db1=default,db1=media
     expose:
       - "9121"
     restart: unless-stopped

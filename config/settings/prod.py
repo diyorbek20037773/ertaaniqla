@@ -11,6 +11,7 @@ from apps.core.sentry import scrub_sentry_event
 
 from .base import *
 from .base import (
+    ALLOWED_HOSTS,
     APP_RELEASE,
     ENVIRONMENT,
     PII_ENCRYPTION_KEYS,
@@ -32,6 +33,12 @@ if not TURNSTILE_SECRET_KEY:
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 SECURE_SSL_REDIRECT = True
+
+# Probes that stay inside the compose network and speak plain HTTP to gunicorn: the Docker
+# HEALTHCHECK (Host: localhost), Prometheus (Host: web:8000) and deploy smoke checks. nginx
+# answers 444 to any Host it does not serve, so these names are unreachable from outside.
+ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, "localhost", "127.0.0.1", "web"]))
+SECURE_REDIRECT_EXEMPT = [r"^healthz/$", r"^readyz/$", r"^metrics$"]
 SECURE_HSTS_SECONDS = 60 * 60 * 24 * 365
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True

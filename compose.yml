@@ -79,6 +79,13 @@ services:
   worker:
     <<: *app
     command: ["worker"]
+    # the image HEALTHCHECK probes gunicorn; a worker answers a Celery ping instead
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A config inspect ping -d celery@$$HOSTNAME --timeout 10 >/dev/null"]
+      interval: 60s
+      timeout: 20s
+      retries: 3
+      start_period: 60s
     depends_on:
       db:
         condition: service_healthy
@@ -90,6 +97,8 @@ services:
   beat:
     <<: *app
     command: ["beat"]
+    healthcheck:
+      disable: true   # no server to probe; a dead beat shows up as stale scheduled jobs
     depends_on:
       redis:
         condition: service_healthy

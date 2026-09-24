@@ -19,13 +19,26 @@
     "list": [
       {
         "name": "project",
-        "type": "custom",
-        "query": "ertaaniqla-prod,ertaaniqla-staging",
+        "label": "project",
+        "type": "query",
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "query": {
+          "qryType": 1,
+          "label": "project",
+          "refId": "LokiVariableQueryEditor-VariableQuery"
+        },
+        "definition": "label_values(project)",
+        "regex": "/^ertaaniqla(?!-sonarqube).*/",
+        "refresh": 2,
+        "sort": 1,
+        "includeAll": false,
         "current": {
           "text": "ertaaniqla-prod",
           "value": "ertaaniqla-prod"
-        },
-        "includeAll": false
+        }
       },
       {
         "name": "service",
@@ -70,7 +83,7 @@
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({project=~\"$project\", service=~\"web|worker\"} |= \"ertaaniqla.audit\" | json | event=\"auth.login_failed\" [$__auto]))",
+          "expr": "(sum(count_over_time({project=~\"$project\", service=~\"web|worker\"} |= \"ertaaniqla.audit\" | json | event=\"auth.login_failed\" [$__auto]))) or vector(0)",
           "refId": "A",
           "queryType": "range",
           "datasource": {
@@ -129,7 +142,7 @@
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({project=~\"$project\", service=~\"web|worker\"} |= \"ertaaniqla.audit\" | json | event=\"auth.lockout\" [$__auto]))",
+          "expr": "(sum(count_over_time({project=~\"$project\", service=~\"web|worker\"} |= \"ertaaniqla.audit\" | json | event=\"auth.lockout\" [$__auto]))) or vector(0)",
           "refId": "A",
           "queryType": "range",
           "datasource": {
@@ -184,7 +197,7 @@
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({project=~\"$project\", service=~\"web|worker\"} |= \"ertaaniqla.audit\" | json | event=~\"user.superuser_changed|user.staff_changed|user.groups_changed\" [$__auto]))",
+          "expr": "(sum(count_over_time({project=~\"$project\", service=~\"web|worker\"} |= \"ertaaniqla.audit\" | json | event=~\"user.superuser_changed|user.staff_changed|user.groups_changed\" [$__auto]))) or vector(0)",
           "refId": "A",
           "queryType": "range",
           "datasource": {
@@ -239,7 +252,7 @@
       },
       "targets": [
         {
-          "expr": "sum(count_over_time({project=~\"$project\", level=\"ERROR\"} [$__auto]))",
+          "expr": "(sum(count_over_time({project=~\"$project\", level=\"ERROR\"} [$__auto]))) or vector(0)",
           "refId": "A",
           "queryType": "range",
           "datasource": {

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import importlib
 import os
 import sys
@@ -72,3 +73,35 @@ def test_prod_check_deploy_passes(prod_env: None) -> None:
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("path", "host"),
+    [("/healthz/", "localhost"), ("/readyz/", "localhost"), ("/metrics", "web:8000")],
+)
+def test_internal_probes_pass_in_prod(
+    prod_env: None, client, settings, monkeypatch: pytest.MonkeyPatch, path: str, host: str
+) -> None:
+    """Docker HEALTHCHECK (Host: localhost) and Prometheus (Host: web:8000) talk plain HTTP
+    inside the compose network. With only the public domain in DJANGO_ALLOWED_HOSTS they got
+    400 DisallowedHost / 301 to https, so web never turned healthy and nothing was scraped."""
+    prod = _load_prod()
+    assert {"localhost", "127.0.0.1", "web"} <= set(prod.ALLOWED_HOSTS)
+    assert "ertaaniqla.uz" in prod.ALLOWED_HOSTS
+    settings.ALLOWED_HOSTS = prod.ALLOWED_HOSTS
+    settings.SECURE_SSL_REDIRECT = True
+    settings.SECURE_REDIRECT_EXEMPT = prod.SECURE_REDIRECT_EXEMPT
+    settings.METRICS_BASIC_AUTH = "prom:secret"
+    auth = "Basic " + base64.b64encode(b"prom:secret").decode()
+    response = client.get(path, HTTP_HOST=host, HTTP_AUTHORIZATION=auth)
+    assert response.status_code in (200, 503), (path, response.status_code)
+
+
+def test_public_pages_still_redirect_to_https(prod_env: None, client, settings) -> None:
+    prod = _load_prod()
+    settings.ALLOWED_HOSTS = prod.ALLOWED_HOSTS
+    settings.SECURE_SSL_REDIRECT = True
+    settings.SECURE_REDIRECT_EXEMPT = prod.SECURE_REDIRECT_EXEMPT
+    response = client.get("/uz/", HTTP_HOST="ertaaniqla.uz")
+    assert response.status_code == 301 and response["Location"].startswith("https://")

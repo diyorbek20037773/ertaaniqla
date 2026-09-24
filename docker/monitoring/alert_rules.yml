@@ -64,7 +64,7 @@ groups:
           summary: "TLS certificate for {{ $labels.instance }} expires in < 14 days"
 
       - alert: CeleryQueueBacklog
-        expr: max(redis_key_size{key=~"default|media"}) > 100
+        expr: max by (key) (redis_key_size{db="db1", key=~"default|media"}) > 100
         for: 10m
         labels: {severity: warning}
         annotations:

@@ -130,7 +130,7 @@
       },
       "targets": [
         {
-          "expr": "100 * sum(rate(django_http_responses_total_by_status_view_method_total{status=~'5..'}[5m])) / sum(rate(django_http_responses_total_by_status_view_method_total[5m]))",
+          "expr": "(100 * sum(rate(django_http_responses_total_by_status_view_method_total{status=~'5..'}[5m])) / sum(rate(django_http_responses_total_by_status_view_method_total[5m]))) or vector(0)",
           "legendFormat": "5xx",
           "refId": "A",
           "datasource": {
@@ -653,7 +653,7 @@
       },
       "targets": [
         {
-          "expr": "redis_key_size{key=~'default|media'}",
+          "expr": "redis_key_size{db='db1', key=~'default|media'}",
           "legendFormat": "{{key}}",
           "refId": "A",
           "datasource": {

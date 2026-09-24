@@ -271,3 +271,36 @@ def test_grafana_logs_audit_dashboard_and_loki_datasource() -> None:
     exprs = " ".join(t["expr"] for p in dashboard["panels"] for t in p["targets"])
     for event in ("auth.login_failed", "auth.lockout", "user.superuser_changed"):
         assert event in exprs, event
+
+
+def test_non_web_roles_do_not_inherit_the_web_healthcheck() -> None:
+    """The image HEALTHCHECK curls gunicorn on :8000. worker/beat/backup run the same image
+    without a web server, so they sat "unhealthy" forever and `compose up --wait` failed."""
+    base = _yaml("compose.yml")["services"]
+    prod = _yaml("compose.prod.yml")["services"]
+    worker = base["worker"]["healthcheck"]
+    assert "inspect" in " ".join(worker["test"]) and "ping" in " ".join(worker["test"])
+    assert base["beat"]["healthcheck"] == {"disable": True}
+    assert prod["backup"]["healthcheck"] == {"disable": True}
+
+
+def test_nginx_re_resolves_the_web_container() -> None:
+    """Every deploy recreates `web` with a new IP; a statically resolved upstream kept the old
+    one and answered 502 until nginx was reloaded (found in the local prod rehearsal)."""
+    conf = (ROOT / "docker" / "nginx" / "nginx.conf").read_text(encoding="utf-8")
+    upstream = conf[conf.index("upstream django {") :]
+    upstream = upstream[: upstream.index("}")]
+    assert re.search(r"server web:8000 resolve\b", upstream)
+    assert "zone django" in upstream
+    assert "resolver 127.0.0.11" in upstream
+
+
+def test_redis_exporter_watches_the_celery_queues() -> None:
+    """`redis_key_size` only exists for keys the exporter is told to check; the Celery broker
+    lives in Redis db 1. Without this the queue panel stayed empty and CeleryQueueBacklog
+    could never fire."""
+    env = _yaml("compose.prod.yml")["services"]["redis-exporter"]["environment"]
+    keys = env["REDIS_EXPORTER_CHECK_SINGLE_KEYS"].split(",")
+    assert {"db1=default", "db1=media"} <= set(keys)
+    alerts = (ROOT / "docker" / "monitoring" / "alert_rules.yml").read_text(encoding="utf-8")
+    assert 'redis_key_size{db="db1", key=~"default|media"}' in alerts
