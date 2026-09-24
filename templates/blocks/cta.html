@@ -1,5 +1,6 @@
 {% load article_tags %}
-<div class="block block--cta cta cta--{{ value.style }}">
+{# cta: without text it is the design's centred pill (Figma 2408:812 «Murojaat qilish»). #}
+<div class="block block--cta cta cta--{{ value.style }}{% if not value.text %} cta--bare{% endif %}">
   {% if value.text %}<div class="cta__text">{{ value.text }}</div>{% endif %}
   <a class="button button--{{ value.style }}" href="{{ value.link|link_href }}">{{ value.button_label }}</a>
 </div>

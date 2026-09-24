@@ -29,3 +29,14 @@ def resolve_step_links(steps: Any) -> list[dict[str, Any]]:
         }
         for step in steps
     ]
+
+
+@register.filter
+def illustration_src(name: str | None) -> str:
+    """Static URL of a designer icon/illustration name (apps.articles.illustrations), or ""."""
+    from django.templatetags.static import static
+
+    from apps.articles.illustrations import static_path
+
+    path = static_path(name or "")
+    return static(path) if path else ""

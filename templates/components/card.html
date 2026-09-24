@@ -4,12 +4,12 @@
    optional), icon (str, optional), meta (str, optional e.g. reading time), tag (h2|h3, default h3).
    States: with/without image, with/without link.
    --------------------------------------------------------------------------- {% endcomment %}
-{% load wagtailimages_tags %}
+{% load wagtailimages_tags article_tags %}
 <article class="card">
   {% if image %}
     {% picture image format-{webp,jpeg} fill-{400x225,640x360} sizes="(max-width: 40rem) 100vw, 24rem" class="card__image" loading="lazy" %}
   {% elif icon %}
-    <span class="card__icon" data-icon="{{ icon }}" aria-hidden="true">[{{ icon }}]</span>
+    {% with src=icon|illustration_src %}{% if src %}<img class="card__icon" src="{{ src }}" alt="" width="96" height="96" loading="lazy" decoding="async">{% endif %}{% endwith %}
   {% endif %}
   <{{ tag|default:"h3" }} class="card__title">
     {% if url %}<a class="card__link" href="{{ url }}">{{ title }}</a>{% else %}{{ title }}{% endif %}

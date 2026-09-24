@@ -21,6 +21,7 @@ from wagtail.images.blocks import ImageBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from apps.articles.embeds import parse_embed_url
+from apps.articles.illustrations import icon_choices, illustration_choices
 
 RICH_TEXT_FEATURES = [
     "h2",
@@ -87,6 +88,7 @@ class CalloutKind(blocks.ChoiceBlock):
         ("danger", _("Danger — do not delay")),
         ("success", _("Success / good news")),
         ("reassurance", _("Reassurance (this sign is not always cancer)")),
+        ("alert", _("Alert strip with “!” (do not panic, do not delay)")),
     ]
 
 
@@ -134,7 +136,7 @@ class StepBlock(blocks.StructBlock):
         label=_("Number"),
         help_text=_("Leave empty to number automatically (01, 02, …)."),
     )
-    title = blocks.CharBlock(max_length=160, label=_("Title"))
+    title = blocks.CharBlock(required=False, max_length=160, label=_("Title"))
     text = blocks.RichTextBlock(features=LIST_FEATURES, label=_("Text"))
     deadline = blocks.CharBlock(
         required=False,
@@ -150,6 +152,15 @@ class StepBlock(blocks.StructBlock):
 
 class StepsBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=False, max_length=160, label=_("Heading"))
+    layout = blocks.ChoiceBlock(
+        choices=[
+            ("list", _("Numbered list")),
+            ("capsules_arrows", _("Capsules joined by arrows (stages, patient route)")),
+            ("capsules", _("Capsules without arrows (rights)")),
+        ],
+        default="list",
+        label=_("Layout"),
+    )
     steps = blocks.ListBlock(StepBlock(), min_num=1, label=_("Steps"))
 
     class Meta:
@@ -160,11 +171,11 @@ class StepsBlock(blocks.StructBlock):
 
 class CardBlock(blocks.StructBlock):
     image = ImageBlock(required=False, label=_("Image"))
-    icon = blocks.CharBlock(
+    icon = blocks.ChoiceBlock(
+        choices=icon_choices,
         required=False,
-        max_length=40,
-        label=_("Icon name"),
-        help_text=_("Optional icon identifier for the designer (e.g. 'dna', 'age')."),
+        label=_("Icon"),
+        help_text=_("Designer icon shown on the pink tile (used when no image is uploaded)."),
     )
     title = blocks.CharBlock(max_length=160, label=_("Title"))
     text = blocks.RichTextBlock(required=False, features=LIST_FEATURES, label=_("Text"))
@@ -176,12 +187,70 @@ class CardBlock(blocks.StructBlock):
 
 class CardsGridBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=False, max_length=160, label=_("Heading"))
+    layout = blocks.ChoiceBlock(
+        choices=[("cards", _("Cards")), ("icon_tiles", _("Icon tiles (risk factors)"))],
+        default="cards",
+        label=_("Layout"),
+    )
     cards = blocks.ListBlock(CardBlock(), min_num=1, label=_("Cards"))
 
     class Meta:
         icon = "grip"
         label = _("Cards grid")
         template = "blocks/cards_grid.html"
+
+
+class HeadingBlock(blocks.CharBlock):
+    """Section heading of the design: flower icon + gradient uppercase title (Figma 2408:240)."""
+
+    class Meta:
+        icon = "title"
+        label = _("Section heading")
+        template = "blocks/heading.html"
+
+
+class TextCardBlock(blocks.StructBlock):
+    """Glass card of the design: optional lime label, title, text and an illustration."""
+
+    label = blocks.CharBlock(
+        required=False,
+        max_length=60,
+        label=_("Label"),
+        help_text=_("Lime chip, e.g. MAMMOGRAFIYA."),
+    )
+    title = blocks.CharBlock(required=False, max_length=200, label=_("Title"))
+    text = blocks.RichTextBlock(features=LIST_FEATURES, label=_("Text"))
+    image = ImageBlock(required=False, label=_("Image"))
+    illustration = blocks.ChoiceBlock(
+        choices=illustration_choices,
+        required=False,
+        label=_("Designer illustration"),
+        help_text=_("Used when no image is uploaded."),
+    )
+    width = blocks.ChoiceBlock(
+        choices=[("full", _("Full width")), ("narrow", _("Narrow, centred"))],
+        default="full",
+        label=_("Width"),
+    )
+
+    class Meta:
+        icon = "doc-full"
+        label = _("Text card")
+        template = "blocks/text_card.html"
+
+
+class TextCardsBlock(blocks.StructBlock):
+    columns = blocks.ChoiceBlock(
+        choices=[("2", _("Two per row")), ("3", _("Three per row"))],
+        default="2",
+        label=_("Columns"),
+    )
+    cards = blocks.ListBlock(TextCardBlock(), min_num=1, label=_("Cards"))
+
+    class Meta:
+        icon = "grip"
+        label = _("Text cards grid")
+        template = "blocks/text_cards.html"
 
 
 class UrgencyChoice(blocks.ChoiceBlock):
@@ -453,7 +522,10 @@ class EmbedBlock(blocks.StructBlock):
 # Stream definitions
 # ---------------------------------------------------------------------------
 class ArticleBodyBlock(blocks.StreamBlock):
+    heading = HeadingBlock(max_length=160)
     rich_text = RichTextBlock(features=RICH_TEXT_FEATURES)
+    text_card = TextCardBlock()
+    text_cards = TextCardsBlock()
     callout = CalloutBlock()
     three_columns = ThreeColumnsBlock()
     two_columns = TwoColumnsBlock()
@@ -505,6 +577,9 @@ _SKIP_KEYS = frozenset(
         "free_only",
         "downloadable",
         "terms",
+        "layout",
+        "illustration",
+        "width",
     }
 )
 

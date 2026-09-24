@@ -1,0 +1,4 @@
+{# text_cards: grid of glass text cards, 2 or 3 per row on desktop, stacked on phones. #}
+<div class="block text-cards text-cards--{{ value.columns|default:'2' }}">
+  {% for card in value.cards %}{% include "blocks/text_card.html" with value=card %}{% endfor %}
+</div>

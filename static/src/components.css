@@ -543,4 +543,177 @@
   .site-footer__social a { display: inline-flex; align-items: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-6); border-radius: var(--radius-pill); background: var(--c-pink-200); color: var(--c-pink-700); text-decoration: none; }
   .site-footer__partners { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
   .site-footer__partner-logo { height: 40px; width: auto; }
+
+  /* ==========================================================================================
+     M5d — Figma fidelity for the women's section (frames 2408:194 … 2408:2489, D-064…D-067).
+     Sizes are the Figma 1728 px values, made fluid down to 390 px with clamp().
+     ========================================================================================== */
+
+  /* page backdrop: soft pink + lime blobs repeating down the page (Figma «Group 36/48/66») */
+  body[data-section="women"] {
+    background-color: var(--c-page-women);
+    background-image:
+      radial-gradient(ellipse 22% 16% at 4% 9%, var(--c-blob-pink), transparent 70%),
+      radial-gradient(ellipse 20% 18% at 98% 12%, var(--c-blob-lime), transparent 70%),
+      radial-gradient(ellipse 30% 9% at 45% 17%, var(--c-blob-pink), transparent 70%),
+      radial-gradient(ellipse 18% 20% at 2% 45%, var(--c-blob-pink), transparent 70%),
+      radial-gradient(ellipse 16% 18% at 52% 52%, var(--c-blob-lime), transparent 70%),
+      radial-gradient(ellipse 20% 20% at 99% 60%, var(--c-blob-pink), transparent 70%),
+      radial-gradient(ellipse 22% 16% at 30% 88%, var(--c-blob-pink), transparent 70%),
+      radial-gradient(ellipse 18% 16% at 85% 90%, var(--c-blob-lime), transparent 70%);
+    background-size: 100% 2600px;
+    background-repeat: repeat-y;
+  }
+
+  /* Figma shows no breadcrumb trail: the tab bar and the switch give the location. Kept for
+     screen readers and JSON-LD (spec F6), hidden visually in the designed section (D-064). */
+  body[data-section="women"] .breadcrumbs { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; }
+
+  /* illustration mosaic under the header (Figma «Group 67», exported as one SVG) */
+  .section-banner { display: block; width: 100%; overflow: hidden; margin-block: clamp(var(--space-4), 1.4vw, var(--space-8)) clamp(var(--space-6), 2.8vw, var(--space-12)); }
+  .section-banner__img { display: block; width: 100%; min-width: 900px; height: auto; aspect-ratio: 1728 / 347; object-fit: cover; object-position: left center; }
+
+  /* tab bar — Figma 2408:817: h74, r50, 2px border, labels 24px #800049, active 217×62 */
+  .section-tabs__list { justify-content: space-between; gap: clamp(var(--space-2), 2vw, 5rem); padding: 6px; min-height: clamp(52px, 4.3vw, 74px); border-color: rgba(183, 0, 83, 0.36); }
+  .section-tabs__link { font-size: var(--fs-lead); min-height: clamp(44px, 3.6vw, 62px); padding-inline: clamp(var(--space-4), 2vw, 2.75rem); color: var(--c-pink-750); }
+  @media (min-width: 80rem) { .section-tabs__list { justify-content: center; } }
+
+  /* breast / cervical switch — Figma 2408:234: two 722×70 pills, bold 32px */
+  .variant-switch { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: clamp(var(--space-3), 1.6vw, 1.75rem); margin-block: clamp(var(--space-6), 3.7vw, 4rem); }
+  .variant-switch__link {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    min-height: clamp(52px, 4vw, 70px); padding: var(--space-2) var(--space-6);
+    border-radius: var(--radius-pill); border: var(--glass-border-width) solid var(--glass-border);
+    background: var(--glass-bg); font-size: var(--fs-h3); font-weight: 700; text-transform: uppercase; text-decoration: none;
+  }
+  .variant-switch__label { background-image: var(--grad-title); color: var(--brand); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .variant-switch__label { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
+  .variant-switch__link.is-active { background-image: var(--grad-cta); border-color: transparent; }
+  .variant-switch__link.is-active .variant-switch__label { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: var(--neutral-0); }
+
+  /* article body rhythm: Figma keeps 64 px between blocks and 30 px under a heading */
+  .article--designed .page-header { margin: 0; }
+  .article__body > .block, .article__body > .steps, .article__body > .callout { margin-block: 0 var(--gap-block); }
+  .article__body > .block--heading { margin-block: var(--gap-block) clamp(var(--space-4), 1.8vw, 1.9rem); font-size: var(--fs-h2); }
+  .article__body > .block--heading:first-child { margin-top: 0; }
+  .block--heading { background-image: var(--grad-title); color: var(--brand); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .block--heading { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
+
+  /* flower bullets used by every list inside the design's cards (Figma 2408:360) */
+  .text-card__text ul, .icon-tile__text ul, .columns__items ul, .steps--capsules ul, .steps--capsules_arrows ul { list-style: none; padding-left: 0; }
+  .text-card__text ul li, .columns__items ul li {
+    position: relative; padding-left: clamp(1.75rem, 2.4vw, 2.6rem); margin-block: var(--space-2); font-style: italic;
+  }
+  .text-card__text ul li::before, .columns__items ul li::before {
+    content: ""; position: absolute; left: 0; top: 0.1em;
+    width: clamp(1.1rem, 1.4vw, 1.5rem); height: clamp(1.1rem, 1.4vw, 1.5rem);
+    background: url("../img/figma/icon-flower.svg") center / contain no-repeat;
+  }
+
+  /* text card — Figma 2408:245: glass, r50, 2px border, copy 32px, 80px side padding */
+  .text-card {
+    position: relative; display: flex; gap: clamp(var(--space-4), 3vw, var(--space-12)); align-items: center;
+    padding: clamp(var(--space-6), 2.6vw, 2.9rem) clamp(var(--space-6), 4.8vw, 5.4rem);
+    background: var(--glass-bg); border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-glass);
+    font-size: var(--fs-body); line-height: 1.2;
+  }
+  @supports (backdrop-filter: blur(1px)) { .text-card { backdrop-filter: blur(var(--glass-blur)); } }
+  .text-card__body { flex: 1 1 auto; min-width: 0; }
+  .text-card__text > :first-child { margin-top: 0; }
+  .text-card__text > :last-child { margin-bottom: 0; }
+  .text-card__text p { margin-block: 0 0.4em; }
+  .text-card__title { margin: 0 0 var(--space-3); font-size: var(--fs-card-title); line-height: 1.15; text-transform: uppercase; background-image: var(--grad-title); color: var(--brand); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .text-card__title { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
+  .text-card__media { flex: none; width: clamp(8rem, 20vw, 24rem); max-width: 40%; height: auto; }
+  .text-card--narrow { max-width: 707px; margin-inline: auto; }
+  .text-card--labelled { margin-top: clamp(1.6rem, 2vw, 2.2rem); padding-top: clamp(2.4rem, 3.4vw, 4rem); }
+  .text-card__label {
+    position: absolute; top: 0; left: clamp(var(--space-6), 2vw, 2.1rem); transform: translateY(-50%); margin: 0;
+    display: inline-flex; align-items: center; min-height: clamp(40px, 2.9vw, 50px); padding-inline: clamp(var(--space-6), 2.2vw, 2.4rem);
+    border-radius: var(--radius-pill); background: var(--c-lime-soft); color: var(--neutral-800);
+    font-size: var(--fs-h3); font-weight: 700; text-transform: uppercase;
+  }
+  /* smaller copy inside grids (symptom cards, self-exam steps, duties) */
+  .text-cards { display: grid; gap: clamp(var(--space-4), 2.2vw, 2.4rem); grid-template-columns: 1fr; }
+  .text-cards .text-card { align-items: flex-start; font-size: var(--fs-card); line-height: 1.3; padding: clamp(var(--space-6), 2.6vw, 2.9rem) clamp(var(--space-6), 2.8vw, 2.9rem); }
+  .text-cards .text-card__media { width: clamp(7rem, 12vw, 13rem); align-self: center; }
+  @media (min-width: 48rem) {
+    .text-cards--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .text-cards--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 40rem) {
+    .text-card--media { flex-direction: column; }
+    .text-card__media { max-width: 70%; align-self: center; }
+  }
+
+  /* capsules — Figma 2408:762: 477×840 pills, 8px #ff5a93 border, lime star, arrows between */
+  .steps--capsules .steps__list, .steps--capsules_arrows .steps__list {
+    display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-6), 3vw, 3.2rem) clamp(var(--space-4), 1.6vw, 1.7rem);
+  }
+  @media (min-width: 48rem) { .steps--capsules .steps__list, .steps--capsules_arrows .steps__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .steps--capsules .steps__list, .steps--capsules_arrows .steps__list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .steps--capsules .steps__item, .steps--capsules_arrows .steps__item {
+    position: relative; flex-direction: column; align-items: center; text-align: center; gap: var(--space-4);
+    min-height: clamp(16rem, 30vw, 46rem); padding: clamp(var(--space-8), 3.2vw, 3.1rem) clamp(var(--space-6), 3.4vw, 3.5rem) clamp(var(--space-12), 5vw, 5rem);
+    border: clamp(4px, 0.46vw, 8px) solid var(--c-pink-400); border-radius: 999px; background: var(--stage-bg); border-bottom-width: clamp(4px, 0.46vw, 8px);
+    font-size: var(--fs-capsule); line-height: 1.2;
+  }
+  .steps--capsules .steps__number, .steps--capsules_arrows .steps__number {
+    width: clamp(56px, 6.2vw, 107px); height: clamp(56px, 6.2vw, 107px); font-size: var(--fs-h3); font-weight: 400; background: var(--c-lime);
+  }
+  .steps--capsules .steps__title, .steps--capsules_arrows .steps__title { margin: 0 0 var(--space-2); font-size: var(--fs-capsule); color: var(--c-pink-700); text-transform: uppercase; }
+  .steps--capsules .steps__deadline, .steps--capsules_arrows .steps__deadline { color: var(--c-pink-800); }
+  .steps--capsules_arrows .steps__item:not(:last-child)::after {
+    content: ""; position: absolute; top: 50%; right: calc(-1 * clamp(var(--space-4), 1.6vw, 1.7rem) - 12px);
+    width: clamp(28px, 2.6vw, 44px); height: 24px; transform: translateY(-50%); z-index: 1;
+    background: url("../img/figma/arrow-right.svg") center / contain no-repeat;
+  }
+  @media (min-width: 64rem) { .steps--capsules_arrows .steps__item:nth-child(3n)::after { display: none; } }
+  @media (min-width: 48rem) and (max-width: 63.99rem) { .steps--capsules_arrows .steps__item:nth-child(2n)::after { display: none; } }
+  @media (max-width: 47.99rem) {
+    .steps--capsules_arrows .steps__item:not(:last-child)::after { top: auto; right: auto; bottom: calc(-1 * clamp(var(--space-6), 3vw, 3.2rem)); left: 50%; transform: translateX(-50%) rotate(90deg); }
+  }
+  /* 4-step patient route fits one row on desktop like the Figma frame (2408:1396) */
+  @media (min-width: 64rem) { .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) .steps__item:nth-child(3n)::after { display: block; } }
+
+  /* icon tiles — Figma 2408:255: 260×563 glass card, 260×260 pink tile, 5 per row */
+  .cards-grid--icon_tiles .cards-grid__items { grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: clamp(var(--space-4), 1.6vw, 1.25rem); }
+  @media (min-width: 64rem) { .cards-grid--icon_tiles .cards-grid__items { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .icon-tile { display: flex; flex-direction: column; border: 1px solid var(--c-pink-400); border-radius: clamp(24px, 2.3vw, 40px); background: var(--glass-bg); overflow: hidden; }
+  .icon-tile__art { aspect-ratio: 1; background: var(--c-pink-400); border-radius: clamp(24px, 2.3vw, 40px); display: flex; align-items: center; justify-content: center; }
+  .icon-tile__img { width: 85%; height: auto; }
+  .icon-tile__title { margin: clamp(var(--space-4), 1.3vw, 1.4rem) clamp(var(--space-4), 1.6vw, 1.7rem) var(--space-4); font-size: var(--fs-tile-title); line-height: 1.1; min-height: 2.2em; }
+  .icon-tile__text { margin: 0 clamp(var(--space-4), 1.6vw, 1.7rem) clamp(var(--space-6), 1.8vw, 2rem); font-size: var(--fs-sm); line-height: 1.3; }
+  .icon-tile__text p { margin: 0; }
+
+  /* alert strip — Figma 2408:435: glass bar, gradient «!» disc, 32px copy */
+  .callout--alert { align-items: center; border: var(--glass-border-width) solid var(--glass-border); background: var(--glass-bg); padding: clamp(var(--space-4), 1.7vw, 1.75rem) clamp(var(--space-4), 1.7vw, 1.9rem); font-size: var(--fs-body); line-height: 1.2; }
+  .callout--alert .callout__icon {
+    width: clamp(48px, 5.8vw, 101px); height: clamp(48px, 5.8vw, 101px); border: 0; border-radius: 50%;
+    background: url("../img/figma/icon-warning.svg") center / contain no-repeat;
+    color: transparent; overflow: hidden; /* the «!» glyph stays for no-image fallbacks */
+  }
+  .callout--alert .callout__text p { margin: 0; }
+
+  /* centred pill CTA — Figma 2408:812: 548×90, 32px */
+  .cta--bare { border: 0; padding: 0; background: none; display: flex; justify-content: center; }
+  .cta--bare .button { min-width: min(100%, 548px); min-height: clamp(56px, 5.2vw, 90px); font-size: var(--fs-h3); font-weight: 500; }
+
+  /* three / two columns as glass cards with gradient titles (Figma 2408:2128 life after cancer) */
+  body[data-section="women"] .columns__col {
+    border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-glass);
+    background: var(--glass-bg); padding: clamp(var(--space-6), 2vw, 2rem) clamp(var(--space-6), 2vw, 2.1rem);
+  }
+  body[data-section="women"] .columns__title { font-size: var(--fs-card-title); text-transform: uppercase; line-height: 1.15; background-image: var(--grad-title); color: var(--brand); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    body[data-section="women"] .columns__title { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
+  body[data-section="women"] .columns__items { font-size: var(--fs-card); }
 }

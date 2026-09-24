@@ -36,8 +36,8 @@
   {% block header %}{% include "components/header.html" %}{% endblock %}
   {% include "components/banner.html" %}
   <main id="main" tabindex="-1">
+    {% block section_tabs %}{% section_tabs %}{% endblock %}
     {% block breadcrumbs %}{% breadcrumbs %}{% endblock %}
-    {% block section_tabs %}<div class="container">{% section_tabs %}</div>{% endblock %}
     {% block content %}{% endblock %}
   </main>
   {% block footer %}{% include "components/footer.html" %}{% endblock %}

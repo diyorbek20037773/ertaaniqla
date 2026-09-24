@@ -30,6 +30,12 @@
 
   /* accent */
   --c-lime: #b2f71b;          /* stage badges, method pills */
+  --c-lime-soft: #d5f96b;     /* illustration lime */
+
+  /* page backdrop of the women's section (sampled from the Figma exports, M5d) */
+  --c-page-women: #fffafd;
+  --c-blob-pink: #fec2e0;
+  --c-blob-lime: #e4ffaa;
 
   /* neutral */
   --neutral-0: #ffffff;
@@ -98,6 +104,11 @@
   --fs-lead: clamp(0.944rem, 0.831rem + 0.52vw, 1.333rem);     /*  17 →  24px */
   --fs-ui: clamp(0.889rem, 0.824rem + 0.3vw, 1.111rem);        /*  16 →  20px */
   --fs-sm: 0.889rem;                                            /*        16px */
+  --fs-card-title: clamp(1.111rem, 0.852rem + 1.2vw, 1.778rem); /*  20 →  32px, card titles */
+  --fs-card: clamp(0.889rem, 0.824rem + 0.3vw, 1.111rem);       /*  16 →  20px, card copy */
+  --fs-tile-title: clamp(1rem, 0.87rem + 0.6vw, 1.556rem);      /*  18 →  28px */
+  --fs-capsule: clamp(1rem, 0.87rem + 0.6vw, 1.556rem);         /*  18 →  28px, capsule copy */
+  --gap-block: clamp(2rem, 1.3rem + 2.9vw, 4rem);               /*  32 →  64px between blocks */
 
   /* === spacing / radius / shadow ======================================== */
   --space-1: 0.25rem;

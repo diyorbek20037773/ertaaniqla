@@ -1,0 +1,17 @@
+{% load wagtailimages_tags article_tags %}
+{% comment %} text_card: glass card (Figma 2408:245). value: label (lime chip on the top border),
+   title, text, image (upload) | illustration (designer file), width full|narrow. {% endcomment %}
+{% with src=value.illustration|illustration_src %}
+<section class="block text-card text-card--{{ value.width|default:'full' }}{% if value.label %} text-card--labelled{% endif %}{% if value.image or src %} text-card--media{% endif %}">
+  {% if value.label %}<p class="text-card__label">{{ value.label }}</p>{% endif %}
+  <div class="text-card__body">
+    {% if value.title %}<h3 class="text-card__title">{{ value.title }}</h3>{% endif %}
+    <div class="text-card__text">{{ value.text }}</div>
+  </div>
+  {% if value.image %}
+    {% picture value.image format-{webp,png} max-{400x400,800x800} sizes="(max-width: 48rem) 60vw, 24rem" class="text-card__media" loading="lazy" %}
+  {% elif src %}
+    <img class="text-card__media" src="{{ src }}" alt="" loading="lazy" decoding="async">
+  {% endif %}
+</section>
+{% endwith %}

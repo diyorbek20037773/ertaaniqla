@@ -146,7 +146,7 @@ def test_cards_grid_render() -> None:
         "cards": [
             {
                 "image": None,
-                "icon": "dna",
+                "icon": "genes",
                 "title": f"Card {i}",
                 "text": "<p>t</p>",
                 "link": {"page": None, "url": "https://x.uz"},
@@ -156,8 +156,96 @@ def test_cards_grid_render() -> None:
     }
     html = render("cards_grid", value)
     assert html.count('<article class="card">') == 6
-    assert 'data-icon="dna"' in html
+    assert "img/figma/women/risk-genes.png" in html  # designer icon from the registry
     assert 'href="https://x.uz"' in html
+
+
+def test_cards_grid_icon_tiles_render_the_pink_tile() -> None:
+    value = {
+        "title": "",
+        "layout": "icon_tiles",
+        "cards": [
+            {
+                "image": None,
+                "icon": "age",
+                "title": "Yosh",
+                "text": "<p>t</p>",
+                "link": {"page": None, "url": ""},
+            }
+        ],
+    }
+    html = render("cards_grid", value)
+    assert "cards-grid--icon_tiles" in html and 'class="icon-tile"' in html
+    assert (
+        "img/figma/women/risk-age.png" in html and '<h3 class="icon-tile__title">Yosh</h3>' in html
+    )
+
+
+def test_heading_block_renders_design_h2() -> None:
+    html = render("heading", "Skrining nima?")
+    assert '<h2 class="block block--heading section-heading__title">Skrining nima?</h2>' in html
+
+
+@pytest.mark.parametrize(("illustration", "label"), [("mammography", "MAMMOGRAFIYA"), ("", "")])
+def test_text_card_label_and_illustration(illustration: str, label: str) -> None:
+    value = {
+        "label": label,
+        "title": "Sarlavha",
+        "text": "<ul><li>a</li></ul>",
+        "image": None,
+        "illustration": illustration,
+        "width": "narrow",
+    }
+    html = render("text_card", value)
+    assert "text-card--narrow" in html and '<h3 class="text-card__title">Sarlavha</h3>' in html
+    assert ("text-card__label" in html) is bool(label)
+    assert ("img/figma/women/method-mammography.png" in html) is bool(illustration)
+
+
+def test_text_cards_grid_uses_column_count() -> None:
+    card = {
+        "label": "",
+        "title": "",
+        "text": "<p>x</p>",
+        "image": None,
+        "illustration": "",
+        "width": "full",
+    }
+    html = render("text_cards", {"columns": "3", "cards": [card, card, card]})
+    assert "text-cards--3" in html and html.count('class="block text-card ') == 3
+
+
+@pytest.mark.parametrize("layout", ["list", "capsules", "capsules_arrows"])
+def test_steps_layouts(layout: str) -> None:
+    value = {
+        "title": "",
+        "layout": layout,
+        "steps": [
+            {
+                "number": "",
+                "title": "",
+                "text": "<p>a</p>",
+                "deadline": "",
+                "link": {"page": None, "url": ""},
+            },
+            {
+                "number": "",
+                "title": "B",
+                "text": "<p>b</p>",
+                "deadline": "",
+                "link": {"page": None, "url": ""},
+            },
+        ],
+    }
+    html = render("steps", value)
+    assert f"steps--{layout}" in html
+    assert ("01" in html) is (layout == "list")  # capsules count 1, 2, … like the design
+    assert html.count('class="steps__title"') == 1  # the title is optional
+
+
+def test_callout_alert_is_announced_as_important() -> None:
+    html = render("callout", {"kind": "alert", "title": "", "text": "<p>Vahima qilmang</p>"})
+    assert "callout--alert" in html and "Vahima qilmang" in html
 
 
 @pytest.mark.parametrize("urgency", ["routine", "soon", "urgent"])

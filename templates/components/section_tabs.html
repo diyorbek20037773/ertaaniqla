@@ -4,10 +4,15 @@
    Context: items (list[NavItem: title, url]), active_url (str), section_key.
    States: active item = gradient pill, the rest = plain labels inside one glass bar.
    Mobile: the bar scrolls horizontally; every tab keeps a 44px target.
+   Women's section: the Figma illustration banner (full width) sits above the bar.
    --------------------------------------------------------------------------- {% endcomment %}
-{% load i18n %}
+{% load i18n static %}
+{% if section_key == "women" %}
+  {# Figma «Group 67»: illustration mosaic across the full width, decorative only #}
+  <div class="section-banner" aria-hidden="true"><img class="section-banner__img" src="{% static 'img/figma/women/banner.svg' %}" alt="" width="1728" height="347" decoding="async" fetchpriority="high"></div>
+{% endif %}
 {% if items %}
-  <nav class="section-tabs" aria-label="{% trans 'Section topics' %}">
+  <div class="container"><nav class="section-tabs" aria-label="{% trans 'Section topics' %}">
     <ul class="section-tabs__list">
       {% for item in items %}
         <li class="section-tabs__item">
@@ -16,5 +21,5 @@
         </li>
       {% endfor %}
     </ul>
-  </nav>
+  </nav></div>
 {% endif %}

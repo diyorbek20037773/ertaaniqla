@@ -1,9 +1,21 @@
-{% load article_tags %}
-<section class="block block--cards-grid cards-grid">
+{% load article_tags wagtailimages_tags %}
+<section class="block block--cards-grid cards-grid cards-grid--{{ value.layout|default:'cards' }}">
   {% if value.title %}<h2 class="cards-grid__heading">{{ value.title }}</h2>{% endif %}
   <div class="cards-grid__items">
     {% for card in value.cards %}
-      {% include "components/card.html" with title=card.title text=card.text image=card.image icon=card.icon url=card.link|link_href %}
+      {% if value.layout == "icon_tiles" %}
+        {# icon tile (Figma 2408:255): pink square with the icon, title, short text #}
+        <article class="icon-tile">
+          <div class="icon-tile__art">
+            {% if card.image %}{% picture card.image format-{webp,png} fill-{220x220,440x440} sizes="12rem" class="icon-tile__img" %}
+            {% elif card.icon %}<img class="icon-tile__img" src="{{ card.icon|illustration_src }}" alt="" width="220" height="220" loading="lazy" decoding="async">{% endif %}
+          </div>
+          <h3 class="icon-tile__title">{{ card.title }}</h3>
+          {% if card.text %}<div class="icon-tile__text">{{ card.text }}</div>{% endif %}
+        </article>
+      {% else %}
+        {% include "components/card.html" with title=card.title text=card.text image=card.image icon=card.icon url=card.link|link_href %}
+      {% endif %}
     {% endfor %}
   </div>
 </section>
