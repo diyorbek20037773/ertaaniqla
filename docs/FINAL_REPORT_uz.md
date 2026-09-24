@@ -1,6 +1,6 @@
-# «Erta aniqla» — yakuniy hisobot (autopilot, M0 → M7b)
+# «Erta aniqla» — yakuniy hisobot (autopilot, M0 → M5b)
 
-Sana: 2026-09-17 · Oxirgi teg: `m7b` (`m7-release-candidate` dan keyin) · Filial: `master`
+Sana: 2026-09-24 (birinchi versiya 2026-09-17) · Oxirgi teg: `m5b` · Filial: `feat/m5b-design-integration`
 
 ## 1. Nima qurildi
 
@@ -15,6 +15,7 @@ Sana: 2026-09-17 · Oxirgi teg: `m7b` (`m7-release-candidate` dan keyin) · Fili
 | M6 — Prod DevOps | `m6` | nginx (TLS, rate limit, micro-cache), certbot, backup + restic + haftalik restore testi, monitoring (Prometheus/Grafana/Telegram), staging, CD + rollback, RUNBOOK, SECURITY | `compose.prod.yml`, `docker/nginx/`, `docs/RUNBOOK.md` |
 | M7 — Muharrirlar, workflow, launch | `m7-release-candidate` | Rollar Editor / Medical Reviewer / Admin, «Medical review» workflow va «Shifokor tekshirgan» belgisi, 2FA, muharrir qoʻllanmalari (ru+uz), launch checklist, yuklama testi | `apps/users/`, `docs/EDITOR_GUIDE_*.md`, `docs/LAUNCH_CHECKLIST.md`, `tests/perf/locustfile.py` |
 | M7b — Oʻzbek kirill | `m7b` | Buyurtmachi talabi: saytning kirill versiyasi `/oz/` (lotin daraxtidan avtomatik), 3 tilli almashtirgich, hreflang `uz-Cyrl` | `apps/core/uzcyrl.py`, `apps/core/middleware.py` |
+| M5b — Figma dizayn | `m5b` | Dizaynerning Figma fayli: tokenlar, Albert Sans (lokal), glass/pill/lime primitivlari, bosh sahifa, ichki sahifalar, desktop menyu; Python oʻzgarmadi (ADR-0006, D-056…D-063). Bolalar boʻlimi vizuali — **M5c** (buyurtmachi maketlari kutilmoqda) | `static/src/tokens.css`, `components.css`, `nav.js`, `templates/` |
 
 M7 da topilib tuzatilgan ikki jiddiy xato:
 - **2FA umuman ishlamas edi**: django-otp 1.7 + wagtail-2fa 1.8 birga «Please select a device.» xatosini berardi — hech kim CMS ga kira olmasdi. Tuzatildi (`apps/users/otp.py`, D-042), testlar bilan.
@@ -22,11 +23,11 @@ M7 da topilib tuzatilgan ikki jiddiy xato:
 
 ## 2. TZ_TRACE xulosasi
 
-Jami **81** talab: **79 done**, **2 not done**.
+Jami **82** talab: **80 done**, **1 not done**, **1 hujjatlashtirilgan ogʻish** (E-13).
 
 | ID | Talab | Nima uchun bajarilmagan |
 |---|---|---|
-| E-11 | Yakuniy vizual dizayn | Figma dizayn hali kelmagan (D-003). Hozir toza wireframe; dizayn faqat `tokens.css` va `templates/components/` ga tushadi (M5b), Python oʻzgarmaydi. |
+| E-13 | WCAG AA rang kontrasti (standart tema) | **Buyurtmachi qarori (D-059)**: Figma ranglari aynan saqlanadi; toʻliq AA — «Yuqori kontrast» temasida (har sahifada). Hujjatlashtirilgan ogʻish. |
 | M7-08 | Kopirayter/dizayner bilan UAT | Odamlar kerak. Vositalar tayyor: `create_demo_staff`, e2e ssenariy, LAUNCH_CHECKLIST §6. |
 
 Qoʻshimcha: barcha tibbiy matnlar `[[TODO: content — copywriter]]` / `[[VERIFY: doctor]]` toʻldiruvchilari bilan (qoida boʻyicha tibbiy matn yozilmagan). Nashrdan oldin `manage.py find_placeholders --fail` tekshiradi.
@@ -52,32 +53,33 @@ Sizning javoblaringiz asosida: D-045 (DMED — kiritilmaydi), D-046 (muassasalar
 3. **`.env` qiymatlari**: `DJANGO_SECRET_KEY`, `PII_ENCRYPTION_KEYS`, DB/Redis parollari, `DOMAIN`, `LETSENCRYPT_EMAIL`, restic ombori (backup uchun S3/SFTP), Telegram bot (alertlar) — roʻyxat `.env.example` da.
 4. **Kalitlar/hisoblar**: Sentry DSN, Yandex.Metrika ID (kimning hisobida), Cloudflare Turnstile kalitlari, Yandex.Webmaster / Google Search Console.
 5. **Muassasalar CSV** (Sogʻliqni saqlash vazirligidan) — format `docs/EDITOR_GUIDE_uz.md` §9 va `data/institutions.sample.csv`.
-6. **Logotip, ranglar, Figma dizayn** (M5b).
+6. **Bolalar boʻlimi uchun Figma maketlari** (M5c); hamkor logotiplari.
 7. **Tibbiy matnlar** (kopirayter + RONM / Ona va bola markazi / bolalar onkogematologiyasi shifokorlari), maxfiylik siyosati, bemor rozilik shakli (yuridik matn, vasiy varianti bilan), tibbiy ogohlantirish yakuniy matni, PQ-402 sanasi.
 8. **Odamlar**: har bir muharrir va shifokor uchun hisob (rol + tashkilot), UAT sessiyasi.
 
 Toʻliq roʻyxat: `docs/LAUNCH_CHECKLIST.md`.
 
-## 5. Test natijalari (haqiqiy chiqish, 2026-09-17)
+## 5. Test natijalari (haqiqiy chiqish, 2026-09-17; M5b qatorlari 2026-09-24)
 
 | Tekshiruv | Natija |
 |---|---|
 | `ruff check` / `ruff format --check` | All checks passed |
 | `mypy` | Success: no issues found in 122 source files |
-| `pytest --cov` | **432 passed**, 1 skipped (hostda ffmpeg yoʻq; konteynerda M3 da oʻtgan), coverage **92 %** (chegara 85 %) |
+| `pytest --cov` | M5b: **468 passed**, coverage 92.36 % · M7b: **432 passed**, 1 skipped (hostda ffmpeg yoʻq; konteynerda M3 da oʻtgan), coverage **92 %** (chegara 85 %) |
 | Tarjimalar | uz + ru complete |
-| E2E (Playwright, dev server) | **41 passed**: ekran rasmlari (390 px), menyu, til almashtirish (uz↔ru, lotin↔kirill), print, CSP, axe (13 sahifa, 0 jiddiy), CMS: muharrir ru maqola → uz tarjima → shifokor tasdiqlaydi → ikkala tilda nashr + belgi, 2FA orqali |
+| E2E (Playwright, dev server) | M5b: **52 passed** (+ 1280 px desktop ekranlar) · M7b: **41 passed**: ekran rasmlari (390 px), menyu, til almashtirish (uz↔ru, lotin↔kirill), print, CSP, axe (13 sahifa, 0 jiddiy), CMS: muharrir ru maqola → uz tarjima → shifokor tasdiqlaydi → ikkala tilda nashr + belgi, 2FA orqali |
 | Yuklama (locust, 200 foydalanuvchi, 5 daqiqa) | 28 736 soʻrov, **0 xato**, 96.8 req/s; sahifa p50 12 ms · **p95 32 ms** · p99 75 ms (budjet p95 < 300 ms). ⚠️ Prod sozlamali image, lekin dev noutbukda (Docker Desktop), VPS da emas — staging da qayta oʻtkazish LAUNCH_CHECKLIST §6 da. |
-| Lighthouse (M5, lokal) | perf 0.98–0.99, a11y 1.00, LCP 2.0–2.1 s, CLS 0, TBT 48–130 ms |
-| pa11y-ci (M5) | 8/8 URL WCAG 2.1 AA; M7b da `/oz/` URL qoʻshildi (CI da ishlaydi) |
-| Hajm budjeti | CSS 2.6 KB gz, JS 37.7 KB gz (budjet 40/50) |
+| Lighthouse (M5b, 2026-09-24, siqilgan preview) | perf 0.99–1.00, a11y 1.00, LCP 2.05/1.85/1.89 s, CLS 0, TBT ≤ 37 ms |
+| pa11y-ci (M5b) | 9/9 URL, 0 xato (standart temada kontrast D-059 boʻyicha chiqarilgan) |
+| Hajm budjeti | CSS 9.5 KB gz, JS 42.8 KB gz (budjet 40/50); shriftlar ≈ 32 KB/til |
 | `check --deploy` (prod) | yashil (M6) |
 | `nginx -t` | successful (M7b oʻzgarishidan keyin qayta tekshirildi) |
 | Backup → restore (M6) | scratch postgres:16 ga tiklandi: 71 sahifa, 12 muassasa, 6 atama |
 
 ## 6. Maʼlum kamchiliklar va `docs/TODO_HARDENING.md` (H-001…H-023)
 
-- **Dizayn yoʻq** (wireframe) — M5b, Figma kutilmoqda.
+- **Bolalar boʻlimi vizuali** — M5c, buyurtmachi maketlari kutilmoqda (D-060).
+- **Standart temada rang kontrasti AA dan past** — buyurtmachi qarori D-059; AA yuqori kontrast temasida.
 - **Kirill transliteratsiyasi** qoidalarga asoslangan: «ь», «ц» li oʻzlashma soʻzlar istisnolar lugʻatida (kodda). Filolog koʻrib chiqishi va CMS orqali boshqarish — H-023.
 - **Wagtail admin oʻzbekcha tarjimasi toʻliq emas** — muharrirlar rus tilini tanlashi mumkin (H-022).
 - Admin workflow ni chetlab toʻgʻridan-toʻgʻri nashr qilsa, eski belgi saqlanib qoladi (H-020).
@@ -86,4 +88,4 @@ Toʻliq roʻyxat: `docs/LAUNCH_CHECKLIST.md`.
 - Tashqi uptime monitor (H-016), Loki loglar (H-017), ZAP skan (H-019), brotli (H-015) — ixtiyoriy yaxshilanishlar.
 - Qolgan H-bandlar (`docs/TODO_HARDENING.md`) — keyingi yaxshilashlar, launch ni toʻsmaydi.
 
-Keyingi qadamlar: M5b (Figma kelganda) → LAUNCH_CHECKLIST boʻyicha M8 (ishga tushirish) → qoʻllab-quvvatlash 31.12.2026 gacha.
+Keyingi qadamlar: M5c (bolalar boʻlimi maketlari kelganda) → LAUNCH_CHECKLIST boʻyicha M8 (ishga tushirish) → qoʻllab-quvvatlash 31.12.2026 gacha.
