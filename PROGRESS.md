@@ -230,6 +230,34 @@ Verified: `up --wait` green, Prometheus 9/9 targets up, both Grafana dashboards 
 event → Loki with trace_id, backup OK. Local creds live in `.env.localprod` (gitignored).
 Image tags: `ertaaniqla/web:prod` (prod, no dev deps) — keep `:local` for the dev stack.
 
+**M5d — Figma fidelity (developer request 2026-09-24, IN PROGRESS).** The developer compared the
+site with the Figma PNG exports in `templates/erta aniqla/` (14 files; sliced copies can be
+regenerated) and asked for an exact match. Decisions D-064…D-067 (Figma nav + tabs; Figma medical
+copy seeded with [[VERIFY: doctor]]; breast/cervical = two sibling pages; assets from Figma).
+Figma MCP hit the **Starter-plan call limit** after 3 calls — everything else comes from the PNGs.
+Saved: `static/img/figma/women/banner.svg` (mosaic, exported via MCP); breast-awareness texts
+(100 layers, exact) in scratchpad `figma/breast_awareness_texts.json` → to be moved into
+`apps/core/seed/figma_women.py` (U+FFFD in them = lost ’: oʻ/gʻ→ʻ, else ʼ, quotes → “ ”).
+Figma values (MCP): tabs bar h74 r50 border 2px rgba(183,0,83,.36) bg white 36% gap 80, label 24px
+#800049, active 217×62 gradient #ff477e→#701c44; disease pills 722×70 r50 bold 32px, active
+gradient, inactive glass + gradient text #d5507f→#6f2a42.
+
+Phases (commit after each):
+- [ ] A assets: crop from PNGs → `static/img/figma/women/` (10 risk icons, mammography/UTT/MRT,
+  4 self-exam figures, "!" icon) — 1× only (MCP limit), note in D-067.
+- [ ] B blocks + CSS: page bg blobs (pink/lime), banner, tabs, disease switch, section h2 w/ flower,
+  `text_card` (title, rich text, width full|narrow), steps `layout` capsules(+arrows)/illustrated,
+  cards_grid icon cards, two/three columns as glass cards with flower bullets, callout `alert`
+  (gradient "!"), centred CTA pill, `method_card` (lime label + image). Migrations for block changes.
+- [ ] C IA + seed: women → 5 tabs (awareness, screening, treatment, support, after) × {breast,
+  cervical} ArticlePages; TopicIndexPage/SectionIndexPage `is_variant_group` → 302 to first child;
+  directory kept (CTA target, not in tabs); old keys (what/risk/symptoms/who/where/state/care)
+  removed with Wagtail redirects; TZ care/after columns kept inside support/after pages.
+- [ ] D header (Asosiy · Haqimizda · Bo'limlar▾ · Shifokorlar · Savol-Javob + Uz pill + search),
+  new pages Haqimizda/Shifokorlar, landing hero/capsules/check cards per Figma.
+- [ ] E verify: Playwright 1728/390 screenshots side-by-side with PNGs, make check, e2e, a11y,
+  Lighthouse, TZ_TRACE deviation rows, commit + tag `m5d`.
+
 **Next:** M5c (client frames) and M8 (launch inputs).
 
 **Blocker of 2026-09-23 RESOLVED (2026-09-24):** root cause = **C: drive full (0.2 GB free)**;
