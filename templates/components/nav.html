@@ -1,51 +1,79 @@
 {% comment %} ---------------------------------------------------------------------------
-   components/nav.html — primary navigation: one mega-menu per section (5 items each per
-   TZ §II) + language switcher. Rendered by {% main_nav %} (apps/core/templatetags/core_tags).
-   Context: sections (list[NavSection]: key, title, url, tagline, emoji, items[NavItem: title,
-   url, summary, children]), LANGUAGE_CODE, section_key (active section), page.
-   States: mobile — each section is a <details> disclosure (works without JS);
-           desktop — sections inline, sub-items revealed on hover/focus (CSS only).
+   components/nav.html — primary navigation (Figma header, D-064): Asosiy · Haqimizda ·
+   Bo'limlar ▾ (both sections, 5 TZ items each + sub-items) · Shifokorlar · Savol-Javob,
+   then the language dropdown («Uz ▾») and the search pill. Rendered by {% main_nav %}.
+   Context: sections (list[NavSection]), links (dict: home, about, doctors, faq → URL; an
+   item without a page is left out), LANGUAGE_CODE, section_key (active section), request.
+   States: mobile — everything behind the «Menu» disclosure, dropdowns are disclosures
+           (works without JS); desktop — one row, «Bo'limlar» and the language are dropdowns
+           (nav.js: one open at a time, Esc / outside click closes).
    --------------------------------------------------------------------------- {% endcomment %}
 {% load i18n static core_tags %}
 <nav class="site-nav" aria-label="{% trans 'Main navigation' %}">
   <details class="site-nav__toggle">
     <summary class="site-nav__toggle-button" aria-controls="site-nav-menu">{% trans "Menu" %}</summary>
     <div class="site-nav__menu" id="site-nav-menu">
-      <ul class="site-nav__sections">
-        {% for section in sections %}
-          <li class="site-nav__section{% if section.key == section_key %} is-active{% endif %}" data-section="{{ section.key }}">
-            <details class="mega-menu" {% if section.key == section_key %}open{% endif %}>
-              <summary class="mega-menu__title">
-                <span class="mega-menu__emoji" aria-hidden="true">{{ section.emoji }}</span>
-                {{ section.title }}
-              </summary>
-              <div class="mega-menu__panel">
-                <a class="mega-menu__root" href="{{ section.url }}">{{ section.title }}{% if section.tagline %} — <span class="mega-menu__tagline">{{ section.tagline }}</span>{% endif %}</a>
-                <ul class="mega-menu__items">
-                  {% for item in section.items %}
-                    <li class="mega-menu__item">
-                      <a href="{{ item.url }}">{{ item.title }}</a>
-                      {% if item.children %}
-                        <ul class="mega-menu__children">
-                          {% for child in item.children %}
-                            <li><a href="{{ child.url }}">{{ child.title }}</a></li>
-                          {% endfor %}
-                        </ul>
-                      {% endif %}
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </details>
-          </li>
-        {% endfor %}
+      <ul class="site-nav__primary">
+        {% if links.home %}
+          <li><a class="site-nav__link" href="{{ links.home }}"{% if request.path == links.home %} aria-current="page"{% endif %}>{% trans "Home" context "header menu" %}</a></li>
+        {% endif %}
+        {% if links.about %}
+          <li><a class="site-nav__link" href="{{ links.about }}"{% if request.path == links.about %} aria-current="page"{% endif %}>{% trans "About us" context "header menu" %}</a></li>
+        {% endif %}
+        <li class="site-nav__primary-sections">
+          <details class="nav-dropdown site-nav__dropdown{% if section_key %} is-active{% endif %}">
+            <summary class="site-nav__link nav-dropdown__toggle">{% trans "Sections" context "header menu" %}</summary>
+            <ul class="site-nav__sections nav-dropdown__panel">
+              {% for section in sections %}
+                <li class="site-nav__section{% if section.key == section_key %} is-active{% endif %}" data-section="{{ section.key }}">
+                  <details class="mega-menu" {% if section.key == section_key %}open{% endif %}>
+                    <summary class="mega-menu__title">
+                      <span class="mega-menu__emoji" aria-hidden="true">{{ section.emoji }}</span>
+                      {{ section.title }}
+                    </summary>
+                    <div class="mega-menu__panel">
+                      <a class="mega-menu__root" href="{{ section.url }}"><span class="mega-menu__emoji" aria-hidden="true">{{ section.emoji }}</span> {{ section.title }}{% if section.tagline %}<span class="mega-menu__tagline"> — {{ section.tagline }}</span>{% endif %}</a>
+                      <ul class="mega-menu__items">
+                        {% for item in section.items %}
+                          <li class="mega-menu__item">
+                            <a href="{{ item.url }}">{{ item.title }}</a>
+                            {% if item.children %}
+                              <ul class="mega-menu__children">
+                                {% for child in item.children %}
+                                  <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </details>
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        </li>
+        {% if links.doctors %}
+          <li><a class="site-nav__link" href="{{ links.doctors }}"{% if request.path == links.doctors %} aria-current="page"{% endif %}>{% trans "Doctors" context "header menu" %}</a></li>
+        {% endif %}
+        {% if links.faq %}
+          <li><a class="site-nav__link" href="{{ links.faq }}"{% if request.path == links.faq %} aria-current="page"{% endif %}>{% trans "Q&A" context "header menu" %}</a></li>
+        {% endif %}
       </ul>
       <div class="site-nav__utils">
-        {% lang_switch %}
-        <a class="site-nav__search pill pill--cta" href="{% url 'search:search' %}">
-          <span>{% trans "Search" %}</span>
-          <img class="site-nav__search-icon" src="{% static 'img/figma/icon-search.svg' %}" alt="" width="18" height="19" aria-hidden="true">
-        </a>
+        <details class="nav-dropdown lang-menu">
+          {# «Uz» is transliterated to «Уз» on /oz/ pages by the Cyrillic middleware (D-049) #}
+          <summary class="lang-menu__toggle"><span class="lang-menu__current">{% if LANGUAGE_CODE == "ru" %}Ru{% else %}Uz{% endif %}</span><span class="sr-only"> — {% trans "Language" %}</span></summary>
+          <div class="nav-dropdown__panel lang-menu__panel">{% lang_switch %}</div>
+        </details>
+        <form class="site-search" role="search" action="{% url 'search:search' %}" method="get">
+          <label class="sr-only" for="site-search-q">{% trans "Search" %}</label>
+          <input class="site-search__input" id="site-search-q" name="q" type="search" placeholder="{% trans 'Search' %}" autocomplete="off">
+          <button class="site-search__button" type="submit" aria-label="{% trans 'Search' %}">
+            <img class="site-search__icon" src="{% static 'img/figma/icon-search.svg' %}" alt="" width="18" height="19">
+          </button>
+        </form>
       </div>
     </div>
   </details>

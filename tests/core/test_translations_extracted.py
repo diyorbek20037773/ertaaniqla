@@ -14,7 +14,10 @@ import polib
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-TRANS_RE = re.compile(r"""\{%\s*trans\s+(?P<q>["'])(?P<msgid>.+?)(?P=q)(?:\s+as\s+\w+)?\s*%\}""")
+TRANS_RE = re.compile(
+    r"""\{%\s*trans\s+(?P<q>["'])(?P<msgid>.+?)(?P=q)"""
+    r"""(?:\s+context\s+(?P<cq>["']).+?(?P=cq))?(?:\s+as\s+\w+)?\s*%\}"""
+)
 
 
 def _template_msgids() -> set[str]:

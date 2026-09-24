@@ -73,6 +73,7 @@ class Seeder:
                 self.apply_body(page, node, lang, publish=True)
         self.ensure_redirects()
         self.redirect_retired()
+        self.ensure_header_pages()
         return {"created": self.created, "updated": self.updated, "unchanged": self.unchanged}
 
     # --- home / site -----------------------------------------------------------------------
@@ -144,6 +145,19 @@ class Seeder:
     def ensure_site_settings(self) -> None:
         site = Site.objects.get(is_default_site=True)
         SiteSettings.objects.get_or_create(site=site)
+
+    def ensure_header_pages(self) -> None:
+        """Figma header items «Haqimizda» / «Shifokorlar» (D-064); an editor's choice is kept."""
+        site = Site.objects.get(is_default_site=True)
+        site_settings = SiteSettings.objects.get_or_create(site=site)[0]
+        changed = []
+        for key in ("about", "doctors"):
+            field = f"{key}_page_id"
+            if getattr(site_settings, field) is None:
+                setattr(site_settings, field, self.ctx.page_id(key, self.languages[0]))
+                changed.append(field)
+        if changed:
+            site_settings.save(update_fields=[f.removesuffix("_id") for f in changed])
 
     # --- glossary ----------------------------------------------------------------------------
     def ensure_terms(self) -> None:

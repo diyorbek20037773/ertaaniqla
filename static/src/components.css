@@ -151,12 +151,25 @@
   .banner { background: var(--warning-bg); border-block: 1px solid var(--warning); padding-block: var(--space-3); }
   .banner--home { margin-block: var(--space-4); padding-inline: var(--space-4); }
 
-  /* components/nav.html — mega-menu (mobile: <details> disclosures; desktop: inline) */
+  /* components/nav.html — Figma header (D-064): Asosiy · Haqimizda · Bo'limlar ▾ · Shifokorlar ·
+     Savol-Javob, then «Uz ▾» and the search pill. Mobile: one «Menu» disclosure. */
   .site-nav { width: 100%; }
   .site-nav__toggle-button { list-style: none; cursor: pointer; display: inline-flex; align-items: center; min-height: var(--tap-target); padding: var(--space-2) var(--space-4); border: 1px solid var(--neutral-200); border-radius: var(--radius); }
-  .site-nav__toggle-button::-webkit-details-marker { display: none; }
+  .site-nav__toggle-button::-webkit-details-marker, .nav-dropdown > summary::-webkit-details-marker { display: none; }
   .site-nav__menu { display: flex; flex-direction: column; gap: var(--space-4); padding-block: var(--space-4); }
-  .site-nav__sections { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .site-nav__primary { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-1); }
+  .site-nav__link {
+    display: inline-flex; align-items: center; min-height: var(--tap-target); padding-inline: var(--space-2);
+    font-style: italic; font-size: var(--fs-ui); color: var(--neutral-900); text-decoration: none; cursor: pointer;
+  }
+  .site-nav__link:hover, .site-nav__link:focus-visible, .site-nav__link[aria-current="page"],
+  .site-nav__dropdown.is-active > .site-nav__link { color: var(--c-pink-700); }
+  .nav-dropdown > summary { list-style: none; }
+  .nav-dropdown__toggle::after {
+    content: ""; width: 0.45em; height: 0.45em; margin-left: 0.5em; margin-top: -0.25em;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg);
+  }
+  .site-nav__sections { list-style: none; margin: 0; padding: 0 0 0 var(--space-2); display: flex; flex-direction: column; gap: var(--space-2); }
   .site-nav__section[data-section="women"] { --brand: var(--brand-w); --brand-soft: var(--brand-w-soft); }
   .site-nav__section[data-section="children"] { --brand: var(--brand-c); --brand-soft: var(--brand-c-soft); }
   .mega-menu__title { cursor: pointer; font-weight: 700; color: var(--brand); min-height: var(--tap-target); display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2); border-left: 4px solid var(--brand); }
@@ -168,33 +181,73 @@
   .mega-menu__item > a { font-weight: 700; display: inline-flex; min-height: var(--tap-target); align-items: center; }
   .mega-menu__children { padding-left: var(--space-4); }
   .mega-menu__children a { display: inline-flex; min-height: var(--tap-target); align-items: center; }
-  /* language pill + gradient search pill (Figma 2408:186) */
+
+  /* «Uz ▾» (Figma: 107×43 pink pill split by a white rule) + gradient search pill (208×43) */
   .site-nav__utils { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
-  .site-nav__search { text-decoration: none; }
-  .site-nav__search-icon { width: 1em; height: 1em; }
+  .lang-menu { position: relative; }
+  .lang-menu__toggle {
+    display: inline-flex; align-items: stretch; min-height: var(--tap-target); cursor: pointer;
+    border-radius: var(--radius-pill); background: var(--c-pink-300); color: var(--c-pink-700); overflow: hidden;
+  }
+  .lang-menu__current { display: inline-flex; align-items: center; padding-inline: var(--space-4); font-size: var(--fs-ui); font-weight: 500; }
+  .lang-menu__toggle::after {
+    content: ""; flex: none; width: 2.6em; border-left: 2px solid var(--neutral-0);
+    background: url("../img/figma/icon-chevron-down.svg") center / 0.9em auto no-repeat;
+  }
+  .lang-menu__panel { margin-top: var(--space-2); }
+  .site-search {
+    display: inline-flex; align-items: center; min-height: var(--tap-target); width: min(100%, 13rem);
+    padding-inline: var(--space-4) var(--space-2); border-radius: var(--radius-pill); background-image: var(--grad-cta);
+  }
+  .site-search__input {
+    flex: 1 1 auto; min-width: 0; border: 0; background: transparent; color: var(--neutral-0); font: inherit; font-size: var(--fs-ui);
+  }
+  .site-search__input::placeholder { color: var(--neutral-0); opacity: 1; }
+  .site-search__input:focus { outline: none; }
+  .site-search:focus-within { outline: 3px solid var(--c-pink-700); outline-offset: 2px; }
+  .site-search__button { display: inline-flex; align-items: center; justify-content: center; min-width: var(--tap-target); min-height: var(--tap-target); border: 0; background: transparent; cursor: pointer; }
+  .site-search__icon { width: 1.1rem; height: auto; }
+
   @media (min-width: 64rem) {
-    .site-nav { width: auto; margin-left: auto; }
+    .site-nav { width: auto; flex: 1 1 auto; }
     .site-nav__toggle-button { display: none; }
-    .site-nav__toggle > .site-nav__menu { display: flex; flex-direction: row; align-items: center; gap: var(--space-6); padding: 0; }
+    .site-nav__toggle > .site-nav__menu { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: var(--space-6); padding: 0; }
     /* A closed <details> hides its content via ::details-content (Chrome 131+); keep the
        desktop menu visible without JS. nav.js also opens it for older engines. */
     .site-nav__toggle::details-content { content-visibility: visible; }
-    .site-nav__sections { flex-direction: row; gap: var(--space-4); }
-    .site-nav__section { position: relative; }
-    .mega-menu__title { border-left: 0; border-bottom: 3px solid transparent; }
-    .site-nav__section.is-active .mega-menu__title { border-bottom-color: var(--brand); }
-    .mega-menu__panel { position: absolute; top: 100%; left: 0; z-index: 50; min-width: 22rem; background: var(--neutral-0); border: 1px solid var(--neutral-200); border-radius: var(--radius); box-shadow: var(--shadow-float); }
-    .mega-menu__title { font-style: italic; font-weight: 500; color: var(--neutral-900); font-size: var(--fs-ui); }
-    .site-nav__section.is-active .mega-menu__title { color: var(--brand); }
+    .site-nav__primary { flex-direction: row; align-items: center; gap: clamp(var(--space-6), 3.2vw, 3.4rem); margin-inline: auto; }
+    .site-nav__link { padding-inline: 0; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown__panel {
+      position: absolute; top: calc(100% + var(--space-2)); z-index: 50; min-width: 100%;
+      background: var(--neutral-0); border: 1px solid var(--glass-border); border-radius: var(--radius-glass); box-shadow: var(--shadow-float);
+    }
+    /* «Bo'limlar»: both sections side by side, each with its 5 items */
+    .site-nav__sections.nav-dropdown__panel { left: 50%; transform: translateX(-50%); flex-direction: row; gap: var(--space-6); padding: var(--space-6); width: max-content; max-width: min(90vw, 52rem); }
+    .site-nav__section { flex: 1 1 0; min-width: 18rem; }
+    .site-nav__section .mega-menu::details-content { content-visibility: visible; }
+    .site-nav__section .mega-menu__title { pointer-events: none; border-left: 0; padding-inline: 0; font-size: var(--fs-h3); }
+    .site-nav__section .mega-menu__title::-webkit-details-marker { display: none; }
+    .site-nav__section .mega-menu__title { list-style: none; }
+    .mega-menu__panel { background: transparent; padding: 0; }
+    /* compact like the Figma dropdown: section + its 5 items; deeper pages via the tabs */
+    .site-nav__section .mega-menu__children, .site-nav__section .mega-menu__tagline, .site-nav__section .mega-menu__title { display: none; }
+    .site-nav__section .mega-menu__root { font-size: var(--fs-h3); color: var(--brand); text-decoration: none; margin-bottom: var(--space-3); }
+    .site-nav__section .mega-menu__item { margin-block: 0; }
+    .site-nav__section .mega-menu__item > a { font-weight: 400; font-size: var(--fs-ui); color: var(--neutral-900); text-decoration: none; }
+    .site-nav__section .mega-menu__item > a:hover, .site-nav__section .mega-menu__item > a:focus-visible { color: var(--brand); text-decoration: underline; }
+    .site-nav__section .mega-menu__title { font-style: normal; }
+    .lang-menu__panel { right: 0; margin-top: 0; padding: var(--space-2); }
+    .lang-menu .lang-switch { flex-direction: column; align-items: stretch; background: transparent; }
   }
 
-  /* components/lang_switch.html — Figma 2408:187: one soft pink pill */
+  /* components/lang_switch.html — the three language versions (inside «Uz ▾») */
   .lang-switch {
     display: flex; align-items: center; gap: var(--space-1);
     list-style: none; margin: 0; padding: var(--space-1) var(--space-2);
     background: var(--c-pink-200); border-radius: var(--radius-pill);
   }
-  .lang-switch__current { font-weight: 700; padding: var(--space-2); color: var(--c-pink-700); font-size: var(--fs-ui); }
+  .lang-switch__current { display: inline-flex; align-items: center; min-height: var(--tap-target); font-weight: 700; padding: var(--space-2); color: var(--c-pink-700); font-size: var(--fs-ui); }
   .lang-switch__link { display: inline-flex; align-items: center; padding: var(--space-2); min-height: var(--tap-target); color: var(--c-pink-700); text-decoration: none; font-size: var(--fs-ui); }
   .lang-switch__link:hover, .lang-switch__link:focus-visible { text-decoration: underline; }
 
@@ -515,7 +568,6 @@
   .article__footer { margin-top: var(--space-12); padding-top: var(--space-4); border-top: var(--glass-border-width) solid var(--glass-border); color: var(--neutral-600); font-size: 0.9em; }
 
   /* components/search_form.html, search/search.html — results are glass cards */
-  .site-nav__search { display: inline-flex; align-items: center; min-height: var(--tap-target); }
   .search-form__label { display: block; font-weight: 700; margin-bottom: var(--space-2); }
   .search-form__row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
   .search-form__input { flex: 1 1 14rem; min-height: var(--tap-target); padding: var(--space-3) var(--space-6); border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-pill); background: var(--glass-bg); color: var(--neutral-900); font: inherit; }

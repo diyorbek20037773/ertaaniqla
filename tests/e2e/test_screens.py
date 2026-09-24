@@ -95,6 +95,7 @@ def test_desktop_screenshot(desktop_page, name: str, path: str) -> None:
 def test_mobile_menu_opens_without_hover(mobile_page) -> None:
     mobile_page.goto(BASE_URL + "/uz/", wait_until="networkidle")
     mobile_page.locator("summary.site-nav__toggle-button").click()
+    mobile_page.locator("summary.nav-dropdown__toggle").click()
     assert mobile_page.locator(".mega-menu").count() == 2
     mobile_page.locator(".mega-menu__title").first.click()
     assert mobile_page.locator(".mega-menu__item").first.is_visible()
@@ -106,6 +107,7 @@ def test_language_switch_keeps_page(mobile_page) -> None:
         BASE_URL + "/uz/ayollar/skrining/kokrak-bezi-saratoni/", wait_until="networkidle"
     )
     mobile_page.locator("summary.site-nav__toggle-button").click()
+    mobile_page.locator("summary.lang-menu__toggle").click()
     mobile_page.locator('a.lang-switch__link[hreflang="ru"]').click()
     mobile_page.wait_for_load_state("networkidle")
     assert mobile_page.url.endswith("/ru/zhenskiy/skrining/rak-molochnoy-zhelezy/")
@@ -116,12 +118,14 @@ def test_language_switch_to_uzbek_cyrillic_and_back(mobile_page) -> None:
         BASE_URL + "/uz/ayollar/skrining/kokrak-bezi-saratoni/", wait_until="networkidle"
     )
     mobile_page.locator("summary.site-nav__toggle-button").click()
+    mobile_page.locator("summary.lang-menu__toggle").click()
     mobile_page.locator('a.lang-switch__link[hreflang="uz-Cyrl"]').click()
     mobile_page.wait_for_load_state("networkidle")
     assert mobile_page.url.endswith("/oz/ayollar/skrining/kokrak-bezi-saratoni/")
     assert mobile_page.locator("html").get_attribute("lang") == "uz-Cyrl"
     assert "Скрининг" in mobile_page.locator("main").inner_text()
     mobile_page.locator("summary.site-nav__toggle-button").click()
+    mobile_page.locator("summary.lang-menu__toggle").click()
     mobile_page.locator('a.lang-switch__link[hreflang="uz"]').click()
     mobile_page.wait_for_load_state("networkidle")
     assert mobile_page.url.endswith("/uz/ayollar/skrining/kokrak-bezi-saratoni/")

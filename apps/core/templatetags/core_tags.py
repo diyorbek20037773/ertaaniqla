@@ -13,7 +13,7 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import SafeString
 from wagtail.models import Locale, Page, Site
 
-from apps.core.navigation import get_navigation, get_site_links
+from apps.core.navigation import get_header_links, get_navigation, get_site_links
 
 register = template.Library()
 
@@ -70,6 +70,7 @@ def main_nav(context: dict[str, Any]) -> dict[str, Any]:
     lang = _current_language()
     return {
         "sections": get_navigation(lang),
+        "links": get_header_links(lang),
         "LANGUAGE_CODE": lang,
         "request": context.get("request"),
         "page": context.get("page"),

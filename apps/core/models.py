@@ -231,6 +231,24 @@ class SiteSettings(BaseSiteSetting):
         related_name="+",
         help_text=_("Linked from the consent banner and every form."),
     )
+    about_page = models.ForeignKey(
+        "wagtailcore.Page",
+        verbose_name=_("«About us» page"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_("Header menu item «Haqimizda» — its translation per language."),
+    )
+    doctors_page = models.ForeignKey(
+        "wagtailcore.Page",
+        verbose_name=_("«Doctors» page"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_("Header menu item «Shifokorlar» — its translation per language."),
+    )
     legal_text_uz = RichTextField(_("legal / privacy text (uz)"), blank=True, editor="default")
     legal_text_ru = RichTextField(_("legal / privacy text (ru)"), blank=True, editor="default")
     partner_agency_logo = models.ForeignKey(
@@ -300,6 +318,10 @@ class SiteSettings(BaseSiteSetting):
                 FieldPanel("partner_hamroh_logo"),
             ],
             heading=_("Partner logos"),
+        ),
+        MultiFieldPanel(
+            [FieldPanel("about_page"), FieldPanel("doctors_page")],
+            heading=_("Header menu"),
         ),
         FieldPanel("metrika_id"),
         FieldPanel("privacy_page"),

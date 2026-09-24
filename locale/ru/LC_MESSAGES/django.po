@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 20:23+0500\n"
+"POT-Creation-Date: 2026-09-24 21:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -618,6 +618,18 @@ msgstr "страница политики конфиденциальности"
 msgid "Linked from the consent banner and every form."
 msgstr "Ссылка из баннера согласия и каждой формы."
 
+msgid "«About us» page"
+msgstr "Страница «О портале»"
+
+msgid "Header menu item «Haqimizda» — its translation per language."
+msgstr "Пункт «Haqimizda» в меню шапки — на каждом языке его перевод."
+
+msgid "«Doctors» page"
+msgstr "Страница «Врачи»"
+
+msgid "Header menu item «Shifokorlar» — its translation per language."
+msgstr "Пункт «Shifokorlar» в меню шапки — на каждом языке его перевод."
+
 msgid "legal / privacy text (uz)"
 msgstr "правовой текст / политика (uz)"
 
@@ -647,6 +659,9 @@ msgstr "Экстренный баннер (например, месяц скри
 
 msgid "Partner logos"
 msgstr "Логотипы партнёров"
+
+msgid "Header menu"
+msgstr "Меню шапки"
 
 msgid "site settings"
 msgstr "настройки сайта"
@@ -1606,6 +1621,26 @@ msgstr "Основная навигация"
 
 msgid "Menu"
 msgstr "Меню"
+
+msgctxt "header menu"
+msgid "Home"
+msgstr "Главная"
+
+msgctxt "header menu"
+msgid "About us"
+msgstr "О нас"
+
+msgctxt "header menu"
+msgid "Sections"
+msgstr "Разделы"
+
+msgctxt "header menu"
+msgid "Doctors"
+msgstr "Врачи"
+
+msgctxt "header menu"
+msgid "Q&A"
+msgstr "Вопрос-ответ"
 
 #, python-format
 msgid "%(minutes)s min read"

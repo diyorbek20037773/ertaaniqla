@@ -1270,7 +1270,110 @@ MATERIALS = Node(
     ],
 )
 
-TREE: list[Node] = [WOMEN, CHILDREN, STORIES, TOOLS, FAQ, FEEDBACK, GLOSSARY, MATERIALS]
+ABOUT = Node(
+    key="about",
+    kind="article",
+    title={"uz": "Haqimizda", "ru": "О портале"},
+    slug={"uz": "haqimizda", "ru": "o-portale"},
+    summary={
+        "uz": "«Erta aniqla» onkologik hushyorlik portali — maqsad va tashkilotchilar",
+        "ru": "Портал онконастороженности «Эрта аниқла» — цель и организаторы",
+    },
+    show_in_menus=False,
+    # TZ §I «Цель портала», verbatim (ru) — portal description, not medical content
+    body=lambda lang, ctx: [
+        {
+            "type": "rich_text",
+            "value": p(
+                t(
+                    lang,
+                    "«Erta aniqla» onkologik hushyorlik portali — ikki asosiy boʻlimni birlashtirgan "
+                    "axborot-taʼlim platformasi: koʻkrak bezi va bachadon boʻyni saratoni hamda "
+                    "bolalar saratoni. Platforma aholining onkologik kasalliklarning oldini olish "
+                    "boʻyicha oʻtkazilayotgan tadbirlar haqidagi xabardorligini oshirish, tibbiy "
+                    "yordamga oʻz vaqtida murojaat qilishga koʻmaklashish va bemorlar hamda ularning "
+                    "oilalarini hushyorlikdan davolanish va saratondan keyingi hayotgacha boʻlgan "
+                    "barcha bosqichlarda qoʻllab-quvvatlash uchun yaratilmoqda.",
+                    "Портал настороженности «Эрта аниқла» — это информационно-образовательная "
+                    "платформа, объединяющая два ключевых раздела: РМЖ/РШМ и детский рак. "
+                    "Платформа создается для повышения осведомленности населения о проводимых "
+                    "мероприятиях по предотвращению онкологических заболеваний по двум "
+                    "направлениям, содействия своевременному обращению за медицинской помощью и "
+                    "сопровождения пациентов и их семей на всех этапах – от настороженности до "
+                    "лечения и жизни после рака.",
+                )
+            )
+            + p(
+                t(
+                    lang,
+                    "<b>Portalning asosiy gʻoyasi — erta aniqlash.</b> Portal fuqarolar, bemorlar va "
+                    "ularning yaqinlariga tushunarli tilda ishonchli tibbiy maʼlumot olish imkonini "
+                    "beradi.",
+                    "<b>Ключевая идея портала – раннее выявление.</b> Портал обеспечивает доступ к "
+                    "достоверной медицинской информации для граждан, пациентов и их близких на "
+                    "понятном языке.",
+                )
+            )
+            + p(
+                t(
+                    lang,
+                    "Portal Prezidentning 2024-yil 22-noyabrdagi PQ-402-son va 2025-yil 19-maydagi "
+                    "PQ-186-son qarorlariga muvofiq Prezident huzuridagi Strategik rivojlanish va "
+                    "islohotlar agentligining «Innovatsiyalarni joriy etish va byurokratiyani "
+                    "bartaraf etish – 2030» loyiha ofisi tomonidan «Yandex» va «Hamroh» "
+                    "kompaniyalarining moliyaviy koʻmagida ishlab chiqilmoqda.",
+                    "Портал онконастороженности «Эрта аниқла» разрабатывается в соответствии с "
+                    "Постановлением Президента №402 от 22 ноября 2024 года и Постановления "
+                    "Президента №186 от 19 мая 2025 года со стороны Проектного офиса «Внедрение "
+                    "инноваций и Устранение бюрократии – 2030» Агентства стратегического развития "
+                    "и реформ при финансовой поддержке компании «Яндекс» и «Hamroh».",
+                )
+            )
+            + p(TODO),
+        }
+    ],
+)
+
+DOCTORS = Node(
+    key="doctors",
+    kind="article",
+    title={"uz": "Shifokorlar", "ru": "Врачи"},
+    slug={"uz": "shifokorlar", "ru": "vrachi"},
+    summary={
+        "uz": "Respublika ixtisoslashtirilgan markazlari shifokorlarining videolari va maslahatlari",
+        "ru": "Видео и советы врачей республиканских специализированных центров",
+    },
+    show_in_menus=False,
+    # TZ §2.1 content formats: «видеоролики врачей РОНЦ и ЦЗМиР»
+    body=lambda lang, ctx: [
+        todo_callout(
+            lang,
+            [
+                "Respublika onkologiya markazi shifokorlarining videoroliklari",
+                "Ona va bola salomatligi markazi shifokorlarining videoroliklari",
+            ],
+            ["видеоролики врачей РОНЦ", "видеоролики врачей ЦЗМиР"],
+        ),
+        cta(
+            t(lang, "Savolingiz bormi? Shifokorlar javob beradi.", "Есть вопрос? Ответят врачи."),
+            t(lang, "Shifokorga savol", "Вопрос врачу"),
+            ctx.page_id("faq", lang),
+        ),
+    ],
+)
+
+TREE: list[Node] = [
+    WOMEN,
+    CHILDREN,
+    STORIES,
+    TOOLS,
+    FAQ,
+    FEEDBACK,
+    GLOSSARY,
+    MATERIALS,
+    ABOUT,
+    DOCTORS,
+]
 
 HOME = {
     "title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},

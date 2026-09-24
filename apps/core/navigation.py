@@ -127,7 +127,57 @@ def get_site_links(language_code: str) -> list[NavItem]:
     return links
 
 
+def header_links_cache_key(language_code: str) -> str:
+    return f"headerlinks:{language_code}"
+
+
+HEADER_LINK_KEYS = ("home", "about", "doctors", "faq")
+
+
+def build_header_links(language_code: str) -> dict[str, str]:
+    """URLs of the Figma header items around «Bo'limlar» (D-064): home, about, doctors, FAQ.
+
+    About / doctors are chosen in Site settings (uz page); the translation in the requested
+    language is used, and an item without a live page is simply left out.
+    """
+    from wagtail.models import Locale, Site
+
+    from apps.core.models import SiteSettings
+
+    try:
+        locale = Locale.objects.get(language_code=language_code)
+    except Locale.DoesNotExist:
+        return {}
+    site = Site.objects.filter(is_default_site=True).select_related("root_page").first()
+    if site is None:
+        return {}
+    urls: dict[str, str] = {}
+    candidates: dict[str, Any] = {"home": site.root_page}
+    site_settings = SiteSettings.for_site(site)
+    candidates["about"] = site_settings.about_page
+    candidates["doctors"] = site_settings.doctors_page
+    for key, page in candidates.items():
+        localized = page.get_translation_or_none(locale) if page is not None else None
+        if localized is not None and localized.live and localized.url:
+            urls[key] = str(localized.url)
+    faq = next((link for link in build_site_links(language_code) if link.key == "faq"), None)
+    if faq is not None and faq.url:
+        urls["faq"] = faq.url
+    return urls
+
+
+def get_header_links(language_code: str) -> dict[str, str]:
+    key = header_links_cache_key(language_code)
+    cached = cache.get(key)
+    if cached is not None:
+        return dict(cached)
+    links = build_header_links(language_code)
+    cache.set(key, links, NAV_CACHE_SECONDS)
+    return links
+
+
 def invalidate_navigation() -> None:
     keys = [nav_cache_key(code) for code, _ in settings.LANGUAGES]
     keys += [site_links_cache_key(code) for code, _ in settings.LANGUAGES]
+    keys += [header_links_cache_key(code) for code, _ in settings.LANGUAGES]
     cache.delete_many(keys)

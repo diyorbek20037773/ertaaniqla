@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 20:23+0500\n"
+"POT-Creation-Date: 2026-09-24 21:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -622,6 +622,20 @@ msgstr "maxfiylik siyosati sahifasi"
 msgid "Linked from the consent banner and every form."
 msgstr "Rozilik banneri va har bir formadan havola qilinadi."
 
+msgid "«About us» page"
+msgstr "«Haqimizda» sahifasi"
+
+msgid "Header menu item «Haqimizda» — its translation per language."
+msgstr ""
+"Sarlavha menyusidagi «Haqimizda» bandi — har bir tilda uning tarjimasi."
+
+msgid "«Doctors» page"
+msgstr "«Shifokorlar» sahifasi"
+
+msgid "Header menu item «Shifokorlar» — its translation per language."
+msgstr ""
+"Sarlavha menyusidagi «Shifokorlar» bandi — har bir tilda uning tarjimasi."
+
 msgid "legal / privacy text (uz)"
 msgstr "huquqiy / maxfiylik matni (uz)"
 
@@ -651,6 +665,9 @@ msgstr "Shoshilinch banner (masalan, skrining oyi)"
 
 msgid "Partner logos"
 msgstr "Hamkorlar logotiplari"
+
+msgid "Header menu"
+msgstr "Sarlavha menyusi"
 
 msgid "site settings"
 msgstr "sayt sozlamalari"
@@ -1620,6 +1637,26 @@ msgstr "Asosiy navigatsiya"
 
 msgid "Menu"
 msgstr "Menyu"
+
+msgctxt "header menu"
+msgid "Home"
+msgstr "Asosiy"
+
+msgctxt "header menu"
+msgid "About us"
+msgstr "Haqimizda"
+
+msgctxt "header menu"
+msgid "Sections"
+msgstr "Boʻlimlar"
+
+msgctxt "header menu"
+msgid "Doctors"
+msgstr "Shifokorlar"
+
+msgctxt "header menu"
+msgid "Q&A"
+msgstr "Savol-Javob"
 
 #, python-format
 msgid "%(minutes)s min read"

@@ -1,14 +1,15 @@
 // components/nav.html — one <details> tree serves both layouts (works without JS on mobile).
-// Desktop (≥ 64rem): the outer "Menu" disclosure is always open and each section's
-// mega-menu behaves as a dropdown — one open at a time, closed by Escape or an outside click.
+// Desktop (≥ 64rem): the outer "Menu" disclosure is always open; «Bo'limlar» and the language
+// menu are dropdowns — one open at a time, closed by Escape or a click outside.
+// Inside «Bo'limlar» both sections are always expanded on desktop (CSS ::details-content).
 // No-JS desktop is covered in CSS with ::details-content (components.css).
 const DESKTOP = window.matchMedia("(min-width: 64rem)");
 
 export function initNav() {
   const toggle = document.querySelector(".site-nav__toggle");
   if (!toggle) return;
-  const menus = [...document.querySelectorAll(".mega-menu")];
-  const closeAll = (except) => menus.forEach((m) => { if (m !== except) m.open = false; });
+  const dropdowns = [...document.querySelectorAll(".nav-dropdown")];
+  const closeAll = (except) => dropdowns.forEach((d) => { if (d !== except) d.open = false; });
 
   const sync = () => {
     toggle.open = DESKTOP.matches;
@@ -17,20 +18,20 @@ export function initNav() {
   sync();
   DESKTOP.addEventListener("change", sync);
 
-  menus.forEach((menu) => {
-    menu.addEventListener("toggle", () => {
-      if (DESKTOP.matches && menu.open) closeAll(menu);
+  dropdowns.forEach((dropdown) => {
+    dropdown.addEventListener("toggle", () => {
+      if (dropdown.open) closeAll(dropdown);
     });
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || !DESKTOP.matches) return;
-    const open = menus.find((m) => m.open);
+    if (event.key !== "Escape") return;
+    const open = dropdowns.find((d) => d.open);
     if (open) {
       open.open = false;
       open.querySelector("summary")?.focus();
     }
   });
   document.addEventListener("click", (event) => {
-    if (DESKTOP.matches && !event.target.closest(".mega-menu")) closeAll(null);
+    if (!event.target.closest(".nav-dropdown")) closeAll(null);
   });
 }

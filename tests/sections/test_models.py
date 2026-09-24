@@ -158,3 +158,42 @@ def test_mega_menu_rendered_on_every_page(seeded, client: Client) -> None:
 
 def test_locale_ru_exists_after_migrations(db) -> None:
     assert Locale.objects.filter(language_code="ru").exists()
+
+
+def test_figma_header_menu_links(seeded, client: Client) -> None:
+    # D-064: Asosiy · Haqimizda · Bo'limlar · Shifokorlar · Savol-Javob, per language
+    from apps.core.navigation import get_header_links
+
+    invalidate_navigation()
+    assert get_header_links("uz") == {
+        "home": "/uz/",
+        "about": "/uz/haqimizda/",
+        "doctors": "/uz/shifokorlar/",
+        "faq": "/uz/savol-javob/",
+    }
+    assert get_header_links("ru")["about"] == "/ru/o-portale/"
+    html = client.get("/uz/bolalar/").content.decode()
+    for label, url in [
+        ("Asosiy", "/uz/"),
+        ("Haqimizda", "/uz/haqimizda/"),
+        ("Shifokorlar", "/uz/shifokorlar/"),
+        ("Savol-Javob", "/uz/savol-javob/"),
+    ]:
+        assert f'href="{url}">{label}</a>' in html or f'href="{url}" aria-current' in html
+    assert 'class="site-search"' in html and 'name="q"' in html
+    assert "lang-menu__toggle" in html
+    assert client.get("/uz/haqimizda/").status_code == 200
+    assert client.get("/ru/vrachi/").status_code == 200
+
+
+def test_header_menu_follows_site_settings(seeded) -> None:
+    from wagtail.models import Site
+
+    from apps.core.models import SiteSettings
+    from apps.core.navigation import get_header_links
+
+    assert "doctors" in get_header_links("uz")
+    settings_obj = SiteSettings.for_site(Site.objects.get(is_default_site=True))
+    settings_obj.doctors_page = None
+    settings_obj.save()  # the signal drops the cached header links
+    assert "doctors" not in get_header_links("uz")

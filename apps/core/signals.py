@@ -40,6 +40,8 @@ def _settings_changed(sender: Any, **kwargs: Any) -> None:
         "media_library.Video",
     }:
         bump_page_cache()
+    if label == "core.SiteSettings":
+        invalidate_navigation()  # header menu pages (about / doctors) live in the settings
 
 
 @receiver(page_published)
