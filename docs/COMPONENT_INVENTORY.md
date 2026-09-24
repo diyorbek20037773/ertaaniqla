@@ -15,7 +15,7 @@
 > `templates/components/*.html` / `templates/blocks/*.html` (tuzilma) fayllarida. Figma
 > dizaynini qo'llash = faqat shu fayllarni o'zgartirish, **Python o'zgarmaydi**.
 
-Last updated: 2026-09-23 (M5b — design applied). Screenshots at 390 px: `tests/e2e/screenshots/`.
+Last updated: 2026-09-24 (M5d — women's Figma pages). Screenshots at 390 px: `tests/e2e/screenshots/`.
 
 > **M5b status:** the designer's Figma (`y76CeUEqpXAuCtaJxB5LUk`) is mapped into the tokens
 > below — see `docs/ADR/0006-design-system-figma.md`. Still open: the children's section
@@ -118,6 +118,12 @@ Blocks are the editor's building kit (`apps/articles/blocks.py`). Each maps to a
 | `steps` | title, steps[number,title,text,deadline,link] | `components/steps.html` | Маршрут пациента (4 шага), самообследование |
 | `cards_grid` | title, cards[image/icon,title,text,link] | `components/card.html` | 6 видов детского рака, факторы риска, онкокоманда |
 | `symptom_list` | title, symptoms[symptom,urgency,explanation] | `components/symptom_list.html` | Симптомы |
+| `text_card` (M5d) | title, label (lime chip), text, image / designer illustration, width full·narrow | `blocks/text_card.html` — glass card r50 | every Figma women's page |
+| `text_cards` (M5d) | columns 2·3, cards[text_card] | `blocks/text_cards.html` | signs, self-exam, duties, life after |
+| `steps` layouts (M5d) | layout list · capsules_arrows · capsules; an ALL-CAPS title is set larger in the heading gradient; lists inside capsules get flower bullets | `components/steps.html` | stages, route, cervical forms/grades, rights (staggered 1 · 2+3 · 4+5) |
+| `cards_grid` icon_tiles (M5d) | cards[icon (designer registry) or image, title, text] | `blocks/cards_grid.html` `.icon-tile` | risk factors |
+| `callout` alert (M5d) | kind=alert | gradient «!» disc, glass strip | «vahima qilmang, kechiktirmang» |
+| `{% variant_switch %}` (M5d) | siblings of an `is_variant_group` topic | breast / cervical pill pair | every women's article |
 | `stat` | value,label,source,year | `components/stat.html` | Статистика по Узбекистану, home strip |
 | `video` | video snippet / external URL, caption, transcript | `components/video.html` | видео врачей, мобилограф |
 | `image_gallery` | title, images[image+alt, caption], downloadable | `.gallery` | инфографика |
