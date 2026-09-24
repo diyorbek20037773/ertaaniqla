@@ -259,7 +259,10 @@ Phases (commit after each):
 - Known small gaps vs Figma (accepted): route capsule copy ~26px vs ~30px in Figma; Figma bold
   sub-heads in cards are pink («Prognoz va kasallik kechishi») — Wagtail rich text has no colour.
 - DONE D (20d6a56 header, 1799f10 landing): Figma header (D-069), «Haqimizda»/«Shifokorlar» pages, landing hero/capsules/check cards. 492 passed.
-- NEXT: phase E gate — `make e2e` (dev stack on :8001; e2e nav steps already updated for the dropdowns), a11y/pa11y, Lighthouse, 390 px screenshots, TZ_TRACE check, tag `m5d`. Findings to report to the developer: Figma screening ages 40–75 vs TZ 45–65 (kept + VERIFY); cervical «Sabablari» cards copied from breast in Figma (TZ risk headings used); «Bezi jigarrang epiteliy» likely a mistranslation (kept for the doctor); Figma support frame ends with a duplicated box (not reproduced); landing check-card labels differ from the tool titles (D-069).
+- DONE E (a3aa824, tag `m5d`): ruff/format/mypy clean; pytest 492 passed, 1 skipped (ffmpeg); translations uz+ru complete; `make e2e` (E2E_BASE_URL=http://localhost:8001) 52 passed incl. axe; pa11y-ci 9/9 URLs 0 errors; Lighthouse on the CI-like compressed preview (test settings, STATIC_COMPRESSED=1, runserver :8002 on the dev DB), 3 runs mobile 3G: LCP 2.0–2.4 s, CLS 0, TBT ≤ 111 ms. (The dev stack itself serves uncompressed assets + debug toolbar → LCP ~3.2 s, not representative.) Banner WebP below desktop.
+- M5d COMPLETE. Open items for the developer: the findings list below; `lighthouserc.json` uploads reports to Google's temporary-public-storage (pre-existing; switch to `filesystem` if the pages must not leave the machine).
+- Findings to report: Figma screening ages 40–75 vs TZ 45–65 (kept + VERIFY); cervical «Sabablari» cards copied from breast in Figma (TZ risk headings used); «Bezi jigarrang epiteliy» likely a mistranslation (kept for the doctor); Figma support frame ends with a duplicated box (not reproduced); landing check-card labels differ from the tool titles (D-069).
+- NEXT: M5c (children's Figma frames when the client delivers) and M8 (launch inputs).
 
 - [x] A assets: crop from PNGs → `static/img/figma/women/` (10 risk icons, mammography/UTT/MRT,
   4 self-exam figures, "!" icon) — 1× only (MCP limit), note in D-067.
@@ -273,7 +276,7 @@ Phases (commit after each):
   removed with Wagtail redirects; TZ care/after columns kept inside support/after pages.
 - [x] D header (Asosiy · Haqimizda · Bo'limlar▾ · Shifokorlar · Savol-Javob + Uz pill + search),
   new pages Haqimizda/Shifokorlar, landing hero/capsules/check cards per Figma.
-- [ ] E verify: Playwright 1728/390 screenshots side-by-side with PNGs, make check, e2e, a11y,
+- [x] E verify: Playwright 1728/390 screenshots side-by-side with PNGs, make check, e2e, a11y,
   Lighthouse, TZ_TRACE deviation rows, commit + tag `m5d`.
 
 **Next:** M5c (client frames) and M8 (launch inputs).
