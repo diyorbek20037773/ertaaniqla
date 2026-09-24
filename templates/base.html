@@ -21,6 +21,9 @@
     {% if page.og_image %}{% image page.og_image fill-1200x630 as og %}<meta property="og:image" content="{{ og.full_url }}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">{% elif page.og_image_generated_url %}<meta property="og:image" content="{% site_root_url %}{{ page.og_image_generated_url }}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">{% endif %}
     <meta name="twitter:card" content="summary_large_image">
   {% endblock %}
+  {# The body face is only discovered after main.css is parsed; preload it (LCP, ADR-0006). #}
+  <link rel="preload" href="{% static 'fonts/AlbertSans-var-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+  {% if LANGUAGE_CODE == "ru" %}<link rel="preload" href="{% static 'fonts/Manrope-var-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>{% endif %}
   <link rel="stylesheet" href="{% static 'dist/main.css' %}">
   <script nonce="{{ request.csp_nonce }}">(function(){try{var s=JSON.parse(localStorage.getItem("ea-a11y")||"{}"),r=document.documentElement;if(s.font&&s.font!=="100")r.setAttribute("data-font-scale",s.font);if(s.contrast)r.setAttribute("data-contrast","high");if(s.motion)r.setAttribute("data-reduce-motion","true")}catch(e){}})();</script>
   {% jsonld %}

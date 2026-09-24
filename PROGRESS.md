@@ -110,11 +110,11 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] CI job `a11y-perf`: seeded preview server → `pa11y-ci` (8 URLs, WCAG2AA) + Lighthouse CI (3 URLs, LCP < 2.5 s, CLS < 0.1, TBT < 200 ms); `make pa11y`, `make lighthouse`; `tests/perf/test_budgets.py` (CSS ≤ 40 KB gz, JS ≤ 50 KB gz, HTML ≤ 60 KB gz)
   - [x] docs: TZ_TRACE (F6, F7, F9, F13, F15, W-05, W-13, C-12, A5–A8 → done), DECISIONS D-027…D-032, TODO_HARDENING H-011…H-014, CONTENT_MODEL (MaterialsPage, SEO), COMPONENT_INVENTORY (share, toolbar, consent, materials, picture)
   - [x] Gate: `tests/core/test_seo.py` (JSON-LD structure per type, sitemaps, share, story image, WebP), `tests/core/test_page_cache.py` (publish → next request MISS with new content), `tests/perf/test_budgets.py`, `tests/media_library/test_materials.py`, `tests/e2e/test_print.py` (print media + toolbar persistence), `tests/e2e/test_csp_alpine.py`; pa11y-ci 8/8 · Lighthouse local: perf 0.98/0.99/0.98, a11y 1.00, LCP 2.1/2.0/2.1 s, CLS 0, TBT 130/48/86 ms
-- [ ] M5b — Design integration (blocked until Figma arrives)
-  - [ ] map Figma tokens → `static/src/tokens.css`
-  - [ ] restyle each partial in `templates/components/` (no Python changes)
-  - [ ] screenshot-compare (Playwright, 390 px + 1280 px) against Figma exports
-  - [ ] re-run pa11y/axe + Lighthouse budgets; update COMPONENT_INVENTORY.md
+- [x] **M5b — Design integration** — DONE 2026-09-24, tagged `m5b` (ADR-0006, D-056…D-063)
+  - [x] M5b-1 tokens/fonts/assets · M5b-2/3 primitives, header, section tabs · M5b-4 landing · M5b-5 content surfaces · M5b-6 remaining pages
+  - [x] fixes found: desktop menu missing (nav.js), purged urgency modifiers, untranslated hero strings, a11y-toolbar CLS 0.16 (no-wrap row), font preload
+  - [x] Gate: pa11y-ci 9/9 · Lighthouse on compressed preview LCP 2.05/1.85/1.89 s, CLS 0, TBT ≤ 37 ms, a11y 1.00 · e2e 52 passed (axe, print, 390 + 1280 px screenshots) · TZ_TRACE E-11 done, E-13 contrast deviation
+  - [ ] **M5c** children's section visuals — waiting for the client's Figma frames (D-060)
 - [x] **M6 — Production DevOps** — DONE, tagged `m6`
   - [x] `compose.prod.yml`: nginx (templates + envsubst, `DOMAIN`/`DOMAIN_ALT`/`STAGING_*`), certbot + `nginx-reloader`, limits (web 4g, db 4g + tuned postgres flags, worker 2g, redis 640m, backup 1g), json-file 50m×5, `backup` container, `clamav` profile, **`monitoring` profile** (prometheus, alertmanager→Telegram, grafana on 127.0.0.1:3000, nginx/postgres/redis/node/blackbox exporters); `compose.staging.yml` (no ports, joins prod network)
   - [x] `docker/nginx/`: `nginx.conf` (JSON anonymised log, rate zones general 30r/s · cms_login 5r/m · form_post 10r/m POST-only, micro-cache, 444 default vhost, stub_status :8080), `templates/ertaaniqla.conf.template` (80→443, alt hosts→canonical, TLS 1.2/1.3 + OCSP, maintenance flag → 503 page, `/healthz/` `/readyz/` `/metrics` (internal), `/cms/` 512m + allow-list, forms zone, micro-cache 10 s, staging vhost with basic auth + lazy upstream), snippets (security headers, cache: static 1y immutable / media 30d / mp4 byte-range + throttle / **404 for `/media/documents/` and `/media/videos/source/`**, gzip + gzip_static, proxy, tls, cms_allowlist), `maintenance/maintenance.html` (uz+ru)
@@ -155,7 +155,17 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 
-## Last command run (2026-09-24, M5b resume)
+## Last command run (2026-09-24, M5b gate)
+
+```
+ruff / format / mypy / translations      → clean (125 files), uz + ru complete
+pytest --cov                             → 468 passed, 1 skipped, coverage 92.36 %
+pytest tests/e2e -m e2e (dev :8001)      → 52 passed
+npx pa11y-ci                             → 9/9 URLs passed
+lhci (preview :8002, STATIC_COMPRESSED)  → LCP 2046/1847/1892 ms, CLS 0, TBT 0/0/37, perf 0.99–1.0, a11y 1.0
+```
+
+## Earlier run (2026-09-24, M5b resume)
 
 ```
 ruff check . / format --check            → All checks passed / 217 files already formatted
@@ -207,8 +217,12 @@ Next:
   modifiers → callout/tool-result urgency colours never rendered since M2 (safelist + purge test,
   D-063); M5b-4 hero strings never extracted → English buttons on /uz/ (translated + test
   `tests/core/test_translations_extracted.py`).
-- [ ] **M5b-7** axe/pa11y/Lighthouse run, print check, e2e screenshots refresh, TZ_TRACE deviation
-  row for the contrast decision, `make check`, tag `m5b`. Children's visuals = **M5c** (client Figma).
+- [x] **M5b-7** gate (see milestone list). CI preview now serves .gz/.br (`STATIC_COMPRESSED=1`,
+  test settings) — before, Lighthouse measured uncompressed assets (LCP 2.9–3.1 s false fail).
+  Local Lighthouse: never use the config's `temporary-public-storage` upload — pass
+  `--upload.target=filesystem` (reports would be public).
+
+**Next:** refresh `docs/FINAL_REPORT_uz.md` with M5b; then M5c (client frames) and M8 (launch inputs).
 
 **Blocker of 2026-09-23 RESOLVED (2026-09-24):** root cause = **C: drive full (0.2 GB free)**;
 Docker's WSL VHD (`%LOCALAPPDATA%\Docker\wsl`, ~42 GB) lives on C:, image export hit ENOSPC and

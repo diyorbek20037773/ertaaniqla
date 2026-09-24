@@ -30,7 +30,16 @@ CELERY_RESULT_BACKEND = "cache+memory://"
 
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
-STORAGES["staticfiles"] = {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}
+# The CI preview server (Lighthouse / pa11y) sets STATIC_COMPRESSED=1 so collectstatic writes
+# .gz/.br siblings and WhiteNoise serves them — like nginx gzip_static in production. Without
+# it the LCP budget was measured on uncompressed CSS/JS/SVG (≈ 3× the real bytes).
+STORAGES["staticfiles"] = {
+    "BACKEND": (
+        "whitenoise.storage.CompressedStaticFilesStorage"
+        if env.bool("STATIC_COMPRESSED", default=False)
+        else "django.contrib.staticfiles.storage.StaticFilesStorage"
+    )
+}
 MEDIA_ROOT = str(BASE_DIR / ".pytest_cache" / "media")
 WHITENOISE_AUTOREFRESH = True
 
