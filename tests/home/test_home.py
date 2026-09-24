@@ -59,3 +59,15 @@ def test_unpublished_featured_article_hidden(seeded, client: Client) -> None:
     article.unpublish()
     html = client.get("/uz/").content.decode()
     assert "Featured" not in html or article.title not in html
+
+
+def test_hero_title_splits_after_the_dash(seeded, client: Client) -> None:
+    """Figma: «ERTA ANIQLA –» in the gradient, «HAYOTNI SAQLA» in grey below."""
+    home = HomePage.objects.get(locale__language_code="uz")
+    assert home.hero_title_parts == ("Erta aniqla –", "hayotni saqla")
+    home.hero_title = "Faqat sarlavha"
+    assert home.hero_title_parts == ("Faqat sarlavha", "")
+    html = client.get("/uz/").content.decode()
+    assert '<span class="hero__title-rest">hayotni saqla</span>' in html
+    assert 'href="/uz/haqimizda/">Batafsil</a>' in html
+    assert 'href="/uz/ayollar/qayerga-murojaat/">Murojaat qilish</a>' in html

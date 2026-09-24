@@ -175,6 +175,12 @@ def site_verification() -> SafeString:
 
 
 @register.simple_tag
+def header_links() -> dict[str, str]:
+    """Header item URLs (home, about, doctors, faq) of the current language (cached)."""
+    return get_header_links(_current_language())
+
+
+@register.simple_tag
 def site_links() -> list[Any]:
     """Footer links to the root-level utility pages of the current language (cached)."""
     return get_site_links(_current_language())

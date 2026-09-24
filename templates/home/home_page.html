@@ -19,14 +19,15 @@
   <div class="container landing__inner">
     <div class="landing__top">
       <section class="hero">
-        <h1 class="hero__title u-gradient-text">{% if page.hero_title %}{{ page.hero_title }}{% else %}{{ page.title }}{% endif %}</h1>
+        {% with parts=page.hero_title_parts %}
+          <h1 class="hero__title"><span class="hero__title-main u-gradient-text">{{ parts.0 }}</span>{% if parts.1 %} <span class="hero__title-rest">{{ parts.1 }}</span>{% endif %}</h1>
+        {% endwith %}
         {% if page.hero_subtitle %}<p class="hero__subtitle">{{ page.hero_subtitle }}</p>{% endif %}
         <p class="hero__actions">
-          {% if sections %}<a class="pill pill--lg hero__action hero__action--alt" href="{{ sections.0.url }}">{% trans "Read more" %}</a>{% endif %}
-          {% site_links as links %}
-          {% for link in links %}{% if link.key == "feedback" %}
-            <a class="pill pill--lg pill--active hero__action" href="{{ link.url }}">{% trans "Get in touch" %}</a>
-          {% endif %}{% endfor %}
+          {% header_links as hl %}
+          {% if hl.about %}<a class="pill hero__action hero__action--alt" href="{{ hl.about }}">{% trans "Read more" %}</a>
+          {% elif sections %}<a class="pill hero__action hero__action--alt" href="{{ sections.0.url }}">{% trans "Read more" %}</a>{% endif %}
+          {% if directory_url %}<a class="pill pill--active hero__action" href="{{ directory_url }}">{% trans "Get help" context "hero button" %}</a>{% endif %}
         </p>
       </section>
 
@@ -40,11 +41,13 @@
             <img class="icon-button capsule-card__arrow"
                  src="{% if section.section_key == 'children' %}{% static 'img/figma/btn-arrow-purple.svg' %}{% else %}{% static 'img/figma/btn-arrow-pink.svg' %}{% endif %}"
                  alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
+            <span class="capsule-card__clip" aria-hidden="true">{# clips the bleeding artwork, not the arrow #}
             {% if section.section_key == "children" %}
               <img class="capsule-card__art" src="{% static 'img/figma/children-bow.svg' %}" alt="" aria-hidden="true" width="305" height="309" loading="lazy" decoding="async">
             {% else %}
               <img class="capsule-card__art" src="{% static 'img/figma/women-ribbon.png' %}" alt="" aria-hidden="true" width="429" height="461" loading="lazy" decoding="async">
             {% endif %}
+            </span>
           </article>
         {% endfor %}
       </section>
@@ -56,7 +59,7 @@
           <article class="check-card">
             <img class="check-card__shape" src="{% static 'img/figma/card-test-1.svg' %}" alt="" aria-hidden="true" loading="lazy" decoding="async">
             <h2 class="check-card__title"><a class="check-card__link" href="{{ check.url }}">{{ check.title }}</a></h2>
-            <img class="icon-button check-card__arrow" src="{% static 'img/figma/btn-arrow-pink.svg' %}" alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
+            <img class="icon-button check-card__arrow" src="{% static 'img/figma/btn-arrow-grey.svg' %}" alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
           </article>
         {% endfor %}
       </section>

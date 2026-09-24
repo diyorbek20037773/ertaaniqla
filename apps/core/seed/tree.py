@@ -774,7 +774,7 @@ WOMEN = Node(
     title={"uz": "Ayollar saratoni", "ru": "Женский рак"},
     slug={"uz": "ayollar", "ru": "zhenskiy"},
     summary={
-        "uz": "Koʻkrak bezi va bachadon boʻyni saratoni: xabardorlik, skrining, davolash",
+        "uz": "Koʻkrak bezi saratoni va bachadon boʻyni saratoni: xabardorlik, skrining, davolash.",
         "ru": "Рак молочной железы и рак шейки матки: осведомленность, скрининг, лечение",
     },
     body=intro_women,
@@ -908,7 +908,7 @@ CHILDREN = Node(
     title={"uz": "Bolalar saratoni", "ru": "Детский рак"},
     slug={"uz": "bolalar", "ru": "detskiy"},
     summary={
-        "uz": "Bolalardagi onkologik kasalliklar: ilk belgilar, turlari, diagnostika, davolash, saratondan keyingi hayot",
+        "uz": "Onkologik kasalliklar: dastlabki alomatlar, turlari, diagnostika, davolash, kasallikdan keyingi hayot",
         "ru": "Онкологические заболевания у детей: первые симптомы, виды, диагностика, лечение, жизнь после рака",
     },
     body=intro_children,
@@ -1378,10 +1378,11 @@ TREE: list[Node] = [
 HOME = {
     "title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},
     "slug": {"uz": "erta-aniqla", "ru": "erta-aniqla"},
-    "hero_title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},
+    # Figma landing copy (D-065); ru = translation of it
+    "hero_title": {"uz": "Erta aniqla – hayotni saqla", "ru": "Эрта аниқла – сохрани жизнь"},
     "hero_subtitle": {
-        "uz": f"Portalning asosiy gʻoyasi — erta aniqlash. Tushunarli tilda ishonchli tibbiy maʼlumotlar. {TODO}",
-        "ru": f"Ключевая идея портала — раннее выявление. Достоверная медицинская информация на понятном языке. {TODO}",
+        "uz": "Saraton kasalliklari haqida ishonchli va tushunarli maʼlumot beruvchi axborot-taʼlim portali.",
+        "ru": "Информационно-образовательный портал с достоверной и понятной информацией об онкологических заболеваниях.",
     },
     # <meta name="description"> of the home page (site description, not medical content)
     "search_description": {

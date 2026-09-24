@@ -312,10 +312,17 @@
   .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block: var(--space-6); }
   .hero__action { text-decoration: none; }
   .hero__action--alt { background-image: var(--grad-cta-c); color: var(--neutral-0); }
+  /* Figma landing: «ERTA ANIQLA –» gradient over two lines, «HAYOTNI SAQLA» grey, 64px */
+  .hero__title-main, .hero__title-rest { display: block; }
+  .hero__title-rest { font-size: clamp(1.4rem, 0.5rem + 3.1vw, 3.5rem); color: var(--neutral-600); line-height: 1.1; margin-top: 0.1em; }
+  .hero__actions { flex-direction: column; align-items: flex-start; }
+  .hero__action { min-width: clamp(12rem, 16.3vw, 17.6rem); min-height: clamp(44px, 3.3vw, 57px); font-size: var(--fs-lead); font-weight: 400; }
 
   /* the two section capsules, presented equally (TZ §II) */
   .landing__sections { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
   .capsule-card__title { font-size: var(--fs-h1); margin: 0; text-transform: uppercase; }
+  .capsule-card__title.u-gradient-text { background-image: var(--grad-capsule-w); }
+  .capsule-card[data-section="children"] .capsule-card__title.u-gradient-text { background-image: var(--grad-capsule-c); }
   .capsule-card__link { text-decoration: none; color: inherit; }
   .capsule-card__link::after { content: ""; position: absolute; inset: 0; }
   .capsule-card__text { font-size: var(--fs-ui); margin: 0; }
@@ -329,10 +336,25 @@
   .check-card__link { text-decoration: none; color: var(--neutral-900); }
   .check-card__link::after { content: ""; position: absolute; inset: 0; }
   .check-card__arrow { position: absolute; top: var(--space-4); right: var(--space-4); z-index: 1; }
+  /* check cards: the svg shape at its own 461×374 ratio, the arrow disc sits in the notch */
+  .check-card { aspect-ratio: 461 / 374; min-height: 0; }
+  .check-card__shape { object-fit: fill; }
+  .check-card__arrow { top: 0.8%; right: 2.8%; width: 21.7%; height: auto; }
+  .capsule-card__clip { display: contents; }
 
   @media (min-width: 64rem) {
-    .landing__top { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--space-12); }
-    .landing__sections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    /* Figma: hero column ~520px, two capsules 430×704 with a 33px gap */
+    .landing__top { grid-template-columns: minmax(0, 516fr) minmax(0, 891fr); gap: clamp(var(--space-8), 4.5vw, 4.9rem); align-items: center; }
+    .landing__sections { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(var(--space-4), 1.9vw, 2.1rem); }
+    .landing__sections .capsule-card { aspect-ratio: 430 / 704; overflow: visible; padding: clamp(var(--space-12), 6.3vw, 6.8rem) clamp(var(--space-6), 4vw, 4.3rem) 0; }
+    .capsule-card__title { font-size: clamp(1.75rem, 0.9rem + 1.6vw, 2.75rem); line-height: 1.05; }
+    .capsule-card__text { font-size: var(--fs-lead); line-height: 1.2; }
+    .landing__sections .capsule-card__arrow { top: clamp(8px, 0.9vw, 15px); right: clamp(8px, 0.8vw, 13px); width: clamp(56px, 5.1vw, 88px); height: auto; }
+    /* the artwork bleeds out of the capsule like the Figma ribbon / bow */
+    .landing__sections .capsule-card__clip { display: block; position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
+    .landing__sections .capsule-card__art { position: absolute; left: -12%; bottom: -6%; width: 124%; max-width: none; margin: 0; opacity: 0.55; }
+    .landing__sections .capsule-card[data-section="children"] .capsule-card__art { left: 12%; bottom: 8%; width: 76%; opacity: 0.8; }
+    .capsule-card__title, .capsule-card__text { position: relative; z-index: 1; }
     .checks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 

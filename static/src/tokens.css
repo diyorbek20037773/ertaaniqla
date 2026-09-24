@@ -63,6 +63,8 @@
   --grad-cta-w: linear-gradient(90deg, var(--c-pink-500), var(--c-pink-800));
   --grad-title-c: linear-gradient(90deg, var(--c-purple-900), var(--c-purple-600));
   --grad-cta-c: linear-gradient(90deg, var(--c-purple-700), var(--c-purple-400));
+  --grad-capsule-w: linear-gradient(90deg, #752c46 0%, #a63e63 100%);   /* landing capsule titles */
+  --grad-capsule-c: linear-gradient(90deg, #1e103e 0%, #502089 100%);
   --grad-title: var(--grad-title-w);
   --grad-cta: var(--grad-cta-w);
 
