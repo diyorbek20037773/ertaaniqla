@@ -13,7 +13,8 @@ SERVICE      ?= web
 .PHONY: help dev down shell migrate makemigrations seed messages compilemessages \
         lint fmt type test check translations e2e lighthouse pa11y build deploy backup restore logs \
         install frontend frontend-watch superuser nginx-test compose-check restore-test ops-check \
-        prod-up prod-down tls-init maintenance-on maintenance-off ci-local sonar sonar-up
+        prod-up prod-down tls-init maintenance-on maintenance-off ci-local sonar sonar-up \
+        local-prod-up local-prod-down
 
 help: ## list targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -121,6 +122,15 @@ ops-check: nginx-test compose-check ## M6 gate: nginx -t, compose config, promet
 
 prod-up: ## start the production stack on this host (+ monitoring profile)
 	$(COMPOSE_PROD) --profile monitoring up -d
+
+LOCAL_PROD = docker compose -p ertaaniqla-local --env-file .env.localprod -f compose.yml -f compose.prod.yml -f compose.local-prod.yml --profile monitoring
+
+local-prod-up: ## prod image + nginx + monitoring on this laptop (https://ertaaniqla.localhost, RUNBOOK §10)
+	docker build -f docker/web/Dockerfile -t ertaaniqla/web:prod --build-arg APP_RELEASE=local-prod .
+	$(LOCAL_PROD) up -d --wait --wait-timeout 300
+
+local-prod-down: ## stop the local production rehearsal (volumes kept)
+	$(LOCAL_PROD) down
 
 sonar-up: ## start self-hosted SonarQube on this host (separate compose project, ADR-0005)
 	docker compose -p ertaaniqla-sonarqube --env-file .env -f compose.sonarqube.yml up -d

@@ -1,0 +1,33 @@
+# Local production rehearsal (RUNBOOK §10): the real prod image + nginx + monitoring on a
+# laptop, under the host name ertaaniqla.localhost (never `localhost` — prod sends a 1-year
+# HSTS header with includeSubDomains, which would pin every other local project to https).
+#   make local-prod-up     (needs .env.localprod — see RUNBOOK §10)
+# Never used on a server.
+x-localenv: &localenv
+  env_file:
+    - .env.localprod   # appended after .env; later file wins
+
+services:
+  migrate: *localenv
+  web: *localenv
+  worker: *localenv
+  beat: *localenv
+  backup: *localenv
+  db:
+    command: ["postgres", "-c", "shared_buffers=256MB", "-c", "log_min_duration_statement=500"]
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+  # Docker Desktop cannot mount / with rslave; metrics then describe the Docker VM.
+  node-exporter:
+    command: !override
+      - --collector.textfile.directory=/textfile/metrics
+    volumes: !override
+      - backups:/textfile:ro
+  # resolve the rehearsal host to the Docker host (nginx publishes 443 there); self-signed cert
+  blackbox-exporter:
+    extra_hosts:
+      - "ertaaniqla.localhost:host-gateway"
+    volumes: !override
+      - ./docker/monitoring/blackbox.local.yml:/etc/blackbox/blackbox.yml:ro

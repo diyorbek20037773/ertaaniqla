@@ -274,3 +274,30 @@ UI: `ssh -L 16686:127.0.0.1:16686 deploy@vps` → http://localhost:16686 (servic
 `ertaaniqla-worker`, `ertaaniqla-beat`). Spans: request → SQL statements (no parameters) → Celery
 publish → task. `/healthz/`, `/readyz/`, `/metrics` and static files are not traced. Staging has
 no Jaeger: leave the endpoint empty there.
+
+## 10. Local production rehearsal (laptop)
+
+Runs the **production image** with nginx (TLS), worker, beat, backup and the whole `monitoring`
+profile on a developer machine, as compose project `ertaaniqla-local` (the dev stack is untouched).
+The first run (2026-09-24) found five production bugs that unit tests could not see: healthcheck
+`Host: localhost` rejected by `ALLOWED_HOSTS`, Prometheus scrape redirected to https, nginx
+keeping the old `web` IP after a recreate (502), worker/beat/backup inheriting the web
+healthcheck, and the Celery queue metric never being exported.
+
+1. `.env.localprod` (gitignored): copy `.env.example`, then set `DJANGO_SETTINGS_MODULE=config.settings.prod`,
+   `DOMAIN=ertaaniqla.localhost`, `DJANGO_ALLOWED_HOSTS=ertaaniqla.localhost`,
+   `DJANGO_CSRF_TRUSTED_ORIGINS=https://ertaaniqla.localhost`, `WEB_IMAGE=ertaaniqla/web:prod`,
+   `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318`, fresh `DJANGO_SECRET_KEY`, `PII_ENCRYPTION_KEYS`,
+   `POSTGRES_PASSWORD`, `METRICS_BASIC_AUTH`, `GRAFANA_ADMIN_PASSWORD`, `TURNSTILE_SECRET_KEY=local-dummy`,
+   `TELEGRAM_BOT_TOKEN=000000:dummy`, `TELEGRAM_ALERT_CHAT_ID=-1` (alertmanager refuses to start without them).
+   **Never `DOMAIN=localhost`**: prod sends HSTS with `includeSubDomains` for a year and the
+   browser would force https on every other local project.
+2. Self-signed certificate into the `ertaaniqla-local_letsencrypt` volume (step 1 of
+   `docker/scripts/init_letsencrypt.sh`, with `-p ertaaniqla-local` and the local compose files).
+3. `make local-prod-up`, then seed:
+   `docker exec ertaaniqla-local-web-1 sh -c "python manage.py seed_content --lang uz,ru && python manage.py import_institutions data/institutions.sample.csv && python manage.py rebuild_search"`
+   and `createsuperuser` (2FA enrolment happens on first CMS login).
+4. Site `https://ertaaniqla.localhost/` (accept the certificate), CMS `/cms/`,
+   Grafana `http://127.0.0.1:3000`, Jaeger `http://127.0.0.1:16686`.
+   Differences from a server: node-exporter sees the Docker VM (no disk panel), blackbox skips
+   certificate verification. `make local-prod-down` stops it; volumes are kept.
