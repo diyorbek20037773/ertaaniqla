@@ -218,7 +218,10 @@ class Seeder:
                 continue
             for page_id in reversed(wanted):
                 if page_id is not None:
-                    Page.objects.get(pk=page_id).move(parent, pos="first-child")
+                    # fresh rows each time: treebeard plans the move from path/numchild, and the
+                    # cached parent still says numchild=0 on a first seed (path collision)
+                    target = Page.objects.get(pk=parent.pk)
+                    Page.objects.get(pk=page_id).move(target, pos="first-child")
 
     def model_for(self, kind: str) -> type[Page]:
         from apps.articles.models import ArticlePage
@@ -349,9 +352,7 @@ class Seeder:
         from apps.articles.models import ArticlePage
 
         for lang, slug, parent, _target in self._retired_locations():
-            old = ArticlePage.objects.child_of(parent).filter(
-                slug=slug, locale=self.locales[lang]
-            )
+            old = ArticlePage.objects.child_of(parent).filter(slug=slug, locale=self.locales[lang])
             for page in old:
                 logger.info("seed: retiring %s", page.url_path)
                 page.delete()

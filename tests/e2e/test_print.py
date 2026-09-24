@@ -16,7 +16,7 @@ BASE = os.environ.get("E2E_BASE_URL", "http://localhost:8001")
 pytestmark = pytest.mark.e2e
 
 PRINT_PAGES = [
-    "/uz/ayollar/ogohlik/belgilar/",  # self-exam steps
+    "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",  # self-exam steps
     "/uz/ayollar/davolash/",  # 4-step patient route
     "/ru/detskiy/diagnostika-i-lechenie/diagnostika/",  # questions checklist
 ]

@@ -40,7 +40,7 @@ def test_header_footer_use_settings(site_settings, client: Client) -> None:
 
 
 def test_emergency_banner(site_settings, client: Client) -> None:
-    html = client.get("/uz/ayollar/").content.decode()
+    html = client.get("/uz/bolalar/").content.decode()
     assert "banner--emergency" in html
     assert "Skrining oyi!" in html
     ru = client.get("/ru/").content.decode()

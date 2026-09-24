@@ -26,7 +26,9 @@ def test_home_shows_both_section_cards(seeded, client: Client) -> None:
 
 def test_home_featured_articles_and_videos(seeded, client: Client) -> None:
     home = HomePage.objects.get(locale__language_code="uz")
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     video = Video.objects.create(
         title="Shifokor bilan suhbat",
         source=VideoSource.YOUTUBE,
@@ -50,7 +52,9 @@ def test_home_featured_articles_and_videos(seeded, client: Client) -> None:
 
 def test_unpublished_featured_article_hidden(seeded, client: Client) -> None:
     home = HomePage.objects.get(locale__language_code="uz")
-    article = ArticlePage.objects.get(slug="xavf-omillari", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/bachadon-boyni-saratoni/", locale__language_code="uz"
+    )
     HomeFeaturedArticle.objects.create(page=home, article=article, sort_order=0)
     article.unpublish()
     html = client.get("/uz/").content.decode()

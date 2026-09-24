@@ -23,6 +23,10 @@ def page_for(key: str, lang: str) -> Page:
     locale = Locale.objects.get(language_code=lang)
     model = Seeder().model_for(node.kind)
     candidates = model.objects.filter(locale=locale, slug=node.slug[lang], live=True)
+    parent_key = key.rpartition(".")[0]
+    if any(n.key == parent_key for n in tree.iter_nodes()):
+        # variant articles share their slugs across topics (D-066): narrow by the parent
+        candidates = candidates.child_of(page_for(parent_key, lang))
     section_key = key.split(".")[0]
     for page in candidates:
         section = page.specific.get_section()
@@ -65,20 +69,31 @@ def test_translations_are_linked(seeded) -> None:
         assert uz_page.get_translation(ru).slug == node.slug["ru"]
 
 
-def test_women_menu_has_the_five_tz_items(seeded) -> None:
+def test_women_menu_has_the_five_figma_tabs(seeded) -> None:
     section = page_for("women", "ru")
     titles = [p.title for p in section.get_menu_items()]
+    # D-064: the Figma tabs replace the TZ menu; «Куда обратиться» stays as a CTA target
     assert titles == [
         "Осведомленность",
         "Скрининг",
         "Организация лечения",
-        "Куда обратиться",
-        "Государственная поддержка",
+        "Поддержка",
+        "Жизнь после рака",
     ]
-    # care & life-after are in the subtree but not in the top menu (spec §2.1)
     all_titles = [p.title for p in section.get_subsections()]
-    assert "Уход и поддержка" in all_titles
-    assert "Жизнь после рака" in all_titles
+    assert "Куда обратиться" in all_titles
+
+
+def test_women_topics_are_breast_and_cervical_variant_groups(seeded) -> None:
+    for topic in ("awareness", "screening", "treatment", "support", "after"):
+        for lang in ("uz", "ru"):
+            page = page_for(f"women.{topic}", lang)
+            assert page.is_variant_group
+            children = [c.slug for c in page.get_children()]
+            assert children[:2] == [
+                page_for(f"women.{topic}.breast", lang).slug,
+                page_for(f"women.{topic}.cervical", lang).slug,
+            ]
 
 
 def test_children_menu_has_the_five_tz_items(seeded) -> None:
@@ -107,24 +122,27 @@ def test_section_urls_match_spec(seeded) -> None:
     ("key", "snippets"),
     [
         (
-            "women.awareness.what",
-            ["что происходит в организме", "стадии", "статистика по Узбекистану"],
+            "women.awareness.breast",
+            [
+                "что происходит в организме",
+                "стадии",
+                "статистика по Узбекистану",
+                "Возраст",
+                "Наследственность",
+                "Образ жизни",
+                "ВПЧ-инфекция",
+                "Самообследование груди",
+                "не всегда означает рак",
+            ],
         ),
-        ("women.awareness.risk", ["Возраст", "Наследственность", "Образ жизни", "ВПЧ-инфекция"]),
-        ("women.awareness.symptoms", ["Самообследование груди", "не всегда означает рак"]),
         (
-            "women.screening.who",
+            "women.screening.breast",
             [
                 "маммография: женщины 45–65 лет, раз в 2 года",
                 "УЗИ: женщины до 45 лет, раз в 2 года",
                 "ВПЧ-тест: женщины 30–50 лет",
                 "Призывы к самостоятельному обследованию",
                 "[[VERIFY: doctor]]",
-            ],
-        ),
-        (
-            "women.screening.where",
-            [
                 "семейные врачебные пункты",
                 "районные поликлиники (кабинеты онконастороженности)",
                 "Центр здоровья матери и ребенка и его филиалы",
@@ -132,7 +150,7 @@ def test_section_urls_match_spec(seeded) -> None:
             ],
         ),
         (
-            "women.treatment",
+            "women.treatment.breast",
             [
                 "Первичный прием",
                 "Обратитесь к терапевту или гинекологу при первых признаках или при плановом визите.",
@@ -146,16 +164,11 @@ def test_section_urls_match_spec(seeded) -> None:
             ],
         ),
         (
-            "women.state",
+            "women.support.breast",
             [
                 "Бесплатный скрининг в рамках государственной программы",
                 "Возможности в кабинетах «Онконастороженности»",
                 "Права и обязанности пациентов и врачей",
-            ],
-        ),
-        (
-            "women.care",
-            [
                 "Физическое здоровье",
                 "питание во время лечения",
                 "управление побочными эффектами",
@@ -174,7 +187,89 @@ def test_section_urls_match_spec(seeded) -> None:
             ],
         ),
         (
-            "women.after",
+            "women.after.breast",
+            [
+                "Наблюдение после лечения",
+                "график контрольных осмотров",
+                "поздние эффекты лечения",
+                "паспорт здоровья пациента",
+                "Возвращение к жизни",
+                "возврат к работе и привычному ритму",
+                "физическая реабилитация",
+                "эмоциональное восстановление",
+                "Долгосрочное здоровье",
+                "профилактика рецидива",
+                "репродуктивное здоровье после лечения",
+                "психологическое благополучие в долгосрочной перспективе",
+            ],
+        ),
+        (
+            "women.awareness.cervical",
+            [
+                "что происходит в организме",
+                "стадии",
+                "статистика по Узбекистану",
+                "Возраст",
+                "Наследственность",
+                "Образ жизни",
+                "ВПЧ-инфекция",
+                "Самообследование груди",
+                "не всегда означает рак",
+            ],
+        ),
+        (
+            "women.screening.cervical",
+            [
+                "маммография: женщины 45–65 лет, раз в 2 года",
+                "УЗИ: женщины до 45 лет, раз в 2 года",
+                "ВПЧ-тест: женщины 30–50 лет",
+                "Призывы к самостоятельному обследованию",
+                "[[VERIFY: doctor]]",
+                "семейные врачебные пункты",
+                "районные поликлиники (кабинеты онконастороженности)",
+                "Центр здоровья матери и ребенка и его филиалы",
+                "Бесплатно – в рамках государственной программы",
+            ],
+        ),
+        (
+            "women.treatment.cervical",
+            [
+                "Первичный прием",
+                "Обратитесь к терапевту или гинекологу при первых признаках или при плановом визите.",
+                "Направление на диагностику",
+                "УЗИ, маммография, тесты, прием у кабинета «Онконастороженности» и др.",
+                "Онколог / онкогинеколог",
+                "направление в онкологический центр (в соответствии с датами в ПП-402)",
+                "[[VERIFY: PP-402 referral deadlines]]",
+                "Лечение",
+                "Информация об этапах лечения.",
+            ],
+        ),
+        (
+            "women.support.cervical",
+            [
+                "Бесплатный скрининг в рамках государственной программы",
+                "Возможности в кабинетах «Онконастороженности»",
+                "Права и обязанности пациентов и врачей",
+                "Физическое здоровье",
+                "питание во время лечения",
+                "управление побочными эффектами",
+                "уход за кожей и волосами",
+                "физическая активность и реабилитация",
+                "Эмоциональная поддержка",
+                "как справляться со страхом и тревогой",
+                "психологическая помощь: куда обратиться",
+                "поддержка близких и семьи",
+                "группы взаимопомощи пациентов",
+                "Практические вопросы",
+                "больничный и трудовые права",
+                "финансовая поддержка и льготы",
+                "как помочь близкому человеку с диагнозом",
+                "вопросы, которые важно задать врачу",
+            ],
+        ),
+        (
+            "women.after.cervical",
             [
                 "Наблюдение после лечения",
                 "график контрольных осмотров",
@@ -299,27 +394,27 @@ def test_tz_bullets_verbatim_ru(seeded, key: str, snippets: list[str]) -> None:
 
 
 def test_uz_bodies_are_real_uzbek_with_placeholders(seeded) -> None:
-    text = body_text(page_for("women.care", "uz"))
+    text = body_text(page_for("women.support.breast", "uz"))
     assert "Jismoniy salomatlik" in text
     assert "Hissiy qoʻllab-quvvatlash" in text
-    assert "[[TODO: content — copywriter]]" in text
+    assert "[[VERIFY: doctor]]" in text  # Figma copy (D-065) waits for the doctor
+    assert "[[TODO: content — copywriter]]" in body_text(page_for("women.after.breast", "ru"))
     types = body_text(page_for("children.about.types", "uz"))
     assert "Leykozlar" in types
     assert "Neyroblastoma" in types
 
 
 def test_block_types_match_spec_for_key_pages(seeded) -> None:
-    assert "steps" in page_for("women.treatment", "uz").block_types
-    assert "steps" in page_for("women.awareness.symptoms", "uz").block_types
-    assert "symptom_list" in page_for("women.awareness.symptoms", "uz").block_types
-    assert "table" in page_for("women.screening.who", "uz").block_types
-    assert "institution_list" in page_for("women.screening.where", "uz").block_types
-    assert page_for("women.care", "uz").block_types.count("three_columns") == 1
+    assert "steps" in page_for("women.treatment.breast", "uz").block_types
+    assert "steps" in page_for("women.awareness.breast", "uz").block_types
+    assert "cards_grid" in page_for("women.awareness.cervical", "uz").block_types
+    assert "text_cards" in page_for("women.after.breast", "uz").block_types
+    assert page_for("women.support.breast", "uz").block_types.count("three_columns") == 1
     assert page_for("children.family", "uz").block_types.count("two_columns") == 1
     assert "cards_grid" in page_for("children.about.types", "uz").block_types
     assert "glossary_terms" in page_for("children.diagnosis.diagnostics", "ru").block_types
     assert "faq_accordion" in page_for("children.diagnosis.diagnostics", "ru").block_types
-    assert "cta" in page_for("women.awareness.symptoms", "ru").block_types
+    assert "cta" in page_for("women.awareness.breast", "ru").block_types
 
 
 def test_six_childhood_cancer_cards(seeded) -> None:
@@ -329,7 +424,7 @@ def test_six_childhood_cancer_cards(seeded) -> None:
 
 
 def test_patient_route_has_four_steps_with_pp402_deadline(seeded) -> None:
-    page = page_for("women.treatment", "ru")
+    page = page_for("women.treatment.breast", "ru")
     steps = next(b for b in page.body if b.block_type == "steps")
     assert len(steps.value["steps"]) == 4
     assert steps.value["steps"][2]["deadline"] == "[[VERIFY: PP-402 referral deadlines]]"
@@ -373,6 +468,12 @@ def test_every_live_page_returns_200_in_both_languages(seeded, client: Client) -
         url = page.url
         assert url, page
         response = client.get(url)
+        if getattr(page, "is_variant_group", False) or getattr(page, "open_first_topic", False):
+            # D-066: a variant group / the women's section opens its first child (≤ 2 hops)
+            for _hop in range(2):
+                if response.status_code != 302:
+                    break
+                response = client.get(response["Location"])
         assert response.status_code == 200, (url, response.status_code)
         assert f'lang="{page.locale.language_code}"' in response.content.decode()
         seen += 1

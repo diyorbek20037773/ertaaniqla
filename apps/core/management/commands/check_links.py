@@ -19,6 +19,12 @@ HREF_RE = re.compile(r'(?:href|src)="([^"#]+)(?:#[^"]*)?"')
 SKIP_PREFIXES = ("mailto:", "tel:", "javascript:", "data:", "sms:")
 
 
+def _opens_first_child(page: Page) -> bool:
+    return bool(
+        getattr(page, "is_variant_group", False) or getattr(page, "open_first_topic", False)
+    )
+
+
 class Command(BaseCommand):
     help = "Check internal (and optionally external) links on every live page."
 
@@ -42,6 +48,8 @@ class Command(BaseCommand):
                 continue
             response = client.get(url)
             checked_pages += 1
+            if response.status_code == 302 and _opens_first_child(page):
+                continue  # D-066: a variant group / the women's section only redirects
             if response.status_code != 200:
                 broken.append(f"{url} → HTTP {response.status_code} (page itself)")
                 continue

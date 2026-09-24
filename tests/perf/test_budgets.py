@@ -27,7 +27,9 @@ def test_js_budget() -> None:
     assert gz_size(DIST / "main.js") <= 50 * 1024
 
 
-@pytest.mark.parametrize("url", ["/uz/", "/uz/ayollar/", "/ru/zhenskiy/osvedomlennost/simptomy/"])
+@pytest.mark.parametrize(
+    "url", ["/uz/", "/uz/ayollar/", "/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/"]
+)
 def test_html_budget(seeded, client: Client, url: str) -> None:
     body = client.get(url).content
     assert len(gzip.compress(body, compresslevel=6)) <= 60 * 1024

@@ -15,7 +15,9 @@ pytestmark = pytest.mark.django_db
 
 
 def test_get_section_from_nested_article(seeded) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     section = article.get_section()
     assert isinstance(section, SectionIndexPage)
     assert section.section_key == "women"
@@ -34,7 +36,7 @@ def test_home_has_no_section(seeded) -> None:
 def test_body_data_section_attribute_and_theme(seeded, client: Client) -> None:
     html = client.get("/uz/bolalar/").content.decode()
     assert 'data-section="children"' in html
-    html = client.get("/uz/ayollar/").content.decode()
+    html = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
     assert 'data-section="women"' in html
     html = client.get("/uz/").content.decode()
     assert 'data-section=""' in html
@@ -44,26 +46,45 @@ def test_section_colour_override_is_emitted_with_nonce(seeded, client: Client) -
     section = SectionIndexPage.objects.get(section_key="women", locale__language_code="uz")
     section.colour_primary = "#123456"
     section.save_revision().publish()
-    html = client.get("/uz/ayollar/").content.decode()
+    html = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
     assert "--brand:#123456;" in html
     assert '<style nonce="' in html
 
 
 def test_section_index_query_count(seeded, django_assert_max_num_queries) -> None:
     client = Client()
-    client.get("/uz/ayollar/")  # warm nav cache + settings
+    client.get("/uz/bolalar/")  # warm nav cache + settings
     with django_assert_max_num_queries(40):
-        response = client.get("/uz/ayollar/")
+        response = client.get("/uz/bolalar/")
     assert response.status_code == 200
 
 
+def test_women_section_opens_its_first_topic(seeded, client: Client) -> None:
+    # D-066: the women's section has no landing of its own — the first tab opens
+    response = client.get("/uz/ayollar/")
+    assert response.status_code == 302
+    assert response["Location"] == "/uz/ayollar/ogohlik/"
+    response = client.get(response["Location"])
+    assert response.status_code == 302
+    assert response["Location"] == "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/"
+
+
 def test_topic_index_lists_child_articles(seeded, client: Client) -> None:
-    topic = TopicIndexPage.objects.get(slug="skrining", locale__language_code="uz")
+    topic = TopicIndexPage.objects.get(slug="diagnostika-va-davolash", locale__language_code="uz")
     articles = topic.get_articles()
-    assert [a.slug for a in articles] == ["kimga-va-qachon", "qayerda"]
+    assert [a.slug for a in articles] == ["diagnostika", "davolash"]
     html = client.get(topic.url).content.decode()
-    assert "Kimga va qanchalik tez-tez" in html
+    assert "Diagnostika" in html
     assert "daqiqa" in html  # reading time meta on cards (uz)
+
+
+def test_variant_group_lists_breast_then_cervical(seeded) -> None:
+    topic = TopicIndexPage.objects.get(slug="skrining", locale__language_code="uz")
+    assert [a.slug for a in topic.get_articles()] == [
+        "kokrak-bezi-saratoni",
+        "bachadon-boyni-saratoni",
+    ]
+    assert topic.get_variants() == list(topic.get_articles())
 
 
 def test_reading_time_and_word_count(seeded) -> None:
@@ -76,7 +97,9 @@ def test_reading_time_and_word_count(seeded) -> None:
 
 
 def test_verified_badge(seeded, user, client: Client) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     assert article.verified_badge is None
     user.first_name, user.last_name, user.organisation = "Dilfuza", "A.", "RONC"
     user.save()
@@ -101,9 +124,8 @@ def test_navigation_structure_and_cache(seeded) -> None:
     assert len(women.items) == 5
     assert women.items[0].title == "Осведомленность"
     assert [c.title for c in women.items[0].children] == [
-        "Что такое РМЖ и РШМ",
-        "Факторы риска",
-        "Симптомы",
+        "Рак молочной железы",
+        "Рак шейки матки",
     ]
     from django.core.cache import cache
 
@@ -129,7 +151,7 @@ def test_navigation_unknown_language_is_empty(db) -> None:
 def test_mega_menu_rendered_on_every_page(seeded, client: Client) -> None:
     html = client.get("/ru/detskiy/uhod-i-podderzhka/").content.decode()
     assert html.count('class="mega-menu"') == 2
-    assert "Государственная поддержка" in html
+    assert "Организация лечения" in html
     assert "Информация для семьи" in html
     assert 'class="site-nav__section is-active"' in html
 

@@ -33,8 +33,8 @@ def test_apostrophe_variants_match_content(seeded) -> None:
 
 
 def test_autocomplete_prefix(seeded) -> None:
-    results = search_pages("Kimg", "uz")  # title prefix (AutocompleteField on ArticlePage.title)
-    assert any(r.title.startswith("Kimga") for r in results)
+    results = search_pages("Diagnos", "uz")  # title prefix (AutocompleteField on ArticlePage.title)
+    assert any(r.title.startswith("Diagnostika") for r in results)
 
 
 def test_empty_and_short_queries(seeded) -> None:

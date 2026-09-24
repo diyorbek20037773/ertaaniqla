@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 15:04+0500\n"
+"POT-Creation-Date: 2026-09-24 20:23+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,9 @@ msgstr "Хорошая новость"
 msgid "Reassurance (this sign is not always cancer)"
 msgstr "Успокоение (этот признак не всегда рак)"
 
+msgid "Alert strip with “!” (do not panic, do not delay)"
+msgstr "Полоса-предупреждение с «!» (не паникуйте, не откладывайте)"
+
 msgid "Kind"
 msgstr "Тип"
 
@@ -93,6 +96,18 @@ msgstr "Например, срок направления по ПП-402. Пок�
 msgid "Heading"
 msgstr "Заголовок"
 
+msgid "Numbered list"
+msgstr "Нумерованный список"
+
+msgid "Capsules joined by arrows (stages, patient route)"
+msgstr "Капсулы со стрелками (стадии, маршрут пациента)"
+
+msgid "Capsules without arrows (rights)"
+msgstr "Капсулы без стрелок (права)"
+
+msgid "Layout"
+msgstr "Макет"
+
 msgid "Steps"
 msgstr "Шаги"
 
@@ -102,18 +117,56 @@ msgstr "Шаги (маршрут пациента, самообследован�
 msgid "Image"
 msgstr "Изображение"
 
-msgid "Icon name"
-msgstr "Имя иконки"
+msgid "Icon"
+msgstr "Иконка"
 
-msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
-msgstr ""
-"Необязательный идентификатор иконки для дизайнера (например, 'dna', 'age')."
+msgid "Designer icon shown on the pink tile (used when no image is uploaded)."
+msgstr "Иконка дизайнера на розовой плитке (если изображение не загружено)."
 
 msgid "Cards"
 msgstr "Карточки"
 
+msgid "Icon tiles (risk factors)"
+msgstr "Плитки с иконками (факторы риска)"
+
 msgid "Cards grid"
 msgstr "Сетка карточек"
+
+msgid "Section heading"
+msgstr "Заголовок раздела"
+
+msgid "Label"
+msgstr "Подпись"
+
+msgid "Lime chip, e.g. MAMMOGRAFIYA."
+msgstr "Лаймовый ярлык, например МАММОГРАФИЯ."
+
+msgid "Designer illustration"
+msgstr "Иллюстрация дизайнера"
+
+msgid "Used when no image is uploaded."
+msgstr "Используется, если изображение не загружено."
+
+msgid "Full width"
+msgstr "Во всю ширину"
+
+msgid "Narrow, centred"
+msgstr "Узкая, по центру"
+
+msgid "Width"
+msgstr "Ширина"
+
+msgid "Text card"
+msgstr "Текстовая карточка"
+
+msgid "Two per row"
+msgstr "По две в ряд"
+
+msgid "Three per row"
+msgstr "По три в ряд"
+
+msgid "Text cards grid"
+msgstr "Сетка текстовых карточек"
 
 msgid "Routine — mention at the next visit"
 msgstr "Планово — скажите на следующем приёме"
@@ -144,9 +197,6 @@ msgstr "Значение"
 
 msgid "E.g. '1 из 8' or '45–65'."
 msgstr "Например, «1 из 8» или «45–65»."
-
-msgid "Label"
-msgstr "Подпись"
 
 msgid "Source"
 msgstr "Источник"
@@ -279,6 +329,60 @@ msgstr "YouTube, пост Telegram, пост/reel Instagram или видео Ti
 
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
 msgstr "Встраивание (YouTube / Telegram / Instagram / TikTok)"
+
+msgid "Woman silhouette"
+msgstr "Силуэт женщины"
+
+msgid "Age"
+msgstr "Возраст"
+
+msgid "Flower (breast disease)"
+msgstr "Цветок (заболевания груди)"
+
+msgid "Medical cross (white)"
+msgstr "Медицинский крест (белый)"
+
+msgid "DNA and ribbon"
+msgstr "ДНК и лента"
+
+msgid "Radiation"
+msgstr "Облучение"
+
+msgid "Medical cross (lime)"
+msgstr "Медицинский крест (лайм)"
+
+msgid "Heart with baby"
+msgstr "Сердце с малышом"
+
+msgid "Molecule (hormones)"
+msgstr "Молекула (гормоны)"
+
+msgid "Head (habits)"
+msgstr "Голова (привычки)"
+
+msgid "Virus (HPV)"
+msgstr "Вирус (ВПЧ)"
+
+msgid "Mammography"
+msgstr "Маммография"
+
+msgid "Ultrasound"
+msgstr "УЗИ"
+
+msgid "MRI"
+msgstr "МРТ"
+
+msgid "Self-exam 1: in front of a mirror"
+msgstr "Самообследование 1: перед зеркалом"
+
+msgid "Self-exam 2: hands behind the head"
+msgstr "Самообследование 2: руки за головой"
+
+msgid "Self-exam 3: lying down"
+msgstr "Самообследование 3: лёжа"
+
+msgid "Self-exam 4: nipple and armpit"
+msgstr "Самообследование 4: сосок и подмышка"
 
 msgid "summary"
 msgstr "краткое описание"
@@ -1139,6 +1243,16 @@ msgstr "акцентный цвет"
 msgid "icon"
 msgstr "иконка"
 
+msgid "open the first topic"
+msgstr "открывать первую тему"
+
+msgid ""
+"The design has no section overview: visitors go straight to the first menu "
+"topic (302). The overview stays visible in preview."
+msgstr ""
+"В дизайне нет обзора раздела: посетитель сразу попадает в первую тему меню "
+"(302). Обзор остаётся виден в предпросмотре."
+
 msgid "Section identity"
 msgstr "Идентичность раздела"
 
@@ -1147,6 +1261,17 @@ msgstr "главная страница раздела"
 
 msgid "Shown on the section index card and in the mega-menu."
 msgstr "Показывается на карточке раздела и в мега-меню."
+
+msgid "children are variants of one topic"
+msgstr "дочерние страницы — варианты одной темы"
+
+msgid ""
+"E.g. breast / cervical cancer: the topic opens its first child page (302) "
+"and every child shows a switch between the variants (Figma design)."
+msgstr ""
+"Например, рак молочной железы / шейки матки: тема открывает первую дочернюю "
+"страницу (302), а на каждой дочерней странице есть переключатель вариантов "
+"(дизайн Figma)."
 
 msgid "topic index page"
 msgstr "страница темы"
@@ -1237,9 +1362,6 @@ msgstr "2 года назад"
 
 msgid "3 years ago or more"
 msgstr "3 года назад и более"
-
-msgid "Mammography"
-msgstr "Маммография"
 
 msgid "Breast ultrasound"
 msgstr "УЗИ молочных желёз"
@@ -1750,6 +1872,10 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
+#~ msgstr ""
+#~ "Необязательный идентификатор иконки для дизайнера (например, 'dna', 'age')."
 
 #~ msgid "Open section"
 #~ msgstr "Открыть раздел"

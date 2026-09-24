@@ -16,6 +16,12 @@ def link_href(value: Any) -> str:
     return _link_href(value)
 
 
+def _is_all_caps(text: str) -> bool:
+    """A title the designer typed in capitals (Figma «PAST MALIGNLIK») — set larger by the CSS."""
+    letters = [c for c in text if c.isalpha()]
+    return len(letters) >= 4 and not any(c.islower() for c in letters)
+
+
 @register.filter
 def resolve_step_links(steps: Any) -> list[dict[str, Any]]:
     """StepBlock values → plain dicts with a resolved `href` for components/steps.html."""
@@ -23,6 +29,7 @@ def resolve_step_links(steps: Any) -> list[dict[str, Any]]:
         {
             "number": step.get("number") or "",
             "title": step.get("title"),
+            "caps": _is_all_caps(step.get("title") or ""),
             "text": step.get("text"),
             "deadline": step.get("deadline") or "",
             "href": _link_href(step.get("link")),

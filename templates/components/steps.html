@@ -1,7 +1,7 @@
 {% comment %} ---------------------------------------------------------------------------
    components/steps.html — numbered steps (patient route, self-exam guide, stages). Printable.
    Context: title (str, optional), layout (list | capsules_arrows | capsules, default list),
-   steps (list of {number, title, text, deadline, href}).
+   steps (list of {number, title, caps, text, deadline, href}).
    Capsules = the design's tall pink-bordered pills with a lime star number (Figma 2408:762);
    `capsules_arrows` joins them with arrows. Numbers are auto (01… in lists, 1… in capsules).
    --------------------------------------------------------------------------- {% endcomment %}
@@ -13,7 +13,7 @@
       <li class="steps__item">
         <span class="steps__number" aria-hidden="true">{% if step.number %}{{ step.number }}{% elif layout and layout != "list" %}{{ forloop.counter }}{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</span>
         <div class="steps__body">
-          {% if step.title %}<h3 class="steps__title">{{ step.title }}</h3>{% endif %}
+          {% if step.title %}<h3 class="steps__title{% if step.caps %} steps__title--caps{% endif %}">{{ step.title }}</h3>{% endif %}
           <div class="steps__text">{{ step.text }}</div>
           {% if step.deadline %}<p class="steps__deadline"><span class="steps__deadline-label">{% trans "Timing" %}:</span> {{ step.deadline }}</p>{% endif %}
           {% if step.href %}<a class="steps__link" href="{{ step.href }}">{% trans "Learn more" %}</a>{% endif %}

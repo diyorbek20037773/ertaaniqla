@@ -15,7 +15,19 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from apps.core.seed.tree import TODO, VERIFY, Body, SeedContext, callout, cta, p, rich, t, ul
+from apps.core.seed.tree import (
+    TODO,
+    VERIFY,
+    Body,
+    SeedContext,
+    callout,
+    cta,
+    p,
+    rich,
+    t,
+    todo_callout,
+    ul,
+)
 
 RU_TODO = "[[TODO: перевод с узбекского — копирайтер]]"
 _APOS = re.compile(r"(?<=[oOgG])['’`‘]|['’`‘]")
@@ -129,7 +141,7 @@ DONT_PANIC = uz(
 
 def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
     if lang != "uz":
-        return _ru_skeleton(
+        body = _ru_skeleton(
             lang,
             ctx,
             [
@@ -141,6 +153,7 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
                 "Самообследование груди",
             ],
         )
+        return [*body[:-1], todo_callout(lang, TZ_AWARENESS_UZ, TZ_AWARENESS_RU), body[-1]]
     stages = [
         (
             "0",
@@ -431,6 +444,7 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
                 )
             )
         ),
+        uz_statistics(),
         heading(uz("Ko'krak bezi saratoni bosqichlari")),
         capsules(stages),
         heading(uz("Ko'krak bezi saratoni sabablari")),
@@ -525,6 +539,38 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
 # ---------------------------------------------------------------------------------------------
 # Russian skeleton: same rhythm, translated headings, translation placeholder (D-068)
 # ---------------------------------------------------------------------------------------------
+# TZ «Осведомленность» (what / risk / symptoms), verbatim — kept on the awareness pages (D-068)
+TZ_AWARENESS_RU = [
+    "что происходит в организме",
+    "стадии",
+    "статистика по Узбекистану",
+    "Возраст",
+    "Наследственность",
+    "Образ жизни",
+    "ВПЧ-инфекция",
+    "Другие факторы, о которых важно знать",
+    "Самообследование груди — пошаговое руководство",
+    "Признаки, которые нельзя игнорировать; этот признак не всегда означает рак",
+]
+TZ_AWARENESS_UZ = [
+    "organizmda nima sodir boʻladi",
+    "kasallik bosqichlari",
+    "Oʻzbekiston boʻyicha statistika",
+    "Yosh",
+    "Irsiyat",
+    "Turmush tarzi",
+    "HPV infeksiyasi",
+    "Bilish muhim boʻlgan boshqa omillar",
+    "Koʻkrakni mustaqil tekshirish — bosqichma-bosqich qoʻllanma",
+    "Eʼtiborsiz qoldirib boʻlmaydigan belgilar; bu belgi har doim saraton degani emas",
+]
+
+
+def uz_statistics() -> dict[str, Any]:
+    """TZ «статистика по Узбекистану» — no Figma layer carries it; a card for the copywriter."""
+    return text_card(p(f"{TODO} {VERIFY}"), title=uz("O'zbekiston bo'yicha statistika"))
+
+
 def _ru_skeleton(lang: str, ctx: SeedContext, headings: list[str]) -> Body:
     body: Body = []
     for title in headings:
@@ -543,7 +589,7 @@ def _lines(*lines: str) -> str:
 
 def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
     if lang != "uz":
-        return _ru_skeleton(
+        body = _ru_skeleton(
             lang,
             ctx,
             [
@@ -553,10 +599,11 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
                 "Причины рака шейки матки",
             ],
         )
+        return [*body[:-1], todo_callout(lang, TZ_AWARENESS_UZ, TZ_AWARENESS_RU), body[-1]]
     forms = [
         (
             "1",
-            uz("Yassi epiteliydan rivojlangan o'simtalar"),
+            uz("YASSI EPITELIYDAN RIVOJLANGAN O'SIMTALAR"),
             ul(
                 [
                     uz("HPV bilan bog'liq yassi hujayrali saraton;"),
@@ -567,7 +614,7 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
         ),
         (
             "2",
-            uz("Bezi jigarrang epiteliydan rivojlangan o'simtalar"),
+            uz("BEZI JIGARRANG EPITELIYDAN RIVOJLANGAN O'SIMTALAR"),
             ul(
                 [
                     uz("HPV bilan bog'liq adenokarsinoma;"),
@@ -581,7 +628,7 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
         ),
         (
             "3",
-            uz("Noyob shakllar"),
+            uz("NOYOB SHAKLLAR"),
             ul(
                 [
                     uz("Aralash epitelial va mezenximal o'simtalar;"),
@@ -594,13 +641,13 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
     grades = [
         (
             "1",
-            uz("Past malignlik"),
+            uz("PAST MALIGNLIK"),
             p("<i>" + uz("Hujayralar sog'lom hujayralarga o'xshaydi, o'sish sekin;") + "</i>"),
         ),
-        ("2", uz("O'rtacha"), p("<i>" + uz("o'rtacha farq, o'sish tezlashgan;") + "</i>")),
+        ("2", uz("O'RTACHA"), p("<i>" + uz("o'rtacha farq, o'sish tezlashgan;") + "</i>")),
         (
             "3",
-            uz("Yuqori malignlik"),
+            uz("YUQORI MALIGNLIK"),
             p("<i>" + uz("hujayralar keskin o'zgargan, o'sma tez o'sadi va tarqaladi.") + "</i>"),
         ),
     ]
@@ -740,6 +787,7 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
             ),
             title=uz("Eng ko'p uchraydigan shakllar"),
         ),
+        uz_statistics(),
         heading(uz("Bachadon bo'yni saratoni bosqichlari")),
         text_card(
             _lines(
@@ -849,7 +897,7 @@ def _where_to_screen(lang: str) -> dict[str, Any]:
                 t(
                     lang,
                     "davlat dasturi doirasida — bepul.",
-                    "бесплатно – в рамках государственной программы.",
+                    "Бесплатно – в рамках государственной программы.",
                 ),
             ]
         ),
@@ -876,7 +924,7 @@ def _tz_screening_rules(lang: str) -> dict[str, Any]:
                 t(
                     lang,
                     "o'z-o'zini tekshirishga chaqiriq.",
-                    "призывы к самостоятельному обследованию.",
+                    "Призывы к самостоятельному обследованию.",
                 ),
             ]
         )

@@ -16,7 +16,9 @@ pytestmark = pytest.mark.django_db
 
 @override_settings(PAGE_CACHE_SECONDS=300)
 def test_cache_hit_swaps_nonce_and_publish_invalidates(seeded, client: Client) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     first = client.get(article.url)
     assert first["X-Page-Cache"] == "MISS"
     assert "max-age=300" in first["Cache-Control"]
@@ -38,7 +40,7 @@ def test_cache_hit_swaps_nonce_and_publish_invalidates(seeded, client: Client) -
 
 @override_settings(PAGE_CACHE_SECONDS=300)
 def test_cache_bypasses(seeded, client: Client, user) -> None:
-    url = "/uz/ayollar/"
+    url = "/uz/bolalar/"
     assert client.get(url)["X-Page-Cache"] == "MISS"
     assert client.get(url)["X-Page-Cache"] == "HIT"
     # HTMX partials have their own key

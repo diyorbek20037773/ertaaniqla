@@ -30,7 +30,9 @@ def test_render_og_image_png_1200x630(section: str, language: str) -> None:
 
 
 def test_task_generates_and_stores_image(seeded, client: Client) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     name = generate_og_image(article.pk)
     assert name.startswith("og/uz-")
     article.refresh_from_db()
@@ -42,13 +44,18 @@ def test_task_generates_and_stores_image(seeded, client: Client) -> None:
 
 def test_task_skips_missing_or_unpublished(seeded) -> None:
     assert generate_og_image(10**9) == ""
-    article = ArticlePage.objects.get(slug="simptomy", locale__language_code="ru")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/",
+        locale__language_code="ru",
+    )
     article.unpublish()
     assert generate_og_image(article.pk) == ""
 
 
 def test_publish_triggers_task(seeded, django_capture_on_commit_callbacks) -> None:
-    article = ArticlePage.objects.get(slug="xavf-omillari", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/bachadon-boyni-saratoni/", locale__language_code="uz"
+    )
     article.og_image_generated = ""
     article.save(update_fields=["og_image_generated"], clean=False)
     with django_capture_on_commit_callbacks(execute=True):

@@ -32,7 +32,9 @@ def types(graph: dict) -> list:
 
 
 def test_article_jsonld_with_reviewer(seeded, user, client: Client) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     user.first_name, user.last_name, user.organisation = "Dilfuza", "A.", "RONC"
     user.save()
     article.medically_verified = True
@@ -49,7 +51,7 @@ def test_article_jsonld_with_reviewer(seeded, user, client: Client) -> None:
     assert page_item["inLanguage"] == "uz"
     assert page_item["about"]["name"] == "Ayollar saratoni"
     crumbs = next(i for i in graph["@graph"] if i["@type"] == "BreadcrumbList")
-    assert crumbs["itemListElement"][-1]["name"] == "Belgilar"
+    assert crumbs["itemListElement"][-1]["name"] == "Koʻkrak bezi saratoni"
 
 
 def test_home_and_faq_and_directory_jsonld(seeded, client: Client) -> None:
@@ -89,7 +91,9 @@ def test_video_object_for_video_blocks(seeded, client: Client) -> None:
     video = Video.objects.create(
         title="Shifokor", source="youtube", external_url="https://youtu.be/dQw4w9WgXcQ", duration=90
     )
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     article.body = json.dumps(
         [
             {
@@ -115,7 +119,9 @@ def test_sitemaps_are_per_language_and_skip_noindex(seeded, client: Client) -> N
     ru = client.get("/ru/sitemap.xml").content.decode()
     assert "/uz/ayollar/" in uz and "/ru/zhenskiy/" not in uz
     assert "/ru/zhenskiy/" in ru and "/uz/ayollar/" not in ru
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     assert article.url in uz
     article.noindex = True
     article.save_revision().publish()
@@ -131,7 +137,9 @@ def test_sitemap_skips_disabled_tools(seeded, client: Client) -> None:
 
 
 def test_share_bar_and_story_image(seeded, client: Client) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     generate_og_image(article.pk)
     article.refresh_from_db()
     assert article.story_image_generated_url.startswith("/media/story/")
@@ -174,7 +182,11 @@ def test_picture_tag_serves_webp(seeded, client: Client, tmp_path) -> None:
     image.file = SimpleUploadedFile("hero.jpg", buffer.getvalue(), content_type="image/jpeg")
     image.width, image.height = 900, 600
     image.save()
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    # a plain article: the Figma-designed women's pages show the section banner instead
+    article = ArticlePage.objects.get(
+        url_path__endswith="/bolalar/onkologiya-haqida/keng-tarqalgan-turlari/",
+        locale__language_code="uz",
+    )
     article.hero_image = image
     article.save_revision().publish()
     html = client.get(article.url).content.decode()

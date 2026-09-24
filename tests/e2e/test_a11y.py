@@ -22,7 +22,7 @@ PAGES = [
     "/uz/",
     "/ru/zhenskiy/",
     "/uz/bolalar/",
-    "/uz/ayollar/ogohlik/belgilar/",
+    "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",
     "/ru/zhenskiy/kuda-obratitsya/",
     "/uz/qidiruv/?q=skrining",
     "/uz/vositalar/skrining/",
@@ -72,7 +72,9 @@ def test_no_serious_violations(axe_page, path: str) -> None:
     assert not serious, summary
 
 
-@pytest.mark.parametrize("path", ["/uz/", "/uz/ayollar/ogohlik/belgilar/", "/uz/bolalar/"])
+@pytest.mark.parametrize(
+    "path", ["/uz/", "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/", "/uz/bolalar/"]
+)
 def test_high_contrast_theme_is_aa(axe_page, path: str) -> None:
     """ADR-0006: the high-contrast theme must pass WCAG 2.1 AA colour contrast."""
     response = axe_page.goto(BASE_URL + path, wait_until="networkidle")

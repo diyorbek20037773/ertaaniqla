@@ -36,13 +36,17 @@ def test_phone_filters(raw: str, display: str, href: str) -> None:
 
 
 def test_translated_url_points_to_counterpart(seeded) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
-    assert translated_url(article, "ru") == "/ru/zhenskiy/osvedomlennost/simptomy/"
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
+    assert translated_url(article, "ru") == "/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/"
     assert translated_url(article, "uz") == article.url
 
 
 def test_translated_url_falls_back_to_section_then_root(seeded) -> None:
-    article = ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    article = ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
     ru = article.get_translation(Locale.objects.get(language_code="ru"))
     ru.unpublish()
     assert translated_url(article, "ru") == "/ru/zhenskiy/"
@@ -51,8 +55,8 @@ def test_translated_url_falls_back_to_section_then_root(seeded) -> None:
 
 
 def test_language_switcher_links_to_counterpart(seeded, client: Client) -> None:
-    html = client.get("/uz/ayollar/ogohlik/belgilar/").content.decode()
-    assert 'href="/ru/zhenskiy/osvedomlennost/simptomy/" hreflang="ru"' in html
+    html = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
+    assert 'href="/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/" hreflang="ru"' in html
     assert 'aria-current="true" lang="uz"' in html
 
 
@@ -73,9 +77,9 @@ def test_hreflang_and_canonical_in_head(seeded, client: Client) -> None:
 
 
 def test_breadcrumbs_on_nested_page(seeded, client: Client) -> None:
-    html = client.get("/ru/zhenskiy/skrining/gde-proyti/").content.decode()
+    html = client.get("/ru/zhenskiy/skrining/rak-molochnoy-zhelezy/").content.decode()
     assert 'aria-label="Хлебные крошки"' in html or "breadcrumbs" in html
-    assert '<span aria-current="page">Где пройти</span>' in html
+    assert '<span aria-current="page">Рак молочной железы</span>' in html
     assert 'href="/ru/zhenskiy/skrining/"' in html
     home_html = client.get("/ru/").content.decode()
     assert "breadcrumbs__list" not in home_html

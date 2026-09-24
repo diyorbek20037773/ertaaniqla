@@ -135,6 +135,11 @@ def test_every_live_uz_page_is_served_in_cyrillic(seeded, client: Client) -> Non
     assert len(urls) > 30
     for url in urls:
         response = client.get("/oz/" + url[4:])
+        for _hop in range(2):  # D-066: variant groups open their first child
+            if response.status_code != 302:
+                break
+            assert response["Location"].startswith("/oz/"), url
+            response = client.get(response["Location"])
         assert response.status_code == 200, url
         assert '<html lang="uz-Cyrl"' in response.content.decode(), url
         assert response["Content-Language"] == "uz-Cyrl"
@@ -142,22 +147,34 @@ def test_every_live_uz_page_is_served_in_cyrillic(seeded, client: Client) -> Non
 
 @pytest.mark.django_db
 def test_cyrillic_page_links_titles_and_alternates(seeded, client: Client) -> None:
-    html = client.get("/oz/ayollar/ogohlik/belgilar/").content.decode()
-    assert "<title>Белгилар — Эрта аниқла</title>" in html
-    assert '<link rel="canonical" href="http://localhost/oz/ayollar/ogohlik/belgilar/">' in html
-    assert 'property="og:url" content="http://localhost/oz/ayollar/ogohlik/belgilar/"' in html
+    html = client.get("/oz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
+    assert "<title>Кўкрак бези саратони — Эрта аниқла</title>" in html
     assert (
-        '<link rel="alternate" hreflang="uz" href="http://localhost/uz/ayollar/ogohlik/belgilar/" '
+        '<link rel="canonical" href="http://localhost/oz/ayollar/ogohlik/kokrak-bezi-saratoni/">'
+        in html
+    )
+    assert (
+        'property="og:url" content="http://localhost/oz/ayollar/ogohlik/kokrak-bezi-saratoni/"'
+        in html
+    )
+    assert (
+        '<link rel="alternate" hreflang="uz" '
+        'href="http://localhost/uz/ayollar/ogohlik/kokrak-bezi-saratoni/" '
         "data-script-keep>" in html
     )
-    assert 'hreflang="ru" href="http://localhost/ru/zhenskiy/osvedomlennost/simptomy/"' in html
+    assert (
+        'hreflang="ru" href="http://localhost/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/"'
+        in html
+    )
     # switcher: the Latin link is kept, Cyrillic is current, names are never transliterated
     assert 'aria-current="true" lang="uz-Cyrl" translate="no">Ўзбекча</span>' in html
     assert ">Oʻzbekcha</a>" in html
     # every other internal Uzbek link stays inside /oz/
-    assert re.findall(r'<a [^>]*href="(/uz/[^"]*)"', html) == ["/uz/ayollar/ogohlik/belgilar/"]
+    assert re.findall(r'<a [^>]*href="(/uz/[^"]*)"', html) == [
+        "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/"
+    ]
     assert 'href="/oz/ayollar/"' in html
-    assert "%2Foz%2Fayollar%2Fogohlik%2Fbelgilar%2F" in html  # share links
+    assert "%2Foz%2Fayollar%2Fogohlik%2Fkokrak-bezi-saratoni%2F" in html  # share links
     visible = re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", html, flags=re.S)
     visible = re.sub(r"\[\[[^\]]*\]\]", " ", visible)
     latin_words = set(re.findall(r"[A-Za-z]{3,}", visible)) - {"Oʻzbekcha", "zbekcha"}
@@ -168,12 +185,14 @@ def test_cyrillic_page_links_titles_and_alternates(seeded, client: Client) -> No
 
 @pytest.mark.django_db
 def test_latin_and_russian_pages_are_unchanged(seeded, client: Client) -> None:
-    uz = client.get("/uz/ayollar/ogohlik/belgilar/").content.decode()
-    assert '<html lang="uz"' in uz and "Belgilar" in uz
-    assert 'hreflang="uz-Cyrl" href="http://localhost/oz/ayollar/ogohlik/belgilar/"' in uz
-    ru = client.get("/ru/zhenskiy/osvedomlennost/simptomy/").content.decode()
+    uz = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
+    assert '<html lang="uz"' in uz and "Koʻkrak bezi saratoni" in uz
+    assert (
+        'hreflang="uz-Cyrl" href="http://localhost/oz/ayollar/ogohlik/kokrak-bezi-saratoni/"' in uz
+    )
+    ru = client.get("/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/").content.decode()
     assert '<html lang="ru"' in ru
-    assert 'href="/oz/ayollar/ogohlik/belgilar/" hreflang="uz-Cyrl"' in ru
+    assert 'href="/oz/ayollar/ogohlik/kokrak-bezi-saratoni/" hreflang="uz-Cyrl"' in ru
 
 
 @pytest.mark.django_db

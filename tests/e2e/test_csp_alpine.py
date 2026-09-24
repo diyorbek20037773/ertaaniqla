@@ -33,7 +33,7 @@ def _page(browser: Browser):
 
 def test_share_copy_and_no_csp_errors(browser: Browser) -> None:
     context, page, errors = _page(browser)
-    page.goto(f"{BASE}/uz/ayollar/ogohlik/belgilar/")
+    page.goto(f"{BASE}/uz/ayollar/ogohlik/kokrak-bezi-saratoni/")
     page.click(".share__link--copy")
     page.wait_for_selector(".share__copied", state="visible")
     assert page.get_attribute(".share__link--copy", "aria-pressed") == "true"

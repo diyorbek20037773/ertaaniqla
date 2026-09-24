@@ -59,7 +59,9 @@ def content_admin(db):
 
 @pytest.fixture
 def article(seeded) -> ArticlePage:
-    return ArticlePage.objects.get(slug="belgilar", locale__language_code="uz")
+    return ArticlePage.objects.get(
+        url_path__endswith="/ayollar/ogohlik/kokrak-bezi-saratoni/", locale__language_code="uz"
+    )
 
 
 # --- roles ------------------------------------------------------------------------------------

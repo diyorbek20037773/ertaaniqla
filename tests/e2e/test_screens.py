@@ -25,7 +25,7 @@ PAGES = [
     ("section-children-uz", "/uz/bolalar/"),
     ("section-children-ru", "/ru/detskiy/"),
     ("article-patient-route-uz", "/uz/ayollar/davolash/"),
-    ("article-symptoms-ru", "/ru/zhenskiy/osvedomlennost/simptomy/"),
+    ("article-symptoms-ru", "/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/"),
     ("article-care-children-uz", "/uz/bolalar/parvarish/"),
     ("directory-uz", "/uz/ayollar/qayerga-murojaat/"),
     ("stories-ru", "/ru/istorii/"),
@@ -37,7 +37,7 @@ PAGES = [
     ("feedback-uz", "/uz/qayta-aloqa/"),
     ("search-uz", "/uz/qidiruv/?q=saraton"),
     ("home-oz", "/oz/"),  # Uzbek Cyrillic (D-049)
-    ("article-symptoms-oz", "/oz/ayollar/ogohlik/belgilar/"),
+    ("article-symptoms-oz", "/oz/ayollar/ogohlik/kokrak-bezi-saratoni/"),
 ]
 
 
@@ -102,22 +102,26 @@ def test_mobile_menu_opens_without_hover(mobile_page) -> None:
 
 
 def test_language_switch_keeps_page(mobile_page) -> None:
-    mobile_page.goto(BASE_URL + "/uz/ayollar/skrining/qayerda/", wait_until="networkidle")
+    mobile_page.goto(
+        BASE_URL + "/uz/ayollar/skrining/kokrak-bezi-saratoni/", wait_until="networkidle"
+    )
     mobile_page.locator("summary.site-nav__toggle-button").click()
     mobile_page.locator('a.lang-switch__link[hreflang="ru"]').click()
     mobile_page.wait_for_load_state("networkidle")
-    assert mobile_page.url.endswith("/ru/zhenskiy/skrining/gde-proyti/")
+    assert mobile_page.url.endswith("/ru/zhenskiy/skrining/rak-molochnoy-zhelezy/")
 
 
 def test_language_switch_to_uzbek_cyrillic_and_back(mobile_page) -> None:
-    mobile_page.goto(BASE_URL + "/uz/ayollar/skrining/qayerda/", wait_until="networkidle")
+    mobile_page.goto(
+        BASE_URL + "/uz/ayollar/skrining/kokrak-bezi-saratoni/", wait_until="networkidle"
+    )
     mobile_page.locator("summary.site-nav__toggle-button").click()
     mobile_page.locator('a.lang-switch__link[hreflang="uz-Cyrl"]').click()
     mobile_page.wait_for_load_state("networkidle")
-    assert mobile_page.url.endswith("/oz/ayollar/skrining/qayerda/")
+    assert mobile_page.url.endswith("/oz/ayollar/skrining/kokrak-bezi-saratoni/")
     assert mobile_page.locator("html").get_attribute("lang") == "uz-Cyrl"
     assert "Скрининг" in mobile_page.locator("main").inner_text()
     mobile_page.locator("summary.site-nav__toggle-button").click()
     mobile_page.locator('a.lang-switch__link[hreflang="uz"]').click()
     mobile_page.wait_for_load_state("networkidle")
-    assert mobile_page.url.endswith("/uz/ayollar/skrining/qayerda/")
+    assert mobile_page.url.endswith("/uz/ayollar/skrining/kokrak-bezi-saratoni/")

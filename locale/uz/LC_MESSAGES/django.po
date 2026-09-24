@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 15:04+0500\n"
+"POT-Creation-Date: 2026-09-24 20:23+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,9 @@ msgstr "Yaxshi xabar"
 msgid "Reassurance (this sign is not always cancer)"
 msgstr "Tinchlantirish (bu belgi har doim saraton emas)"
 
+msgid "Alert strip with “!” (do not panic, do not delay)"
+msgstr "«!» belgili ogohlantirish qatori (vahima qilmang, kechiktirmang)"
+
 msgid "Kind"
 msgstr "Turi"
 
@@ -94,6 +97,18 @@ msgstr ""
 msgid "Heading"
 msgstr "Sarlavha"
 
+msgid "Numbered list"
+msgstr "Raqamlangan roʻyxat"
+
+msgid "Capsules joined by arrows (stages, patient route)"
+msgstr "Strelkalar bilan bogʻlangan kapsulalar (bosqichlar, bemor yoʻli)"
+
+msgid "Capsules without arrows (rights)"
+msgstr "Strelkasiz kapsulalar (huquqlar)"
+
+msgid "Layout"
+msgstr "Joylashuv"
+
 msgid "Steps"
 msgstr "Qadamlar"
 
@@ -103,18 +118,56 @@ msgstr "Qadamlar (bemor yoʻli, oʻz-oʻzini tekshirish)"
 msgid "Image"
 msgstr "Rasm"
 
-msgid "Icon name"
-msgstr "Ikonka nomi"
+msgid "Icon"
+msgstr "Ikonka"
 
-msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
-msgstr ""
-"Dizayner uchun ixtiyoriy ikonka identifikatori (masalan, 'dna', 'age')."
+msgid "Designer icon shown on the pink tile (used when no image is uploaded)."
+msgstr "Pushti plitkadagi dizayner ikonkasi (rasm yuklanmaganda ishlatiladi)."
 
 msgid "Cards"
 msgstr "Kartalar"
 
+msgid "Icon tiles (risk factors)"
+msgstr "Ikonkali plitkalar (xavf omillari)"
+
 msgid "Cards grid"
 msgstr "Kartalar toʻri"
+
+msgid "Section heading"
+msgstr "Boʻlim sarlavhasi"
+
+msgid "Label"
+msgstr "Izoh"
+
+msgid "Lime chip, e.g. MAMMOGRAFIYA."
+msgstr "Laym rangli yorliq, masalan MAMMOGRAFIYA."
+
+msgid "Designer illustration"
+msgstr "Dizayner illyustratsiyasi"
+
+msgid "Used when no image is uploaded."
+msgstr "Rasm yuklanmaganda ishlatiladi."
+
+msgid "Full width"
+msgstr "Toʻliq kenglik"
+
+msgid "Narrow, centred"
+msgstr "Tor, markazda"
+
+msgid "Width"
+msgstr "Kenglik"
+
+msgid "Text card"
+msgstr "Matnli karta"
+
+msgid "Two per row"
+msgstr "Qatorda ikkita"
+
+msgid "Three per row"
+msgstr "Qatorda uchta"
+
+msgid "Text cards grid"
+msgstr "Matnli kartalar toʻri"
 
 msgid "Routine — mention at the next visit"
 msgstr "Odatiy — keyingi tashrifda ayting"
@@ -145,9 +198,6 @@ msgstr "Qiymat"
 
 msgid "E.g. '1 из 8' or '45–65'."
 msgstr "Masalan, '8 dan 1' yoki '45–65'."
-
-msgid "Label"
-msgstr "Izoh"
 
 msgid "Source"
 msgstr "Manba"
@@ -282,6 +332,60 @@ msgstr "YouTube, Telegram posti, Instagram post/reel yoki TikTok videosi."
 
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
 msgstr "Joylashtirish (YouTube / Telegram / Instagram / TikTok)"
+
+msgid "Woman silhouette"
+msgstr "Ayol siluyeti"
+
+msgid "Age"
+msgstr "Yosh"
+
+msgid "Flower (breast disease)"
+msgstr "Gul (koʻkrak kasalliklari)"
+
+msgid "Medical cross (white)"
+msgstr "Tibbiy xoch (oq)"
+
+msgid "DNA and ribbon"
+msgstr "DNK va lenta"
+
+msgid "Radiation"
+msgstr "Nurlanish"
+
+msgid "Medical cross (lime)"
+msgstr "Tibbiy xoch (laym)"
+
+msgid "Heart with baby"
+msgstr "Chaqaloqli yurak"
+
+msgid "Molecule (hormones)"
+msgstr "Molekula (gormonlar)"
+
+msgid "Head (habits)"
+msgstr "Bosh (odatlar)"
+
+msgid "Virus (HPV)"
+msgstr "Virus (HPV)"
+
+msgid "Mammography"
+msgstr "Mammografiya"
+
+msgid "Ultrasound"
+msgstr "UTT"
+
+msgid "MRI"
+msgstr "MRT"
+
+msgid "Self-exam 1: in front of a mirror"
+msgstr "Oʻz-oʻzini tekshirish 1: koʻzgu oldida"
+
+msgid "Self-exam 2: hands behind the head"
+msgstr "Oʻz-oʻzini tekshirish 2: qoʻllar bosh orqasida"
+
+msgid "Self-exam 3: lying down"
+msgstr "Oʻz-oʻzini tekshirish 3: yotgan holda"
+
+msgid "Self-exam 4: nipple and armpit"
+msgstr "Oʻz-oʻzini tekshirish 4: soʻrgʻich va qoʻltiq osti"
 
 msgid "summary"
 msgstr "qisqacha mazmun"
@@ -1150,6 +1254,17 @@ msgstr "qoʻshimcha rang"
 msgid "icon"
 msgstr "ikonka"
 
+msgid "open the first topic"
+msgstr "birinchi mavzuni ochish"
+
+msgid ""
+"The design has no section overview: visitors go straight to the first menu "
+"topic (302). The overview stays visible in preview."
+msgstr ""
+"Dizaynda boʻlim sharhi yoʻq: tashrif buyuruvchilar toʻgʻridan-toʻgʻri "
+"menyuning birinchi mavzusiga oʻtadi (302). Sharh oldindan koʻrishda koʻrinib"
+" turadi."
+
 msgid "Section identity"
 msgstr "Boʻlim identikasi"
 
@@ -1158,6 +1273,17 @@ msgstr "boʻlim bosh sahifasi"
 
 msgid "Shown on the section index card and in the mega-menu."
 msgstr "Boʻlim sahifasidagi kartada va mega-menyuda koʻrsatiladi."
+
+msgid "children are variants of one topic"
+msgstr "ichki sahifalar bitta mavzuning variantlari"
+
+msgid ""
+"E.g. breast / cervical cancer: the topic opens its first child page (302) "
+"and every child shows a switch between the variants (Figma design)."
+msgstr ""
+"Masalan, koʻkrak / bachadon boʻyni saratoni: mavzu birinchi ichki sahifani "
+"ochadi (302), har bir ichki sahifada variantlar oʻrtasida almashtirgich "
+"koʻrsatiladi (Figma dizayni)."
 
 msgid "topic index page"
 msgstr "mavzu sahifasi"
@@ -1249,9 +1375,6 @@ msgstr "2 yil oldin"
 
 msgid "3 years ago or more"
 msgstr "3 yil va undan koʻp vaqt oldin"
-
-msgid "Mammography"
-msgstr "Mammografiya"
 
 msgid "Breast ultrasound"
 msgstr "Koʻkrak UTT"
@@ -1753,6 +1876,10 @@ msgstr "Natijani koʻrsatish"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
+
+#~ msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
+#~ msgstr ""
+#~ "Dizayner uchun ixtiyoriy ikonka identifikatori (masalan, 'dna', 'age')."
 
 #~ msgid "Open section"
 #~ msgstr "Boʻlimni ochish"

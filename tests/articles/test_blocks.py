@@ -243,6 +243,17 @@ def test_steps_layouts(layout: str) -> None:
     assert html.count('class="steps__title"') == 1  # the title is optional
 
 
+def test_steps_all_caps_title_gets_the_caps_style() -> None:
+    step = {"number": "", "text": "<p>a</p>", "deadline": "", "link": {"page": None, "url": ""}}
+    value = {
+        "title": "",
+        "layout": "capsules_arrows",
+        "steps": [{**step, "title": "PAST MALIGNLIK"}, {**step, "title": "Birlamchi qabul"}],
+    }
+    html = render("steps", value)
+    assert html.count("steps__title--caps") == 1
+
+
 def test_callout_alert_is_announced_as_important() -> None:
     html = render("callout", {"kind": "alert", "title": "", "text": "<p>Vahima qilmang</p>"})
     assert "callout--alert" in html and "Vahima qilmang" in html

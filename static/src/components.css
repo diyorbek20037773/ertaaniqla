@@ -670,6 +670,11 @@
     width: clamp(56px, 6.2vw, 107px); height: clamp(56px, 6.2vw, 107px); font-size: var(--fs-h3); font-weight: 400; background: var(--c-lime);
   }
   .steps--capsules .steps__title, .steps--capsules_arrows .steps__title { margin: 0 0 var(--space-2); font-size: var(--fs-capsule); color: var(--c-pink-700); } /* case as typed: «Birlamchi qabul», «PAST MALIGNLIK» */
+  /* an all-caps title (Figma cervical forms / grades) is set larger, medium weight, gradient */
+  .steps .steps__title.steps__title--caps { margin-bottom: var(--space-6); font-size: var(--fs-body); font-weight: 500; line-height: 1.15; background-image: var(--grad-title); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .steps .steps__title.steps__title--caps { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
   .steps--capsules .steps__deadline, .steps--capsules_arrows .steps__deadline { color: var(--c-pink-800); }
   .steps--capsules_arrows .steps__item:not(:last-child)::after {
     content: ""; position: absolute; top: 50%; right: calc(-1 * clamp(var(--space-4), 1.6vw, 1.7rem) - 12px);
@@ -681,9 +686,38 @@
   @media (max-width: 47.99rem) {
     .steps--capsules_arrows .steps__item:not(:last-child)::after { top: auto; right: auto; bottom: calc(-1 * clamp(var(--space-6), 3vw, 3.2rem)); left: 50%; transform: translateX(-50%) rotate(90deg); }
   }
+  /* lists inside capsules (Figma cervical «shakllari»): left-aligned, italic, flower bullets */
+  .steps--capsules .steps__text ul, .steps--capsules_arrows .steps__text ul { margin: var(--space-4) 0 0; text-align: left; font-size: var(--fs-card); }
+  .steps--capsules .steps__text li, .steps--capsules_arrows .steps__text li {
+    position: relative; padding-left: clamp(1.75rem, 2.4vw, 2.6rem); margin-block: 0 0.9em; font-style: italic;
+  }
+  .steps--capsules .steps__text li::before, .steps--capsules_arrows .steps__text li::before {
+    content: ""; position: absolute; left: 0; top: 0.1em;
+    width: clamp(1.1rem, 1.4vw, 1.5rem); height: clamp(1.1rem, 1.4vw, 1.5rem);
+    background: url("../img/figma/icon-flower.svg") center / contain no-repeat;
+  }
+  /* rights (Figma «Qo'llab-quvvatlash»): 32px copy, staggered 1 | 2+3 | 4+5 on desktop */
+  .steps--capsules .steps__item { font-size: var(--fs-body); }
+  .steps--capsules .steps__list:has(> .steps__item:nth-child(5):last-child) .steps__item { min-height: 0; justify-content: center; }
+  @media (min-width: 64rem) {
+    .steps--capsules .steps__list:has(> .steps__item:nth-child(5):last-child) { grid-template-rows: auto auto; grid-auto-flow: column; }
+    .steps--capsules .steps__list:has(> .steps__item:nth-child(5):last-child) .steps__item:first-child { grid-row: span 2; }
+  }
+  /* lead-in line above a block («Bemor quyidagi huquqlarga ega:») — gradient like the headings */
+  .article--designed .prose > h3:only-child { margin: 0; font-size: var(--fs-h2); background-image: var(--grad-title); color: var(--brand); }
+  .article__body > .block--rich-text:has(> h3:only-child) { margin-bottom: clamp(var(--space-4), 1.8vw, 1.9rem); }
+  .steps--capsules .steps__list:has(> .steps__item:nth-child(5):last-child) .steps__item { padding-block: clamp(var(--space-6), 2.4vw, 2.5rem); gap: var(--space-3); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .article--designed .prose > h3:only-child { -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
   /* 4-step patient route fits one row on desktop like the Figma frame (2408:1396) */
   @media (min-width: 64rem) { .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   @media (min-width: 64rem) { .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) .steps__item:nth-child(3n)::after { display: block; } }
+  /* 4 untitled narrow capsules (cervical stages, Figma): tighter sides, 24px copy, lines not paragraphs */
+  @media (min-width: 64rem) {
+    .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) .steps__item:not(:has(.steps__title)) { padding-inline: clamp(var(--space-4), 1.4vw, 1.5rem); font-size: var(--fs-card); }
+  }
+  .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) .steps__text p { margin-block: 0; }
 
   /* icon tiles — Figma 2408:255: 260×563 glass card, 260×260 pink tile, 5 per row */
   .cards-grid--icon_tiles .cards-grid__items { grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: clamp(var(--space-4), 1.6vw, 1.25rem); }
