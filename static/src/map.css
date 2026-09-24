@@ -1,6 +1,6 @@
 /* Directory map styles — Leaflet CSS + the .map container (loaded only on the directory page). */
 @import "leaflet/dist/leaflet.css";
 
-.map { height: 24rem; width: 100%; border: 1px solid var(--neutral-200); border-radius: var(--radius); margin-block: var(--space-6); background: var(--neutral-50); }
+.map { height: 24rem; width: 100%; border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-glass); overflow: hidden; margin-block: var(--space-6); background: var(--neutral-50); }
 .map:empty::after { content: attr(data-empty); display: flex; height: 100%; align-items: center; justify-content: center; color: var(--neutral-600); }
 @media print { .map { display: none; } }

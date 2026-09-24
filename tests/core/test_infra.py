@@ -125,3 +125,10 @@ def test_csp_header_is_nonce_based(client: Client) -> None:
     csp = response.get("Content-Security-Policy", "")
     assert "'nonce-" in csp
     assert "frame-ancestors 'none'" in csp
+
+
+def test_404_page_uses_the_design_error_layout(client: Client) -> None:
+    html = client.get("/ru/no-such-page/").content.decode()
+    assert 'class="container error-page"' in html
+    assert html.count("<h1") == 1
+    assert 'href="/ru/"' in html  # back to the home page in the visitor's language

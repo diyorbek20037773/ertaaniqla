@@ -16,6 +16,7 @@ pytestmark = pytest.mark.e2e
 BASE_URL = os.environ.get("E2E_BASE_URL", "http://localhost:8001")
 SCREENSHOTS = Path(__file__).parent / "screenshots"
 MOBILE = {"width": 390, "height": 844}
+DESKTOP = {"width": 1280, "height": 800}
 
 PAGES = [
     ("home-uz", "/uz/"),
@@ -33,6 +34,8 @@ PAGES = [
     ("faq-uz", "/uz/savol-javob/"),
     ("glossary-ru", "/ru/slovar/"),
     ("materials-uz", "/uz/materiallar/"),
+    ("feedback-uz", "/uz/qayta-aloqa/"),
+    ("search-uz", "/uz/qidiruv/?q=saraton"),
     ("home-oz", "/oz/"),  # Uzbek Cyrillic (D-049)
     ("article-symptoms-oz", "/oz/ayollar/ogohlik/belgilar/"),
 ]
@@ -58,6 +61,35 @@ def test_screenshot(mobile_page, name: str, path: str) -> None:
     assert response is not None and response.status == 200, path
     assert mobile_page.locator("main h1").count() == 1
     mobile_page.screenshot(path=str(SCREENSHOTS / f"{name}.png"), full_page=True)
+
+
+# M5b: the design pages at desktop width too (Figma frames are 1728 px wide).
+DESKTOP_PAGES = [
+    ("home-uz", "/uz/"),
+    ("article-patient-route-uz", "/uz/ayollar/davolash/"),
+    ("directory-uz", "/uz/ayollar/qayerga-murojaat/"),
+    ("tools-screening-uz", "/uz/vositalar/skrining/"),
+    ("faq-uz", "/uz/savol-javob/"),
+    ("glossary-ru", "/ru/slovar/"),
+]
+
+
+@pytest.fixture(scope="module")
+def desktop_page(browser):
+    context = browser.new_context(
+        viewport=DESKTOP, device_scale_factor=1, locale="uz", extra_http_headers={"X-E2E": "1"}
+    )
+    page = context.new_page()
+    yield page
+    context.close()
+
+
+@pytest.mark.parametrize(("name", "path"), DESKTOP_PAGES)
+def test_desktop_screenshot(desktop_page, name: str, path: str) -> None:
+    SCREENSHOTS.mkdir(exist_ok=True)
+    response = desktop_page.goto(BASE_URL + path, wait_until="networkidle")
+    assert response is not None and response.status == 200, path
+    desktop_page.screenshot(path=str(SCREENSHOTS / f"desktop-{name}.png"), full_page=True)
 
 
 def test_mobile_menu_opens_without_hover(mobile_page) -> None:

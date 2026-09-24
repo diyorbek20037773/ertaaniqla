@@ -66,7 +66,13 @@ Editors may override `--brand`/`--brand-soft` per section from the CMS (`Section
 | `stories/story_index_page.html` | StoryIndexPage (`/uz/hikoyalar/`) | заголовок, intro, вкладки-фильтр (все / женский / детский), сетка карточек историй (фото, имя, summary) | Hikoyalar sahifasi | empty state; filter active |
 | `stories/patient_story_page.html` | PatientStoryPage | eyebrow «История пациента», имя (псевдоним) + диагноз, summary, page-meta, фото, блоки, подпись о согласии/анонимизации | Bemor hikoyasi | anonymised on/off; section colour |
 | `media_library/materials_page.html` | MaterialsPage (`/uz/materiallar/`) | заголовок, intro, вкладки аудитории (все / блогеры / близкие / родители / клиники), карточки материалов: картинка + «Скачать», документ, короткое видео + «Скачать видео», готовая подпись + «Копировать», хэштеги + «Копировать» | Bloger-kit sahifasi | empty state; filter active; item without image/video |
-| `404.html`, `429.html`, `500.html`, `core/lockout.html` | errors | текст + ссылка на главную | Xato sahifalari | — |
+| `404.html`, `429.html`, `500.html`, `core/lockout.html` | errors | M5b: большой градиентный код (404/429/500, `aria-hidden`), заголовок, текст, pill «На главную» (язык посетителя) | Xato sahifalari: katta gradient kod, sarlavha, matn, «Bosh sahifaga» tugmasi | 500 renders without DB / base.html |
+
+M5b-6 (2026-09-24): Figma has no frames for directory, tools, FAQ, feedback, glossary, search,
+stories, materials and error pages, so they reuse the landing primitives only — glass panels
+(forms, filters, results, institution cards), pill inputs/buttons/tabs, lime chips (free badge,
+glossary letter, "due/ok" status, other-language result). No Python changes.
+M5b-6: Figma'da bu sahifalar uchun maket yo'q — faqat mavjud primitivlar (glass, pill, lime chip) ishlatildi.
 
 ## 3. Components / Компоненты / Komponentlar — `templates/components/`
 
@@ -75,7 +81,7 @@ Each partial documents its context variables in a header comment. CSS block of t
 | Component | Purpose (ru) | Maqsad (uz) | Context / fields | States |
 |---|---|---|---|---|
 | `header.html` | Шапка: логотип-заглушка, название, горячая линия (tel:), навигация | Sarlavha: logo, nom, ishonch telefoni, navigatsiya | `settings.core.SiteSettings.hotline_phone` | mobile (menu behind toggle) / desktop (inline) |
-| `nav.html` (`{% main_nav %}`) | Мега-меню: 2 раздела × 5 пунктов ТЗ + подпункты; переключатель языка | Mega-menyu: 2 bo'lim × 5 band + ichki bandlar; til almashtirgich | `sections[NavSection{key,title,url,tagline,emoji,items[NavItem{title,url,summary,children}]}]`, `section_key` | mobile `<details>` (no JS), desktop hover panel, active section underline |
+| `nav.html` (`{% main_nav %}`) | Мега-меню: 2 раздела × 5 пунктов ТЗ + подпункты; переключатель языка | Mega-menyu: 2 bo'lim × 5 band + ichki bandlar; til almashtirgich | `sections[NavSection{key,title,url,tagline,emoji,items[NavItem{title,url,summary,children}]}]`, `section_key` | mobile `<details>` (no JS); desktop (≥ 64rem): menu always open (`::details-content` + `static/src/nav.js`), each section = click dropdown, one at a time, Esc / outside click closes; active section underline |
 | `lang_switch.html` (`{% lang_switch %}`) | Переключатель Oʻzbekcha (латиница) / Ўзбекча (кириллица, `/oz/`) / Русский на ту же страницу | Joriy sahifaning lotin / kirill / rus versiyasiga o'tish | `links[{code,name,url,keep,is_current}]`; названия с `translate="no"` | current = plain text with `aria-current` |
 | `banner.html` | Экстренный баннер сайта (месяц скрининга) | Sayt bo'ylab shoshilinch banner | `SiteSettings.emergency_banner_*` | hidden / text / link |
 | `breadcrumbs.html` (`{% breadcrumbs %}`) | Хлебные крошки от главной | Yo'l ko'rsatkichi | `crumbs[Page]` | hidden on home; last item `aria-current` |
@@ -88,7 +94,7 @@ Each partial documents its context variables in a header comment. CSS block of t
 | `video.html` | Плеер (HTML5 + VTT uz/ru + постер) или провайдер-embed; спикер; подпись; транскрипт (`<details>`) | Video pleer / embed, transkript | `video, embed, caption, transcript` | upload ready / processing / external; vertical 9:16 |
 | `embed_frame.html` | iframe YouTube/Telegram; **click-to-load** фасад для Instagram/TikTok; `<noscript>` ссылка | Provayder iframe / bosib yuklash fasadi | `embed{provider,src,vertical,click_to_load}` | facade / loaded / no-JS |
 | `institution_card.html` | Карточка учреждения: название, тип, «бесплатно по госпрограмме», адрес, телефон, часы, услуги, сайт, дата проверки | Muassasa kartasi | `institution` | free badge on/off; no phone/hours |
-| `filter-tabs` (CSS in stories) | Вкладки фильтра раздела (aria-current) | Bo'lim filtr tugmalari | links | active / inactive |
+| `filter-tabs` (CSS in stories, FAQ) | Вкладки фильтра раздела (aria-current); M5b: glass-pill, активная — градиент (как `section_tabs`) | Bo'lim filtr tugmalari | links | active / inactive |
 | `form_field.html` / `form_errors.html` | Поле формы (label, help, inline error, aria-describedby) / сводка ошибок (role=alert, ссылки на поля) | Forma maydoni / xatolar ro'yxati | `field` / `form` | error / checkbox |
 | `turnstile.html` | Виджет Cloudflare Turnstile (только при ключе) | Turnstile vidjeti | `TURNSTILE_SITE_KEY` | present / absent |
 | `disclaimer.html` | Медицинский дисклеймер на страницах инструментов | Tibbiy ogohlantirish | `text` (fallback: site setting) | custom / default |

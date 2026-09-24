@@ -43,13 +43,17 @@ def test_ratelimited_view_renders_429() -> None:
     request = RequestFactory().get("/uz/savol-javob/")
     response = views.ratelimited(request, Exception("limited"))
     assert response.status_code == 429
+    html = response.content.decode()
+    assert 'class="container error-page"' in html and html.count("<h1") == 1
 
 
 def test_server_error_view_renders_without_db() -> None:
     request = RequestFactory().get("/uz/")
     response = views.server_error(request)
     assert response.status_code == 500
-    assert b"<html" in response.content
+    html = response.content.decode()
+    assert "<html" in html and 'class="container error-page"' in html
+    assert html.count("<h1") == 1 and 'href="/"' in html
 
 
 def test_metrics_rejects_malformed_basic_auth(client: Client, settings) -> None:

@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="{% static 'dist/main.css' %}">
 </head>
 <body>
-  <main id="main" class="container prose">
-    <h1>{% trans "Server error" %}</h1>
-    <p>{% trans "Something went wrong on our side. We have been notified. Please try again later." %}</p>
-    <p><a href="/">{% trans "Go to the home page" %}</a></p>
+  <main id="main" class="container error-page">
+    <p class="error-page__code u-gradient-text" aria-hidden="true">500</p>
+    <h1 class="error-page__title">{% trans "Server error" %}</h1>
+    <p class="error-page__text">{% trans "Something went wrong on our side. We have been notified. Please try again later." %}</p>
+    <p class="error-page__actions"><a class="pill pill--cta" href="/">{% trans "Go to the home page" %}</a></p>
   </main>
 </body>
 </html>
