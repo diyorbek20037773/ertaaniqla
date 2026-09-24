@@ -31,3 +31,18 @@ def test_js_budget() -> None:
 def test_html_budget(seeded, client: Client, url: str) -> None:
     body = client.get(url).content
     assert len(gzip.compress(body, compresslevel=6)) <= 60 * 1024
+
+
+def test_every_component_modifier_survives_the_purge() -> None:
+    """Modifiers are often built from data in templates; Tailwind must not purge them."""
+    import re
+
+    css = DIST / "main.css"
+    if not css.exists():
+        pytest.skip("run `npm run build` first")
+    source = (DIST.parent / "src" / "components.css").read_text(encoding="utf-8")
+    built = css.read_text(encoding="utf-8")
+    modifiers = set(re.findall(r"^\s*\.([a-z0-9_-]+--[a-z0-9_-]+)", source, flags=re.M))
+    assert modifiers
+    missing = sorted(m for m in modifiers if f".{m}" not in built)
+    assert not missing, f"purged from static/dist/main.css: {missing}"

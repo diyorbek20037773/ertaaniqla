@@ -6,6 +6,11 @@ module.exports = {
     "./apps/**/*.py",
     "./static/src/**/*.js",
   ],
+  // Modifier classes built in templates from data (`callout--{{ kind }}`,
+  // `tool-result--{{ level }}`, `share__link--{{ key }}` …) never appear literally, so the
+  // purge dropped them and the urgency colours silently vanished. Keep every BEM modifier.
+  // Guarded by tests/perf/test_budgets.py::test_every_component_modifier_survives_the_purge.
+  safelist: [{ pattern: /^(callout|tool-result|tool-result__test|share__link|symptom|steps|video|embed|pill|button|field|capsule-card|search-result|institution|material)--[a-z0-9_-]+$/ }],
   theme: {
     extend: {
       colors: {

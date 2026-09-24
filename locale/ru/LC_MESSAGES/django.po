@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 11:46+0500\n"
+"POT-Creation-Date: 2026-09-24 15:04+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1504,6 +1504,9 @@ msgstr "Поиск по сайту"
 msgid "e.g. mammography"
 msgstr "например, маммография"
 
+msgid "Section topics"
+msgstr "Темы раздела"
+
 msgid "Share"
 msgstr "Поделиться"
 
@@ -1622,8 +1625,14 @@ msgstr "Буквы"
 msgid "No terms found."
 msgstr "Термины не найдены."
 
-msgid "Open section"
-msgstr "Открыть раздел"
+msgid "Read more"
+msgstr "Подробнее"
+
+msgid "Get in touch"
+msgstr "Связаться с нами"
+
+msgid "Self-checks"
+msgstr "Самопроверка"
 
 msgid "Key figures"
 msgstr "Ключевые цифры"
@@ -1741,6 +1750,9 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgid "Open section"
+#~ msgstr "Открыть раздел"
 
 #~ msgid ""
 #~ "This site is an information and education resource. It does not make a "

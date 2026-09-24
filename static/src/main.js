@@ -7,6 +7,7 @@ import htmx from "htmx.org";
 import Alpine from "@alpinejs/csp";
 import { initToolbar } from "./a11y.js";
 import { initConsent } from "./analytics.js";
+import { initNav } from "./nav.js";
 
 // The indicator CSS lives in components.css; htmx must not inject an inline <style> (CSP).
 htmx.config.includeIndicatorStyles = false;
@@ -68,3 +69,4 @@ document.documentElement.classList.remove("no-js");
 Alpine.start();
 initToolbar();
 initConsent();
+initNav();
