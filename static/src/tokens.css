@@ -104,9 +104,10 @@
   --fs-lead: clamp(0.944rem, 0.831rem + 0.52vw, 1.333rem);     /*  17 →  24px */
   --fs-ui: clamp(0.889rem, 0.824rem + 0.3vw, 1.111rem);        /*  16 →  20px */
   --fs-sm: 0.889rem;                                            /*        16px */
-  --fs-card-title: clamp(1.111rem, 0.852rem + 1.2vw, 1.778rem); /*  20 →  32px, card titles */
-  --fs-card: clamp(0.889rem, 0.824rem + 0.3vw, 1.111rem);       /*  16 →  20px, card copy */
-  --fs-tile-title: clamp(1rem, 0.87rem + 0.6vw, 1.556rem);      /*  18 →  28px */
+  --fs-card-title: clamp(1.111rem, 0.852rem + 1.2vw, 2rem);     /*  20 →  36px, card titles */
+  --fs-card: clamp(0.889rem, 0.726rem + 0.75vw, 1.333rem);      /*  16 →  24px, card copy */
+  --fs-tile-title: clamp(1rem, 0.773rem + 1.05vw, 1.778rem);    /*  18 →  32px */
+  --fs-tile: clamp(0.833rem, 0.768rem + 0.3vw, 1.111rem);       /*  15 →  20px, tile copy */
   --fs-capsule: clamp(1rem, 0.87rem + 0.6vw, 1.556rem);         /*  18 →  28px, capsule copy */
   --gap-block: clamp(2rem, 1.3rem + 2.9vw, 4rem);               /*  32 →  64px between blocks */
 

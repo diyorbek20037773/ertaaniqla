@@ -98,6 +98,24 @@ def section_tabs(context: dict[str, Any]) -> dict[str, Any]:
     return {"items": items, "active_url": active_url, "section_key": section_key}
 
 
+@register.inclusion_tag("components/variant_switch.html", takes_context=True)
+def variant_switch(context: dict[str, Any]) -> dict[str, Any]:
+    """Breast / cervical pill pair (Figma 2408:234) between the sibling pages of a variant group.
+
+    Renders nothing unless the page's parent is a TopicIndexPage with `is_variant_group`.
+    """
+    page = context.get("page")
+    if page is None or not getattr(page, "pk", None):
+        return {"items": [], "group_title": ""}
+    parent = page.get_parent().specific
+    variants = parent.get_variants() if hasattr(parent, "get_variants") else []
+    items = [
+        {"title": variant.title, "url": variant.url, "active": variant.pk == page.pk}
+        for variant in variants
+    ]
+    return {"items": items if len(items) > 1 else [], "group_title": getattr(parent, "title", "")}
+
+
 @register.inclusion_tag("components/share.html", takes_context=True)
 def share_bar(context: dict[str, Any]) -> dict[str, Any]:
     """Share links (spec §10): Telegram first, then WhatsApp, Facebook; copy link + story image."""

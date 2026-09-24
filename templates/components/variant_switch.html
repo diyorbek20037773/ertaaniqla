@@ -1,0 +1,13 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/variant_switch.html — the two disease pills of the women's section
+   (Figma 2408:234: 722×70, bold 32px; active = gradient, inactive = glass + gradient text).
+   Rendered by {% variant_switch %} (apps/core/templatetags/core_tags). Real links, no JS.
+   Context: items (list of {title, url, active}), group_title (the topic, for screen readers).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% if items %}
+  <nav class="variant-switch" aria-label="{{ group_title }}">
+    {% for item in items %}
+      <a class="variant-switch__link{% if item.active %} is-active{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}><span class="variant-switch__label">{{ item.title }}</span></a>
+    {% endfor %}
+  </nav>
+{% endif %}

@@ -5,7 +5,8 @@
    --------------------------------------------------------------------------- */
 @layer components {
   /* --- generic ------------------------------------------------------------- */
-  .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+  /* --container is the Figma content width (1484 px inside the 1728 px frame); gutters sit outside it */
+  .container { width: 100%; max-width: calc(var(--container) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
   .prose { max-width: var(--measure); }
   .placeholder { color: var(--neutral-600); font-style: italic; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
@@ -606,7 +607,7 @@
   /* flower bullets used by every list inside the design's cards (Figma 2408:360) */
   .text-card__text ul, .icon-tile__text ul, .columns__items ul, .steps--capsules ul, .steps--capsules_arrows ul { list-style: none; padding-left: 0; }
   .text-card__text ul li, .columns__items ul li {
-    position: relative; padding-left: clamp(1.75rem, 2.4vw, 2.6rem); margin-block: var(--space-2); font-style: italic;
+    position: relative; padding-left: clamp(1.75rem, 2.4vw, 2.6rem); margin-block: 0.45em; font-style: italic;
   }
   .text-card__text ul li::before, .columns__items ul li::before {
     content: ""; position: absolute; left: 0; top: 0.1em;
@@ -625,13 +626,13 @@
   .text-card__body { flex: 1 1 auto; min-width: 0; }
   .text-card__text > :first-child { margin-top: 0; }
   .text-card__text > :last-child { margin-bottom: 0; }
-  .text-card__text p { margin-block: 0 0.4em; }
+  .text-card__text p { margin-block: 0; } /* Figma sets paragraphs as plain line breaks */
   .text-card__title { margin: 0 0 var(--space-3); font-size: var(--fs-card-title); line-height: 1.15; text-transform: uppercase; background-image: var(--grad-title); color: var(--brand); }
   @supports ((-webkit-background-clip: text) or (background-clip: text)) {
     .text-card__title { -webkit-background-clip: text; background-clip: text; color: transparent; }
   }
   .text-card__media { flex: none; width: clamp(8rem, 20vw, 24rem); max-width: 40%; height: auto; }
-  .text-card--narrow { max-width: 707px; margin-inline: auto; }
+  .text-card--narrow { max-width: 707px; margin-inline: auto; font-size: var(--fs-card); padding: clamp(var(--space-6), 3.8vw, 4.1rem) clamp(var(--space-6), 3.8vw, 4.3rem); }
   .text-card--labelled { margin-top: clamp(1.6rem, 2vw, 2.2rem); padding-top: clamp(2.4rem, 3.4vw, 4rem); }
   .text-card__label {
     position: absolute; top: 0; left: clamp(var(--space-6), 2vw, 2.1rem); transform: translateY(-50%); margin: 0;
@@ -641,8 +642,9 @@
   }
   /* smaller copy inside grids (symptom cards, self-exam steps, duties) */
   .text-cards { display: grid; gap: clamp(var(--space-4), 2.2vw, 2.4rem); grid-template-columns: 1fr; }
-  .text-cards .text-card { align-items: flex-start; font-size: var(--fs-card); line-height: 1.3; padding: clamp(var(--space-6), 2.6vw, 2.9rem) clamp(var(--space-6), 2.8vw, 2.9rem); }
+  .text-cards .text-card { align-items: flex-start; font-size: var(--fs-card); line-height: 1.2; padding: clamp(var(--space-6), 4.3vw, 4.2rem) clamp(var(--space-6), 4.4vw, 4.3rem); }
   .text-cards .text-card__media { width: clamp(7rem, 12vw, 13rem); align-self: center; }
+  .text-cards--3 .text-card { padding: clamp(var(--space-6), 2.3vw, 2.4rem) clamp(var(--space-6), 2.3vw, 2.4rem); }
   @media (min-width: 48rem) {
     .text-cards--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .text-cards--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -667,7 +669,7 @@
   .steps--capsules .steps__number, .steps--capsules_arrows .steps__number {
     width: clamp(56px, 6.2vw, 107px); height: clamp(56px, 6.2vw, 107px); font-size: var(--fs-h3); font-weight: 400; background: var(--c-lime);
   }
-  .steps--capsules .steps__title, .steps--capsules_arrows .steps__title { margin: 0 0 var(--space-2); font-size: var(--fs-capsule); color: var(--c-pink-700); text-transform: uppercase; }
+  .steps--capsules .steps__title, .steps--capsules_arrows .steps__title { margin: 0 0 var(--space-2); font-size: var(--fs-capsule); color: var(--c-pink-700); } /* case as typed: «Birlamchi qabul», «PAST MALIGNLIK» */
   .steps--capsules .steps__deadline, .steps--capsules_arrows .steps__deadline { color: var(--c-pink-800); }
   .steps--capsules_arrows .steps__item:not(:last-child)::after {
     content: ""; position: absolute; top: 50%; right: calc(-1 * clamp(var(--space-4), 1.6vw, 1.7rem) - 12px);
@@ -690,7 +692,7 @@
   .icon-tile__art { aspect-ratio: 1; background: var(--c-pink-400); border-radius: clamp(24px, 2.3vw, 40px); display: flex; align-items: center; justify-content: center; }
   .icon-tile__img { width: 85%; height: auto; }
   .icon-tile__title { margin: clamp(var(--space-4), 1.3vw, 1.4rem) clamp(var(--space-4), 1.6vw, 1.7rem) var(--space-4); font-size: var(--fs-tile-title); line-height: 1.1; min-height: 2.2em; }
-  .icon-tile__text { margin: 0 clamp(var(--space-4), 1.6vw, 1.7rem) clamp(var(--space-6), 1.8vw, 2rem); font-size: var(--fs-sm); line-height: 1.3; }
+  .icon-tile__text { margin: 0 clamp(var(--space-4), 1.6vw, 1.7rem) clamp(var(--space-6), 1.8vw, 2rem); font-size: var(--fs-tile); line-height: 1.2; }
   .icon-tile__text p { margin: 0; }
 
   /* alert strip — Figma 2408:435: glass bar, gradient «!» disc, 32px copy */
@@ -704,7 +706,7 @@
 
   /* centred pill CTA — Figma 2408:812: 548×90, 32px */
   .cta--bare { border: 0; padding: 0; background: none; display: flex; justify-content: center; }
-  .cta--bare .button { min-width: min(100%, 548px); min-height: clamp(56px, 5.2vw, 90px); font-size: var(--fs-h3); font-weight: 500; }
+  .cta--bare .button { min-width: min(100%, 548px); min-height: clamp(56px, 5.2vw, 90px); font-size: var(--fs-h2); font-weight: 500; }
 
   /* three / two columns as glass cards with gradient titles (Figma 2408:2128 life after cancer) */
   body[data-section="women"] .columns__col {

@@ -8,6 +8,7 @@ from typing import Any
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import StreamField
@@ -23,6 +24,13 @@ SECTION_ICONS = [
     ("ribbon-women", _("🎗 ribbon (women)")),
     ("ribbon-children", _("🎀 ribbon (children)")),
 ]
+
+
+def _redirect_to(page: Page | None, request: Any) -> HttpResponseRedirect | None:
+    """302 to `page` unless previewing (editors must still see the index itself)."""
+    if page is None or getattr(request, "is_preview", False):
+        return None
+    return HttpResponseRedirect(page.get_url(request=request))
 
 
 class SectionIndexPage(BasePage):
@@ -49,6 +57,14 @@ class SectionIndexPage(BasePage):
     )
     icon = models.CharField(_("icon"), max_length=32, choices=SECTION_ICONS, default="ribbon-women")
     intro = StreamField(IntroBlock(), blank=True, verbose_name=_("intro"))
+    open_first_topic = models.BooleanField(
+        _("open the first topic"),
+        default=False,
+        help_text=_(
+            "The design has no section overview: visitors go straight to the first menu topic "
+            "(302). The overview stays visible in preview."
+        ),
+    )
 
     content_panels = [
         *Page.content_panels,
@@ -63,6 +79,7 @@ class SectionIndexPage(BasePage):
                 FieldPanel("icon"),
                 FieldPanel("colour_primary"),
                 FieldPanel("colour_accent"),
+                FieldPanel("open_first_topic"),
             ],
             heading=_("Section identity"),
         ),
@@ -103,6 +120,18 @@ class SectionIndexPage(BasePage):
         context["subsections"] = self.get_subsections()
         return context
 
+    def serve(self, request: Any, *args: Any, **kwargs: Any) -> HttpResponse:
+        if self.open_first_topic:
+            items = self.get_menu_items()
+            redirect = _redirect_to(items[0] if items else None, request)
+            if redirect is not None:
+                return redirect
+        response: HttpResponse = super().serve(request, *args, **kwargs)
+        return response
+
+    def get_sitemap_urls(self, request: Any = None) -> list[dict[str, Any]]:
+        return [] if self.open_first_topic else super().get_sitemap_urls(request)
+
 
 class TopicIndexPage(BasePage):
     """E.g. «Скрининг», «Диагностика и лечение»: intro + auto-listing of child articles."""
@@ -115,7 +144,21 @@ class TopicIndexPage(BasePage):
         help_text=_("Shown on the section index card and in the mega-menu."),
     )
 
-    content_panels = [*Page.content_panels, FieldPanel("summary"), FieldPanel("intro")]
+    is_variant_group = models.BooleanField(
+        _("children are variants of one topic"),
+        default=False,
+        help_text=_(
+            "E.g. breast / cervical cancer: the topic opens its first child page (302) and every "
+            "child shows a switch between the variants (Figma design)."
+        ),
+    )
+
+    content_panels = [
+        *Page.content_panels,
+        FieldPanel("summary"),
+        FieldPanel("intro"),
+        FieldPanel("is_variant_group"),
+    ]
     search_fields = [*Page.search_fields, index.SearchField("summary"), index.SearchField("intro")]
 
     parent_page_types = ["sections.SectionIndexPage", "sections.TopicIndexPage"]
@@ -131,7 +174,22 @@ class TopicIndexPage(BasePage):
     def get_articles(self) -> list[Page]:
         return list(self.get_children().live().specific())
 
+    def get_variants(self) -> list[Page]:
+        """The pages the variant switch offers (tree order), empty unless `is_variant_group`."""
+        return self.get_articles() if self.is_variant_group else []
+
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context(request, *args, **kwargs)
         context["articles"] = self.get_articles()
         return context
+
+    def serve(self, request: Any, *args: Any, **kwargs: Any) -> HttpResponse:
+        variants = self.get_variants()
+        redirect = _redirect_to(variants[0] if variants else None, request)
+        if redirect is not None:
+            return redirect
+        response: HttpResponse = super().serve(request, *args, **kwargs)
+        return response
+
+    def get_sitemap_urls(self, request: Any = None) -> list[dict[str, Any]]:
+        return [] if self.is_variant_group else super().get_sitemap_urls(request)

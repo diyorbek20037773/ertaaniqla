@@ -121,7 +121,8 @@ def test_editor_ru_article_translated_to_uz_approved_by_reviewer_live_in_both(br
     # 1. editor creates the article in Russian and submits it for medical review
     editor = cms_login(browser, "demo-editor", screenshots=True)
     shot(editor, "03-dashboard-editor")
-    parent = page_id(editor, locale="ru", slug="osvedomlennost")
+    # a plain topic: women's topics are breast/cervical variant groups since M5d (D-066)
+    parent = page_id(editor, locale="ru", slug="diagnostika-i-lechenie")
     editor.goto(f"{BASE_URL}/cms/pages/add/articles/articlepage/{parent}/")
     fill_article(editor, f"E2E статья {tag}", "Краткое описание для проверки процесса.", ru_slug)
     shot(editor, "04-add-article")
@@ -148,8 +149,8 @@ def test_editor_ru_article_translated_to_uz_approved_by_reviewer_live_in_both(br
     assert uz_id != ru_id
 
     anonymous = browser.new_context(extra_http_headers={"X-E2E": "1"})
-    ru_url = f"{BASE_URL}/ru/zhenskiy/osvedomlennost/{ru_slug}/"
-    uz_url = f"{BASE_URL}/uz/ayollar/ogohlik/{uz_slug}/"
+    ru_url = f"{BASE_URL}/ru/detskiy/diagnostika-i-lechenie/{ru_slug}/"
+    uz_url = f"{BASE_URL}/uz/bolalar/diagnostika-va-davolash/{uz_slug}/"
     assert anonymous.request.get(ru_url).status == 404  # nothing is public before review
 
     # 3. the medical reviewer sees both pages on the dashboard and approves them

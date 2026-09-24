@@ -1,17 +1,27 @@
 {% extends "base.html" %}
 {% load i18n wagtailcore_tags wagtailimages_tags core_tags %}
-{# articles/article_page.html — Context: page (ArticlePage), section, section_key. #}
+{# articles/article_page.html — Context: page (ArticlePage), section, section_key.
+   Variant pages (breast / cervical, D-066) follow the Figma layout: the disease switch replaces
+   the visible title, the h1 stays for screen readers and search engines. #}
 {% block og_type %}article{% endblock %}
 {% block content %}
-<article class="container article">
-  <header class="page-header">
-    <h1>{{ page.title }}</h1>
-    {% if page.summary %}<p class="page-header__lead">{{ page.summary }}</p>{% endif %}
-    {% include "components/page_meta.html" %}
-    {% if page.hero_image %}
-      {% picture page.hero_image format-{webp,jpeg} width-{400,800,1200} sizes="(max-width: 72rem) 100vw, 72rem" class="article__hero" %}
-    {% endif %}
-  </header>
+<article class="container article{% if page.variant_group %} article--designed{% endif %}">
+  {% if page.variant_group %}
+    {% variant_switch %}
+    <header class="page-header">
+      <h1 class="sr-only">{{ page.variant_group.title }}: {{ page.title }}</h1>
+      {% if page.verified_badge %}{% include "components/page_meta.html" %}{% endif %}
+    </header>
+  {% else %}
+    <header class="page-header">
+      <h1>{{ page.title }}</h1>
+      {% if page.summary %}<p class="page-header__lead">{{ page.summary }}</p>{% endif %}
+      {% include "components/page_meta.html" %}
+      {% if page.hero_image %}
+        {% picture page.hero_image format-{webp,jpeg} width-{400,800,1200} sizes="(max-width: 72rem) 100vw, 72rem" class="article__hero" %}
+      {% endif %}
+    </header>
+  {% endif %}
   <div class="article__body">
     {% for block in page.body %}{% include_block block %}{% endfor %}
   </div>

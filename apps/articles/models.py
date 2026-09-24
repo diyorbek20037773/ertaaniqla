@@ -6,6 +6,7 @@ from typing import Any
 
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
@@ -59,6 +60,13 @@ class ArticlePage(BasePage):
         verbose_name_plural = _("articles")
 
     jsonld_article = True
+
+    @cached_property
+    def variant_group(self) -> Page | None:
+        """Parent topic when this page is one variant of it (breast / cervical, D-066)."""
+        parent = self.get_parent()
+        parent = parent.specific if parent is not None else None
+        return parent if getattr(parent, "is_variant_group", False) else None
 
     def get_body_text(self) -> str:
         return f"{self.summary} {stream_plain_text(self.body)}"

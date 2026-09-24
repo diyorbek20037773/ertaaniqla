@@ -10,6 +10,9 @@ module.exports = {
   // `tool-result--{{ level }}`, `share__link--{{ key }}` …) never appear literally, so the
   // purge dropped them and the urgency colours silently vanished. Keep every BEM modifier.
   // Guarded by tests/perf/test_budgets.py::test_every_component_modifier_survives_the_purge.
+  // `block` is the wrapper class of every StreamField block template; Tailwind's `.block`
+  // utility (display:block, utilities layer) silently overrode their flex/grid layouts.
+  blocklist: ["block"],
   safelist: [{ pattern: /^(callout|tool-result|tool-result__test|share__link|symptom|steps|video|embed|pill|button|field|capsule-card|search-result|institution|material|cards-grid|text-card|text-cards|cta)--[a-z0-9_-]+$/ }],
   theme: {
     extend: {

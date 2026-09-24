@@ -243,13 +243,36 @@ Figma values (MCP): tabs bar h74 r50 border 2px rgba(183,0,83,.36) bg white 36% 
 gradient, inactive glass + gradient text #d5507f→#6f2a42.
 
 Phases (commit after each):
-- [ ] A assets: crop from PNGs → `static/img/figma/women/` (10 risk icons, mammography/UTT/MRT,
+**RESUME POINT (paused 2026-09-24 by the developer, "davom ettir" to continue):**
+- DONE A (a6a4011), B (6f2156a, 8bf6859) and most of C (WIP commit after them): women tree =
+  5 variant-group topics × {breast, cervical} + hidden directory (`apps/core/seed/tree.py` WOMEN,
+  `_wf()` lazy bodies, RETIRED + seeder `retire_pages` / `redirect_retired` / `order_children`);
+  content in `apps/core/seed/women_figma.py` (uz from Figma, ru = headings + RU_TODO, D-068 still
+  to be written into DECISIONS.md); models `SectionIndexPage.open_first_topic`,
+  `TopicIndexPage.is_variant_group` (302 to first child, migration sections 0006);
+  `{% variant_switch %}` + `article--designed` template; Tailwind `blocklist: ["block"]` (the
+  `.block` utility was overriding every block's flex/grid — old bug); container width = Figma 1484.
+- Dev DB is reseeded (old URLs 301 to the new pages). Visual compare tool:
+  scratchpad `compare.py <path> <figma png> <prefix>` (1728 px, side-by-side slices, scrolls for
+  lazy images). Breast awareness/screening/treatment/after pages already close to Figma.
+- NEXT: (1) compare support page + cervical page; (2) run full pytest — tests referencing old
+  women keys/URLs (tests/sections/test_seed.py, e2e test_screens PAGES
+  `/ru/zhenskiy/osvedomlennost/simptomy/`, `/uz/ayollar/skrining/qayerda/`, oz symptoms) must be
+  updated; (3) makemessages + translate new block labels (uz/ru); (4) DECISIONS D-068 (ru copy
+  placeholder), TZ_TRACE rows for D-064 deviations, COMPONENT_INVENTORY new blocks; (5) phase D
+  header (Asosiy · Haqimizda · Bo'limlar▾ · Shifokorlar · Savol-Javob, Uz pill, search pill; new
+  pages Haqimizda/Shifokorlar) + landing per Figma; (6) phase E gate. Findings to report to the
+  developer: Figma screening ages 40–75 contradict TZ 45–65 (kept + VERIFY); cervical «Sabablari»
+  cards were copied from breast in Figma (replaced by TZ risk headings); «Bezi jigarrang
+  epiteliy» looks like a mistranslation (kept verbatim for the doctor).
+
+- [x] A assets: crop from PNGs → `static/img/figma/women/` (10 risk icons, mammography/UTT/MRT,
   4 self-exam figures, "!" icon) — 1× only (MCP limit), note in D-067.
-- [ ] B blocks + CSS: page bg blobs (pink/lime), banner, tabs, disease switch, section h2 w/ flower,
+- [x] B blocks + CSS: page bg blobs (pink/lime), banner, tabs, disease switch, section h2 w/ flower,
   `text_card` (title, rich text, width full|narrow), steps `layout` capsules(+arrows)/illustrated,
   cards_grid icon cards, two/three columns as glass cards with flower bullets, callout `alert`
   (gradient "!"), centred CTA pill, `method_card` (lime label + image). Migrations for block changes.
-- [ ] C IA + seed: women → 5 tabs (awareness, screening, treatment, support, after) × {breast,
+- [~] C IA + seed (WIP, see resume point): women → 5 tabs (awareness, screening, treatment, support, after) × {breast,
   cervical} ArticlePages; TopicIndexPage/SectionIndexPage `is_variant_group` → 302 to first child;
   directory kept (CTA target, not in tabs); old keys (what/risk/symptoms/who/where/state/care)
   removed with Wagtail redirects; TZ care/after columns kept inside support/after pages.

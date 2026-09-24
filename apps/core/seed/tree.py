@@ -971,110 +971,135 @@ def intro_children(lang: str, ctx: SeedContext) -> Body:
 # ---------------------------------------------------------------------------
 # THE TREE
 # ---------------------------------------------------------------------------
+def _wf(name: str) -> BodyBuilder:
+    """Body builder from `women_figma` resolved at call time (that module imports this one)."""
+
+    def build(lang: Lang, ctx: SeedContext) -> Body:
+        from apps.core.seed import women_figma
+
+        body: Body = getattr(women_figma, name)(lang, ctx)
+        return body
+
+    build.__name__ = name
+    return build
+
+
+def _variants(key: str, breast: BodyBuilder, cervical: BodyBuilder) -> list[Node]:
+    """Breast / cervical pages of one women's topic (Figma switch, D-066)."""
+    return [
+        Node(
+            key=f"{key}.breast",
+            kind="article",
+            title={"uz": "Koʻkrak bezi saratoni", "ru": "Рак молочной железы"},
+            slug={"uz": "kokrak-bezi-saratoni", "ru": "rak-molochnoy-zhelezy"},
+            summary={
+                "uz": "Koʻkrak bezi saratoni (KBS) haqida tushunarli maʼlumot.",
+                "ru": "Понятная информация о раке молочной железы (РМЖ).",
+            },
+            body=breast,
+        ),
+        Node(
+            key=f"{key}.cervical",
+            kind="article",
+            title={"uz": "Bachadon boʻyni saratoni", "ru": "Рак шейки матки"},
+            slug={"uz": "bachadon-boyni-saratoni", "ru": "rak-sheyki-matki"},
+            summary={
+                "uz": "Bachadon boʻyni saratoni (BBS) haqida tushunarli maʼlumot.",
+                "ru": "Понятная информация о раке шейки матки (РШМ).",
+            },
+            body=cervical,
+        ),
+    ]
+
+
+def _women_topic(
+    key: str,
+    title: dict[str, str],
+    slug: dict[str, str],
+    summary: dict[str, str],
+    breast: BodyBuilder,
+    cervical: BodyBuilder,
+) -> Node:
+    return Node(
+        key=key,
+        kind="topic",
+        title=title,
+        slug=slug,
+        summary=summary,
+        children=_variants(key, breast, cervical),
+        extra={"fields": {"is_variant_group": True}},
+    )
+
+
+# Figma navigation (D-064): five tabs, each with a breast / cervical page; the TZ «Куда
+# обратиться» directory is the target of every «Murojaat qilish» button, «Государственная
+# поддержка» and «Уход и поддержка» live on «Qoʻllab-quvvatlash».
 WOMEN = Node(
     key="women",
     kind="section",
     title={"uz": "Ayollar saratoni", "ru": "Женский рак"},
     slug={"uz": "ayollar", "ru": "zhenskiy"},
     summary={
-        "uz": "Koʻkrak bezi va bachadon boʻyni saratoni: ogohlik, skrining, davolash",
+        "uz": "Koʻkrak bezi va bachadon boʻyni saratoni: xabardorlik, skrining, davolash",
         "ru": "Рак молочной железы и рак шейки матки: осведомленность, скрининг, лечение",
     },
     body=intro_women,
-    extra={"section_key": "women", "icon": "ribbon-women"},
+    extra={"section_key": "women", "icon": "ribbon-women", "fields": {"open_first_topic": True}},
     children=[
-        Node(
-            key="women.awareness",
-            kind="topic",
-            title={"uz": "Ogohlik", "ru": "Осведомленность"},
-            slug={"uz": "ogohlik", "ru": "osvedomlennost"},
-            summary={
-                "uz": "Kasallik haqida tushunarli maʼlumot: nima, xavf omillari, belgilar",
-                "ru": "Понятная информация о заболевании: что это, факторы риска, симптомы",
+        _women_topic(
+            "women.awareness",
+            {"uz": "Xabardorlik", "ru": "Осведомленность"},
+            {"uz": "ogohlik", "ru": "osvedomlennost"},
+            {
+                "uz": "Kasallik nima, bosqichlari, sabablari, belgilari va oʻz-oʻzini tekshirish",
+                "ru": "Что это за болезнь, стадии, причины, признаки и самообследование",
             },
-            children=[
-                Node(
-                    key="women.awareness.what",
-                    kind="article",
-                    title={
-                        "uz": "Koʻkrak bezi va bachadon boʻyni saratoni nima?",
-                        "ru": "Что такое РМЖ и РШМ",
-                    },
-                    slug={"uz": "saraton-nima", "ru": "chto-takoe-rmzh-i-rshm"},
-                    summary={
-                        "uz": "Kasalliklarning tushunarli izohi: organizmda nima sodir boʻladi, bosqichlar, Oʻzbekiston boʻyicha statistika.",
-                        "ru": "Понятное объяснение заболеваний: что происходит в организме, стадии, статистика по Узбекистану.",
-                    },
-                    body=body_w_what,
-                ),
-                Node(
-                    key="women.awareness.risk",
-                    kind="article",
-                    title={"uz": "Xavf omillari", "ru": "Факторы риска"},
-                    slug={"uz": "xavf-omillari", "ru": "faktory-riska"},
-                    summary={
-                        "uz": "Yosh, irsiyat, turmush tarzi, HPV infeksiyasi va bilish muhim boʻlgan boshqa omillar.",
-                        "ru": "Возраст, наследственность, образ жизни, ВПЧ-инфекция и другие факторы, о которых важно знать.",
-                    },
-                    body=body_w_risk,
-                ),
-                Node(
-                    key="women.awareness.symptoms",
-                    kind="article",
-                    title={"uz": "Belgilar", "ru": "Симптомы"},
-                    slug={"uz": "belgilar", "ru": "simptomy"},
-                    summary={
-                        "uz": "Eʼtiborsiz qoldirib boʻlmaydigan belgilar. Koʻkrakni mustaqil tekshirish — bosqichma-bosqich qoʻllanma.",
-                        "ru": "Признаки, которые нельзя игнорировать. Самообследование груди – пошаговое руководство.",
-                    },
-                    body=body_w_symptoms,
-                ),
-            ],
+            _wf("body_breast_awareness"),
+            _wf("body_cervical_awareness"),
         ),
-        Node(
-            key="women.screening",
-            kind="topic",
-            title={"uz": "Skrining", "ru": "Скрининг"},
-            slug={"uz": "skrining", "ru": "skrining"},
-            summary={
-                "uz": "Kimga va qanchalik tez-tez tekshiruvdan oʻtish kerak va buni qayerda bepul qilish mumkin",
-                "ru": "Кому и как часто проходить обследование и где это сделать бесплатно",
+        _women_topic(
+            "women.screening",
+            {"uz": "Skrining", "ru": "Скрининг"},
+            {"uz": "skrining", "ru": "skrining"},
+            {
+                "uz": "Skrining nima, usullari, kimga va qanchalik tez-tez, qayerda — bepul",
+                "ru": "Что такое скрининг, методы, кому и как часто, где — бесплатно",
             },
-            children=[
-                Node(
-                    key="women.screening.who",
-                    kind="article",
-                    title={"uz": "Kimga va qanchalik tez-tez", "ru": "Кому и как часто"},
-                    slug={"uz": "kimga-va-qachon", "ru": "komu-i-kak-chasto"},
-                    summary={
-                        "uz": "Mammografiya, UTT va HPV-test: yosh va davriylik.",
-                        "ru": "Маммография, УЗИ и ВПЧ-тест: возраст и периодичность.",
-                    },
-                    body=body_w_screening_who,
-                ),
-                Node(
-                    key="women.screening.where",
-                    kind="article",
-                    title={"uz": "Qayerda oʻtish mumkin", "ru": "Где пройти"},
-                    slug={"uz": "qayerda", "ru": "gde-proyti"},
-                    summary={
-                        "uz": "Oilaviy shifokorlik punktlari, poliklinikalar, Ona va bola salomatligi markazi — davlat dasturi doirasida bepul.",
-                        "ru": "Семейные врачебные пункты, поликлиники, Центр здоровья матери и ребенка — бесплатно в рамках государственной программы.",
-                    },
-                    body=body_w_screening_where,
-                ),
-            ],
+            _wf("body_breast_screening"),
+            _wf("body_cervical_screening"),
         ),
-        Node(
-            key="women.treatment",
-            kind="article",
-            title={"uz": "Davolashni tashkil etish", "ru": "Организация лечения"},
-            slug={"uz": "davolash", "ru": "organizatsiya-lecheniya"},
-            summary={
+        _women_topic(
+            "women.treatment",
+            {"uz": "Davolashni tashkil etish", "ru": "Организация лечения"},
+            {"uz": "davolash", "ru": "organizatsiya-lecheniya"},
+            {
                 "uz": "Bemorning bosqichma-bosqich yoʻli — ilk belgilardan davolash boshlanishigacha.",
                 "ru": "Пошаговый маршрут пациента — от первых симптомов до начала лечения.",
             },
-            body=body_w_treatment,
+            _wf("body_breast_treatment"),
+            _wf("body_cervical_treatment"),
+        ),
+        _women_topic(
+            "women.support",
+            {"uz": "Qoʻllab-quvvatlash", "ru": "Поддержка"},
+            {"uz": "qollab-quvvatlash", "ru": "podderzhka"},
+            {
+                "uz": "Bepul skrining, onkologik hushyorlik xonalari, huquq va majburiyatlar, parvarish.",
+                "ru": "Бесплатный скрининг, кабинеты онконастороженности, права и обязанности, уход.",
+            },
+            _wf("body_support"),
+            _wf("body_support"),
+        ),
+        _women_topic(
+            "women.after",
+            {"uz": "Kasallikdan keyingi hayot", "ru": "Жизнь после рака"},
+            {"uz": "saratondan-keyingi-hayot", "ru": "zhizn-posle-raka"},
+            {
+                "uz": "Davolashning tugashi — bu yangi boshlanish.",
+                "ru": "Окончание лечения — это новое начало.",
+            },
+            _wf("body_after"),
+            _wf("body_after"),
         ),
         Node(
             key="women.directory",
@@ -1086,44 +1111,62 @@ WOMEN = Node(
                 "ru": "Справочник учреждений: карта и список, фильтр по региону",
             },
             body=body_w_directory,
-        ),
-        Node(
-            key="women.state",
-            kind="article",
-            title={"uz": "Davlat qoʻllab-quvvatlashi", "ru": "Государственная поддержка"},
-            slug={"uz": "davlat-yordami", "ru": "gosudarstvennaya-podderzhka"},
-            summary={
-                "uz": "Bepul skrining, onkologik ogohlik xonalari, bemorlar va shifokorlarning huquq va majburiyatlari.",
-                "ru": "Бесплатный скрининг, кабинеты онконастороженности, права и обязанности пациентов и врачей.",
-            },
-            body=body_w_state,
-        ),
-        Node(
-            key="women.care",
-            kind="article",
-            title={"uz": "Parvarish va qoʻllab-quvvatlash", "ru": "Уход и поддержка"},
-            slug={"uz": "parvarish", "ru": "uhod-i-podderzhka"},
-            summary={
-                "uz": "Davolash davrida va undan keyin ayollar uchun amaliy maʼlumot va hissiy qoʻllab-quvvatlash.",
-                "ru": "Практическая информация и эмоциональная поддержка для женщин во время и после лечения.",
-            },
-            body=body_w_care,
-            show_in_menus=False,
-        ),
-        Node(
-            key="women.after",
-            kind="article",
-            title={"uz": "Saratondan keyingi hayot", "ru": "Жизнь после рака"},
-            slug={"uz": "saratondan-keyingi-hayot", "ru": "zhizn-posle-raka"},
-            summary={
-                "uz": "Davolashning tugashi — bu yangi boshlanish.",
-                "ru": "Окончание лечения — это новое начало.",
-            },
-            body=body_w_after,
             show_in_menus=False,
         ),
     ],
 )
+
+# Pages of the pre-Figma women's tree (M1…M5b), removed by the seeder with a permanent redirect
+# from their old URL to the page that now carries their content (D-064).
+RETIRED: list[dict[str, Any]] = [
+    {
+        "parent": "women.awareness",
+        "slug": {"uz": "saraton-nima", "ru": "chto-takoe-rmzh-i-rshm"},
+        "to": "women.awareness.breast",
+    },
+    {
+        "parent": "women.awareness",
+        "slug": {"uz": "xavf-omillari", "ru": "faktory-riska"},
+        "to": "women.awareness.breast",
+    },
+    {
+        "parent": "women.awareness",
+        "slug": {"uz": "belgilar", "ru": "simptomy"},
+        "to": "women.awareness.breast",
+    },
+    {
+        "parent": "women.screening",
+        "slug": {"uz": "kimga-va-qachon", "ru": "komu-i-kak-chasto"},
+        "to": "women.screening.breast",
+    },
+    {
+        "parent": "women.screening",
+        "slug": {"uz": "qayerda", "ru": "gde-proyti"},
+        "to": "women.screening.breast",
+    },
+    {
+        "parent": "women",
+        "slug": {"uz": "davolash", "ru": "organizatsiya-lecheniya"},
+        "kind": "article",
+        "to": "women.treatment.breast",
+    },
+    {
+        "parent": "women",
+        "slug": {"uz": "davlat-yordami", "ru": "gosudarstvennaya-podderzhka"},
+        "to": "women.support.breast",
+    },
+    {
+        "parent": "women",
+        "slug": {"uz": "parvarish", "ru": "uhod-i-podderzhka"},
+        "to": "women.support.breast",
+    },
+    {
+        "parent": "women",
+        "slug": {"uz": "saratondan-keyingi-hayot", "ru": "zhizn-posle-raka"},
+        "kind": "article",
+        "to": "women.after.breast",
+    },
+]
 
 CHILDREN = Node(
     key="children",

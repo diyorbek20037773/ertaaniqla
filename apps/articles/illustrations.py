@@ -24,6 +24,7 @@ ICONS: dict[str, tuple[str, str | Promise]] = {
     "late-birth": (_W + "risk-late-birth.png", _("Heart with baby")),
     "hormone": (_W + "risk-hormone.png", _("Molecule (hormones)")),
     "habits": (_W + "risk-habits.png", _("Head (habits)")),
+    "virus": (_W + "risk-virus.png", _("Virus (HPV)")),
 }
 
 ILLUSTRATIONS: dict[str, tuple[str, str | Promise]] = {

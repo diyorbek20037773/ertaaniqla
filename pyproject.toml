@@ -96,6 +96,7 @@ ignore = [
 "config/settings/**" = ["F403", "F405"]
 "**/management/commands/**" = ["T20"]
 "apps/core/seed/tree.py" = ["E501"]  # verbatim TZ strings
+"apps/core/seed/women_figma.py" = ["E501"]  # verbatim client copy from Figma
 "tests/sections/test_seed.py" = ["E501"]  # verbatim TZ strings
 
 [tool.ruff.lint.isort]

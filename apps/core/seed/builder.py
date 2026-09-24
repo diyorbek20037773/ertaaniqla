@@ -59,6 +59,7 @@ class Seeder:
         # pass 0: resolve pages that already exist so re-runs build complete bodies at once
         for node in tree.TREE:
             self.resolve_node(node, homes)
+        self.retire_pages()
         # pass 1: create every page (cross-links may be unresolved on a first run)
         for node in tree.TREE:
             self.build_node(node, homes)
@@ -71,6 +72,7 @@ class Seeder:
                 page = Page.objects.get(pk=page_id).specific
                 self.apply_body(page, node, lang, publish=True)
         self.ensure_redirects()
+        self.redirect_retired()
         return {"created": self.created, "updated": self.updated, "unchanged": self.unchanged}
 
     # --- home / site -----------------------------------------------------------------------
@@ -203,6 +205,20 @@ class Seeder:
             pages[lang] = self.upsert_page(node, lang, parents[lang], source=pages[default])
         for child in node.children:
             self.build_node(child, pages)
+        if node.extra.get("fields", {}).get("is_variant_group"):
+            self.order_children(node, pages)
+
+    def order_children(self, node: Node, parents: dict[str, Any]) -> None:
+        """Seeded variants first, in tree order: the group opens its first child (D-066) and
+        editors may add further articles after them."""
+        for lang, parent in parents.items():
+            wanted = [self.ctx.page_id(child.key, lang) for child in node.children]
+            current = list(parent.get_children().values_list("pk", flat=True)[: len(wanted)])
+            if current == wanted:
+                continue
+            for page_id in reversed(wanted):
+                if page_id is not None:
+                    Page.objects.get(pk=page_id).move(parent, pos="first-child")
 
     def model_for(self, kind: str) -> type[Page]:
         from apps.articles.models import ArticlePage
@@ -315,6 +331,47 @@ class Seeder:
         page.save_revision().publish()
         if count and changed:
             self.updated += 1
+
+    def _retired_locations(self) -> list[tuple[str, str, Any, str]]:
+        """(lang, slug, parent page, target key) of every retired page whose parent exists."""
+        found = []
+        for entry in tree.RETIRED:
+            for lang in self.languages:
+                parent_id = self.ctx.page_id(entry["parent"], lang)
+                if parent_id is not None:
+                    parent = Page.objects.get(pk=parent_id)
+                    found.append((lang, entry["slug"][lang], parent, entry["to"]))
+        return found
+
+    def retire_pages(self) -> None:
+        """Delete the pre-Figma women's articles (RETIRED); new pages may reuse a slug, so only
+        ArticlePages are removed and a re-run finds nothing."""
+        from apps.articles.models import ArticlePage
+
+        for lang, slug, parent, _target in self._retired_locations():
+            old = ArticlePage.objects.child_of(parent).filter(
+                slug=slug, locale=self.locales[lang]
+            )
+            for page in old:
+                logger.info("seed: retiring %s", page.url_path)
+                page.delete()
+                self.updated += 1
+
+    def redirect_retired(self) -> None:
+        """Permanent redirect from each retired URL to the page that now carries its content."""
+        for lang, slug, parent, target_key in self._retired_locations():
+            target_id = self.ctx.page_id(target_key, lang)
+            parent_url = parent.specific.url
+            if target_id is None or not parent_url:
+                continue
+            old_path = Redirect.normalise_path(f"{parent_url}{slug}/")
+            if Page.objects.child_of(parent).filter(slug=slug).exists():
+                continue  # a new page lives at this URL (the slug was reused by a topic)
+            Redirect.objects.update_or_create(
+                old_path=old_path,
+                site=None,
+                defaults={"redirect_page_id": target_id, "is_permanent": True},
+            )
 
     def ensure_redirects(self) -> None:
         for key, paths in tree.REDIRECTS.items():
