@@ -9,7 +9,9 @@
 {% load i18n static %}
 {% if section_key == "women" %}
   {# Figma «Group 67»: illustration mosaic across the full width, decorative only #}
-  <div class="section-banner" aria-hidden="true"><img class="section-banner__img" src="{% static 'img/figma/women/banner.svg' %}" alt="" width="1728" height="347" decoding="async" fetchpriority="high"></div>
+  <div class="section-banner" aria-hidden="true"><picture>{# LCP on 3G: raster WebP below desktop (19/37 KB vs the 95 KB SVG) #}
+    <source type="image/webp" media="(max-width: 63.99rem)" srcset="{% static 'img/figma/women/banner-780.webp' %} 780w, {% static 'img/figma/women/banner-1456.webp' %} 1456w" sizes="(max-width: 56.25rem) 900px, 100vw">
+    <img class="section-banner__img" src="{% static 'img/figma/women/banner.svg' %}" alt="" width="1728" height="347" decoding="async" fetchpriority="high"></picture></div>
 {% endif %}
 {% if items %}
   <div class="container"><nav class="section-tabs" aria-label="{% trans 'Section topics' %}">

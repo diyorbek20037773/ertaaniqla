@@ -3,8 +3,8 @@
     "collect": {
       "url": [
         "http://localhost:8001/uz/",
-        "http://localhost:8001/uz/ayollar/",
-        "http://localhost:8001/uz/ayollar/ogohlik/belgilar/"
+        "http://localhost:8001/uz/ayollar/skrining/kokrak-bezi-saratoni/",
+        "http://localhost:8001/uz/ayollar/ogohlik/kokrak-bezi-saratoni/"
       ],
       "numberOfRuns": 1,
       "settings": {
