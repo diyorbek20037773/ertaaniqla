@@ -258,13 +258,8 @@ Phases (commit after each):
   `ink.py` (text colour + glyph height from the PNG), `probe.py` (computed styles).
 - Known small gaps vs Figma (accepted): route capsule copy ~26px vs ~30px in Figma; Figma bold
   sub-heads in cards are pink («Prognoz va kasallik kechishi») — Wagtail rich text has no colour.
-- NEXT: (5) phase D header (Asosiy · Haqimizda · Bo'limlar▾ · Shifokorlar · Savol-Javob, Uz pill,
-  search pill; new pages Haqimizda/Shifokorlar) + landing per Figma (`Landing page.png`,
-  `Frame 10/11.png`, `Group 93.png`, `Shifokor ko'rigi.png`); (6) phase E gate. Findings to report
-  to the developer: Figma screening ages 40–75 contradict TZ 45–65 (kept + VERIFY); cervical
-  «Sabablari» cards were copied from breast in Figma (replaced by TZ risk headings); «Bezi
-  jigarrang epiteliy» looks like a mistranslation (kept verbatim for the doctor); the Figma
-  support frame ends with a duplicated «Onkologik hushyorlik» box (not reproduced).
+- DONE D (20d6a56 header, 1799f10 landing): Figma header (D-069), «Haqimizda»/«Shifokorlar» pages, landing hero/capsules/check cards. 492 passed.
+- NEXT: phase E gate — `make e2e` (dev stack on :8001; e2e nav steps already updated for the dropdowns), a11y/pa11y, Lighthouse, 390 px screenshots, TZ_TRACE check, tag `m5d`. Findings to report to the developer: Figma screening ages 40–75 vs TZ 45–65 (kept + VERIFY); cervical «Sabablari» cards copied from breast in Figma (TZ risk headings used); «Bezi jigarrang epiteliy» likely a mistranslation (kept for the doctor); Figma support frame ends with a duplicated box (not reproduced); landing check-card labels differ from the tool titles (D-069).
 
 - [x] A assets: crop from PNGs → `static/img/figma/women/` (10 risk icons, mammography/UTT/MRT,
   4 self-exam figures, "!" icon) — 1× only (MCP limit), note in D-067.
@@ -276,7 +271,7 @@ Phases (commit after each):
   cervical} ArticlePages; TopicIndexPage/SectionIndexPage `is_variant_group` → 302 to first child;
   directory kept (CTA target, not in tabs); old keys (what/risk/symptoms/who/where/state/care)
   removed with Wagtail redirects; TZ care/after columns kept inside support/after pages.
-- [ ] D header (Asosiy · Haqimizda · Bo'limlar▾ · Shifokorlar · Savol-Javob + Uz pill + search),
+- [x] D header (Asosiy · Haqimizda · Bo'limlar▾ · Shifokorlar · Savol-Javob + Uz pill + search),
   new pages Haqimizda/Shifokorlar, landing hero/capsules/check cards per Figma.
 - [ ] E verify: Playwright 1728/390 screenshots side-by-side with PNGs, make check, e2e, a11y,
   Lighthouse, TZ_TRACE deviation rows, commit + tag `m5d`.
