@@ -199,9 +199,14 @@ Also committed (b89bb7f):
   buttons, search input, footer), `print.css` flattens glass/gradients, COMPONENT_INVENTORY updated.
 
 Next:
-- [ ] **M5b-6** tools, directory, faq, feedback, glossary, search, stories, materials,
-  share/a11y toolbar/consent, 404/429/500 — no Figma frames exist for these, so they reuse the
-  primitives (glass, pill, label-chip, gradient heading) only; CSS + template classes, no Python.
+- [x] **M5b-6** (fc62be5) tools, directory, faq, feedback, glossary, search, stories, materials,
+  share/a11y toolbar/consent, 404/429/500 — landing primitives only (D-061). Desktop 1280 px
+  screenshots + feedback/search added to `tests/e2e/test_screens.py`.
+- [x] **Bugs found on the way (7c41764):** desktop header had NO menu (Chrome 131+
+  `::details-content`, fixed with CSS + `static/src/nav.js`, D-062); Tailwind purged data-built
+  modifiers → callout/tool-result urgency colours never rendered since M2 (safelist + purge test,
+  D-063); M5b-4 hero strings never extracted → English buttons on /uz/ (translated + test
+  `tests/core/test_translations_extracted.py`).
 - [ ] **M5b-7** axe/pa11y/Lighthouse run, print check, e2e screenshots refresh, TZ_TRACE deviation
   row for the contrast decision, `make check`, tag `m5b`. Children's visuals = **M5c** (client Figma).
 
