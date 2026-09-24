@@ -222,7 +222,15 @@ Next:
   Local Lighthouse: never use the config's `temporary-public-storage` upload — pass
   `--upload.target=filesystem` (reports would be public).
 
-**Next:** refresh `docs/FINAL_REPORT_uz.md` with M5b; then M5c (client frames) and M8 (launch inputs).
+**Local prod rehearsal (2026-09-24, ef317b8 + 2d59959):** `make local-prod-up` (RUNBOOK §10) — prod
+image + nginx TLS + worker/beat/backup + monitoring as project `ertaaniqla-local` at
+https://ertaaniqla.localhost (never `localhost`: HSTS). Found and fixed 5 prod bugs (healthcheck Host
+400, /metrics 301, nginx stale upstream 502, non-web roles unhealthy, Celery queue metric missing).
+Verified: `up --wait` green, Prometheus 9/9 targets up, both Grafana dashboards populated, audit
+event → Loki with trace_id, backup OK. Local creds live in `.env.localprod` (gitignored).
+Image tags: `ertaaniqla/web:prod` (prod, no dev deps) — keep `:local` for the dev stack.
+
+**Next:** M5c (client frames) and M8 (launch inputs).
 
 **Blocker of 2026-09-23 RESOLVED (2026-09-24):** root cause = **C: drive full (0.2 GB free)**;
 Docker's WSL VHD (`%LOCALAPPDATA%\Docker\wsl`, ~42 GB) lives on C:, image export hit ENOSPC and
