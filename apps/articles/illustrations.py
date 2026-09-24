@@ -7,12 +7,13 @@ Uploaded Wagtail images always win over these when both are set on a block.
 
 from __future__ import annotations
 
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
 _W = "img/figma/women/"
 
 # name → (static path, human label). Icons sit on the pink tile of an icon card.
-ICONS: dict[str, tuple[str, str]] = {
+ICONS: dict[str, tuple[str, str | Promise]] = {
     "women": (_W + "risk-women-risk.png", _("Woman silhouette")),
     "age": (_W + "risk-age.png", _("Age")),
     "breast-disease": (_W + "risk-breast-disease.png", _("Flower (breast disease)")),
@@ -25,7 +26,7 @@ ICONS: dict[str, tuple[str, str]] = {
     "habits": (_W + "risk-habits.png", _("Head (habits)")),
 }
 
-ILLUSTRATIONS: dict[str, tuple[str, str]] = {
+ILLUSTRATIONS: dict[str, tuple[str, str | Promise]] = {
     "mammography": (_W + "method-mammography.png", _("Mammography")),
     "ultrasound": (_W + "method-ultrasound.png", _("Ultrasound")),
     "mri": (_W + "method-mri.png", _("MRI")),
@@ -36,11 +37,11 @@ ILLUSTRATIONS: dict[str, tuple[str, str]] = {
 }
 
 
-def icon_choices() -> list[tuple[str, str]]:
+def icon_choices() -> list[tuple[str, str | Promise]]:
     return [(key, label) for key, (_path, label) in ICONS.items()]
 
 
-def illustration_choices() -> list[tuple[str, str]]:
+def illustration_choices() -> list[tuple[str, str | Promise]]:
     return [(key, label) for key, (_path, label) in ILLUSTRATIONS.items()]
 
 
