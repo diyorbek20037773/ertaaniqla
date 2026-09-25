@@ -40,7 +40,7 @@ jobs:
       CELERY_BROKER_URL: redis://localhost:6379/1
       PII_ENCRYPTION_KEYS: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
@@ -90,7 +90,7 @@ jobs:
     needs: [quality]
     if: vars.SONAR_HOST_URL != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0   # blame data for "new code"
       - uses: actions/download-artifact@v4
@@ -111,7 +111,7 @@ jobs:
     name: tailwind build · bundle budgets
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -155,7 +155,7 @@ jobs:
       CELERY_BROKER_URL: redis://localhost:6379/1
       PII_ENCRYPTION_KEYS: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
@@ -209,7 +209,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         if: github.event_name == 'push'
@@ -274,7 +274,7 @@ jobs:
       url: https://${{ vars.STAGING_DOMAIN }}
     concurrency: deploy-staging
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -301,7 +301,7 @@ jobs:
       url: https://${{ vars.PROD_DOMAIN }}
     concurrency: deploy-prod
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
