@@ -13,6 +13,7 @@ from .base import *
 from .base import (
     ALLOWED_HOSTS,
     APP_RELEASE,
+    CSRF_TRUSTED_ORIGINS,
     ENVIRONMENT,
     PII_ENCRYPTION_KEYS,
     SECRET_KEY,
@@ -38,6 +39,14 @@ SECURE_SSL_REDIRECT = True
 # HEALTHCHECK (Host: localhost), Prometheus (Host: web:8000) and deploy smoke checks. nginx
 # answers 444 to any Host it does not serve, so these names are unreachable from outside.
 ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, "localhost", "127.0.0.1", "web"]))
+
+# Railway demo host (D-070, D-072): its healthcheck probe sends `Host: healthcheck.railway.app`
+# (400 → the deploy is marked failed) and the public domain is only known at runtime.
+if env("RAILWAY_ENVIRONMENT_NAME", default=""):
+    _railway_domain = env("RAILWAY_PUBLIC_DOMAIN", default="")
+    ALLOWED_HOSTS += ["healthcheck.railway.app"] + ([_railway_domain] if _railway_domain else [])
+    if _railway_domain:
+        CSRF_TRUSTED_ORIGINS = [*CSRF_TRUSTED_ORIGINS, f"https://{_railway_domain}"]
 SECURE_REDIRECT_EXEMPT = [r"^healthz/$", r"^readyz/$", r"^metrics$"]
 SECURE_HSTS_SECONDS = 60 * 60 * 24 * 365
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True

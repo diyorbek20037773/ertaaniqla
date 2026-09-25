@@ -105,3 +105,18 @@ def test_public_pages_still_redirect_to_https(prod_env: None, client, settings) 
     settings.SECURE_REDIRECT_EXEMPT = prod.SECURE_REDIRECT_EXEMPT
     response = client.get("/uz/", HTTP_HOST="ertaaniqla.uz")
     assert response.status_code == 301 and response["Location"].startswith("https://")
+
+
+def test_railway_healthcheck_and_public_domain_are_allowed(
+    prod_env: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("RAILWAY_ENVIRONMENT_NAME", "production")
+    monkeypatch.setenv("RAILWAY_PUBLIC_DOMAIN", "demo.up.railway.app")
+    prod = _load_prod()
+    assert "healthcheck.railway.app" in prod.ALLOWED_HOSTS
+    assert "demo.up.railway.app" in prod.ALLOWED_HOSTS
+    assert "https://demo.up.railway.app" in prod.CSRF_TRUSTED_ORIGINS
+
+
+def test_railway_hosts_are_absent_elsewhere(prod_env: None) -> None:
+    assert "healthcheck.railway.app" not in _load_prod().ALLOWED_HOSTS
