@@ -935,6 +935,28 @@ def _tz_screening_rules(lang: str) -> dict[str, Any]:
     )
 
 
+PQ402_URL = "https://lex.uz/docs/7232845"
+
+
+def _pq402_programme(lang: str) -> dict[str, Any]:
+    """Client answer of 2026-09-25 (D-071): the free-screening sentence cites PQ-402 in full and
+    the whole paragraph links to the resolution on lex.uz."""
+    text = t(
+        lang,
+        uz(
+            "30, 40 va 50 yoshdagi ayollarda odam papilloma virusini hamda suyuqlik sitologiyasi "
+            "usuli yordamida bachadon bo'yni saratonini aniqlash skriningi bepul amalga "
+            "oshiriladi – “Bachadon bo'yni va ko'krak bezi saratonini nazorat qilish dasturi” "
+            "(O'zbekiston Respublikasi Prezidentining PQ-402-sonli qarori)."
+        ),
+        "Женщинам в возрасте 30, 40 и 50 лет бесплатно проводится скрининг для выявления рака "
+        "шейки матки — тест на вирус папилломы человека и жидкостная цитология — «Программа "
+        "контроля рака шейки матки и молочной железы» (Постановление Президента Республики "
+        "Узбекистан ПП-402).",
+    )
+    return text_card(p(f'<a href="{PQ402_URL}">{text}</a>'))
+
+
 def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
     if lang != "uz":
         body = _ru_skeleton(
@@ -942,7 +964,13 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
             ctx,
             ["Что такое скрининг?", "Чем скрининг отличается от профилактики?", "Методы скрининга"],
         )
-        return [*body[:-1], _tz_screening_rules(lang), _where_to_screen(lang), body[-1]]
+        return [
+            *body[:-1],
+            _tz_screening_rules(lang),
+            _pq402_programme(lang),
+            _where_to_screen(lang),
+            body[-1],
+        ]
     return [
         *_screening_intro(),
         heading(uz("Skrining usullari")),
@@ -1040,12 +1068,7 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
                 "beradi. Bu sog'liqni, ko'krakni va hayotni saqlab qolish imkonidir."
             )
         ),
-        text_card(
-            _lines(
-                "O'zbekiston Respublikasida tekshiruvlar bepul amalga oshiriladi — bu PQ-402 "
-                "Prezident qarori doirasidagi davlat dasturi tashabbusidir."
-            )
-        ),
+        _pq402_programme(lang),
         _where_to_screen(lang),
         appeal(lang, ctx),
         verify_note(lang),

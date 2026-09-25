@@ -263,6 +263,14 @@ Phases (commit after each):
 - M5d COMPLETE. Open items for the developer: the findings list below; `lighthouserc.json` uploads reports to Google's temporary-public-storage (pre-existing; switch to `filesystem` if the pages must not leave the machine).
 - Findings to report: Figma screening ages 40–75 vs TZ 45–65 (kept + VERIFY); cervical «Sabablari» cards copied from breast in Figma (TZ risk headings used); «Bezi jigarrang epiteliy» likely a mistranslation (kept for the doctor); Figma support frame ends with a duplicated box (not reproduced); landing check-card labels differ from the tool titles (D-069).
 - NEXT: M5c (children's Figma frames when the client delivers) and M8 (launch inputs).
+- **Client answers to the findings (2026-09-25, `docs/5 та банд.docx`, D-071):**
+  - [x] 1 breast screening: 40–75 sentence kept; free-screening card = client's PQ-402 text, whole
+    paragraph → https://lex.uz/docs/7232845 (uz + ru), test `test_breast_screening_links_the_pq402_programme`
+  - [x] 4 duplicated support box — confirmed, not added
+  - [ ] 2 cervical «Sabablari» cards — WAITING for the client's text (Nariman)
+  - [ ] 3 «Bezi jigarrang epiteliy» — WAITING, client is checking the texts
+  - [ ] 5 landing check-card labels — WAITING, client is checking the texts
+  - open question sent back: new text says HPV at 30, 40, 50 y; TZ + Figma programme card say 30–50 (yearly)
 
 - [x] A assets: crop from PNGs → `static/img/figma/women/` (10 risk icons, mammography/UTT/MRT,
   4 self-exam figures, "!" icon) — 1× only (MCP limit), note in D-067.

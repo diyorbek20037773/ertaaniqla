@@ -430,6 +430,16 @@ def test_patient_route_has_four_steps_with_pp402_deadline(seeded) -> None:
     assert steps.value["steps"][2]["deadline"] == "[[VERIFY: PP-402 referral deadlines]]"
 
 
+@pytest.mark.parametrize("lang", ["uz", "ru"])
+def test_breast_screening_links_the_pq402_programme(seeded, lang: str) -> None:
+    page = page_for("women.screening.breast", lang)
+    cards = [str(b.value["text"]) for b in page.body if b.block_type == "text_card"]
+    linked = [c for c in cards if 'href="https://lex.uz/docs/7232845"' in c]
+    assert len(linked) == 1
+    assert ("PQ-402" if lang == "uz" else "ПП-402") in linked[0]
+    assert "30, 40" in linked[0]
+
+
 def test_short_directory_url_redirects(seeded, client: Client) -> None:
     response = client.get("/uz/qayerga-murojaat/")
     assert response.status_code == 301
