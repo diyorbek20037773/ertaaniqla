@@ -7,7 +7,7 @@ requires-python = ">=3.12,<3.13"
 license = { text = "Proprietary" }
 dependencies = [
     "Django>=5.2,<5.3",
-    "wagtail>=7.0,<7.1",
+    "wagtail>=7.0,<8.1",
     "wagtail-localize>=1.14,<1.15",
     "psycopg[binary]>=3.2",
     "redis>=5.2",
