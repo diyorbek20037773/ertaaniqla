@@ -21,10 +21,12 @@ ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/opt/venv
 COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /uvx /bin/
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
-# INSTALL_DEV=1 (compose.dev) adds the dev group (debug toolbar, pytest); prod images never do
-RUN --mount=type=cache,target=/root/.cache/uv \
-    if [ "$INSTALL_DEV" = "1" ]; then uv sync --frozen --no-install-project; \
-    else uv sync --frozen --no-dev --no-install-project; fi
+# INSTALL_DEV=1 (compose.dev) adds the dev group (debug toolbar, pytest); prod images never do.
+# No BuildKit cache mount: Railway (temporary host, D-070) rejects mount ids without its
+# service-id prefix; the layer is still cached by pyproject.toml + uv.lock.
+RUN if [ "$INSTALL_DEV" = "1" ]; then uv sync --frozen --no-install-project; \
+    else uv sync --frozen --no-dev --no-install-project; fi \
+    && rm -rf /root/.cache/uv
 
 # ---------------------------------------------------------------------------
 # Stage 3: runtime
