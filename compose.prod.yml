@@ -260,7 +260,7 @@ services:
     logging: *logging
 
   redis-exporter:
-    image: oliver006/redis_exporter:v1.66.0
+    image: oliver006/redis_exporter:v1.91.1
     profiles: ["monitoring"]
     environment:
       REDIS_ADDR: redis://redis:6379
