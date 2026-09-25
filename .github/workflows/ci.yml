@@ -93,7 +93,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # blame data for "new code"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: coverage
       - name: SonarQube scan
@@ -171,7 +171,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libmagic1 gettext
       - run: uv sync --frozen
       - run: npm ci
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: static-dist
           path: static/dist
