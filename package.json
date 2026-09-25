@@ -18,7 +18,7 @@
   "devDependencies": {
     "@alpinejs/csp": "^3.17.3",
     "axe-core": "^4.10.2",
-    "concurrently": "^9.1.2",
+    "concurrently": "^10.0.5",
     "esbuild": "^0.25.0",
     "pa11y-ci": "^4.1.1",
     "svgo": "^4.1.0",
