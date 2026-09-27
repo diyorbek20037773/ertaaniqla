@@ -6,8 +6,9 @@
     <div class="prose">{{ page.thanks_text|richtext }}</div>
   </div>
 {% else %}
-  <form method="post" action="{{ page.url }}#feedback-form" hx-post="{{ page.url }}" hx-target="#feedback-form" hx-swap="innerHTML" novalidate>
+  <form method="post" action="{{ page.url }}#feedback-form" hx-post="{{ page.url }}" hx-target="#feedback-form" hx-swap="innerHTML" hx-sync="this:drop" hx-disabled-elt="find button[type=submit]" novalidate>
     {% csrf_token %}
+    {% include "components/form_rate_limited.html" %}
     {% include "components/form_errors.html" %}
     {{ form.page_url }}
     {% for field in form.visible_fields %}

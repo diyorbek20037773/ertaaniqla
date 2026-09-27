@@ -8,8 +8,9 @@
 {% else %}
   <h2>{% trans "Ask a doctor" %}</h2>
   {% if page.form_intro %}<div class="prose">{{ page.form_intro|richtext }}</div>{% endif %}
-  <form method="post" action="{{ page.url }}#question-form" hx-post="{{ page.url }}" hx-target="#question-form" hx-swap="innerHTML" novalidate>
+  <form method="post" action="{{ page.url }}#question-form" hx-post="{{ page.url }}" hx-target="#question-form" hx-swap="innerHTML" hx-sync="this:drop" hx-disabled-elt="find button[type=submit]" novalidate>
     {% csrf_token %}
+    {% include "components/form_rate_limited.html" %}
     {% include "components/form_errors.html" %}
     {% for field in form.visible_fields %}
       {% if field.name != "website" %}{% include "components/form_field.html" with field=field %}{% endif %}

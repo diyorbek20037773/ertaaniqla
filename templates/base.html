@@ -30,7 +30,7 @@
   {% section_style section as section_css %}{% if section_css %}<style nonce="{{ request.csp_nonce }}">{{ section_css }}</style>{% endif %}
   {% block extra_head %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}" data-section="{% block section_key %}{{ section_key }}{% endblock %}">
+<body class="{% block body_class %}{% endblock %}" data-section="{% block section_key %}{{ section_key }}{% endblock %}" data-request-error="{% trans "Something went wrong. Please try again later." %}">
   <a class="skip-link" href="#main">{% trans "Skip to main content" %}</a>
   {% include "components/a11y_toolbar.html" %}
   {% block header %}{% include "components/header.html" %}{% endblock %}

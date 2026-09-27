@@ -11,6 +11,14 @@ import { initNav } from "./nav.js";
 
 // The indicator CSS lives in components.css; htmx must not inject an inline <style> (CSP).
 htmx.config.includeIndicatorStyles = false;
+// EA-03: forms answer 400 (validation) and 429 (rate limit) with a partial that must be shown;
+// htmx 2 drops every 4xx/5xx body by default, so the submit button looked dead.
+htmx.config.responseHandling = [
+  { code: "204", swap: false },
+  { code: "[23]..", swap: true },
+  { code: "^(400|422|429)$", swap: true, error: false },
+  { code: "[45]..", swap: false, error: true },
+];
 window.htmx = htmx;
 window.Alpine = Alpine;
 
@@ -21,6 +29,27 @@ document.addEventListener("htmx:configRequest", (event) => {
     .find((row) => row.startsWith("csrftoken="))
     ?.split("=")[1];
   if (token) event.detail.headers["X-CSRFToken"] = token;
+});
+
+// Any other failure (500, network): a translated line inside the target, read out once.
+function showRequestError(event) {
+  const target = event.detail.target;
+  if (!target) return;
+  target.querySelector(".htmx-error")?.remove();
+  const message = document.createElement("p");
+  message.className = "form-errors htmx-error";
+  message.setAttribute("role", "alert");
+  message.textContent = document.body.dataset.requestError || "Error";
+  target.prepend(message);
+}
+document.addEventListener("htmx:responseError", showRequestError);
+document.addEventListener("htmx:sendError", showRequestError);
+
+// After a form swap move focus to the error summary or the thank-you box (spec §9).
+document.addEventListener("htmx:afterSwap", (event) => {
+  if (event.detail.requestConfig?.verb !== "post") return;
+  const box = event.detail.target.querySelector(".form-errors[tabindex], .form-success[tabindex]");
+  box?.focus();
 });
 
 function writeClipboard(text) {

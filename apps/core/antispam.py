@@ -60,3 +60,12 @@ def form_is_ratelimited(request: HttpRequest, group: str) -> bool:
             request, group=group, key="ip", rate=FORM_RATE, method=["POST"], increment=True
         )
     )
+
+
+# never echoed back into a re-rendered form: CSRF token, honeypot, Turnstile token
+_NOT_RETRIED = {"csrfmiddlewaretoken", "website", "cf-turnstile-response"}
+
+
+def retry_initial(request: HttpRequest) -> dict[str, str]:
+    """The visitor's POSTed values as `initial` for an unbound form (rate-limit retry, EA-03)."""
+    return {k: str(v) for k, v in request.POST.items() if k not in _NOT_RETRIED}

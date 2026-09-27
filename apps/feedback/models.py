@@ -15,7 +15,7 @@ from wagtail.models import Page
 from wagtail.snippets.models import register_snippet
 
 from apps.articles.blocks import IntroBlock, stream_plain_text
-from apps.core.antispam import form_is_ratelimited
+from apps.core.antispam import form_is_ratelimited, retry_initial
 from apps.core.fields import EncryptedCharField
 from apps.core.models import BasePage, TimeStampedModel
 
@@ -88,6 +88,7 @@ class FeedbackPage(BasePage):
             request=request, initial={"page_url": request.GET.get("from", "")[:500]}
         )
         context["submitted"] = kwargs.get("submitted", False)
+        context["rate_limited"] = kwargs.get("rate_limited", False)
         return context
 
     def serve(self, request: Any, *args: Any, **kwargs: Any) -> Any:
@@ -99,6 +100,10 @@ class FeedbackPage(BasePage):
         is_htmx = bool(request.headers.get("HX-Request"))
         if request.method == "POST":
             if form_is_ratelimited(request, group="feedback.submit"):
+                if is_htmx:  # EA-03: say why inside the form and keep the visitor's text
+                    form = FeedbackForm(initial=retry_initial(request), request=request)
+                    context = self.get_context(request, form=form, rate_limited=True)
+                    return TemplateResponse(request, "feedback/_form.html", context, status=429)
                 return TemplateResponse(request, "429.html", status=429)
             form = FeedbackForm(request.POST, request=request)
             if form.is_valid():

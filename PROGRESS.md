@@ -154,6 +154,13 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] verified on this machine (2026-09-17): `nginx -t` OK with sonar vhost; `compose config` (prod + profiles, sonarqube) OK; SonarQube stack healthy + real scan → quality gate PASSED; Jaeger v2 healthy, Django request exported, no query string / UA / IP in span tags, `/healthz/` not traced; Loki+Alloy ingest docker logs, `level` label, secret masking, audit LogQL query, ruler rules `health: ok`; Grafana provisions Loki datasource + dashboard and runs the LogQL
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
+- [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in
+  `docs/CHROME_AUDIT_PROMPT.md`; findings EA-01…EA-38; report text lives in the developer's chat).
+  Batches: P0 → P1 code → P2/P3; client/doctor/designer items listed, not coded.
+  - [x] EA-01 absolute URLs `http://localhost` → `sync_site` from `SITE_BASE_URL` (D-075)
+  - [x] EA-02 FAQ 500 (eager Celery + no SMTP) → `apps/core/queue.enqueue_on_commit`, Railway `EMAIL_URL=consolemail://`
+  - [x] EA-03 HTMX dropped 400/429/500 → `responseHandling`, in-form 429 partial, error line, focus, no double submit
+  - [x] EA-07 (Railway data) → `SEED_DEMO_ON_START=1` seeds + imports sample institutions
 
 ## Last command run (2026-09-24, M5b gate)
 

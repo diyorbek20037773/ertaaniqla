@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parent.parent
 # msgid: (uz, ru)
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
+    # audit fixes 2026-09-27 (EA-*)
+    "Something went wrong. Please try again later.": (
+        "Xatolik yuz berdi. Birozdan soʻng qayta urinib koʻring.",
+        "Произошла ошибка. Попробуйте ещё раз немного позже.",
+    ),
     "External URL": ("Tashqi havola", "Внешняя ссылка"),
     "Link": ("Havola", "Ссылка"),
     "Choose either a page or a URL, not both.": (

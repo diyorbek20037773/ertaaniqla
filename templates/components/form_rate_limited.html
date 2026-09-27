@@ -1,0 +1,11 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/form_rate_limited.html — shown inside an HTMX form when the POST hit the rate
+   limit (EA-03); the form keeps the visitor's values. Context: rate_limited (bool).
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+{% if rate_limited %}
+<div class="form-errors" role="alert" tabindex="-1" id="form-errors">
+  <p class="form-errors__title">{% trans "Too many requests" %}</p>
+  <p>{% trans "Please wait a minute and try again." %}</p>
+</div>
+{% endif %}
