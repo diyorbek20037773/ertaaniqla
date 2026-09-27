@@ -17,6 +17,12 @@ case "$ROLE" in
     if [[ "${RUN_MIGRATIONS_ON_START:-0}" == "1" ]]; then
       python manage.py migrate --noinput
       python manage.py createcachetable || true
+      # demo hosts only (D-075): idempotent seed tree + sample institutions, marked as samples
+      if [[ "${SEED_DEMO_ON_START:-0}" == "1" ]]; then
+        python manage.py seed_content
+        python manage.py import_institutions data/institutions.sample.csv
+      fi
+      python manage.py sync_site
     fi
     exec gunicorn config.wsgi:application \
       --bind "0.0.0.0:${PORT:-8000}" \
@@ -44,6 +50,7 @@ case "$ROLE" in
     wait_for_deps
     python manage.py migrate --noinput
     python manage.py createcachetable || true
+    python manage.py sync_site
     exec python manage.py check --deploy --fail-level ERROR
     ;;
   backup-cron)

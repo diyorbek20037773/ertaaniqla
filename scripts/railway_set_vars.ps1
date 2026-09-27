@@ -63,6 +63,10 @@ $vars = [ordered]@{
     "GUNICORN_WORKERS"            = "2"
     # pre-deploy hook does not run on Railway (D-073): the web role migrates on start
     "RUN_MIGRATIONS_ON_START"     = "1"
+    # demo only (D-075): idempotent seed tree + sample institutions on every start
+    "SEED_DEMO_ON_START"          = "1"
+    # no SMTP on the demo host: moderator e-mails go to the log (EA-02)
+    "EMAIL_URL"                   = "consolemail://"
     # Cloudflare's official always-pass test keys; replace with real ones before going live
     "TURNSTILE_SITE_KEY"          = "1x00000000000000000000AA"
     "TURNSTILE_SECRET_KEY"        = "1x0000000000000000000000000000000AA"
