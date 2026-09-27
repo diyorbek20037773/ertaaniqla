@@ -12,6 +12,12 @@ wait_for_deps() {
 case "$ROLE" in
   web)
     wait_for_deps
+    # Single-service hosts without a working pre-deploy hook (Railway demo, D-073) migrate here.
+    # Compose deploys keep the separate `migrate` role and leave this off.
+    if [[ "${RUN_MIGRATIONS_ON_START:-0}" == "1" ]]; then
+      python manage.py migrate --noinput
+      python manage.py createcachetable || true
+    fi
     exec gunicorn config.wsgi:application \
       --bind "0.0.0.0:${PORT:-8000}" \
       --workers "${GUNICORN_WORKERS:-5}" \
