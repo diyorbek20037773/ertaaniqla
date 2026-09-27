@@ -33,6 +33,8 @@ if not TURNSTILE_SECRET_KEY:
 # TLS is terminated by nginx; trust its header
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
+# one proxy hop in production: nginx on the VPS, the edge on Railway (D-074)
+TRUSTED_PROXY_COUNT = env.int("TRUSTED_PROXY_COUNT", default=1)
 SECURE_SSL_REDIRECT = True
 
 # Probes that stay inside the compose network and speak plain HTTP to gunicorn: the Docker

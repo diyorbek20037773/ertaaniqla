@@ -24,7 +24,7 @@ FORM_RATE = "5/m"  # spec §6: 5 POSTs per minute per IP
 
 
 def client_ip(request: HttpRequest) -> str:
-    """Client IP as seen by Django (nginx passes the real one; no XFF trust here)."""
+    """Client IP; ClientIPMiddleware has already resolved it behind trusted proxies."""
     return str(request.META.get("REMOTE_ADDR", "") or "")
 
 

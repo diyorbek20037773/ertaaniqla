@@ -99,6 +99,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    "apps.core.middleware.ClientIPMiddleware",  # real client IP behind proxies (D-074)
     "apps.core.middleware.RequestIDMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -208,6 +209,11 @@ AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_TEMPLATE = "core/lockout.html"
 AXES_ENABLE_ACCESS_FAILURE_LOG = True
+
+# Reverse proxies in front of gunicorn that append to X-Forwarded-For (nginx on the VPS,
+# Railway's edge). ClientIPMiddleware then puts the real client address in REMOTE_ADDR, which
+# axes, rate limits and the audit log read. 0 = no proxy (dev): the header is ignored (D-074).
+TRUSTED_PROXY_COUNT = env.int("TRUSTED_PROXY_COUNT", default=0)
 
 # wagtail-2fa
 WAGTAIL_2FA_REQUIRED = env.bool("CMS_2FA_REQUIRED", default=True)
@@ -473,13 +479,17 @@ LOGGING: dict[str, Any] = {
     "formatters": {
         "json": {
             "()": "pythonjsonlogger.json.JsonFormatter",
-            "format": "%(asctime)s %(levelname)s %(name)s %(request_id)s %(trace_id)s %(message)s",
+            "format": (
+                "%(asctime)s %(levelname)s %(level)s %(name)s %(request_id)s %(trace_id)s "
+                "%(message)s"
+            ),
         },
         "plain": {"format": "%(levelname)s %(name)s [%(request_id)s] %(message)s"},
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",  # stderr is flagged as error by log hosts (D-074)
             "formatter": "json",
             "filters": ["request_id"],
         },

@@ -1,8 +1,11 @@
-"""Request-scoped helpers: request id propagation and Permissions-Policy header."""
+"""Request-scoped helpers: client IP behind proxies, request id propagation and
+Permissions-Policy header."""
 
 from __future__ import annotations
 
+import contextlib
 import contextvars
+import ipaddress
 import re
 import uuid
 from collections.abc import Callable
@@ -14,6 +17,28 @@ request_id_var: contextvars.ContextVar[str] = contextvars.ContextVar("request_id
 
 REQUEST_ID_HEADER = "X-Request-ID"
 _SAFE_ID = re.compile(r"^[A-Za-z0-9\-]{8,64}$")
+
+
+class ClientIPMiddleware:
+    """Replace REMOTE_ADDR (the proxy's address) with the client address from X-Forwarded-For.
+
+    Only the entry appended by the last trusted proxy is used (`TRUSTED_PROXY_COUNT` from the
+    right), so a client cannot spoof its IP by sending its own header. Requests without the
+    header (Docker healthcheck, Prometheus) keep REMOTE_ADDR."""
+
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        count = getattr(settings, "TRUSTED_PROXY_COUNT", 0)
+        if count > 0:
+            hops = [h.strip() for h in request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")]
+            hops = [h for h in hops if h]
+            if len(hops) >= count:
+                candidate = hops[-count]
+                with contextlib.suppress(ValueError):
+                    request.META["REMOTE_ADDR"] = str(ipaddress.ip_address(candidate))
+        return self.get_response(request)
 
 
 class RequestIDMiddleware:
