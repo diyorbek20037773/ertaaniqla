@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from django.db import transaction
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from wagtail.models import Page
@@ -12,6 +11,7 @@ from wagtail.signals import page_published, page_unpublished, post_page_move
 
 from apps.core.cache import bump_page_cache
 from apps.core.navigation import invalidate_navigation
+from apps.core.queue import enqueue_on_commit
 
 
 @receiver(page_published)
@@ -51,8 +51,7 @@ def _generate_og_image(sender: Any, instance: Any, **kwargs: Any) -> None:
         return
     from apps.core.tasks import generate_og_image
 
-    page_id = instance.pk
-    transaction.on_commit(lambda: generate_og_image.delay(page_id))
+    enqueue_on_commit(generate_og_image, instance.pk)
 
 
 @receiver(page_published)
@@ -62,5 +61,4 @@ def _prefetch_renditions(sender: Any, instance: Any, **kwargs: Any) -> None:
         return
     from apps.core.tasks import prefetch_renditions
 
-    page_id = instance.pk
-    transaction.on_commit(lambda: prefetch_renditions.delay(page_id))
+    enqueue_on_commit(prefetch_renditions, instance.pk)

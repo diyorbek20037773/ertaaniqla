@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
+from apps.core.queue import enqueue_on_commit
 from apps.media_library.models import PortalImage, Video, VideoSource, VideoStatus
 from apps.media_library.services import strip_exif
 
@@ -35,4 +35,4 @@ def _enqueue_transcoding(sender: Any, instance: Video, **kwargs: Any) -> None:
         return
     from apps.media_library.tasks import transcode_video
 
-    transaction.on_commit(lambda: transcode_video.delay(instance.pk))
+    enqueue_on_commit(transcode_video, instance.pk)

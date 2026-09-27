@@ -7,10 +7,10 @@ from datetime import timedelta
 from typing import Any
 
 from django.conf import settings
-from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import get_language
 
+from apps.core.queue import enqueue_on_commit
 from apps.faq.models import Question, QuestionStatus
 
 logger = logging.getLogger("ertaaniqla.faq")
@@ -22,7 +22,7 @@ def submit_question(form: Any, request: Any) -> Question:
     question.save()
     from apps.faq.tasks import notify_moderators
 
-    transaction.on_commit(lambda: notify_moderators.delay(question.pk))
+    enqueue_on_commit(notify_moderators, question.pk)
     logger.info("question %s submitted (section=%s)", question.pk, question.section)
     return question
 

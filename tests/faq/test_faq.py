@@ -57,6 +57,23 @@ def test_submit_creates_encrypted_question_and_emails_moderators(
     assert f"#{question.pk}" in mail.outbox[0].subject
 
 
+@override_settings(
+    EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend",
+    EMAIL_HOST="127.0.0.1",
+    EMAIL_PORT=9,
+)
+def test_submit_succeeds_when_moderator_mail_fails(
+    page, client: Client, django_capture_on_commit_callbacks
+) -> None:
+    """EA-02: an unreachable SMTP server (eager Celery on Railway) must not turn a saved
+    question into a 500 — the notification error is logged instead."""
+    with django_capture_on_commit_callbacks(execute=True):
+        response = client.post(page.url, VALID, HTTP_HX_REQUEST="true")
+    assert response.status_code == 200
+    assert "form-success" in response.content.decode()
+    assert Question.objects.count() == 1
+
+
 def test_htmx_submit_returns_partial(page, client: Client) -> None:
     response = client.post(page.url, VALID, HTTP_HX_REQUEST="true")
     assert response.status_code == 200
@@ -148,3 +165,17 @@ def test_purge_task_wrapper() -> None:
     from apps.faq.tasks import purge_contacts as task
 
     assert task() == 0
+
+
+@freeze_time("2026-01-02 12:00:00")
+def test_htmx_rate_limit_is_shown_inside_the_form(page, client: Client) -> None:
+    """EA-03: the HTMX 429 answer is a form partial that keeps the text and says why."""
+    for _ in range(5):
+        client.post(page.url, VALID, HTTP_HX_REQUEST="true")
+    response = client.post(page.url, VALID, HTTP_HX_REQUEST="true")
+    assert response.status_code == 429
+    html = response.content.decode()
+    assert "<html" not in html
+    assert 'role="alert"' in html
+    assert "Qachon mammografiya qilishim kerak?" in html  # visitor's text kept
+    assert "hp-field" in html and 'value="http' not in html
