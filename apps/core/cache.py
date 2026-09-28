@@ -97,6 +97,12 @@ class PageCacheMiddleware:
             response["X-Page-Cache"] = "HIT"
             return response
         response = self.get_response(request)
+        if request.META.get("CSRF_COOKIE_NEEDS_UPDATE"):
+            # The page rendered {% csrf_token %}: CsrfViewMiddleware adds the cookie only after
+            # this middleware, so caching it would hand the next visitor someone else's token
+            # and no cookie — a 403 on submit (EA-25).
+            response["Cache-Control"] = "private, no-cache"
+            return response
         if _cacheable_response(response):
             seconds = cache_seconds()
             response["Cache-Control"] = (

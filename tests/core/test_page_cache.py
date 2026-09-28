@@ -82,3 +82,18 @@ def test_consent_banner_and_toolbar_markup(seeded, client: Client) -> None:
     settings_obj.save()
     html = client.get("/uz/").content.decode()
     assert 'data-metrika-id="12345678"' in html and "mc.yandex.ru" not in html
+
+
+@override_settings(PAGE_CACHE_SECONDS=300)
+def test_pages_with_a_csrf_token_are_never_cached(seeded) -> None:
+    """EA-25: a cached form page carried the first visitor's CSRF token and set no cookie
+    for the next one (403 on submit). Pages that use a token stay private and uncached."""
+    first = Client().get("/uz/savol-javob/")
+    assert "csrftoken" in first.cookies
+    assert "public" not in first.get("Cache-Control", "")
+    second = Client().get("/uz/savol-javob/")
+    assert second.get("X-Page-Cache") != "HIT"
+    assert "csrftoken" in second.cookies
+    # plain content pages are still cached
+    Client().get("/uz/lugat/")
+    assert Client().get("/uz/lugat/").get("X-Page-Cache") == "HIT"
