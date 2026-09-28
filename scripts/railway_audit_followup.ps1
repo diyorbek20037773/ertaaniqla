@@ -12,12 +12,11 @@ $env:Path = "$(npm prefix -g);$env:Path"
 if (-not (Get-Command railway -ErrorAction SilentlyContinue)) { throw "Railway CLI not found (npm install -g @railway/cli)" }
 
 function Step($text) { Write-Host ""; Write-Host "== $text" -ForegroundColor Cyan }
-# railway ssh joins the words and runs them in the container's shell (cwd /app). No quotes are
-# sent: Windows PowerShell 5.1 mangles embedded double quotes of native arguments.
+# railway ssh keeps each argument as is, so the command goes to `sh -c` as ONE argument (cwd
+# /app). It must hold no double quotes: Windows PowerShell 5.1 mangles them in native arguments.
 function Remote($cmd) {
     Write-Host "> $cmd" -ForegroundColor DarkGray
-    $words = $cmd -split " "
-    railway ssh --service $Service -- @words 2>$null
+    railway ssh --service $Service -- sh -c $cmd 2>$null
     if ($LASTEXITCODE -ne 0) { Write-Host "   (failed, exit $LASTEXITCODE)" -ForegroundColor Red }
 }
 # Python for `manage.py shell`, shipped as base64 so it survives both shells unchanged.
