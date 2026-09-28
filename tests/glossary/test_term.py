@@ -17,3 +17,14 @@ def test_term_translation_and_synonyms(seeded) -> None:
     assert term.synonym_list == ["biopsiya", "биопсия"]
     assert str(term) == "Biopsiya"
     assert "[[TODO" in term.definition
+
+
+def test_glossary_block_renders_definitions_as_rich_text(seeded, client) -> None:
+    """EA-12: the inline glossary block showed `<p>…</p>` as literal text."""
+    for url in (
+        "/uz/bolalar/diagnostika-va-davolash/diagnostika/",
+        "/ru/detskiy/diagnostika-i-lechenie/diagnostika/",
+    ):
+        html = client.get(url).content.decode()
+        assert "glossary-terms__definition" in html
+        assert "&lt;p&gt;" not in html, url

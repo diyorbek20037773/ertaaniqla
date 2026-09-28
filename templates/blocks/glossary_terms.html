@@ -1,11 +1,11 @@
-{% load i18n %}
+{% load i18n wagtailcore_tags %}
 <section class="block block--glossary glossary-terms">
   <h2 class="glossary-terms__heading">{% if value.title %}{{ value.title }}{% else %}{% trans "Glossary" %}{% endif %}</h2>
   <dl class="glossary-terms__list">
     {% for term in value.terms %}
       {% if term %}
         <dt class="glossary-terms__term" id="term-{{ term.pk }}">{{ term.term }}</dt>
-        <dd class="glossary-terms__definition">{{ term.definition }}</dd>
+        <dd class="glossary-terms__definition">{{ term.definition|richtext }}</dd>
       {% endif %}
     {% endfor %}
   </dl>
