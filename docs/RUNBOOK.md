@@ -67,7 +67,8 @@ changing the domain, set `SITE_BASE_URL` and redeploy (or run `sync_site` once).
 
 No nginx, no worker. `scripts/railway_set_vars.ps1` sets everything, including the demo flags
 `ROBOTS_NOINDEX=true`, `SERVE_MEDIA=true`, `DJANGO_ADMIN_ENABLED=false`, `SEED_DEMO_ON_START=1`
-and `EMAIL_URL=consolemail://`. Add a Railway **volume mounted at `/app/media`** or uploads and
+and `EMAIL_URL=consolemail://`. Add a Railway **volume mounted at `/srv/media`** (the image's
+`MEDIA_ROOT`; `RAILWAY_RUN_UID=0` lets the process write to the root-owned volume) or uploads and
 OG images vanish on redeploy (`regenerate_social_images` re-renders the OG ones on start). The
 start-up seed only fills an empty database — to push new seed text into a seeded demo, run
 `railway run python manage.py seed_content` by hand (it overwrites page bodies: never after

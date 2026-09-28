@@ -67,8 +67,10 @@ $vars = [ordered]@{
     "SEED_DEMO_ON_START"          = "1"
     # demo host must not be indexed (EA-14)
     "ROBOTS_NOINDEX"              = "true"
-    # no nginx in front: Django serves public /media/ (EA-04); mount a volume at /app/media
+    # no nginx in front: Django serves public /media/ (EA-04); mount a volume at /srv/media
     "SERVE_MEDIA"                 = "true"
+    # Railway mounts volumes as root; the image runs as uid 1000, which could not write media
+    "RAILWAY_RUN_UID"             = "0"
     # public demo: Django admin off, the Wagtail CMS (/cms/, 2FA) is enough (EA-24)
     "DJANGO_ADMIN_ENABLED"        = "false"
     # no SMTP on the demo host: moderator e-mails go to the log (EA-02)
