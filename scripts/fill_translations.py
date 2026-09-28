@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent.parent
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
     # audit fixes 2026-09-27 (EA-*)
+    "Erta aniqla — administration": ("Erta aniqla — boshqaruv", "Эрта аниқла — администрирование"),
+    "Administration": ("Boshqaruv", "Администрирование"),
     "Something went wrong. Please try again later.": (
         "Xatolik yuz berdi. Birozdan soʻng qayta urinib koʻring.",
         "Произошла ошибка. Попробуйте ещё раз немного позже.",

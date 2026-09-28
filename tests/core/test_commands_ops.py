@@ -148,19 +148,25 @@ def test_serve_media_route_skips_private_paths() -> None:
     """EA-04: without nginx Django serves /media/, but never documents or raw video uploads."""
     import importlib
 
-    from django.urls import Resolver404, resolve
+    from django.urls import Resolver404, clear_url_caches, resolve
+    from django.views.static import serve
 
     import config.urls
 
     try:
         with override_settings(SERVE_MEDIA=True, DEBUG=False):
             importlib.reload(config.urls)
+            clear_url_caches()
             assert resolve("/media/og/uz-3.png", urlconf=config.urls).url_name is None
             for private in ("/media/documents/consent.pdf", "/media/videos/source/a.mp4"):
-                with pytest.raises(Resolver404):
-                    resolve(private, urlconf=config.urls)
+                try:
+                    match = resolve(private, urlconf=config.urls)
+                except Resolver404:
+                    match = None
+                assert match is None or match.func is not serve, private
     finally:
         importlib.reload(config.urls)
+        clear_url_caches()
 
 
 def test_start_up_seeding_never_overwrites_edits(seeded) -> None:

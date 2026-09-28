@@ -150,3 +150,27 @@ def test_404_offers_search_and_where_to_go(seeded, client: Client) -> None:
     html = response.content.decode()
     assert 'action="/ru/poisk/"' in html
     assert 'href="/ru/zhenskiy/kuda-obratitsya/"' in html
+
+
+def test_django_admin_can_be_switched_off(client: Client) -> None:
+    """EA-24: DJANGO_ADMIN_ENABLED=false → /django-admin/ is gone; title is translated."""
+    import importlib
+
+    from django.urls import Resolver404, clear_url_caches, resolve
+
+    import config.urls
+
+    assert "Erta aniqla" in client.get("/django-admin/login/").content.decode()
+    try:
+        with override_settings(DJANGO_ADMIN_ENABLED=False):
+            importlib.reload(config.urls)
+            clear_url_caches()
+            try:
+                match = resolve("/django-admin/login/", urlconf=config.urls)
+            except Resolver404:
+                match = None
+            # a Wagtail catch-all may still match the path; it must not be the admin
+            assert match is None or match.namespace != "admin"
+    finally:
+        importlib.reload(config.urls)
+        clear_url_caches()

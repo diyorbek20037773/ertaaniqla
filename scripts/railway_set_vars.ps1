@@ -69,6 +69,8 @@ $vars = [ordered]@{
     "ROBOTS_NOINDEX"              = "true"
     # no nginx in front: Django serves public /media/ (EA-04); mount a volume at /app/media
     "SERVE_MEDIA"                 = "true"
+    # public demo: Django admin off, the Wagtail CMS (/cms/, 2FA) is enough (EA-24)
+    "DJANGO_ADMIN_ENABLED"        = "false"
     # no SMTP on the demo host: moderator e-mails go to the log (EA-02)
     "EMAIL_URL"                   = "consolemail://"
     # Cloudflare's official always-pass test keys; replace with real ones before going live

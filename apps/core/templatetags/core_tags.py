@@ -4,9 +4,9 @@ phone formatting. Every tag degrades gracefully when `page` is missing (404/500,
 from __future__ import annotations
 
 import re
-from urllib.parse import urlencode
 from dataclasses import replace
 from typing import Any
+from urllib.parse import urlencode
 
 from django import template
 from django.conf import settings

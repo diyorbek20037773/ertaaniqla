@@ -36,11 +36,17 @@ urlpatterns = [
     path("sitemap.xml", core_views.sitemap_index, name="sitemap_index"),
     path("", core_views.language_redirect, name="language_redirect"),
     path("i18n/", include("django.conf.urls.i18n")),
-    path("django-admin/", admin.site.urls),
     path(f"{settings.CMS_URL_PREFIX}/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("metrics", core_views.metrics, name="metrics"),
 ]
+
+# Superuser-only Django admin (users, low-level data). Off on the public host when the CMS covers
+# the need — DJANGO_ADMIN_ENABLED=false answers 404 (EA-24).
+if settings.DJANGO_ADMIN_ENABLED:
+    admin.site.site_header = admin.site.site_title = _("Erta aniqla — administration")
+    admin.site.index_title = _("Administration")
+    urlpatterns.append(path("django-admin/", admin.site.urls))
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

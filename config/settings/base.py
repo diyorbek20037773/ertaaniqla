@@ -310,6 +310,8 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = env("MEDIA_ROOT", default=str(BASE_DIR / "media"))
 # Django serves public /media/ itself — only on hosts without nginx (Railway demo, EA-04)
 SERVE_MEDIA = env.bool("SERVE_MEDIA", default=False)
+# /django-admin/ (superusers only); false → 404, the Wagtail CMS stays at CMS_URL_PREFIX (EA-24)
+DJANGO_ADMIN_ENABLED = env.bool("DJANGO_ADMIN_ENABLED", default=True)
 WHITENOISE_MAX_AGE = 60 * 60 * 24 * 365
 
 MEDIA_STORAGE = env("MEDIA_STORAGE", default="local")

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 08:30+0500\n"
+"POT-Creation-Date: 2026-09-28 08:44+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1505,6 +1505,14 @@ msgstr "этапы медицинской проверки"
 
 msgid "Erta aniqla"
 msgstr "Эрта аниқла"
+
+#| msgid "Erta aniqla — home"
+msgid "Erta aniqla — administration"
+msgstr "Эрта аниқла — администрирование"
+
+#| msgid "definition"
+msgid "Administration"
+msgstr "Администрирование"
 
 msgid "qidiruv/"
 msgstr "poisk/"
