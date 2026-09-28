@@ -124,6 +124,8 @@ PROTECTED_RE = re.compile(
     r"|&#?\w+;"  # HTML entities
 )
 TSIYA_RE = re.compile(r"ts(?=i[yo])")
+# Django autoescape writes ' as &#x27; — inside a word it is an apostrophe, not an entity (EA-11)
+ESCAPED_APOSTROPHE_RE = re.compile(r"(?<=[A-Za-z])&#(?:x27|39);(?=[A-Za-z])")
 
 
 def _normalise(word: str) -> str:
@@ -142,6 +144,10 @@ def _letters(lower: str, previous: str = "") -> str:
     while i < len(lower):
         pair = lower[i : i + 2]
         char = lower[i]
+        if lower[i : i + 3] == "yo" + TURNED_COMMA:  # yoʻl → йўл, not ёʻл (EA-11)
+            out.append("йў")
+            i += 3
+            continue
         if pair in _DIGRAPHS:
             out.append(_DIGRAPHS[pair])
             i += 2
@@ -195,6 +201,7 @@ def transliterate(text: str) -> str:
     """Uzbek Latin plain text → Cyrillic; protected chunks (URLs, placeholders…) untouched."""
     if not text or not re.search(r"[A-Za-z]", text):
         return text
+    text = ESCAPED_APOSTROPHE_RE.sub("'", text)
     parts: list[str] = []
     last = 0
     for match in PROTECTED_RE.finditer(text):

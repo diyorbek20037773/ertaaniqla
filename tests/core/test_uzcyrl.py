@@ -57,6 +57,17 @@ from apps.core.uzcyrl import transliterate, transliterate_html, transliterate_js
         ("PQ-402 boʻyicha", "ПҚ-402 бўйича"),
         ("UTT", "УТТ"),
         ("45–65 yosh", "45–65 ёш"),
+        # EA-11: yoʻ is й + ў, and an autoescaped ASCII apostrophe still makes oʻ
+        ("yoʻl", "йўл"),
+        ("yoʻq", "йўқ"),
+        ("Yoʻllanma", "Йўлланма"),
+        ("yoʻnalishi", "йўналиши"),
+        ("yolgʻon", "ёлғон"),
+        ("oʻtish", "ўтиш"),
+        ("o'tish", "ўтиш"),
+        ("Qayerda o&#x27;tish", "Қаерда ўтиш"),
+        ("to&#39;g&#39;ri", "тўғри"),
+        ("gʻoya", "ғоя"),
     ],
 )
 def test_word_rules(latin: str, cyrillic: str) -> None:
