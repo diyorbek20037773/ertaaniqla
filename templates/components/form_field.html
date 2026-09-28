@@ -3,9 +3,13 @@
    Context: field (BoundField). Errors are linked via aria-describedby (set in forms.py).
    Checkbox fields render label after the input.
    --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
 <div class="field{% if field.errors %} field--error{% endif %}{% if field.field.widget.input_type == 'checkbox' %} field--checkbox{% endif %}">
   {% if field.field.widget.input_type == "checkbox" %}
     {{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
+    {% if field.name == "consent_privacy" and settings.core.SiteSettings.privacy_page %}{# EA-05: new tab keeps the typed text #}
+      <a class="field__link" href="{{ settings.core.SiteSettings.privacy_page.localized.url }}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a>
+    {% endif %}
   {% else %}
     <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span aria-hidden="true">*</span>{% endif %}</label>
     {{ field }}

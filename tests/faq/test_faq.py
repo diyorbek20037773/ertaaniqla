@@ -179,3 +179,16 @@ def test_htmx_rate_limit_is_shown_inside_the_form(page, client: Client) -> None:
     assert 'role="alert"' in html
     assert "Qachon mammografiya qilishim kerak?" in html  # visitor's text kept
     assert "hp-field" in html and 'value="http' not in html
+
+
+def test_privacy_policy_is_linked_from_the_form_and_footer(page, client: Client) -> None:
+    """EA-05: the consent checkbox refers to a privacy policy — it must exist and be linked."""
+    for form_url, policy_url in (
+        ("/uz/savol-javob/", "/uz/maxfiylik-siyosati/"),
+        ("/ru/voprosy-otvety/", "/ru/politika-konfidentsialnosti/"),
+        ("/uz/qayta-aloqa/", "/uz/maxfiylik-siyosati/"),
+    ):
+        html = client.get(form_url).content.decode()
+        assert f'class="field__link" href="{policy_url}"' in html, form_url
+        assert html.count(f'href="{policy_url}"') >= 2  # form + footer
+        assert client.get(policy_url).status_code == 200

@@ -1362,6 +1362,53 @@ DOCTORS = Node(
     ],
 )
 
+PRIVACY = Node(
+    key="privacy",
+    kind="article",
+    title={"uz": "Maxfiylik siyosati", "ru": "Политика конфиденциальности"},
+    slug={"uz": "maxfiylik-siyosati", "ru": "politika-konfidentsialnosti"},
+    summary={
+        "uz": "Portal qanday maʼlumotlarni toʻplaydi, qancha saqlaydi va qanday himoya qiladi",
+        "ru": "Какие данные собирает портал, сколько хранит и как защищает",
+    },
+    show_in_menus=False,
+    # EA-05: the consent checkboxes point here. The legal text is the client's lawyer's —
+    # only the outline of what the page must cover is seeded.
+    body=lambda lang, ctx: [
+        {
+            "type": "rich_text",
+            "value": p("[[TODO: legal text — client lawyer]]")
+            + "<ul>"
+            + "".join(
+                f"<li>{t(lang, uz, ru)}</li>"
+                for uz, ru in (
+                    (
+                        "Qaysi maʼlumotlar toʻplanadi (ism va aloqa — ixtiyoriy, savol matni)",
+                        "Какие данные собираются (имя и контакт — по желанию, текст вопроса)",
+                    ),
+                    ("Qanday maqsadda ishlatiladi", "Для чего они используются"),
+                    (
+                        "Qancha saqlanadi (aloqa maʼlumoti javobdan 90 kun oʻtib, "
+                        "xabarlar 180 kundan keyin oʻchiriladi)",
+                        "Сколько хранятся (контакт удаляется через 90 дней после ответа, "
+                        "сообщения — через 180 дней)",
+                    ),
+                    ("Qayerda saqlanadi va kim koʻra oladi", "Где хранятся и кто их видит"),
+                    (
+                        "Foydalanuvchining huquqlari va murojaat uchun aloqa",
+                        "Права пользователя и контакт для обращений",
+                    ),
+                    (
+                        "Cookie va Yandex.Metrika (faqat rozilikdan keyin)",
+                        "Cookie и Яндекс.Метрика (только после согласия)",
+                    ),
+                )
+            )
+            + "</ul>",
+        }
+    ],
+)
+
 TREE: list[Node] = [
     WOMEN,
     CHILDREN,
@@ -1373,6 +1420,7 @@ TREE: list[Node] = [
     MATERIALS,
     ABOUT,
     DOCTORS,
+    PRIVACY,
 ]
 
 HOME = {

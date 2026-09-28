@@ -151,7 +151,7 @@ class Seeder:
         site = Site.objects.get(is_default_site=True)
         site_settings = SiteSettings.objects.get_or_create(site=site)[0]
         changed = []
-        for key in ("about", "doctors"):
+        for key in ("about", "doctors", "privacy"):
             field = f"{key}_page_id"
             if getattr(site_settings, field) is None:
                 setattr(site_settings, field, self.ctx.page_id(key, self.languages[0]))

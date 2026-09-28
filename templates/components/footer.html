@@ -28,6 +28,7 @@
     {% with footer_text=s|localized:"footer_text" %}{% if footer_text %}<p class="site-footer__text">{{ footer_text }}</p>{% endif %}{% endwith %}
     <p class="site-footer__legal">
       {% blocktrans trimmed %}Built under Presidential Resolutions PP-402 and PP-186.{% endblocktrans %}
+      {% if s.privacy_page %}<a href="{{ s.privacy_page.localized.url }}">{% trans "Privacy policy" %}</a>{% endif %}
     </p>
     <div class="site-footer__partners">
       <span class="site-footer__partners-label">{% trans "Partners" %}:</span>
