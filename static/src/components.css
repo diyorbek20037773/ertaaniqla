@@ -834,4 +834,17 @@
     body[data-section="women"] .columns__title { -webkit-background-clip: text; background-clip: text; color: transparent; }
   }
   body[data-section="women"] .columns__items { font-size: var(--fs-card); }
+
+  /* EA-18 (WCAG 1.4.11): in the high-contrast theme every card and control keeps a visible
+     ≥ 3:1 boundary; decorative blobs and card shapes go, arrow discs turn black and white. */
+  html[data-contrast="high"] .capsule-card,
+  html[data-contrast="high"] .check-card,
+  html[data-contrast="high"] .text-card,
+  html[data-contrast="high"] .lang-menu__toggle,
+  html[data-contrast="high"] .variant-switch__link { border: 2px solid #000; }
+  html[data-contrast="high"] .check-card { background: #fff; }
+  html[data-contrast="high"] .landing__blobs,
+  html[data-contrast="high"] .check-card__shape { display: none; }
+  html[data-contrast="high"] img.icon-button, html[data-contrast="high"] .icon-button img { filter: grayscale(1) contrast(100); }
+  html[data-contrast="high"] .site-search:focus-within { outline-color: #000; }
 }
