@@ -39,6 +39,13 @@ def resolve_step_links(steps: Any) -> list[dict[str, Any]]:
 
 
 @register.filter
+def illustration_size(name: str | None) -> tuple[int, int] | None:
+    from apps.articles.illustrations import intrinsic_size
+
+    return intrinsic_size(name or "")
+
+
+@register.filter
 def illustration_src(name: str | None) -> str:
     """Static URL of a designer icon/illustration name (apps.articles.illustrations), or ""."""
     from django.templatetags.static import static

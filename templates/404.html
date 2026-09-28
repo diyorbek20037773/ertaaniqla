@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n core_tags %}
 {% block title %}{% trans "Page not found" %}{% endblock %}
 {% block content %}
 <div class="container error-page">
   <p class="error-page__code u-gradient-text" aria-hidden="true">404</p>
   <h1 class="error-page__title">{% trans "Page not found" %}</h1>
   <p class="error-page__text">{% trans "The page you are looking for does not exist or has moved." %}</p>
-  <p class="error-page__actions"><a class="pill pill--cta" href="/{{ LANGUAGE_CODE }}/">{% trans "Go to the home page" %}</a></p>
+  <p class="error-page__actions"><a class="pill pill--cta" href="/{{ LANGUAGE_CODE }}/">{% trans "Go to the home page" %}</a>
+    {% site_links as links %}{% for link in links %}{% if link.key == "directory" %} <a class="pill pill--ghost" href="{{ link.url }}">{{ link.title }}</a>{% endif %}{% endfor %}</p>
+  {# EA-34: a way forward, not only "home" #}
+  {% include "components/search_form.html" %}
 </div>
 {% endblock %}

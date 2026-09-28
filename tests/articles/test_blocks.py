@@ -518,3 +518,13 @@ def test_every_block_renders_in_both_locales(block_type: str, lang: str) -> None
     assert html.strip()
     for english in ("Load content", "Urgent — see a doctor now", "Transcript", "Timing", "Source:"):
         assert english not in html, (block_type, lang, english)
+
+
+def test_designer_illustrations_have_intrinsic_size(seeded, client) -> None:
+    """EA-33: self-exam and method illustrations carry width/height (no layout shift)."""
+    import re
+
+    html = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
+    images = re.findall(r'<img class="text-card__media"[^>]*>', html)
+    assert images
+    assert all(re.search(r'width="\d+" height="\d+"', img) for img in images), images

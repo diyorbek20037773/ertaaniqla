@@ -140,3 +140,13 @@ def test_404_page_uses_the_design_error_layout(client: Client) -> None:
     assert 'class="container error-page"' in html
     assert html.count("<h1") == 1
     assert 'href="/ru/"' in html  # back to the home page in the visitor's language
+
+
+@pytest.mark.django_db
+def test_404_offers_search_and_where_to_go(seeded, client: Client) -> None:
+    """EA-34: the 404 page gives a way forward in the visitor's language."""
+    response = client.get("/ru/net-takoy-stranitsy/")
+    assert response.status_code == 404
+    html = response.content.decode()
+    assert 'action="/ru/poisk/"' in html
+    assert 'href="/ru/zhenskiy/kuda-obratitsya/"' in html

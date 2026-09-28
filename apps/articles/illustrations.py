@@ -7,6 +7,8 @@ Uploaded Wagtail images always win over these when both are set on a block.
 
 from __future__ import annotations
 
+from functools import lru_cache
+
 from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
@@ -44,6 +46,20 @@ def icon_choices() -> list[tuple[str, str | Promise]]:
 
 def illustration_choices() -> list[tuple[str, str | Promise]]:
     return [(key, label) for key, (_path, label) in ILLUSTRATIONS.items()]
+
+
+@lru_cache(maxsize=64)
+def intrinsic_size(name: str) -> tuple[int, int] | None:
+    """Pixel size of a raster icon/illustration, read once — `<img width height>` (EA-33)."""
+    from django.contrib.staticfiles import finders
+    from PIL import Image
+
+    path = static_path(name)
+    found = finders.find(path) if path else None
+    if not found or not isinstance(found, str) or path is None or path.endswith(".svg"):
+        return None
+    with Image.open(found) as image:
+        return image.size
 
 
 def static_path(name: str) -> str | None:

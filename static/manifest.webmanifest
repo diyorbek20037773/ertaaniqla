@@ -1,0 +1,9 @@
+{
+  "name": "Erta aniqla",
+  "short_name": "Erta aniqla",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#930450",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

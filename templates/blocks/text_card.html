@@ -11,7 +11,7 @@
   {% if value.image %}
     {% picture value.image format-{webp,png} max-{400x400,800x800} sizes="(max-width: 48rem) 60vw, 24rem" class="text-card__media" loading="lazy" %}
   {% elif src %}
-    <img class="text-card__media" src="{{ src }}" alt="" loading="lazy" decoding="async">
+    {% with size=value.illustration|illustration_size %}<img class="text-card__media" src="{{ src }}" alt=""{% if size %} width="{{ size.0 }}" height="{{ size.1 }}"{% endif %} loading="lazy" decoding="async">{% endwith %}
   {% endif %}
 </section>
 {% endwith %}
