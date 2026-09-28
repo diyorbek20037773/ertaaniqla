@@ -3,9 +3,11 @@ HTMX partial + non-JS page, translated URLs."""
 
 from __future__ import annotations
 
+import re
+
 import pytest
 from django.core.management import call_command
-from django.test import Client
+from django.test import Client, override_settings
 
 from apps.search.services import search_pages
 
@@ -86,3 +88,13 @@ def test_rebuild_search_command(seeded, capsys) -> None:
     call_command("rebuild_search", verbosity=0)
     assert "rebuild_search: index rebuilt" in capsys.readouterr().out
     assert search_pages("skrining", "uz")
+
+
+@override_settings(WAFFLE_FLAG_DEFAULT=False)
+def test_disabled_tools_are_not_listed(seeded, client: Client) -> None:
+    """EA-08: every result link must open — tools behind an off flag answer 404."""
+    for url in ("/uz/qidiruv/?q=skrining", "/ru/poisk/?q=скрининг", "/uz/qidiruv/?q=tekshir"):
+        html = client.get(url).content.decode()
+        for link in re.findall(r'class="search-result__title"><a href="([^"]+)"', html):
+            assert client.get(link, follow=True).status_code == 200, link
+        assert "/vositalar/skrining/" not in html and "/instrumenty/skrining/" not in html

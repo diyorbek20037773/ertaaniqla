@@ -16,7 +16,7 @@ def search(request: HttpRequest) -> HttpResponse:
     raw = request.GET.get("q", "")
     query = clean_query(raw)
     language = get_language() or "uz"
-    results = search_pages(query, language) if query else []
+    results = search_pages(query, language, request=request) if query else []
     context = {
         "query": query,
         "raw_query": raw[:MAX_QUERY_LENGTH],

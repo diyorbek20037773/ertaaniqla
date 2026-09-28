@@ -97,7 +97,17 @@ class SearchResult:
         )
 
 
-def search_pages(query: str, language_code: str, limit: int = MAX_RESULTS) -> list[SearchResult]:
+def _servable(page: Any, request: Any) -> bool:
+    """Tool pages behind a disabled waffle flag answer 404 — never list them (EA-08)."""
+    flag_enabled = getattr(page.specific, "flag_enabled", None)
+    if request is None or not callable(flag_enabled):
+        return True
+    return bool(flag_enabled(request))
+
+
+def search_pages(
+    query: str, language_code: str, limit: int = MAX_RESULTS, request: Any = None
+) -> list[SearchResult]:
     """Full-text search + autocomplete (prefix) merged, current language first."""
     query = clean_query(query)
     if not query:
@@ -114,6 +124,7 @@ def search_pages(query: str, language_code: str, limit: int = MAX_RESULTS) -> li
             if hit.pk not in seen_ids:
                 seen_ids.add(hit.pk)
                 ordered.append(hit)
+    ordered = [page for page in ordered if _servable(page, request)]
     # stable sort: visitor's language first, search rank otherwise preserved
     ordered.sort(key=lambda page: 0 if page.locale.language_code == language_code else 1)
     return [SearchResult.from_page(page) for page in ordered[:limit]]
