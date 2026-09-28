@@ -161,3 +161,24 @@ def test_serve_media_route_skips_private_paths() -> None:
                     resolve(private, urlconf=config.urls)
     finally:
         importlib.reload(config.urls)
+
+
+def test_start_up_seeding_never_overwrites_edits(seeded) -> None:
+    """EA-27: `--if-empty` (demo start-up) leaves an edited, seeded site alone."""
+    from apps.directory.models import Institution
+    from apps.home.models import HomePage
+
+    home = HomePage.objects.filter(locale__language_code="uz").first()
+    home.hero_title = "Edited by the copywriter"
+    home.save_revision().publish()
+    out = StringIO()
+    call_command("seed_content", "--if-empty", stdout=out)
+    assert "skipped" in out.getvalue()
+    home.refresh_from_db()
+    assert home.hero_title == "Edited by the copywriter"
+
+    call_command("import_institutions", "data/institutions.sample.csv", stdout=StringIO())
+    count = Institution.objects.count()
+    out = StringIO()
+    call_command("import_institutions", "data/institutions.sample.csv", "--if-empty", stdout=out)
+    assert "skipped" in out.getvalue() and Institution.objects.count() == count

@@ -22,8 +22,19 @@ class Command(BaseCommand):
             default=",".join(code for code, _ in settings.WAGTAIL_CONTENT_LANGUAGES),
             help="Comma-separated language codes, default language first (default: all).",
         )
+        parser.add_argument(
+            "--if-empty",
+            action="store_true",
+            help="do nothing when a home page exists — a re-seed overwrites editors' changes",
+        )
 
     def handle(self, *args: Any, **options: Any) -> None:
+        if options["if_empty"]:
+            from apps.home.models import HomePage
+
+            if HomePage.objects.exists():
+                self.stdout.write("seed_content: site already seeded — skipped (--if-empty)")
+                return
         languages = tuple(code.strip() for code in options["lang"].split(",") if code.strip())
         known = {code for code, _ in settings.WAGTAIL_CONTENT_LANGUAGES}
         unknown = [code for code in languages if code not in known]

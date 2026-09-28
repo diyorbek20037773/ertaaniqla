@@ -17,10 +17,11 @@ case "$ROLE" in
     if [[ "${RUN_MIGRATIONS_ON_START:-0}" == "1" ]]; then
       python manage.py migrate --noinput
       python manage.py createcachetable || true
-      # demo hosts only (D-075): idempotent seed tree + sample institutions, marked as samples
+      # demo hosts only (D-075): seed tree + sample institutions into an EMPTY database only —
+      # a re-seed would overwrite what editors changed in the CMS (EA-27)
       if [[ "${SEED_DEMO_ON_START:-0}" == "1" ]]; then
-        python manage.py seed_content
-        python manage.py import_institutions data/institutions.sample.csv
+        python manage.py seed_content --if-empty
+        python manage.py import_institutions data/institutions.sample.csv --if-empty
         python manage.py regenerate_social_images
       fi
       python manage.py sync_site

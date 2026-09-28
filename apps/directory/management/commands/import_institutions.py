@@ -157,8 +157,18 @@ class Command(BaseCommand):
         parser.add_argument("csv_path")
         parser.add_argument("--source", default="csv", help="external_source label (e.g. dmed)")
         parser.add_argument("--dry-run", action="store_true", help="validate only, write nothing")
+        parser.add_argument(
+            "--if-empty",
+            action="store_true",
+            help="do nothing when institutions exist (demo start-up: never overwrite edits)",
+        )
 
     def handle(self, *args: Any, **options: Any) -> None:
+        from apps.directory.models import Institution
+
+        if options["if_empty"] and Institution.objects.exists():
+            self.stdout.write("import_institutions: institutions exist — skipped (--if-empty)")
+            return
         path = Path(options["csv_path"])
         if not path.exists():
             raise CommandError(f"file not found: {path}")
