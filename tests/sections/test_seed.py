@@ -519,3 +519,13 @@ def test_no_internal_notes_reach_visitors(seeded, client) -> None:
         html = client.get(url).content.decode()
         for marker in ("(TZ)", "ТЗ (ru)", "Figma", "лабораторные анализы"):
             assert marker not in html, (url, marker)
+
+
+def test_where_to_go_is_linked_from_every_section(seeded, client) -> None:
+    """EA-15: the directory is one tap away from the children's pages too (footer)."""
+    for url, directory in (
+        ("/uz/bolalar/diagnostika-va-davolash/diagnostika/", "/uz/ayollar/qayerga-murojaat/"),
+        ("/ru/detskiy/", "/ru/zhenskiy/kuda-obratitsya/"),
+    ):
+        response = client.get(url, follow=True)
+        assert f'href="{directory}"' in response.content.decode(), url

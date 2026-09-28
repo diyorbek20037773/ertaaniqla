@@ -4,11 +4,13 @@ phone formatting. Every tag degrades gracefully when `page` is missing (404/500,
 from __future__ import annotations
 
 import re
+from urllib.parse import urlencode
 from dataclasses import replace
 from typing import Any
 
 from django import template
 from django.conf import settings
+from django.urls import translate_url
 from django.utils import translation
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import SafeString
@@ -224,6 +226,18 @@ def lang_switch(context: dict[str, Any]) -> dict[str, Any]:
     return {"links": language_versions(context)}
 
 
+# Filters and the search query survive a language switch (EA-16); nothing else is copied.
+KEPT_QUERY_KEYS = ("q", "region", "kind", "section", "audience", "free", "letter")
+
+
+def _kept_query(request: Any) -> str:
+    params = getattr(request, "GET", None)
+    if not params:
+        return ""
+    kept = [(k, v) for k in KEPT_QUERY_KEYS for v in params.getlist(k) if v]
+    return "?" + urlencode(kept) if kept else ""
+
+
 def language_versions(context: dict[str, Any]) -> list[dict[str, Any]]:
     """Site versions for the switcher and hreflang: uz (Latin), uz-Cyrl (`/oz/`, D-049), ru.
 
@@ -238,9 +252,14 @@ def language_versions(context: dict[str, Any]) -> list[dict[str, Any]]:
     page = context.get("page")
     request = context.get("request")
     current = CYRILLIC_LANGUAGE_TAG if is_cyrillic_request(request) else _current_language()
+    query = _kept_query(request)
     versions: list[dict[str, Any]] = []
     for code, name in settings.LANGUAGES:
-        url = translated_url(page, code)
+        if page is None and request is not None and getattr(request, "resolver_match", None):
+            url = translate_url(request.path, code)  # app views: /uz/qidiruv/ ↔ /ru/poisk/
+        else:
+            url = translated_url(page, code)
+        url += query
         versions.append(
             {
                 "code": code,

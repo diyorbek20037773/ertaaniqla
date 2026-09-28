@@ -86,6 +86,8 @@ def get_navigation(language_code: str) -> list[NavSection]:
 
 
 SITE_LINK_TYPES: tuple[tuple[str, str], ...] = (
+    # "where to go" first: one tap from every page of both sections (EA-15)
+    ("directory", "directory.DirectoryPage"),
     ("tools", "tools.ToolsIndexPage"),
     ("stories", "stories.StoryIndexPage"),
     ("faq", "faq.FAQPage"),

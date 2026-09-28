@@ -126,3 +126,12 @@ def test_error_pages_render_without_page_context(seeded, client: Client) -> None
     assert response.status_code == 404
     html = response.content.decode()
     assert 'lang="uz"' in html
+
+
+def test_language_switch_keeps_search_query_and_filters(seeded, client) -> None:
+    """EA-16: switching language on search / a filtered listing keeps the query."""
+    html = client.get("/ru/poisk/?q=%D1%80%D0%B0%D0%BA&utm=x").content.decode()
+    assert 'href="/uz/qidiruv/?q=%D1%80%D0%B0%D0%BA"' in html
+    assert "utm=x" not in html.split("<main", 1)[0]
+    html = client.get("/uz/ayollar/qayerga-murojaat/?region=tashkent-city").content.decode()
+    assert 'href="/ru/zhenskiy/kuda-obratitsya/?region=tashkent-city"' in html
