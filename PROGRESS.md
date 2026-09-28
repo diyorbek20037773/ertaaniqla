@@ -160,7 +160,13 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] EA-01 absolute URLs `http://localhost` → `sync_site` from `SITE_BASE_URL` (D-075)
   - [x] EA-02 FAQ 500 (eager Celery + no SMTP) → `apps/core/queue.enqueue_on_commit`, Railway `EMAIL_URL=consolemail://`
   - [x] EA-03 HTMX dropped 400/429/500 → `responseHandling`, in-form 429 partial, error line, focus, no double submit
-  - [x] EA-07 (Railway data) → `SEED_DEMO_ON_START=1` seeds + imports sample institutions
+  - [x] EA-07 (Railway data) → `SEED_DEMO_ON_START=1` seeds + imports sample institutions, **empty DB only** (`--if-empty`, EA-27)
+  - [x] P1 code: EA-04 `SERVE_MEDIA` + `regenerate_social_images` · EA-05 privacy page (outline, lawyer text TODO) linked from forms + footer · EA-06 deploy check on Turnstile test keys · EA-08 search hides flag-off tools · EA-09 tabs keep the disease · EA-10 tab bar reachable + active tab in view · EA-11 `yoʻ`/escaped apostrophe transliteration · EA-12 glossary block richtext · EA-13 unique titles/descriptions · EA-14 `ROBOTS_NOINDEX`
+  - [x] P2/P3 code: EA-15 directory in footer · EA-16 language switch keeps `q`/filters · EA-18 high-contrast boundaries · EA-22 visitor-friendly placeholder notes · EA-24 `DJANGO_ADMIN_ENABLED` + translated admin title · **EA-25 CSRF pages were page-cached (would 403 once warm) → never cached** · EA-27 · EA-32 manifest + theme-color · EA-33 illustration width/height · EA-34 404 search + directory · EA-35 print
+  - [x] Checked, no change: EA-28 honeypot already in `aria-hidden` wrapper · EA-33(c) banner `sizes=900px` matches its CSS `min-width: 900px` · EA-37 header search ring is on `.site-search:focus-within` · EA-30 `autocomplete="off"` on contact is deliberate (privacy)
+  - [ ] Decisions for others (not coded): EA-05 policy text (client lawyer) · EA-06 real Turnstile keys (client Cloudflare) · EA-15 hotline number (client) · EA-20 body line-height 1.2 and EA-21 visible h1 / breadcrumbs on women's pages (designer, Figma pixel-perfect D-059) · EA-23 one screening rule set (doctor) · EA-29 tools publication (doctor sign-off) · EA-31/EA-36 Cyrillic OG images, logo/brand per language (designer/client) · EA-32 PNG touch icons (designer)
+  - [ ] Later (TODO_HARDENING H-030…): EA-17 search `<mark>`/fuzzy/Cyrillic on /oz/ · EA-19 mobile a11y toolbar panel · EA-26 JSON-LD WebSite/SearchAction, reviewedBy · EA-38 Railway cold starts
+  - Railway actions for the developer: re-run `scripts/railway_set_vars.ps1` (new vars), add a Railway **volume at `/app/media`**, redeploy; the DB is already seeded, so seed text changes (EA-05 privacy page, EA-22) need one manual `railway run python manage.py seed_content` (safe now: no CMS edits yet) — then delete the audit test messages (`[AUDIT TEST - please delete]`) in the CMS
 
 ## Last command run (2026-09-24, M5b gate)
 

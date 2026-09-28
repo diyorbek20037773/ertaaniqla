@@ -59,6 +59,20 @@ The script installs Docker, creates `deploy`, hardens sshd, ufw (22 restricted /
 
 Timing on a clean VPS: bootstrap 10 min, image pull 3 min, restore 5 min, TLS 2 min, monitoring 3 min.
 
+Absolute URLs (canonical, hreflang, OG, share links, sitemaps) come from the Wagtail Site record;
+the `migrate` role runs `manage.py sync_site`, which copies `SITE_BASE_URL` into it (D-075). After
+changing the domain, set `SITE_BASE_URL` and redeploy (or run `sync_site` once).
+
+### 1.4 Railway demo host (temporary, D-070)
+
+No nginx, no worker. `scripts/railway_set_vars.ps1` sets everything, including the demo flags
+`ROBOTS_NOINDEX=true`, `SERVE_MEDIA=true`, `DJANGO_ADMIN_ENABLED=false`, `SEED_DEMO_ON_START=1`
+and `EMAIL_URL=consolemail://`. Add a Railway **volume mounted at `/app/media`** or uploads and
+OG images vanish on redeploy (`regenerate_social_images` re-renders the OG ones on start). The
+start-up seed only fills an empty database — to push new seed text into a seeded demo, run
+`railway run python manage.py seed_content` by hand (it overwrites page bodies: never after
+editors started working).
+
 ## 2. Rollback
 
 * GitHub → Actions → **Rollback** → environment + previous image tag (12-char sha from the CI run or `dc images web`). Same zero-downtime path, then smoke test.

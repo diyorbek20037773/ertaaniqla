@@ -38,3 +38,11 @@ here. Each item: what, why, where.
 Risk-factor icons, screening-method and self-exam illustrations in `static/img/figma/women/*.png`
 are 1× crops of the PNG exports (Figma MCP Starter-plan limit, D-067). Re-export them from Figma as
 SVG (or 2× PNG) with the same file names when MCP calls are available; no template changes needed.
+
+## H-030…H-033 — from the Railway audit (2026-09-27, EA-*)
+| # | Area | Item | Where |
+|---|---|---|---|
+| H-030 | search | EA-17: `<mark>` highlighting in snippets, trigram/fuzzy match for one-letter typos, compare `/oz/` Cyrillic query counts with `/uz/` Latin ones. | `apps/search` |
+| H-031 | a11y | EA-19: on phones collapse the accessibility toolbar into one "Aa" button with a panel (today the row scrolls sideways). Needs the designer's frame. | `components/a11y_toolbar.html` |
+| H-032 | seo | EA-26: JSON-LD `WebSite` + `SearchAction`, `Organization.logo`, `reviewedBy`/`lastReviewed` from the review workflow, `about` = the page's disease. | `apps/core/seo.py` |
+| H-033 | ops | EA-38: Railway cold starts (first hit 1–2 s, one 9 s POST during the audit). Irrelevant on the VPS; on Railway keep one replica warm or accept. | Railway |
