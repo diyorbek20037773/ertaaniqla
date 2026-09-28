@@ -192,3 +192,27 @@ def test_picture_tag_serves_webp(seeded, client: Client, tmp_path) -> None:
     html = client.get(article.url).content.decode()
     assert "<picture>" in html and 'type="image/webp"' in html
     assert "400w" in html and "800w" in html
+
+
+def test_titles_and_descriptions_are_unique_per_language(seeded, client) -> None:
+    """EA-13: the five women's topics per disease shared one title and description."""
+    from collections import Counter
+
+    from wagtail.models import Page
+
+    for code in ("uz", "ru"):
+        titles: Counter[str] = Counter()
+        descriptions: Counter[str] = Counter()
+        for page in Page.objects.live().filter(locale__language_code=code, depth__gt=1):
+            response = client.get(page.url)
+            if response.status_code != 200:  # variant groups redirect, flag-off tools 404
+                continue
+            html = response.content.decode()
+            titles[re.search(r"<title>(.*?)</title>", html, re.S).group(1)] += 1
+            found = re.search(r'<meta name="description" content="([^"]*)"', html)
+            if found:
+                descriptions[found.group(1)] += 1
+        assert [t for t, n in titles.items() if n > 1] == [], code
+        assert [d for d, n in descriptions.items() if n > 1] == [], code
+    home = client.get("/uz/").content.decode()
+    assert "<title>Erta aniqla – hayotni saqla</title>" in home

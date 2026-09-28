@@ -159,7 +159,7 @@ def test_every_live_uz_page_is_served_in_cyrillic(seeded, client: Client) -> Non
 @pytest.mark.django_db
 def test_cyrillic_page_links_titles_and_alternates(seeded, client: Client) -> None:
     html = client.get("/oz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
-    assert "<title>Кўкрак бези саратони — Эрта аниқла</title>" in html
+    assert "<title>Хабардорлик: Кўкрак бези саратони — Эрта аниқла</title>" in html  # EA-13
     assert (
         '<link rel="canonical" href="http://localhost/oz/ayollar/ogohlik/kokrak-bezi-saratoni/">'
         in html

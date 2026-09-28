@@ -88,6 +88,8 @@ def _prefers_uzbek_cyrillic(request: HttpRequest) -> bool:
 @require_GET
 def robots_txt(request: HttpRequest) -> HttpResponse:
     host = request.get_host()
+    if settings.ROBOTS_NOINDEX:  # a demo host must not compete with the real domain (EA-14)
+        return HttpResponse("User-agent: *\nDisallow: /\n", content_type="text/plain")
     lines = [
         "User-agent: *",
         f"Disallow: /{settings.CMS_URL_PREFIX}/",

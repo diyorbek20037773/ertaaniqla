@@ -58,6 +58,14 @@ def test_robots_txt_hides_cms_and_lists_sitemap(client: Client) -> None:
     assert "Sitemap: http://testserver/sitemap.xml" in text
 
 
+def test_noindex_host_blocks_crawlers(client: Client, settings) -> None:
+    """EA-14: a demo host sends X-Robots-Tag on every response and disallows everything."""
+    assert "X-Robots-Tag" not in client.get("/healthz/")
+    settings.ROBOTS_NOINDEX = True
+    assert client.get("/healthz/")["X-Robots-Tag"] == "noindex, nofollow"
+    assert client.get("/robots.txt").content.decode() == "User-agent: *\nDisallow: /\n"
+
+
 def test_sitemap_index_lists_languages(client: Client) -> None:
     response = client.get("/sitemap.xml")
     assert response.status_code == 200

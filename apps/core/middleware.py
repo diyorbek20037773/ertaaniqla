@@ -61,6 +61,8 @@ class RequestIDMiddleware:
         policy = getattr(settings, "PERMISSIONS_POLICY", "")
         if policy and "Permissions-Policy" not in response:
             response["Permissions-Policy"] = policy
+        if getattr(settings, "ROBOTS_NOINDEX", False):  # demo / staging hosts (EA-14)
+            response["X-Robots-Tag"] = "noindex, nofollow"
         return response
 
 

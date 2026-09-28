@@ -70,6 +70,11 @@ class HomePage(BasePage):
     class Meta:
         verbose_name = _("home page")
 
+    @property
+    def html_title(self) -> str:
+        """Hero slogan ("Erta aniqla – hayotni saqla"), not "Erta aniqla — Erta aniqla" (EA-13)."""
+        return str(self.seo_title or self.hero_title or self.title)
+
     def get_body_text(self) -> str:
         return f"{self.hero_title} {self.hero_subtitle} {stream_plain_text(self.body)}"
 

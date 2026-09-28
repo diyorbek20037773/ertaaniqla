@@ -115,6 +115,22 @@ class BasePage(Page):
         section = self.get_section()
         return section.section_key if section else ""
 
+    # --- titles and descriptions (EA-13: unique per page) --------------------------------------
+    @property
+    def html_title(self) -> str:
+        """`<title>` / og:title without the site suffix. A breast/cervical variant carries its
+        topic ("Skrining: Koʻkrak bezi saratoni"), like its visually hidden h1."""
+        if self.seo_title:
+            return str(self.seo_title)
+        group = getattr(self, "variant_group", None)
+        return f"{group.title}: {self.title}" if group is not None else str(self.title)
+
+    @property
+    def meta_description(self) -> str:
+        description = str(self.search_description or "")
+        group = getattr(self, "variant_group", None)
+        return f"{group.title}. {description}" if description and group is not None else description
+
     # --- reading time ---------------------------------------------------------------------------
     def get_body_text(self) -> str:
         """Plain text used for reading time and search. Subclasses with a StreamField override."""
