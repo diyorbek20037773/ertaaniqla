@@ -70,13 +70,12 @@ def callout(kind: str, title: str, html: str) -> dict[str, Any]:
 
 
 def todo_callout(lang: str, bullets_uz: list[str], bullets_ru: list[str]) -> dict[str, Any]:
-    """Structured placeholder: the TZ bullets the copywriter must cover, in both languages."""
-    title = t(
-        lang, "Ushbu sahifada nima boʻlishi kerak (TZ)", "Что должно быть на этой странице (ТЗ)"
-    )
+    """Structured placeholder: the TZ bullets the copywriter must cover, in the page's language.
+
+    Worded for visitors — no "TZ", no Russian on Uzbek pages (EA-22); the Russian TZ text
+    stays on the ru page."""
+    title = t(lang, "Bu sahifada tez orada", "Скоро на этой странице")
     html = p(TODO) + ul(bullets_ru if lang == "ru" else bullets_uz)
-    if lang == "uz":
-        html += p("<i>ТЗ (ru):</i>") + ul(bullets_ru)
     return callout("info", title, html)
 
 

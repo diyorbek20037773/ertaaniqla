@@ -124,8 +124,8 @@ def appeal(lang: str, ctx: SeedContext) -> dict[str, Any]:
 def verify_note(lang: str) -> dict[str, Any]:
     note = t(
         lang,
-        "Matn buyurtmachining Figma maketidan olingan va shifokor tekshiruvini kutmoqda.",
-        "Текст взят из макета заказчика и ожидает проверки врачом.",
+        "Matn shifokor tekshiruvini kutmoqda.",  # no internal "Figma" wording (EA-22)
+        "Текст ожидает проверки врачом.",
     )
     return rich(p(f"<i>{note} {VERIFY}</i>"))
 

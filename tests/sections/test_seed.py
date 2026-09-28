@@ -507,3 +507,15 @@ def test_section_tabs_keep_the_disease(seeded, client, url: str, slug: str) -> N
     assert re.search(r'section-tabs__link is-active"\s+href="' + re.escape(url), html)
     for tab in tabs:
         assert client.get(tab).status_code == 200, tab
+
+
+def test_no_internal_notes_reach_visitors(seeded, client) -> None:
+    """EA-22: "TZ", "Figma" and Russian TZ text on Uzbek pages are editor notes, not copy."""
+    for url in (
+        "/uz/bolalar/diagnostika-va-davolash/diagnostika/",
+        "/uz/shifokorlar/",
+        "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",
+    ):
+        html = client.get(url).content.decode()
+        for marker in ("(TZ)", "ТЗ (ru)", "Figma", "лабораторные анализы"):
+            assert marker not in html, (url, marker)
