@@ -29,6 +29,8 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.
 CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=[])
 SITE_BASE_URL = env("SITE_BASE_URL", default="http://localhost:8000")
 ENVIRONMENT = env("ENVIRONMENT", default="dev")
+# demo / staging hosts: X-Robots-Tag noindex on every response + robots.txt "Disallow: /" (EA-14)
+ROBOTS_NOINDEX = env.bool("ROBOTS_NOINDEX", default=False)
 APP_RELEASE = env("APP_RELEASE", default="dev")
 CMS_URL_PREFIX = env("CMS_URL_PREFIX", default="cms").strip("/")
 
@@ -306,6 +308,8 @@ STATICFILES_FINDERS = [
 ]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = env("MEDIA_ROOT", default=str(BASE_DIR / "media"))
+# Django serves public /media/ itself — only on hosts without nginx (Railway demo, EA-04)
+SERVE_MEDIA = env.bool("SERVE_MEDIA", default=False)
 WHITENOISE_MAX_AGE = 60 * 60 * 24 * 365
 
 MEDIA_STORAGE = env("MEDIA_STORAGE", default="local")

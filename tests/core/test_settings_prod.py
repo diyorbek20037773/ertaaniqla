@@ -120,3 +120,17 @@ def test_railway_healthcheck_and_public_domain_are_allowed(
 
 def test_railway_hosts_are_absent_elsewhere(prod_env: None) -> None:
     assert "healthcheck.railway.app" not in _load_prod().ALLOWED_HOSTS
+
+
+def test_turnstile_test_keys_fail_the_prod_deploy_check(settings) -> None:
+    """EA-06: Cloudflare test keys are an error in prod, a warning on demo hosts."""
+    from apps.core.checks import turnstile_keys
+
+    settings.TURNSTILE_SITE_KEY = "1x00000000000000000000AA"
+    settings.ENVIRONMENT = "prod"
+    assert [m.id for m in turnstile_keys()] == ["ertaaniqla.E001"]
+    settings.ENVIRONMENT = "railway-demo"
+    assert [m.id for m in turnstile_keys()] == ["ertaaniqla.W001"]
+    settings.TURNSTILE_SITE_KEY = "0x4AAAAAAArealkey"
+    settings.TURNSTILE_SECRET_KEY = "0x4AAAAAAArealsecret"
+    assert turnstile_keys() == []

@@ -8,7 +8,7 @@ class CoreConfig(AppConfig):
     verbose_name = _("Core")
 
     def ready(self) -> None:
-        from apps.core import signals  # noqa: F401  (registers receivers)
+        from apps.core import checks, signals  # noqa: F401  (registers checks, receivers)
 
         self._connect_audit()
 

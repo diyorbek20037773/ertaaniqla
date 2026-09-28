@@ -21,6 +21,7 @@ case "$ROLE" in
       if [[ "${SEED_DEMO_ON_START:-0}" == "1" ]]; then
         python manage.py seed_content
         python manage.py import_institutions data/institutions.sample.csv
+        python manage.py regenerate_social_images
       fi
       python manage.py sync_site
     fi

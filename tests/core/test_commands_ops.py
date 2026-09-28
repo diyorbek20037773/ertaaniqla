@@ -125,3 +125,39 @@ def test_find_placeholders_clean_content(seeded) -> None:
     out = StringIO()
     call_command("find_placeholders", "--fail", stdout=out)
     assert "no placeholders on live content" in out.getvalue()
+
+
+def test_regenerate_social_images_restores_missing_files(seeded) -> None:
+    """EA-04: a redeploy on an ephemeral disk wipes /media/og/ — the command re-renders."""
+    from apps.articles.models import ArticlePage
+    from apps.core.tasks import generate_og_image
+
+    page = ArticlePage.objects.live().filter(locale__language_code="uz").first()
+    generate_og_image(page.pk)
+    page.refresh_from_db()
+    storage, name = page.og_image_generated.storage, page.og_image_generated.name
+    storage.delete(name)
+    out = StringIO()
+    call_command("regenerate_social_images", stdout=out)
+    assert "regenerated social images for" in out.getvalue()
+    page.refresh_from_db()
+    assert page.og_image_generated.storage.exists(page.og_image_generated.name)
+
+
+def test_serve_media_route_skips_private_paths() -> None:
+    """EA-04: without nginx Django serves /media/, but never documents or raw video uploads."""
+    import importlib
+
+    from django.urls import Resolver404, resolve
+
+    import config.urls
+
+    try:
+        with override_settings(SERVE_MEDIA=True, DEBUG=False):
+            importlib.reload(config.urls)
+            assert resolve("/media/og/uz-3.png", urlconf=config.urls).url_name is None
+            for private in ("/media/documents/consent.pdf", "/media/videos/source/a.mp4"):
+                with pytest.raises(Resolver404):
+                    resolve(private, urlconf=config.urls)
+    finally:
+        importlib.reload(config.urls)

@@ -13,10 +13,11 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.templatetags.static import static as static_url
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import RedirectView
+from django.views.static import serve
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -47,6 +48,16 @@ if settings.DEBUG:
         from debug_toolbar.toolbar import debug_toolbar_urls
 
         urlpatterns += debug_toolbar_urls()
+elif settings.SERVE_MEDIA:
+    # Hosts without nginx (Railway demo, EA-04). Same rule as nginx: consent/private documents
+    # and raw video uploads are never served from /media/.
+    urlpatterns += [
+        re_path(
+            r"^media/(?P<path>(?!documents/|videos/source/).+)$",
+            serve,
+            {"document_root": settings.MEDIA_ROOT},
+        )
+    ]
 
 urlpatterns += i18n_patterns(
     path("sitemap.xml", core_views.sitemap_language, name="sitemap_language"),

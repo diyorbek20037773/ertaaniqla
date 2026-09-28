@@ -65,6 +65,10 @@ $vars = [ordered]@{
     "RUN_MIGRATIONS_ON_START"     = "1"
     # demo only (D-075): idempotent seed tree + sample institutions on every start
     "SEED_DEMO_ON_START"          = "1"
+    # demo host must not be indexed (EA-14)
+    "ROBOTS_NOINDEX"              = "true"
+    # no nginx in front: Django serves public /media/ (EA-04); mount a volume at /app/media
+    "SERVE_MEDIA"                 = "true"
     # no SMTP on the demo host: moderator e-mails go to the log (EA-02)
     "EMAIL_URL"                   = "consolemail://"
     # Cloudflare's official always-pass test keys; replace with real ones before going live
