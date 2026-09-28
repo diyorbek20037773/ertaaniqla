@@ -488,3 +488,22 @@ def test_every_live_page_returns_200_in_both_languages(seeded, client: Client) -
         assert f'lang="{page.locale.language_code}"' in response.content.decode()
         seen += 1
     assert seen >= 2 * len(tree.iter_nodes()) + 2
+
+
+@pytest.mark.parametrize(
+    ("url", "slug"),
+    [
+        ("/uz/ayollar/ogohlik/bachadon-boyni-saratoni/", "bachadon-boyni-saratoni"),
+        ("/ru/zhenskiy/osvedomlennost/rak-sheyki-matki/", "rak-sheyki-matki"),
+        ("/uz/ayollar/skrining/kokrak-bezi-saratoni/", "kokrak-bezi-saratoni"),
+    ],
+)
+def test_section_tabs_keep_the_disease(seeded, client, url: str, slug: str) -> None:
+    """EA-09: every tab on a cervical page opens the cervical page of that topic."""
+    html = client.get(url).content.decode()
+    tabs = re.findall(r'class="section-tabs__link[^"]*"\s+href="([^"]+)"', html)
+    assert len(tabs) == 5
+    assert all(tab.endswith(f"/{slug}/") for tab in tabs), tabs
+    assert re.search(r'section-tabs__link is-active"\s+href="' + re.escape(url), html)
+    for tab in tabs:
+        assert client.get(tab).status_code == 200, tab

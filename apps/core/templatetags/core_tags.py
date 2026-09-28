@@ -4,6 +4,7 @@ phone formatting. Every tag degrades gracefully when `page` is missing (404/500,
 from __future__ import annotations
 
 import re
+from dataclasses import replace
 from typing import Any
 
 from django import template
@@ -90,13 +91,35 @@ def section_tabs(context: dict[str, Any]) -> dict[str, Any]:
     request = context.get("request")
     path = getattr(request, "path", "") or ""
     section = next((s for s in get_navigation(lang) if s.key == section_key), None)
-    items = [] if section is None else section.items
+    items = [] if section is None else _same_variant_items(context.get("page"), section.items)
     active_url = ""
     for item in items:
         url = item.url or ""
         if url and path.startswith(url) and len(url) > len(active_url):
             active_url = url
     return {"items": items, "active_url": active_url, "section_key": section_key}
+
+
+def _same_variant_items(page: Any, items: list[Any]) -> list[Any]:
+    """On a variant page (…/skrining/bachadon-boyni-saratoni/) every tab opens the same variant
+    under its own topic, so reading about cervical cancer never jumps to breast cancer (EA-09).
+    A tab keeps the topic URL (→ first variant) when that topic has no such child."""
+    if page is None or not getattr(page, "pk", None):
+        return items
+    parent = page.get_parent().specific
+    if not getattr(parent, "is_variant_group", False):
+        return items
+    siblings = {
+        str(p.url)
+        for p in Page.objects.live()
+        .filter(slug=page.slug, depth=page.depth, locale_id=page.locale_id)
+        .defer_streamfields()
+    }
+    result = []
+    for item in items:
+        candidate = f"{item.url}{page.slug}/" if item.url else ""
+        result.append(replace(item, url=candidate) if candidate in siblings else item)
+    return result
 
 
 @register.inclusion_tag("components/variant_switch.html", takes_context=True)

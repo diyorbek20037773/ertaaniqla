@@ -498,6 +498,8 @@
   .field--checkbox { display: flex; gap: var(--space-2); align-items: flex-start; }
   .field--checkbox input, .checklist__item input { width: 1.5rem; height: 1.5rem; margin-top: 0.2rem; flex: none; accent-color: var(--brand); }
   .field--checkbox label { font-weight: 400; margin: 0; }
+  .field--checkbox { flex-wrap: wrap; }
+  .field--checkbox .field__link { flex-basis: 100%; padding-inline-start: calc(1.5rem + var(--space-2)); display: inline-flex; align-items: center; min-height: var(--tap-target); }
   .field--error input, .field--error select, .field--error textarea { border-color: var(--danger); }
   .field__help { font-size: 0.9em; color: var(--neutral-600); margin: var(--space-1) 0 0; }
   .field__error { color: var(--danger); font-weight: 700; margin: var(--space-1) 0 0; }
@@ -651,7 +653,13 @@
   /* tab bar — Figma 2408:817: h74, r50, 2px border, labels 24px #800049, active 217×62 */
   .section-tabs__list { justify-content: space-between; gap: clamp(var(--space-2), 2vw, 5rem); padding: 6px; min-height: clamp(52px, 4.3vw, 74px); border-color: rgba(183, 0, 83, 0.36); }
   .section-tabs__link { font-size: var(--fs-lead); min-height: clamp(44px, 3.6vw, 62px); padding-inline: clamp(var(--space-4), 2vw, 2.75rem); color: var(--c-pink-750); }
-  @media (min-width: 80rem) { .section-tabs__list { justify-content: center; } }
+  /* EA-10: `justify-content: center` on a scroller makes its start unreachable. Auto margins
+     centre the tabs while they fit and collapse to 0 once the bar overflows. */
+  @media (min-width: 80rem) {
+    .section-tabs__list { justify-content: flex-start; }
+    .section-tabs__item:first-child { margin-inline-start: auto; }
+    .section-tabs__item:last-child { margin-inline-end: auto; }
+  }
 
   /* breast / cervical switch — Figma 2408:234: two 722×70 pills, bold 32px */
   .variant-switch { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: clamp(var(--space-3), 1.6vw, 1.75rem); margin-block: clamp(var(--space-6), 3.7vw, 4rem); }

@@ -5,7 +5,18 @@
 // No-JS desktop is covered in CSS with ::details-content (components.css).
 const DESKTOP = window.matchMedia("(min-width: 64rem)");
 
+// EA-10: a scrolled tab bar opens with the current tab in view (no page scroll).
+function revealActiveTab() {
+  const list = document.querySelector(".section-tabs__list");
+  const active = list?.querySelector(".is-active");
+  if (!list || !active || list.scrollWidth <= list.clientWidth) return;
+  const bar = list.getBoundingClientRect();
+  const tab = active.getBoundingClientRect();
+  list.scrollLeft += tab.left - bar.left - (bar.width - tab.width) / 2;
+}
+
 export function initNav() {
+  revealActiveTab();
   const toggle = document.querySelector(".site-nav__toggle");
   if (!toggle) return;
   const dropdowns = [...document.querySelectorAll(".nav-dropdown")];
