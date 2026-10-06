@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 17:30+0500\n"
+"POT-Creation-Date: 2026-10-06 17:49+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -330,6 +330,76 @@ msgstr "YouTube, пост Telegram, пост/reel Instagram или видео Ti
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
 msgstr "Встраивание (YouTube / Telegram / Instagram / TikTok)"
 
+#| msgid "Title"
+msgid "Title bar"
+msgstr "Полоса заголовка"
+
+msgid "Highlight box"
+msgstr "Выделенный блок"
+
+#| msgid "intro"
+msgid "Intro"
+msgstr "Вступление"
+
+msgid "Items"
+msgstr "Пункты"
+
+msgid "Closing text"
+msgstr "Заключительный текст"
+
+#| msgid "Check"
+msgid "Check row"
+msgstr "Ряд с галочками"
+
+msgid "Pictogram"
+msgstr "Пиктограмма"
+
+msgid "List with pictograms"
+msgstr "Список с пиктограммами"
+
+msgid "Text next to the picture"
+msgstr "Текст рядом с картинкой"
+
+#| msgid "Note"
+msgid "Note box"
+msgstr "Блок примечания"
+
+#| msgid "Explanation"
+msgid "Exclamation mark"
+msgstr "Восклицательный знак"
+
+#| msgid "icon"
+msgid "Note icon"
+msgstr "Значок примечания"
+
+#| msgid "Numbered list"
+msgid "Numbered cards"
+msgstr "Нумерованные карточки"
+
+msgid "Anchor"
+msgstr "Якорь"
+
+msgid "Latin letters and dashes, e.g. bosqichlari — links can open this item."
+msgstr ""
+"Латинские буквы и дефисы, например bosqichlari — ссылки смогут открыть этот "
+"пункт."
+
+#| msgid "Load content"
+msgid "Frame the content"
+msgstr "Обвести содержимое рамкой"
+
+msgid ""
+"One rounded frame around everything inside (diagnostics in the design)."
+msgstr ""
+"Одна скруглённая рамка вокруг всего содержимого (диагностика в дизайне)."
+
+#| msgid "Contact"
+msgid "Content"
+msgstr "Содержимое"
+
+msgid "Accordion (topic sections)"
+msgstr "Аккордеон (разделы темы)"
+
 msgid "Woman silhouette"
 msgstr "Силуэт женщины"
 
@@ -383,6 +453,34 @@ msgstr "Самообследование 3: лёжа"
 
 msgid "Self-exam 4: nipple and armpit"
 msgstr "Самообследование 4: сосок и подмышка"
+
+#| msgid "e.g. mammography"
+msgid "Woman at the mammograph"
+msgstr "Женщина у маммографа"
+
+msgid "Biopsy and tissue analysis"
+msgstr "Биопсия и анализ ткани"
+
+msgid "CT scanner"
+msgstr "Аппарат КТ"
+
+msgid "Microscope"
+msgstr "Микроскоп"
+
+msgid "DNA"
+msgstr "ДНК"
+
+msgid "Blood drop"
+msgstr "Капля крови"
+
+msgid "Test tube"
+msgstr "Пробирка"
+
+msgid "Urine cup"
+msgstr "Контейнер для мочи"
+
+msgid "Pregnancy test"
+msgstr "Тест на беременность"
 
 msgid "summary"
 msgstr "краткое описание"
@@ -513,11 +611,9 @@ msgstr "Женский рак"
 msgid "Childhood cancer"
 msgstr "Детский рак"
 
-#| msgid "Women's cancer"
 msgid "Breast cancer"
 msgstr "Рак молочной железы"
 
-#| msgid "Childhood cancer"
 msgid "Cervical cancer"
 msgstr "Рак шейки матки"
 
@@ -569,22 +665,18 @@ msgstr ""
 msgid "Medical review"
 msgstr "Медицинская проверка"
 
-#| msgid "Go to the home page"
 msgid "Anchor on the page"
 msgstr "Якорь на странице"
 
 msgid "Optional, without # — e.g. a section of a long page."
 msgstr "Необязательно, без # — например, раздел длинной страницы."
 
-#| msgid "external URL"
 msgid "or external URL"
 msgstr "или внешняя ссылка"
 
-#| msgid "Link"
 msgid "Links"
 msgstr "Ссылки"
 
-#| msgid "Two columns"
 msgid "Footer column"
 msgstr "Колонка подвала"
 
@@ -623,11 +715,9 @@ msgstr "место на карте"
 msgid "Footer location icon (e.g. Yandex Maps)."
 msgstr "Значок адреса в подвале (например, ссылка на Яндекс Карты)."
 
-#| msgid "footer text (uz)"
 msgid "footer columns (uz)"
 msgstr "колонки подвала (uz)"
 
-#| msgid "footer text (ru)"
 msgid "footer columns (ru)"
 msgstr "колонки подвала (ru)"
 
@@ -697,7 +787,6 @@ msgstr "Горячая линия"
 msgid "Social networks"
 msgstr "Социальные сети"
 
-#| msgid "Footer & legal"
 msgid "Footer site map"
 msgstr "Карта сайта в подвале"
 
@@ -865,7 +954,6 @@ msgstr "Вопросы и ответы"
 msgid "Section"
 msgstr "Раздел"
 
-#| msgid "Topics"
 msgid "Topic"
 msgstr "Тема"
 
@@ -889,7 +977,6 @@ msgstr "Ваш вопрос"
 msgid "My question may be published anonymously with the answer"
 msgstr "Мой вопрос можно опубликовать анонимно вместе с ответом"
 
-#| msgid "Your question"
 msgid "Leave your question too"
 msgstr "Оставьте и ваш вопрос"
 
@@ -925,7 +1012,6 @@ msgstr ""
 msgid "section"
 msgstr "раздел"
 
-#| msgid "Topics"
 msgid "topic"
 msgstr "тема"
 
@@ -987,7 +1073,6 @@ msgstr "вопрос врачу"
 msgid "questions to a doctor"
 msgstr "вопросы врачу"
 
-#| msgid "All types"
 msgid "All topics"
 msgstr "Все темы"
 
@@ -1118,12 +1203,6 @@ msgstr "дополнительное содержимое"
 
 msgid "Hero"
 msgstr "Главный блок (hero)"
-
-msgid "Featured articles"
-msgstr "Избранные статьи"
-
-msgid "Featured videos"
-msgstr "Избранные видео"
 
 msgid "home page"
 msgstr "главная страница"
@@ -1319,18 +1398,15 @@ msgstr "%(label)s: тип содержимого %(mime)s не разрешён.
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr "Файлы субтитров должны быть WebVTT (начинаться с 'WEBVTT')."
 
-#| msgid "videos"
 msgid "videos list"
 msgstr "список видео"
 
-#| msgid "Featured articles"
 msgid "News and articles"
 msgstr "Новости и статьи"
 
 msgid "News"
 msgstr "Новости"
 
-#| msgid "All types"
 msgid "list type"
 msgstr "тип списка"
 
@@ -1343,19 +1419,15 @@ msgstr "дата"
 msgid "picture"
 msgstr "изображение"
 
-#| msgid "Shown in listings, the mega-menu and search results."
 msgid "Two lines shown on the card (articles) and in search results."
 msgstr "Две строки на карточке (статьи) и в результатах поиска."
 
-#| msgid "Cards"
 msgid "Card"
 msgstr "Карточка"
 
-#| msgid "featured article"
 msgid "news item / article"
 msgstr "новость / статья"
 
-#| msgid "Featured articles"
 msgid "news and articles"
 msgstr "новости и статьи"
 
@@ -1740,7 +1812,6 @@ msgstr "Открыть в"
 msgid "Site sections"
 msgstr "Разделы сайта"
 
-#| msgid "Social networks"
 msgid "Contacts and social networks"
 msgstr "Контакты и соцсети"
 
@@ -1804,7 +1875,6 @@ msgstr "Проверено врачом"
 msgid "Verified by a doctor"
 msgstr "Проверено врачом"
 
-#| msgid "Page"
 msgid "Pages"
 msgstr "Страницы"
 
@@ -1841,7 +1911,6 @@ msgstr "Сроки"
 msgid "Learn more"
 msgstr "Подробнее"
 
-#| msgid "Filter by section"
 msgid "Filter by topic"
 msgstr "Фильтр по теме"
 
@@ -1918,7 +1987,6 @@ msgstr ""
 "Мы никогда не публикуем имена и контакты. Контакты удаляются через 90 дней "
 "после ответа."
 
-#| msgid "Search the site"
 msgid "Search the questions"
 msgstr "Поиск по вопросам"
 
@@ -1932,11 +2000,9 @@ msgstr "Здесь появятся отвеченные вопросы."
 msgid "Learn about %(topic)s"
 msgstr "Узнайте о теме: %(topic)s"
 
-#| msgid "Answered questions"
 msgid "Most asked questions"
 msgstr "Часто задаваемые вопросы"
 
-#| msgid "Search the site"
 msgid "Read the answer"
 msgstr "Читать ответ"
 
@@ -1965,15 +2031,12 @@ msgctxt "hero button"
 msgid "Get help"
 msgstr "Обратиться"
 
-#| msgid "Stories will appear here."
 msgid "News will appear here soon."
 msgstr "Новости скоро появятся здесь."
 
-#| msgid "Stories will appear here."
 msgid "Videos will appear here soon."
 msgstr "Видео скоро появятся здесь."
 
-#| msgid "Articles will appear here."
 msgid "Articles will appear here soon."
 msgstr "Статьи скоро появятся здесь."
 
@@ -1998,11 +2061,9 @@ msgstr "Скопировать хэштеги"
 msgid "Materials will appear here."
 msgstr "Здесь появятся материалы."
 
-#| msgid "Short video"
 msgid "More videos"
 msgstr "Другие видео"
 
-#| msgid "Read more"
 msgctxt "article card"
 msgid "Read more"
 msgstr "Читать дальше"
@@ -2102,6 +2163,12 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgid "Featured articles"
+#~ msgstr "Избранные статьи"
+
+#~ msgid "Featured videos"
+#~ msgstr "Избранные видео"
 
 #~ msgid "Partners"
 #~ msgstr "Партнёры"

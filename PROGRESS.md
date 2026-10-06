@@ -155,7 +155,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
 - [ ] **Design 2026-10** (client frames `docs/Erta aniqla/`, D-077; branch `feat/design-2026-10`)
   - [x] Phase 1 «Bosh sahifa»: landing blocks (question topic cards, news lead + rows, video and article rows), news / articles / videos lists with topic pills, video watch page, question hub, footer site map, Yandex logo, contact icons; CMS: news/articles under their lists, videos under Snippets, «most asked» flag on questions, info cards on the FAQ page, footer columns in Site settings
-  - [ ] Phase 2 «Koʻkrak bezi saratoni»: awareness page as an accordion (stages / causes / signs / doctor exam / self-exam) + new blocks (numbered cards, check row, «Eng muhimi!», bullet cards)
+  - [x] Phase 2 «Koʻkrak bezi saratoni»: awareness page = intro + `accordion` block (bosqichlari / sabablari / belgilari / shifokor-korigi / oz-ozini-tekshirish, anchors shared with the footer, ru skeleton too); new blocks `numbered_cards`, `check_row`, `highlight`, `pill_title`; diagnostics illustrations and pictograms, risk icons and self-exam pictures re-cropped in the 2026-10 colours; plain page background. TZ «стадии» (0–4 capsules) and the statistics card are kept (TZ wins)
   - [ ] Phase 3 «Bachadon boʻyni saratoni»: forms / stages capsules with arrows, labelled boxes, three-column lists, risk tiles, treatment page
   - Open with the client: which «tepa qism» is «Kontent tayyorlanmoqda» (developer asks); header logo slot is empty in the frames (logo kept)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)

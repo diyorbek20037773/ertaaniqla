@@ -406,7 +406,17 @@ def test_uz_bodies_are_real_uzbek_with_placeholders(seeded) -> None:
 
 def test_block_types_match_spec_for_key_pages(seeded) -> None:
     assert "steps" in page_for("women.treatment.breast", "uz").block_types
-    assert "steps" in page_for("women.awareness.breast", "uz").block_types
+    breast = page_for("women.awareness.breast", "uz")
+    assert "accordion" in breast.block_types  # design 2026-10: stages live inside it
+    nested = [
+        b.block_type
+        for item in breast.body
+        for acc in [item.value]
+        if item.block_type == "accordion"
+        for i in acc["items"]
+        for b in i["body"]
+    ]
+    assert "steps" in nested and "numbered_cards" in nested
     assert "cards_grid" in page_for("women.awareness.cervical", "uz").block_types
     assert "text_cards" in page_for("women.after.breast", "uz").block_types
     assert page_for("women.support.breast", "uz").block_types.count("three_columns") == 1

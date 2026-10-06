@@ -1,0 +1,12 @@
+{% load wagtailcore_tags %}
+{% comment %} blocks/accordion.html — design 2026-10 topic sections: pink pill rows with an arrow
+   disc (↗ closed, ↘ open); content opens in place. Native <details>: keyboard and no-JS work,
+   several can be open; `#anchor` links open their item (static/src/main.js). {% endcomment %}
+<div class="block acc">
+  {% for item in value.items %}
+    <details class="acc__item"{% if item.anchor %} id="{{ item.anchor }}"{% endif %}>
+      <summary class="acc__summary"><span class="acc__title">{{ item.title }}</span><span class="acc__disc" aria-hidden="true">{% include "components/icons/arrow.svg" %}</span></summary>
+      <div class="acc__body{% if item.boxed %} acc__body--boxed{% endif %}">{% for block in item.body %}{% include_block block %}{% endfor %}</div>
+    </details>
+  {% endfor %}
+</div>

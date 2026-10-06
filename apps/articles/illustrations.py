@@ -37,6 +37,20 @@ ILLUSTRATIONS: dict[str, tuple[str, str | Promise]] = {
     "selfexam-2": (_W + "selfexam-2.png", _("Self-exam 2: hands behind the head")),
     "selfexam-3": (_W + "selfexam-3.png", _("Self-exam 3: lying down")),
     "selfexam-4": (_W + "selfexam-4.png", _("Self-exam 4: nipple and armpit")),
+    # design 2026-10: diagnostics cards
+    "diag-mammography": (_W + "diag-mammography.png", _("Woman at the mammograph")),
+    "diag-biopsy": (_W + "diag-biopsy.png", _("Biopsy and tissue analysis")),
+    "diag-ct": (_W + "diag-ct.png", _("CT scanner")),
+}
+
+# Small pictograms next to list items and inside note boxes (design 2026-10).
+PICTOGRAMS: dict[str, tuple[str, str | Promise]] = {
+    "microscope": (_W + "diag-microscope.png", _("Microscope")),
+    "dna": (_W + "diag-dna.png", _("DNA")),
+    "blood": (_W + "diag-blood.png", _("Blood drop")),
+    "tube": (_W + "diag-tube.png", _("Test tube")),
+    "cup": (_W + "diag-cup.png", _("Urine cup")),
+    "test": (_W + "diag-test.png", _("Pregnancy test")),
 }
 
 
@@ -62,7 +76,11 @@ def intrinsic_size(name: str) -> tuple[int, int] | None:
         return image.size
 
 
+def pictogram_choices() -> list[tuple[str, str | Promise]]:
+    return [(key, label) for key, (_path, label) in PICTOGRAMS.items()]
+
+
 def static_path(name: str) -> str | None:
-    """Static path for an icon or illustration name, or None when unknown."""
-    entry = ICONS.get(name) or ILLUSTRATIONS.get(name)
+    """Static path for an icon, illustration or pictogram name, or None when unknown."""
+    entry = ICONS.get(name) or ILLUSTRATIONS.get(name) or PICTOGRAMS.get(name)
     return entry[0] if entry else None

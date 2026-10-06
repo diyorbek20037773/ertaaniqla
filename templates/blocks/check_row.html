@@ -1,0 +1,9 @@
+{% comment %} blocks/check_row.html — intro, questions with pink check discs split by thin
+   rules, closing sentence (design 2026-10, diagnostics). {% endcomment %}
+<section class="block check-row">
+  {% if value.intro %}<div class="check-row__intro">{{ value.intro }}</div>{% endif %}
+  <ul class="check-row__items">
+    {% for item in value.items %}<li class="check-row__item"><span class="check-row__disc" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" focusable="false"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{{ item }}</li>{% endfor %}
+  </ul>
+  {% if value.outro %}<div class="check-row__outro">{{ value.outro }}</div>{% endif %}
+</section>

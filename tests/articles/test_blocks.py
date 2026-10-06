@@ -528,3 +528,55 @@ def test_designer_illustrations_have_intrinsic_size(seeded, client) -> None:
     images = re.findall(r'<img class="text-card__media"[^>]*>', html)
     assert images
     assert all(re.search(r'width="\d+" height="\d+"', img) for img in images), images
+
+
+def test_design_2026_awareness_accordion(seeded, client) -> None:
+    """Design 2026-10: the breast awareness page is an intro + five accordion sections whose
+    anchors the footer site map links to; diagnostics use the new blocks."""
+    import re
+
+    html = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
+    anchors = re.findall(r'<details class="acc__item" id="([a-z-]+)"', html)
+    assert anchors == [
+        "bosqichlari",
+        "sabablari",
+        "belgilari",
+        "shifokor-korigi",
+        "oz-ozini-tekshirish",
+    ]
+    assert 'class="acc__body acc__body--boxed"' in html  # diagnostics are framed
+    assert html.count('class="num-card"') == 6
+    assert html.count('class="check-row__item"') == 4
+    assert "Eng muhimi!" in html and 'class="block pill-title"' in html
+    assert "diag-biopsy.png" in html and "diag-microscope.png" in html
+    ru = client.get("/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/").content.decode()
+    assert re.findall(r'<details class="acc__item" id="([a-z-]+)"', ru) == anchors
+
+
+def test_new_blocks_render_standalone() -> None:
+    from apps.articles.blocks import ArticleBodyBlock
+
+    stream = ArticleBodyBlock()
+    value = stream.to_python(
+        [
+            {"type": "pill_title", "value": "Qachon?"},
+            {"type": "highlight", "value": {"title": "Muhim", "text": "<ul><li>bir</li></ul>"}},
+            {
+                "type": "accordion",
+                "value": {
+                    "items": [
+                        {
+                            "title": "Bo'lim",
+                            "anchor": "bolim",
+                            "boxed": False,
+                            "body": [{"type": "rich_text", "value": "<p>Matn</p>"}],
+                        }
+                    ]
+                },
+            },
+        ]
+    )
+    html = "".join(str(child.render()) for child in value)
+    assert '<h3 class="block pill-title">Qachon?</h3>' in html
+    assert 'class="highlight-box__title">Muhim<' in html
+    assert '<details class="acc__item" id="bolim">' in html and "<p>Matn</p>" in html

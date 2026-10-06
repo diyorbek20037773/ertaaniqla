@@ -112,6 +112,53 @@ def icon_tiles(items: list[tuple[str, str, str]]) -> dict[str, Any]:
     }
 
 
+def accordion(items: list[dict[str, Any]]) -> dict[str, Any]:
+    return {"type": "accordion", "value": {"items": items}}
+
+
+def acc_item(
+    title: str, anchor: str, body: list[dict[str, Any]], boxed: bool = False
+) -> dict[str, Any]:
+    return {"title": title, "anchor": anchor, "boxed": boxed, "body": body}
+
+
+def check_row(intro: str, items: list[str], outro: str) -> dict[str, Any]:
+    return {"type": "check_row", "value": {"intro": p(intro), "items": items, "outro": p(outro)}}
+
+
+def num_card(
+    title: str,
+    text_html: str,
+    items: list[tuple[str, str]] | None = None,
+    illustration: str = "",
+    side: str = "",
+    note: str = "",
+    note_icon: str = "",
+) -> dict[str, Any]:
+    return {
+        "title": title,
+        "text": text_html,
+        "items": [{"pictogram": icon, "text": text} for icon, text in (items or [])],
+        "image": None,
+        "illustration": illustration,
+        "side_text": side,
+        "note": p(note) if note else "",
+        "note_icon": note_icon,
+    }
+
+
+def num_cards(cards: list[dict[str, Any]]) -> dict[str, Any]:
+    return {"type": "numbered_cards", "value": {"cards": cards}}
+
+
+def highlight(text_html: str, title: str = "") -> dict[str, Any]:
+    return {"type": "highlight", "value": {"title": title, "text": text_html}}
+
+
+def pill_title(text: str) -> dict[str, Any]:
+    return {"type": "pill_title", "value": text}
+
+
 def alert(text: str) -> dict[str, Any]:
     return callout("alert", "", p(text))
 
@@ -141,19 +188,22 @@ DONT_PANIC = uz(
 
 def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
     if lang != "uz":
-        body = _ru_skeleton(
-            lang,
-            ctx,
-            [
-                "Что такое рак молочной железы?",
-                "Стадии рака молочной железы",
-                "Причины рака молочной железы",
-                "Признаки рака молочной железы",
-                "Осмотр у врача",
-                "Самообследование груди",
-            ],
-        )
-        return [*body[:-1], todo_callout(lang, TZ_AWARENESS_UZ, TZ_AWARENESS_RU), body[-1]]
+        # same accordion as uz (anchors shared with the footer site map); text = translator TODO
+        sections = [
+            ("Стадии рака молочной железы", "bosqichlari"),
+            ("Причины рака молочной железы", "sabablari"),
+            ("Признаки рака молочной железы", "belgilari"),
+            ("Осмотр у врача", "shifokor-korigi"),
+            ("Самообследование груди", "oz-ozini-tekshirish"),
+        ]
+        placeholder = text_card(p(RU_TODO) + p(VERIFY))
+        return [
+            heading("Что такое рак молочной железы?"),
+            placeholder,
+            todo_callout(lang, TZ_AWARENESS_UZ, TZ_AWARENESS_RU),
+            accordion([acc_item(title, anchor, [placeholder]) for title, anchor in sections]),
+            appeal(lang, ctx),
+        ]
     stages = [
         (
             "0",
@@ -420,6 +470,166 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
             illustration="selfexam-4",
         ),
     ]
+    diagnostics = [
+        check_row(
+            uz(
+                "Davolanishni boshlashdan oldin shifokor nima bilan ish olib borayotganini aniq "
+                "bilishi kerak. Diagnostika bir nechta muhim savollarga javob beradi:"
+            ),
+            [
+                uz("o'sma yomon sifatlimi?"),
+                uz("uning o'lchami qanday?"),
+                uz("limfa tugunlari yoki boshqa a'zolarga tarqalganmi?"),
+                uz("o'smada qanday xususiyatlar mavjud?"),
+            ],
+            uz("Aynan shu javoblarga qarab davolash yo'nalishi va natijasi belgilanadi."),
+        ),
+        num_cards(
+            [
+                num_card(
+                    uz("Diagnostikaning asosiy bosqichlari"),
+                    p(
+                        uz(
+                            "Shifokor avvalo ko'krak bezlarini va limfa tugunlarini ko'zdan "
+                            "kechiradi va paypaslab tekshiradi. So'ng mammografiya yoki sut bezlari "
+                            "va limfa tugunlarining UTT tekshiruvini tayinlaydi."
+                        )
+                    ),
+                    illustration="diag-mammography",
+                ),
+                num_card(
+                    uz("Biopsiya va to'qima tahlili"),
+                    p(
+                        uz(
+                            "Tashxisni tasdiqlash uchun o'sma to'qimasi mikroskop ostida "
+                            "o'rganiladi. Buning uchun biopsiya o'tkaziladi — shifokor o'smadan "
+                            "kichik bo'lakcha olib, laboratoriyaga yuboradi."
+                        )
+                    ),
+                    illustration="diag-biopsy",
+                ),
+                num_card(
+                    uz("Gistologik va IGX tahlil"),
+                    p(
+                        uz(
+                            "Gistologik tahlil o'smada qanday hujayralar borligini ko'rsatadi, "
+                            "immunogistokimyoviy (IGX) esa o'smaning turini aniqlashga yordam beradi:"
+                        )
+                    )
+                    + ul(
+                        [
+                            uz("gormonga ta'sirchan retseptorlar (estrogen, progesteron) bormi;"),
+                            uz("HER2 oqsili aniqlanadimi;"),
+                            uz("hujayralar qanchalik tez bo'linadi (Ko'rsatkich Ki-67)."),
+                        ]
+                    ),
+                    note=uz(
+                        "Ushbu ma'lumotlar asosida qanday davolash — jarrohlik, gormonterapiya, "
+                        "targetli yoki kimyoterapiya — eng mos kelishi aniqlanadi."
+                    ),
+                    note_icon="microscope",
+                ),
+                num_card(
+                    uz("Metastazlarni aniqlash"),
+                    p(
+                        uz(
+                            "Agar o'sma katta, limfa tugunlari zararlangan yoki tarqalish belgilari "
+                            "bo'lsa, KT o'tkaziladi. Zaruratda suyaklar ostsintigrafiyasi yoki "
+                            "PET-KT ham tavsiya etiladi."
+                        )
+                    ),
+                    illustration="diag-ct",
+                    side=p(uz("KT — ko'krak, qorin va chanoqni tekshirish."))
+                    + p(uz("Suyaklar ostsintigrafiyasi — suyak metastazlarini aniqlash."))
+                    + p(uz("PET-KT — mayda metastazlarni aniqlash."))
+                    + p(uz("MRT — miya va orqa miyani tekshirish.")),
+                    note=uz(
+                        "Agar bemorda asab tizimi bilan bog'liq alomatlar (bosh og'rishi, "
+                        "muvozanat buzilishi) bo'lsa, miya yoki orqa miyaning MRT tekshiruvi "
+                        "o'tkaziladi."
+                    ),
+                    note_icon="alert",
+                ),
+                num_card(
+                    uz("Genetik test"),
+                    p(
+                        uz(
+                            "Ba'zi sut bezi saratoni turlari irsiy gen mutatsiyalari bilan bog'liq — "
+                            "eng ko'p BRCA1 va BRCA2 genlari. Genetik shifokor maslahati va tahlil "
+                            "quyidagi hollarda tavsiya etiladi:"
+                        )
+                    )
+                    + ul(
+                        [
+                            uz("45 yoshgacha bo'lgan ayollar uchun;"),
+                            uz(
+                                "60 yoshgacha bo'lgan uch martalik salbiy (triple-negative) saraton "
+                                "holatlarida;"
+                            ),
+                            uz(
+                                "agar oila tarixida ko'krak, tuxumdon, prostata yoki oshqozon osti "
+                                "bezi saratoni bo'lgan bo'lsa;"
+                            ),
+                            uz("ko'krak bezi saratoni aniqlangan erkaklar uchun."),
+                        ]
+                    ),
+                    note=uz(
+                        "Bunday mutatsiyani aniqlash faqat davolash usulini tanlashda emas, balki "
+                        "oila a'zolari uchun xavfni baholashda ham muhimdir."
+                    ),
+                    note_icon="dna",
+                ),
+                num_card(
+                    uz("Davolanishdan oldingi tahlillar"),
+                    p(
+                        uz(
+                            "Davolashni boshlashdan oldin organizmning umumiy holatini baholash "
+                            "kerak. Shifokor quyidagi tahlillarni buyuradi:"
+                        )
+                    ),
+                    items=[
+                        ("blood", uz("qonning klinik va biokimyoviy tahlili;")),
+                        ("tube", uz("qon ivish tizimini baholovchi koagulogramma;")),
+                        ("cup", uz("siydik tahlili;")),
+                        ("test", uz("homiladorlik testi (bola tug'ish yoshidagi ayollar uchun).")),
+                    ],
+                    note=uz(
+                        "Bu tahlillar davolashni xavfsiz va to'g'ri rejalashtirishga yordam beradi."
+                    ),
+                ),
+            ]
+        ),
+        highlight(
+            p(
+                uz(
+                    "Zamonaviy diagnostika nafaqat saratonni tasdiqlaydi, balki uning qanday "
+                    "rivojlanayotganini ham ko'rsatadi. Ma'lumot qanchalik to'liq va aniq bo'lsa, "
+                    "davolash shunchalik samarali bo'ladi. Shu yo'l bilan to'liq sog'ayish "
+                    "imkoniyati oshadi."
+                )
+            ),
+            title=uz("Eng muhimi!"),
+        ),
+        # TZ «стадии» (wins over the design, which shows only diagnostics here)
+        capsules(stages),
+    ]
+    when_to_see = highlight(
+        p(
+            uz(
+                "Agar o'z-o'zini tekshirish vaqtida quyidagi o'zgarishlardan birini sezsangiz, "
+                "shifokorga murojaat qilishni kechiktirmang:"
+            )
+        )
+        + ul(
+            [
+                uz("ko'krak shakli yoki hajmining o'zgarishi;"),
+                uz("qattiqlik yoki shish paydo bo'lishi;"),
+                uz("teri holatining o'zgarishi — ichkariga tortilish, qizarish, quruqlashish;"),
+                uz("so'rg'ichning tortilishi yoki joyining o'zgarishi;"),
+                uz("so'rg'ichdan suyuqlik chiqishi."),
+            ]
+        )
+    )
     return [
         heading(uz("Ko'krak bezi saratoni nima?")),
         text_card(
@@ -445,90 +655,92 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
             )
         ),
         uz_statistics(),
-        heading(uz("Ko'krak bezi saratoni bosqichlari")),
-        capsules(stages),
-        heading(uz("Ko'krak bezi saratoni sabablari")),
-        icon_tiles([(icon, uz(title), uz(text)) for icon, title, text in causes]),
-        heading(uz("Ko'krak bezi saratoni belgilari")),
-        text_cards(signs),
-        alert(DONT_PANIC),
-        appeal(lang, ctx),
-        heading(uz("Shifokor ko'rigi")),
-        text_card(
-            p(
-                uz(
-                    "Qabul vaqtida shifokor (ginekolog, mammolog yoki onkolog) sizdan quyidagilar "
-                    "haqida so'raydi: yaqin qarindoshlaringizda ko'krak bezi saratoni bo'lganmi, "
-                    "hayz qachon boshlangan va tugagan, oxirgi hayz qachon bo'lgan, homiladorlik va "
-                    "emizish qanday o'tgan, hozirda qanday dori vositalari qabul qilinmoqda. Bu "
-                    "ma'lumotlar shifokorga xavf omillarini baholashda yordam beradi."
-                )
-            )
-            + p(
-                uz(
-                    "Agar siz ko'kragingizda o'zgarishlarni sezsangiz, bu haqda shifokorga albatta "
-                    "xabar bering. Ayniqsa, bu o'zgarishlar hayz davri bilan bog'liqligini, ya'ni "
-                    "ma'lum kunlarda kuchayishi yoki o'tib ketishini aniqlashtirish muhim."
-                )
-            )
-            + p(
-                uz(
-                    "Ko'rik vaqtida shifokor ko'krakni va qo'ltiq osti sohasini diqqat bilan ko'zdan "
-                    "kechiradi va paypaslab tekshiradi. Kattalashgan limfa tugunlari yallig'lanish "
-                    "yoki o'smaning tarqalganini ko'rsatishi mumkin va qo'shimcha tekshiruvni talab "
-                    "qiladi."
-                )
-            )
-            + p(
-                uz(
-                    "Aniqroq natijaga erishish uchun shifokor sizdan turish, o'tirish yoki yotish "
-                    "holatida bo'lishingizni so'rashi mumkin. Agar tekshiruv paytida og'riq yoki "
-                    "noqulaylik sezsangiz, bu haqida darhol shifokorga ayting."
-                )
-            )
-        ),
-        heading(uz("Ko'krakni o'z-o'zini tekshirish")),
-        text_card(
-            p("<b>" + uz("O'z-o'zini tekshirish kerakmi?") + "</b>")
-            + p(
-                uz(
-                    "O'z-o'zini tekshirish ko'krak bezi saratonini erta aniqlash usuli "
-                    "hisoblanmaydi. Shunga qaramay, bu usul foydali bo'lishi mumkin: u sizga "
-                    "ko'kragingizning holatini yaxshiroq bilishga va o'zgarishlarni erta payqashga "
-                    "yordam beradi."
-                )
-            )
-        ),
-        text_card(
-            p("<b>" + uz("O'z-o'zini tekshirishni qanday bajarish kerak?") + "</b>")
-            + p(
-                uz(
-                    "Ko'krak to'qimasi hayz sikli bosqichlariga qarab o'zgaradi, shuning uchun eng "
-                    "qulay vaqt hayz boshlanganidan 5–7 kundan keyingi kun hisoblanadi. "
-                    "Menopauzadagi ayollar har oyda bir xil sanani tanlab, shu kuni tekshiruvni "
-                    "o'tkazishlari tavsiya etiladi."
-                )
-            )
-        ),
-        text_cards(self_exam),
-        text_card(
-            p(
-                uz(
-                    "Agar o'z-o'zini tekshirish vaqtida quyidagi o'zgarishlardan birini sezsangiz, "
-                    "shifokorga murojaat qilishni kechiktirmang:"
-                )
-            )
-            + ul(
-                [
-                    uz("ko'krak shakli yoki hajmining o'zgarishi;"),
-                    uz("qattiqlik yoki shish paydo bo'lishi;"),
-                    uz("teri holatining o'zgarishi — ichkariga tortilish, qizarish, quruqlashish;"),
-                    uz("so'rg'ichning tortilishi yoki joyining o'zgarishi;"),
-                    uz("so'rg'ichdan suyuqlik chiqishi."),
-                ]
-            ),
-            title=uz("Qachon shifokorga murojaat qilish kerak?"),
-            width="narrow",
+        accordion(
+            [
+                acc_item(
+                    uz("Ko'krak bezi saratoni bosqichlari"), "bosqichlari", diagnostics, boxed=True
+                ),
+                acc_item(
+                    uz("Ko'krak bezi saratoni sabablari"),
+                    "sabablari",
+                    [icon_tiles([(icon, uz(title), uz(text)) for icon, title, text in causes])],
+                ),
+                acc_item(
+                    uz("Ko'krak bezi saratoni belgilari"),
+                    "belgilari",
+                    [text_cards(signs)],
+                ),
+                acc_item(
+                    uz("Shifokor ko'rigi"),
+                    "shifokor-korigi",
+                    [
+                        text_card(
+                            p(
+                                uz(
+                                    "Qabul vaqtida shifokor (ginekolog, mammolog yoki onkolog) sizdan quyidagilar "
+                                    "haqida so'raydi: yaqin qarindoshlaringizda ko'krak bezi saratoni bo'lganmi, "
+                                    "hayz qachon boshlangan va tugagan, oxirgi hayz qachon bo'lgan, homiladorlik va "
+                                    "emizish qanday o'tgan, hozirda qanday dori vositalari qabul qilinmoqda. Bu "
+                                    "ma'lumotlar shifokorga xavf omillarini baholashda yordam beradi."
+                                )
+                            )
+                            + p(
+                                uz(
+                                    "Agar siz ko'kragingizda o'zgarishlarni sezsangiz, bu haqda shifokorga albatta "
+                                    "xabar bering. Ayniqsa, bu o'zgarishlar hayz davri bilan bog'liqligini, ya'ni "
+                                    "ma'lum kunlarda kuchayishi yoki o'tib ketishini aniqlashtirish muhim."
+                                )
+                            )
+                            + p(
+                                uz(
+                                    "Ko'rik vaqtida shifokor ko'krakni va qo'ltiq osti sohasini diqqat bilan ko'zdan "
+                                    "kechiradi va paypaslab tekshiradi. Kattalashgan limfa tugunlari yallig'lanish "
+                                    "yoki o'smaning tarqalganini ko'rsatishi mumkin va qo'shimcha tekshiruvni talab "
+                                    "qiladi."
+                                )
+                            )
+                            + p(
+                                uz(
+                                    "Aniqroq natijaga erishish uchun shifokor sizdan turish, o'tirish yoki yotish "
+                                    "holatida bo'lishingizni so'rashi mumkin. Agar tekshiruv paytida og'riq yoki "
+                                    "noqulaylik sezsangiz, bu haqida darhol shifokorga ayting."
+                                )
+                            )
+                        ),
+                    ],
+                ),
+                acc_item(
+                    uz("Ko'krakni o'z-o'zini tekshirish"),
+                    "oz-ozini-tekshirish",
+                    [
+                        text_card(
+                            p("<b>" + uz("O'z-o'zini tekshirish kerakmi?") + "</b>")
+                            + p(
+                                uz(
+                                    "O'z-o'zini tekshirish ko'krak bezi saratonini erta aniqlash usuli "
+                                    "hisoblanmaydi. Shunga qaramay, bu usul foydali bo'lishi mumkin: u sizga "
+                                    "ko'kragingizning holatini yaxshiroq bilishga va o'zgarishlarni erta payqashga "
+                                    "yordam beradi."
+                                )
+                            )
+                        ),
+                        text_card(
+                            p("<b>" + uz("O'z-o'zini tekshirishni qanday bajarish kerak?") + "</b>")
+                            + p(
+                                uz(
+                                    "Ko'krak to'qimasi hayz sikli bosqichlariga qarab o'zgaradi, shuning uchun eng "
+                                    "qulay vaqt hayz boshlanganidan 5–7 kundan keyingi kun hisoblanadi. "
+                                    "Menopauzadagi ayollar har oyda bir xil sanani tanlab, shu kuni tekshiruvni "
+                                    "o'tkazishlari tavsiya etiladi."
+                                )
+                            )
+                        ),
+                        text_cards(self_exam),
+                        pill_title(uz("Qachon shifokorga murojaat qilish kerak?")),
+                        when_to_see,
+                    ],
+                ),
+            ]
         ),
         alert(DONT_PANIC),
         appeal(lang, ctx),

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 17:30+0500\n"
+"POT-Creation-Date: 2026-10-06 17:49+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -333,6 +333,76 @@ msgstr "YouTube, Telegram posti, Instagram post/reel yoki TikTok videosi."
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
 msgstr "Joylashtirish (YouTube / Telegram / Instagram / TikTok)"
 
+#| msgid "Title"
+msgid "Title bar"
+msgstr "Sarlavha chizigʻi"
+
+msgid "Highlight box"
+msgstr "Ajratilgan quti"
+
+#| msgid "intro"
+msgid "Intro"
+msgstr "Kirish"
+
+msgid "Items"
+msgstr "Bandlar"
+
+msgid "Closing text"
+msgstr "Yakuniy matn"
+
+#| msgid "Check"
+msgid "Check row"
+msgstr "Belgili qator"
+
+msgid "Pictogram"
+msgstr "Piktogramma"
+
+msgid "List with pictograms"
+msgstr "Piktogrammali roʻyxat"
+
+msgid "Text next to the picture"
+msgstr "Rasm yonidagi matn"
+
+#| msgid "Note"
+msgid "Note box"
+msgstr "Izoh qutisi"
+
+#| msgid "Explanation"
+msgid "Exclamation mark"
+msgstr "Undov belgisi"
+
+#| msgid "icon"
+msgid "Note icon"
+msgstr "Izoh belgisi"
+
+#| msgid "Numbered list"
+msgid "Numbered cards"
+msgstr "Raqamli kartalar"
+
+msgid "Anchor"
+msgstr "Anchor (havola nomi)"
+
+msgid "Latin letters and dashes, e.g. bosqichlari — links can open this item."
+msgstr ""
+"Lotin harflari va chiziqcha, masalan bosqichlari — havolalar shu bandni ocha"
+" oladi."
+
+#| msgid "Load content"
+msgid "Frame the content"
+msgstr "Kontentni ramkaga olish"
+
+msgid ""
+"One rounded frame around everything inside (diagnostics in the design)."
+msgstr ""
+"Ichidagi hamma narsa atrofida bitta yumaloq ramka (dizayndagi diagnostika)."
+
+#| msgid "Contact"
+msgid "Content"
+msgstr "Kontent"
+
+msgid "Accordion (topic sections)"
+msgstr "Akkordeon (mavzu boʻlimlari)"
+
 msgid "Woman silhouette"
 msgstr "Ayol siluyeti"
 
@@ -386,6 +456,34 @@ msgstr "Oʻz-oʻzini tekshirish 3: yotgan holda"
 
 msgid "Self-exam 4: nipple and armpit"
 msgstr "Oʻz-oʻzini tekshirish 4: soʻrgʻich va qoʻltiq osti"
+
+#| msgid "e.g. mammography"
+msgid "Woman at the mammograph"
+msgstr "Mammograf yonidagi ayol"
+
+msgid "Biopsy and tissue analysis"
+msgstr "Biopsiya va toʻqima tahlili"
+
+msgid "CT scanner"
+msgstr "KT apparati"
+
+msgid "Microscope"
+msgstr "Mikroskop"
+
+msgid "DNA"
+msgstr "DNK"
+
+msgid "Blood drop"
+msgstr "Qon tomchisi"
+
+msgid "Test tube"
+msgstr "Probirka"
+
+msgid "Urine cup"
+msgstr "Siydik idishi"
+
+msgid "Pregnancy test"
+msgstr "Homiladorlik testi"
 
 msgid "summary"
 msgstr "qisqacha mazmun"
@@ -516,11 +614,9 @@ msgstr "Ayollar saratoni"
 msgid "Childhood cancer"
 msgstr "Bolalar saratoni"
 
-#| msgid "Women's cancer"
 msgid "Breast cancer"
 msgstr "Koʻkrak bezi saratoni"
 
-#| msgid "Childhood cancer"
 msgid "Cervical cancer"
 msgstr "Bachadon boʻyni saratoni"
 
@@ -573,22 +669,18 @@ msgstr ""
 msgid "Medical review"
 msgstr "Tibbiy tekshiruv"
 
-#| msgid "Go to the home page"
 msgid "Anchor on the page"
 msgstr "Sahifadagi boʻlim (anchor)"
 
 msgid "Optional, without # — e.g. a section of a long page."
 msgstr "Ixtiyoriy, # belgisisiz — masalan, uzun sahifaning boʻlimi."
 
-#| msgid "external URL"
 msgid "or external URL"
 msgstr "yoki tashqi havola"
 
-#| msgid "Link"
 msgid "Links"
 msgstr "Havolalar"
 
-#| msgid "Two columns"
 msgid "Footer column"
 msgstr "Footer ustuni"
 
@@ -628,11 +720,9 @@ msgstr "xaritadagi manzil"
 msgid "Footer location icon (e.g. Yandex Maps)."
 msgstr "Footerdagi manzil belgisi (masalan, Yandex Xaritalar havolasi)."
 
-#| msgid "footer text (uz)"
 msgid "footer columns (uz)"
 msgstr "footer ustunlari (uz)"
 
-#| msgid "footer text (ru)"
 msgid "footer columns (ru)"
 msgstr "footer ustunlari (ru)"
 
@@ -704,7 +794,6 @@ msgstr "Ishonch telefoni"
 msgid "Social networks"
 msgstr "Ijtimoiy tarmoqlar"
 
-#| msgid "Footer & legal"
 msgid "Footer site map"
 msgstr "Footerdagi sayt xaritasi"
 
@@ -874,7 +963,6 @@ msgstr "Savollar va javoblar"
 msgid "Section"
 msgstr "Boʻlim"
 
-#| msgid "Topics"
 msgid "Topic"
 msgstr "Mavzu"
 
@@ -899,7 +987,6 @@ msgstr "Savolingiz"
 msgid "My question may be published anonymously with the answer"
 msgstr "Savolim javob bilan birga anonim eʼlon qilinishi mumkin"
 
-#| msgid "Your question"
 msgid "Leave your question too"
 msgstr "Siz ham oʻz savolingizni qoldiring"
 
@@ -935,7 +1022,6 @@ msgstr ""
 msgid "section"
 msgstr "boʻlim"
 
-#| msgid "Topics"
 msgid "topic"
 msgstr "mavzu"
 
@@ -996,7 +1082,6 @@ msgstr "shifokorga savol"
 msgid "questions to a doctor"
 msgstr "shifokorga savollar"
 
-#| msgid "All types"
 msgid "All topics"
 msgstr "Barcha mavzular"
 
@@ -1129,12 +1214,6 @@ msgstr "qoʻshimcha kontent"
 
 msgid "Hero"
 msgstr "Bosh blok (hero)"
-
-msgid "Featured articles"
-msgstr "Tanlangan maqolalar"
-
-msgid "Featured videos"
-msgstr "Tanlangan videolar"
 
 msgid "home page"
 msgstr "bosh sahifa"
@@ -1333,18 +1412,15 @@ msgstr "%(label)s tarkib turi %(mime)s ruxsat etilmagan."
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr "Subtitr fayllari WebVTT boʻlishi kerak ('WEBVTT' bilan boshlanadi)."
 
-#| msgid "videos"
 msgid "videos list"
 msgstr "videoroliklar roʻyxati"
 
-#| msgid "Featured articles"
 msgid "News and articles"
 msgstr "Yangiliklar va maqolalar"
 
 msgid "News"
 msgstr "Yangiliklar"
 
-#| msgid "All types"
 msgid "list type"
 msgstr "roʻyxat turi"
 
@@ -1357,19 +1433,15 @@ msgstr "sana"
 msgid "picture"
 msgstr "rasm"
 
-#| msgid "Shown in listings, the mega-menu and search results."
 msgid "Two lines shown on the card (articles) and in search results."
 msgstr "Kartada (maqolalar) va qidiruv natijalarida koʻrinadigan ikki qator."
 
-#| msgid "Cards"
 msgid "Card"
 msgstr "Karta"
 
-#| msgid "featured article"
 msgid "news item / article"
 msgstr "yangilik / maqola"
 
-#| msgid "Featured articles"
 msgid "news and articles"
 msgstr "yangiliklar va maqolalar"
 
@@ -1759,7 +1831,6 @@ msgstr "Ochish:"
 msgid "Site sections"
 msgstr "Sayt boʻlimlari"
 
-#| msgid "Social networks"
 msgid "Contacts and social networks"
 msgstr "Aloqa va ijtimoiy tarmoqlar"
 
@@ -1821,7 +1892,6 @@ msgstr "Shifokor tekshirgan"
 msgid "Verified by a doctor"
 msgstr "Shifokor tekshirgan"
 
-#| msgid "Page"
 msgid "Pages"
 msgstr "Sahifalar"
 
@@ -1858,7 +1928,6 @@ msgstr "Muddat"
 msgid "Learn more"
 msgstr "Batafsil"
 
-#| msgid "Filter by section"
 msgid "Filter by topic"
 msgstr "Mavzu boʻyicha saralash"
 
@@ -1933,7 +2002,6 @@ msgstr ""
 "Ism va aloqa maʼlumotlari hech qachon eʼlon qilinmaydi. Aloqa maʼlumotlari "
 "javobdan 90 kun oʻtgach oʻchiriladi."
 
-#| msgid "Search the site"
 msgid "Search the questions"
 msgstr "Savollardan qidirish"
 
@@ -1947,11 +2015,9 @@ msgstr "Javob berilgan savollar shu yerda paydo boʻladi."
 msgid "Learn about %(topic)s"
 msgstr "%(topic)s haqida bilib oling"
 
-#| msgid "Answered questions"
 msgid "Most asked questions"
 msgstr "Eng koʻp beriladigan savollar"
 
-#| msgid "Search the site"
 msgid "Read the answer"
 msgstr "Javobini oʻqish"
 
@@ -1980,15 +2046,12 @@ msgctxt "hero button"
 msgid "Get help"
 msgstr "Murojaat qilish"
 
-#| msgid "Stories will appear here."
 msgid "News will appear here soon."
 msgstr "Yangiliklar tez orada shu yerda chiqadi."
 
-#| msgid "Stories will appear here."
 msgid "Videos will appear here soon."
 msgstr "Videoroliklar tez orada shu yerda chiqadi."
 
-#| msgid "Articles will appear here."
 msgid "Articles will appear here soon."
 msgstr "Maqolalar tez orada shu yerda chiqadi."
 
@@ -2013,11 +2076,9 @@ msgstr "Xeshteglarni nusxalash"
 msgid "Materials will appear here."
 msgstr "Materiallar shu yerda paydo boʻladi."
 
-#| msgid "Short video"
 msgid "More videos"
 msgstr "Boshqa videoroliklar"
 
-#| msgid "Read more"
 msgctxt "article card"
 msgid "Read more"
 msgstr "Koʻproq oʻqish"
@@ -2111,6 +2172,12 @@ msgstr "Natijani koʻrsatish"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
+
+#~ msgid "Featured articles"
+#~ msgstr "Tanlangan maqolalar"
+
+#~ msgid "Featured videos"
+#~ msgstr "Tanlangan videolar"
 
 #~ msgid "Partners"
 #~ msgstr "Hamkorlar"

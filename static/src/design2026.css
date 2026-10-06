@@ -249,4 +249,94 @@
   .social-icons a { display: inline-flex; align-items: center; justify-content: center; width: var(--tap-target); height: var(--tap-target); border-radius: 10px; background: var(--c-social); color: var(--c-chip-purple); }
   .site-footer__bottom { margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid rgba(72, 0, 103, 0.18); font-size: 0.85rem; color: var(--neutral-600); }
   .site-footer__bottom p { margin-bottom: var(--space-2); }
+
+  /* ---- awareness accordion (design 2026-10, «Koʻkrak bezi saratoni» frames 1–6) ------------ */
+  .acc { display: grid; gap: clamp(0.8rem, 1.1vw, 1.25rem); margin-block: clamp(2.5rem, 4vw, 5rem); }
+  .acc__summary {
+    display: flex; align-items: center; gap: var(--space-4); list-style: none; cursor: pointer;
+    padding: clamp(4px, 0.4vw, 7px); border: clamp(2px, 0.2vw, 3px) solid var(--c-acc-ring);
+    border-radius: var(--radius-pill); background: var(--neutral-50);
+  }
+  .acc__summary::-webkit-details-marker { display: none; }
+  .acc__title {
+    flex: 1; display: flex; align-items: center; min-height: clamp(52px, 6vw, 104px);
+    padding-inline: clamp(1.1rem, 2.6vw, 2.8rem); border-radius: var(--radius-pill); background: var(--c-card-hero-pink);
+    color: var(--c-pink-800); text-transform: uppercase; font-size: clamp(1rem, 0.7rem + 0.95vw, 1.95rem); font-weight: 600; line-height: 1.15;
+  }
+  .acc__disc {
+    flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: clamp(52px, 6vw, 104px); height: clamp(52px, 6vw, 104px); border-radius: 50%; background: var(--c-pink-600); color: var(--neutral-0);
+  }
+  .acc__disc .icon { width: 48%; height: 48%; transition: rotate 0.15s; }
+  .acc__item[open] > .acc__summary { border-color: var(--c-pink-700); }
+  .acc__item[open] .acc__title { background: var(--c-pink-600); color: var(--neutral-0); }
+  .acc__item[open] .acc__disc .icon { rotate: 90deg; }
+  .acc__body { padding-block: clamp(1.5rem, 3vw, 3rem) clamp(0.5rem, 1.5vw, 1.5rem); }
+  .acc__body > .block:first-child { margin-top: 0; }
+  .acc__body--boxed { margin-top: clamp(1.5rem, 3vw, 3rem); padding: clamp(1.25rem, 3.4vw, 3.6rem); border: 2px solid var(--c-acc-ring); border-radius: clamp(28px, 2.8vw, 48px); background: var(--neutral-0); }
+
+  .check-row { font-size: clamp(1.05rem, 0.85rem + 0.6vw, 1.65rem); line-height: 1.3; }
+  .check-row__items { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); margin: clamp(1.2rem, 2.4vw, 2.5rem) 0; padding: 0; list-style: none; }
+  .check-row__item { display: flex; align-items: center; gap: var(--space-4); font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.3rem); }
+  @media (min-width: 64rem) { .check-row__item + .check-row__item { border-left: 2px solid var(--c-pink-400); padding-left: var(--space-6); } }
+  .check-row__disc { flex: none; display: inline-flex; align-items: center; justify-content: center; width: clamp(44px, 3.8vw, 64px); height: clamp(44px, 3.8vw, 64px); border-radius: 50%; background: var(--c-check); color: var(--neutral-0); }
+
+  .num-cards { display: grid; gap: clamp(1rem, 1.7vw, 1.75rem); grid-template-columns: 1fr; margin: clamp(1.5rem, 2.5vw, 2.5rem) 0; padding: 0; list-style: none; }
+  @media (min-width: 56rem) { .num-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .num-card { display: flex; flex-direction: column; gap: var(--space-4); padding: clamp(1.25rem, 2.6vw, 2.8rem); border-radius: clamp(28px, 2.8vw, 48px); background: var(--c-card-hero-pink); font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.3rem); line-height: 1.3; }
+  /* checkerboard: 1 light, 2 dark / 3 dark, 4 light … (one column: alternate) */
+  .num-card:nth-child(even) { background: var(--c-card-dark-pink); }
+  @media (min-width: 56rem) {
+    .num-card:nth-child(even) { background: var(--c-card-hero-pink); }
+    .num-card:nth-child(4n + 2), .num-card:nth-child(4n + 3) { background: var(--c-card-dark-pink); }
+  }
+  .num-card__title { display: flex; align-items: center; gap: clamp(1rem, 2.2vw, 2.3rem); margin: 0; color: var(--neutral-900); text-transform: uppercase; font-size: clamp(1.15rem, 0.8rem + 1vw, 1.95rem); font-weight: 500; line-height: 1.15; }
+  .num-card__no { flex: none; display: inline-flex; align-items: center; justify-content: center; width: clamp(44px, 3.8vw, 66px); height: clamp(44px, 3.8vw, 66px); border-radius: 50%; background: var(--c-check); color: var(--neutral-0); font-size: 0.8em; }
+  .num-card:nth-child(even) .num-card__no { background: var(--c-card-hero-pink); color: var(--c-pink-600); }
+  @media (min-width: 56rem) {
+    .num-card:nth-child(even) .num-card__no { background: var(--c-check); color: var(--neutral-0); }
+    .num-card:nth-child(4n + 2) .num-card__no, .num-card:nth-child(4n + 3) .num-card__no { background: var(--c-card-hero-pink); color: var(--c-pink-600); }
+  }
+  .num-card__text > :last-child, .num-card__side > :last-child, .num-card__note-text > :last-child { margin-bottom: 0; }
+  .num-card__text ul { list-style: none; padding-left: 0; }
+  .num-card__text ul li { position: relative; padding-left: 1.6em; margin-block: 0.4em; }
+  .num-card__text ul li::before { content: ""; position: absolute; left: 0.2em; top: 0.35em; width: 0.7em; height: 0.7em; border-radius: 50%; background: var(--c-pink-500); }
+  .num-card__items { display: grid; gap: 0.9rem; margin: 0; padding: 0 0 0 clamp(0rem, 3vw, 3rem); list-style: none; }
+  .num-card__items li { display: flex; align-items: center; gap: var(--space-4); }
+  .num-card__items img { flex: none; width: 1.8em; height: auto; }
+  .num-card__dot { flex: none; width: 0.7em; height: 0.7em; border-radius: 50%; background: var(--c-pink-500); }
+  .num-card__media { display: flex; justify-content: center; }
+  .num-card__media--side { justify-content: flex-start; align-items: center; gap: var(--space-4); }
+  .num-card__img { width: min(100%, 26rem); height: auto; }
+  .num-card__media--side .num-card__img { width: min(55%, 16rem); }
+  .num-card__side { font-size: 0.9em; }
+  .num-card__note { display: flex; align-items: center; gap: var(--space-4); margin-top: auto; padding: clamp(1rem, 2vw, 2rem); border-radius: clamp(14px, 1.3vw, 22px); background: var(--c-note-pink); font-size: 0.9em; }
+  .num-card:nth-child(even) .num-card__note { background: var(--c-card-hero-pink); }
+  @media (min-width: 56rem) {
+    .num-card:nth-child(even) .num-card__note { background: var(--c-note-pink); }
+    .num-card:nth-child(4n + 2) .num-card__note, .num-card:nth-child(4n + 3) .num-card__note { background: var(--c-card-hero-pink); }
+  }
+  .num-card__note-text { flex: 1; }
+  .num-card__note-icon { flex: none; width: clamp(56px, 6vw, 110px); height: auto; }
+  .num-card__alert { flex: none; display: inline-flex; align-items: center; justify-content: center; width: clamp(56px, 5.8vw, 100px); height: clamp(56px, 5.8vw, 100px); border-radius: 50%; background: var(--c-pink-500); color: var(--neutral-0); font-size: clamp(2rem, 3vw, 3.4rem); font-weight: 700; }
+
+  .highlight-box { margin-block: clamp(1.5rem, 2.5vw, 2.5rem); padding: clamp(1.25rem, 2.8vw, 3rem) clamp(1.25rem, 3.6vw, 3.8rem); border-radius: clamp(28px, 2.8vw, 48px); background: var(--c-card-hero-pink); font-size: clamp(1.05rem, 0.8rem + 0.75vw, 1.85rem); line-height: 1.3; }
+  .highlight-box__title { margin: 0 0 var(--space-2); color: var(--neutral-900); text-transform: uppercase; font-size: clamp(1.5rem, 1rem + 1.4vw, 2.7rem); font-weight: 500; }
+  .highlight-box__text > :last-child { margin-bottom: 0; }
+  .highlight-box__text ul { list-style: none; padding-left: 0; }
+  .highlight-box__text ul li { position: relative; padding-left: 2em; margin-block: 0.5em; font-style: italic; }
+  .highlight-box__text ul li::before { content: ""; position: absolute; left: 0; top: 0.12em; width: 1.2em; height: 1.2em; background: url("../img/figma/icon-flower.svg") center / contain no-repeat; }
+  .pill-title { margin: clamp(2rem, 3vw, 3rem) 0 var(--space-4); padding: clamp(1rem, 1.8vw, 1.9rem) clamp(1.25rem, 2.8vw, 3rem); border: 2px solid var(--c-acc-ring); border-radius: clamp(24px, 2.4vw, 40px); background: var(--c-card-hero-pink); color: var(--c-pink-800); text-transform: uppercase; font-size: clamp(1.1rem, 0.8rem + 0.9vw, 1.9rem); font-weight: 600; }
+  .pill-title + .highlight-box { margin-top: 0; }
+
+  /* design 2026-10: the women's pages sit on the plain page colour (no blob backdrop) */
+  body[data-section="women"] { background-color: var(--neutral-50); background-image: none; }
+  .num-card__side p { margin: 0; }
+
+  /* design 2026-10 risk tiles: light pink square, wine pictogram, thin pink frame */
+  .icon-tile { border: 2px solid var(--c-card-hero-pink); background: var(--neutral-0); }
+  .icon-tile__art { background: var(--c-card-hero-pink); }
+  .icon-tile__img { width: 70%; height: 70%; object-fit: contain; }
+  /* stacked blocks inside an accordion item keep the design rhythm */
+  .acc__body > * + * { margin-top: clamp(1rem, 1.6vw, 1.75rem); }
 }

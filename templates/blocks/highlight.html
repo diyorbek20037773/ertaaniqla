@@ -1,0 +1,5 @@
+{% comment %} blocks/highlight.html — pink box, optional big title («ENG MUHIMI!»). {% endcomment %}
+<section class="block highlight-box">
+  {% if value.title %}<h3 class="highlight-box__title">{{ value.title }}</h3>{% endif %}
+  <div class="highlight-box__text">{{ value.text }}</div>
+</section>

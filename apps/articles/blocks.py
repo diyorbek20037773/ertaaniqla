@@ -21,7 +21,7 @@ from wagtail.images.blocks import ImageBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
 from apps.articles.embeds import parse_embed_url
-from apps.articles.illustrations import icon_choices, illustration_choices
+from apps.articles.illustrations import icon_choices, illustration_choices, pictogram_choices
 
 RICH_TEXT_FEATURES = [
     "h2",
@@ -519,6 +519,136 @@ class EmbedBlock(blocks.StructBlock):
 
 
 # ---------------------------------------------------------------------------
+# Design 2026-10 blocks (awareness pages of the women's section)
+# ---------------------------------------------------------------------------
+class PillTitleBlock(blocks.CharBlock):
+    """Pink rounded bar with a wine title («QACHON SHIFOKORGA MUROJAAT QILISH KERAK?»)."""
+
+    class Meta:
+        icon = "title"
+        label = _("Title bar")
+        template = "blocks/pill_title.html"
+
+
+class HighlightBlock(blocks.StructBlock):
+    """Pink box: optional big title («ENG MUHIMI!») and text; list items get flower bullets."""
+
+    title = blocks.CharBlock(required=False, max_length=120, label=_("Title"))
+    text = blocks.RichTextBlock(features=LIST_FEATURES, label=_("Text"))
+
+    class Meta:
+        icon = "pick"
+        label = _("Highlight box")
+        template = "blocks/highlight.html"
+
+
+class CheckRowBlock(blocks.StructBlock):
+    """Intro, a row of questions with check discs, closing sentence."""
+
+    intro = blocks.RichTextBlock(required=False, features=LIST_FEATURES, label=_("Intro"))
+    items = blocks.ListBlock(blocks.CharBlock(max_length=120), label=_("Items"))
+    outro = blocks.RichTextBlock(required=False, features=LIST_FEATURES, label=_("Closing text"))
+
+    class Meta:
+        icon = "tick"
+        label = _("Check row")
+        template = "blocks/check_row.html"
+
+
+class PictogramItemBlock(blocks.StructBlock):
+    pictogram = blocks.ChoiceBlock(choices=pictogram_choices, required=False, label=_("Pictogram"))
+    text = blocks.CharBlock(max_length=200, label=_("Text"))
+
+    class Meta:
+        icon = "list-ul"
+
+
+class NumberedCardBlock(blocks.StructBlock):
+    title = blocks.CharBlock(max_length=120, label=_("Title"))
+    text = blocks.RichTextBlock(features=LIST_FEATURES, label=_("Text"))
+    items = blocks.ListBlock(
+        PictogramItemBlock(), required=False, default=[], label=_("List with pictograms")
+    )
+    image = ImageBlock(required=False, label=_("Image"))
+    illustration = blocks.ChoiceBlock(
+        choices=illustration_choices,
+        required=False,
+        label=_("Designer illustration"),
+        help_text=_("Used when no image is uploaded."),
+    )
+    side_text = blocks.RichTextBlock(
+        required=False, features=LIST_FEATURES, label=_("Text next to the picture")
+    )
+    note = blocks.RichTextBlock(required=False, features=LIST_FEATURES, label=_("Note box"))
+    note_icon = blocks.ChoiceBlock(
+        choices=[("alert", _("Exclamation mark")), *pictogram_choices()],
+        required=False,
+        label=_("Note icon"),
+    )
+
+    class Meta:
+        icon = "order"
+
+
+class NumberedCardsBlock(blocks.StructBlock):
+    """Two-column numbered cards (diagnostics 1–6); light and dark pink alternate."""
+
+    cards = blocks.ListBlock(NumberedCardBlock(), min_num=1, label=_("Cards"))
+
+    class Meta:
+        icon = "order"
+        label = _("Numbered cards")
+        template = "blocks/numbered_cards.html"
+
+
+class AccordionBodyBlock(blocks.StreamBlock):
+    rich_text = RichTextBlock(features=RICH_TEXT_FEATURES)
+    text_card = TextCardBlock()
+    text_cards = TextCardsBlock()
+    cards_grid = CardsGridBlock()
+    steps = StepsBlock()
+    callout = CalloutBlock()
+    numbered_cards = NumberedCardsBlock()
+    check_row = CheckRowBlock()
+    highlight = HighlightBlock()
+    pill_title = PillTitleBlock(max_length=160)
+    faq_accordion = FAQAccordionBlock()
+    image_gallery = ImageGalleryBlock()
+    video = VideoBlock()
+
+
+class AccordionItemBlock(blocks.StructBlock):
+    title = blocks.CharBlock(max_length=160, label=_("Title"))
+    anchor = blocks.CharBlock(
+        required=False,
+        max_length=60,
+        label=_("Anchor"),
+        help_text=_("Latin letters and dashes, e.g. bosqichlari — links can open this item."),
+    )
+    boxed = blocks.BooleanBlock(
+        required=False,
+        default=False,
+        label=_("Frame the content"),
+        help_text=_("One rounded frame around everything inside (diagnostics in the design)."),
+    )
+    body = AccordionBodyBlock(label=_("Content"))
+
+    class Meta:
+        icon = "collapse-down"
+
+
+class AccordionBlock(blocks.StructBlock):
+    """Design 2026-10: pink pill rows (↗) that open in place (↘) — stages, causes, signs…"""
+
+    items = blocks.ListBlock(AccordionItemBlock(), min_num=1, label=_("Items"))
+
+    class Meta:
+        icon = "list-ul"
+        label = _("Accordion (topic sections)")
+        template = "blocks/accordion.html"
+
+
+# ---------------------------------------------------------------------------
 # Stream definitions
 # ---------------------------------------------------------------------------
 class ArticleBodyBlock(blocks.StreamBlock):
@@ -543,6 +673,11 @@ class ArticleBodyBlock(blocks.StreamBlock):
     quote = QuoteBlock()
     table = TableBlock()
     embed = EmbedBlock()
+    accordion = AccordionBlock()
+    numbered_cards = NumberedCardsBlock()
+    check_row = CheckRowBlock()
+    highlight = HighlightBlock()
+    pill_title = PillTitleBlock(max_length=160)
 
 
 class IntroBlock(blocks.StreamBlock):

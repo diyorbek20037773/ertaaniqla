@@ -35,6 +35,10 @@
   /* design 2026-10 (docs/Erta aniqla/*.png, sampled): cards, chips, footer */
   --c-card-pink: #ffd2e2;     /* news rows */
   --c-card-hero-pink: #ffb2cd; /* landing «Ayollar saratoni» capsule */
+  --c-card-dark-pink: #ee7ca4; /* numbered cards, dark squares */
+  --c-note-pink: #ff93b9;     /* note box on a light card */
+  --c-check: #ff6ea1;         /* check and number discs */
+  --c-acc-ring: #e29cbc;      /* accordion ring, framed content */
   --c-card-pink-2: #fccbdc;   /* question topic cards */
   --c-card-lilac: #d0b6ff;    /* children's cards, footer */
   --c-chip-purple: #9b64ff;   /* children's topic chip */

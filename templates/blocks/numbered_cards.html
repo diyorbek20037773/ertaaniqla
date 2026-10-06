@@ -1,0 +1,33 @@
+{% load wagtailimages_tags article_tags %}
+{% comment %} blocks/numbered_cards.html — two-column numbered cards (design 2026-10, diagnostics
+   1–6): number disc, title, text, optional pictogram list, picture (+ text beside it) and a
+   note box with an icon. Light / dark pink alternate in a checkerboard (CSS). {% endcomment %}
+<ol class="block num-cards">
+  {% for card in value.cards %}
+    <li class="num-card">
+      <h3 class="num-card__title"><span class="num-card__no" aria-hidden="true">{{ forloop.counter }}</span>{{ card.title }}</h3>
+      <div class="num-card__text">{{ card.text }}</div>
+      {% if card.items %}
+        <ul class="num-card__items">
+          {% for item in card.items %}<li>{% with src=item.pictogram|illustration_src %}{% if src %}<img src="{{ src }}" alt="" width="28" height="36" loading="lazy" decoding="async">{% else %}<span class="num-card__dot" aria-hidden="true"></span>{% endif %}{% endwith %}<span>{{ item.text }}</span></li>{% endfor %}
+        </ul>
+      {% endif %}
+      {% with src=card.illustration|illustration_src %}
+        {% if card.image or src %}
+          <div class="num-card__media{% if card.side_text %} num-card__media--side{% endif %}">
+            {% if card.image %}{% picture card.image format-{webp,png} max-{400x400,800x800} sizes="(max-width: 48rem) 70vw, 22rem" class="num-card__img" loading="lazy" %}
+            {% else %}{% with size=card.illustration|illustration_size %}<img class="num-card__img" src="{{ src }}" alt=""{% if size %} width="{{ size.0 }}" height="{{ size.1 }}"{% endif %} loading="lazy" decoding="async">{% endwith %}{% endif %}
+            {% if card.side_text %}<div class="num-card__side">{{ card.side_text }}</div>{% endif %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% if card.note %}
+        <div class="num-card__note">
+          <div class="num-card__note-text">{{ card.note }}</div>
+          {% if card.note_icon == "alert" %}<span class="num-card__alert" aria-hidden="true">!</span>
+          {% elif card.note_icon %}<img class="num-card__note-icon" src="{{ card.note_icon|illustration_src }}" alt="" width="110" height="120" loading="lazy" decoding="async">{% endif %}
+        </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ol>
