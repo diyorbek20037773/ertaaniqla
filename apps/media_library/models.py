@@ -22,8 +22,9 @@ from wagtail.images.models import AbstractImage, AbstractRendition, Image
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
-from apps.core.models import TimeStampedModel
+from apps.core.models import TimeStampedModel, Topic
 from apps.media_library.materials import MaterialsPage  # noqa: F401 - registers the page type
+from apps.media_library.videos import VideoIndexPage  # noqa: F401 - registers the page type
 
 
 class PortalImage(AbstractImage):
@@ -130,6 +131,14 @@ class Video(index.Indexed, TimeStampedModel):
     """A doctor video or a short vertical social video (spec §4.3 `Video`)."""
 
     title = models.CharField(_("title"), max_length=200)
+    topic = models.CharField(
+        _("topic"),
+        max_length=16,
+        choices=Topic.choices,
+        blank=True,
+        db_index=True,
+        help_text=_("Filter on the «Videos» page; empty = shown under «All» only."),
+    )
     kind = models.CharField(
         _("kind"), max_length=16, choices=VideoKind.choices, default=VideoKind.LONG
     )
@@ -173,7 +182,9 @@ class Video(index.Indexed, TimeStampedModel):
 
     panels = [
         FieldPanel("title"),
-        MultiFieldPanel([FieldPanel("kind"), FieldPanel("source")], heading=_("Type")),
+        MultiFieldPanel(
+            [FieldPanel("topic"), FieldPanel("kind"), FieldPanel("source")], heading=_("Type")
+        ),
         MultiFieldPanel(
             [FieldPanel("file"), FieldPanel("external_url"), FieldPanel("poster")],
             heading=_("Media"),
@@ -198,6 +209,7 @@ class Video(index.Indexed, TimeStampedModel):
         index.SearchField("transcript"),
         index.FilterField("kind"),
         index.FilterField("status"),
+        index.FilterField("topic"),
     ]
 
     class Meta:
@@ -277,3 +289,12 @@ class Video(index.Indexed, TimeStampedModel):
 
     def subtitles_for(self, language: str) -> Any:
         return self.subtitles_ru if language == "ru" else self.subtitles_uz
+
+    @property
+    def embed(self) -> Any:
+        """Provider embed (YouTube, Telegram, …) for an external video, else None."""
+        from apps.articles.embeds import parse_embed_url
+
+        return (
+            parse_embed_url(self.external_url) if self.is_external and self.external_url else None
+        )

@@ -10,9 +10,10 @@ from django.conf import settings
 from django.db import models
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, HelpPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
 if TYPE_CHECKING:
@@ -33,6 +34,21 @@ class TimeStampedModel(models.Model):
 class SectionKey(models.TextChoices):
     WOMEN = "women", _("Women's cancer")
     CHILDREN = "children", _("Childhood cancer")
+
+
+class Topic(models.TextChoices):
+    """Disease filter of news, articles, videos and questions (design 2026-10: «Barchasi /
+    Ko'krak bezi saratoni / Bachadon bo'yni saratoni / Bolalar saratoni»)."""
+
+    BREAST = "breast", _("Breast cancer")
+    CERVICAL = "cervical", _("Cervical cancer")
+    CHILDREN = "children", _("Childhood cancer")
+
+
+def topic_from_request(request: Any) -> str:
+    """`?topic=` when it names a known topic, else "" (= all)."""
+    value = getattr(request, "GET", {}).get("topic", "")
+    return value if value in Topic.values else ""
 
 
 class BasePage(Page):
@@ -208,6 +224,35 @@ class BasePage(Page):
         return context
 
 
+class FooterLinkBlock(blocks.StructBlock):
+    label = blocks.CharBlock(max_length=120, label=_("Label"))
+    page = blocks.PageChooserBlock(required=False, label=_("Page"))
+    anchor = blocks.CharBlock(
+        required=False,
+        max_length=80,
+        label=_("Anchor on the page"),
+        help_text=_("Optional, without # — e.g. a section of a long page."),
+    )
+    url = blocks.URLBlock(required=False, label=_("or external URL"))
+
+    class Meta:
+        icon = "link"
+
+
+class FooterColumnBlock(blocks.StructBlock):
+    title = blocks.CharBlock(max_length=80, label=_("Column title"))
+    links = blocks.ListBlock(FooterLinkBlock(), label=_("Links"))
+
+    class Meta:
+        icon = "list-ul"
+        label = _("Footer column")
+
+
+FOOTER_COLUMNS_HELP = _(
+    "The footer site map (design 2026-10): one block per column, links in order."
+)
+
+
 @register_setting(icon="cog")
 class SiteSettings(BaseSiteSetting):
     """Editor-controlled global values (spec §4.3 'Site settings')."""
@@ -221,6 +266,23 @@ class SiteSettings(BaseSiteSetting):
     facebook_url = models.URLField(_("Facebook"), blank=True)
     youtube_url = models.URLField(_("YouTube"), blank=True)
     tiktok_url = models.URLField(_("TikTok"), blank=True)
+    map_url = models.URLField(
+        _("location on the map"),
+        blank=True,
+        help_text=_("Footer location icon (e.g. Yandex Maps)."),
+    )
+    footer_columns_uz = StreamField(
+        [("column", FooterColumnBlock())],
+        blank=True,
+        verbose_name=_("footer columns (uz)"),
+        help_text=FOOTER_COLUMNS_HELP,
+    )
+    footer_columns_ru = StreamField(
+        [("column", FooterColumnBlock())],
+        blank=True,
+        verbose_name=_("footer columns (ru)"),
+        help_text=FOOTER_COLUMNS_HELP,
+    )
     footer_text_uz = models.TextField(_("footer text (uz)"), blank=True)
     footer_text_ru = models.TextField(_("footer text (ru)"), blank=True)
     disclaimer_uz = models.TextField(
@@ -304,8 +366,13 @@ class SiteSettings(BaseSiteSetting):
                 FieldPanel("facebook_url"),
                 FieldPanel("youtube_url"),
                 FieldPanel("tiktok_url"),
+                FieldPanel("map_url"),
             ],
             heading=_("Social networks"),
+        ),
+        MultiFieldPanel(
+            [FieldPanel("footer_columns_uz"), FieldPanel("footer_columns_ru")],
+            heading=_("Footer site map"),
         ),
         MultiFieldPanel(
             [

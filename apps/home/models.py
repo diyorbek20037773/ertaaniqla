@@ -8,7 +8,7 @@ from typing import Any
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
-from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
@@ -46,9 +46,9 @@ class HomePage(BasePage):
         *Page.content_panels,
         MultiFieldPanel([FieldPanel("hero_title"), FieldPanel("hero_subtitle")], heading=_("Hero")),
         FieldPanel("emergency_banner"),
-        InlinePanel("featured_articles", label=_("Featured articles"), max_num=6),
-        InlinePanel("featured_videos", label=_("Featured videos"), max_num=3),
-        FieldPanel("stats"),
+        # Design 2026-10 replaced «featured articles / videos» and the stats strip with the
+        # news, videos and articles feeds; their panels are hidden, the data stays until a
+        # contract migration removes the fields (D-077).
         FieldPanel("body"),
     ]
     search_fields = [*Page.search_fields, index.SearchField("hero_title")]
@@ -64,6 +64,8 @@ class HomePage(BasePage):
         "feedback.FeedbackPage",
         "glossary.GlossaryPage",
         "media_library.MaterialsPage",
+        "media_library.VideoIndexPage",
+        "posts.PostIndexPage",
     ]
     template = "home/home_page.html"
 
@@ -110,8 +112,37 @@ class HomePage(BasePage):
         index = ToolsIndexPage.objects.child_of(self).live().first()
         return [] if index is None else index.get_tools(request)[:3]
 
+    def get_landing_feeds(self) -> dict[str, Any]:
+        """Design 2026-10 landing blocks: «Eng ko'p beriladigan savollar» topic cards, the newest
+        news (lead + three rows), videos and articles — each with its list page for the pills."""
+        from apps.core.models import Topic
+        from apps.faq.models import FAQPage
+        from apps.media_library.videos import VideoIndexPage, ready_videos
+        from apps.posts.models import PostIndexPage, PostKind
+
+        def child(model: Any, **filters: Any) -> Any:
+            return model.objects.child_of(self).live().filter(**filters).first()
+
+        news_index = child(PostIndexPage, kind=PostKind.NEWS)
+        articles_index = child(PostIndexPage, kind=PostKind.ARTICLES)
+        video_index = child(VideoIndexPage)
+        videos = list(ready_videos()[:8])
+        if video_index is not None:
+            video_index.specific.add_watch_urls(videos)
+        return {
+            "faq_page": child(FAQPage),
+            "topics": Topic.choices,
+            "news_index": news_index,
+            "news": list(news_index.get_posts()[:4]) if news_index else [],
+            "articles_index": articles_index,
+            "articles": list(articles_index.get_posts()[:8]) if articles_index else [],
+            "video_index": video_index,
+            "videos": videos if video_index is not None else [],
+        }
+
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context(request, *args, **kwargs)
+        context.update(self.get_landing_feeds())
         context["sections"] = self.get_sections()
         context["quick_checks"] = self.get_quick_checks(request)
         context["directory_url"] = self.get_directory_url()

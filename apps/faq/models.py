@@ -15,6 +15,7 @@ from django.http import Http404
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
@@ -24,7 +25,7 @@ from wagtail.snippets.models import register_snippet
 from apps.articles.blocks import IntroBlock, stream_plain_text
 from apps.core.antispam import form_is_ratelimited, retry_initial
 from apps.core.fields import EncryptedCharField
-from apps.core.models import BasePage, SectionKey, TimeStampedModel
+from apps.core.models import BasePage, SectionKey, TimeStampedModel, Topic, topic_from_request
 
 
 class QuestionSection(models.TextChoices):
@@ -51,6 +52,19 @@ class Question(index.Indexed, TimeStampedModel):
     )
     section = models.CharField(
         _("section"), max_length=16, choices=QuestionSection.choices, db_index=True
+    )
+    topic = models.CharField(
+        _("topic"),
+        max_length=16,
+        choices=Topic.choices,
+        blank=True,
+        db_index=True,
+        help_text=_("Which disease page shows the published question."),
+    )
+    is_featured = models.BooleanField(
+        _("most asked"),
+        default=False,
+        help_text=_("Shown as a card under «Most asked questions» (published questions only)."),
     )
     text = models.TextField(_("question"), max_length=2000)
     consent_to_publish = models.BooleanField(_("may be published anonymously"), default=False)
@@ -85,6 +99,8 @@ class Question(index.Indexed, TimeStampedModel):
             [
                 FieldPanel("status"),
                 FieldPanel("section"),
+                FieldPanel("topic"),
+                FieldPanel("is_featured"),
                 FieldPanel("language", read_only=True),
                 FieldPanel("consent_to_publish", read_only=True),
             ],
@@ -108,6 +124,7 @@ class Question(index.Indexed, TimeStampedModel):
         index.SearchField("answer"),
         index.FilterField("status"),
         index.FilterField("section"),
+        index.FilterField("topic"),
     ]
 
     class Meta:
@@ -143,6 +160,24 @@ class Question(index.Indexed, TimeStampedModel):
         self.save(update_fields=["contact", "contact_purged_at", "updated_at"])
 
 
+class InfoCardBlock(blocks.StructBlock):
+    topic = blocks.ChoiceBlock(
+        choices=[("", _("All topics")), *Topic.choices],
+        required=False,
+        label=_("Topic"),
+    )
+    title = blocks.CharBlock(max_length=80, label=_("Title"))
+    page = blocks.PageChooserBlock(required=False, label=_("Page"))
+    anchor = blocks.CharBlock(
+        required=False, max_length=80, label=_("Anchor on the page"), help_text=_("Without #.")
+    )
+    url = blocks.URLBlock(required=False, label=_("or external URL"))
+
+    class Meta:
+        icon = "doc-full"
+        label = _("Information card")
+
+
 class FAQPage(BasePage):
     """`/uz/savol-javob/` `/ru/voprosy-otvety/` — form + published questions."""
 
@@ -153,12 +188,19 @@ class FAQPage(BasePage):
         editor="minimal",
         default="<p>[[TODO: content — copywriter]]</p>",
     )
+    info_cards = StreamField(
+        [("card", InfoCardBlock())],
+        blank=True,
+        verbose_name=_("«Information you should know» cards"),
+        help_text=_("Short links to pages, shown next to the most asked questions."),
+    )
 
     content_panels = [
         *Page.content_panels,
         FieldPanel("intro"),
         FieldPanel("form_intro"),
         FieldPanel("thanks_text"),
+        FieldPanel("info_cards"),
     ]
     parent_page_types = ["home.HomePage"]
     subpage_types: list[str] = []
@@ -170,26 +212,54 @@ class FAQPage(BasePage):
     def get_body_text(self) -> str:
         return stream_plain_text(self.intro)
 
-    def published_questions(self, section: str = "") -> list[Question]:
+    def published_questions(
+        self, section: str = "", topic: str = "", query: str = ""
+    ) -> list[Question]:
         qs = Question.objects.filter(status=QuestionStatus.PUBLISHED).select_related("answered_by")
         if section in QuestionSection.values:
             qs = qs.filter(section=section)
+        if topic in Topic.values:
+            qs = qs.filter(topic=topic)
+        if query:
+            qs = qs.filter(
+                models.Q(public_question__icontains=query)
+                | models.Q(text__icontains=query)
+                | models.Q(answer__icontains=query)
+            )
         return list(qs.order_by("-published_at")[:200])
+
+    def info_cards_for(self, topic: str) -> list[Any]:
+        """«Siz bilishingiz lozim bo'lgan ma'lumotlar» cards of the topic (all when none)."""
+        return [
+            block.value
+            for block in self.info_cards
+            if not topic or block.value.get("topic") in ("", topic)
+        ]
 
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         from apps.faq.forms import QuestionForm
 
         context = super().get_context(request, *args, **kwargs)
         section = request.GET.get("section", "")
+        topic = topic_from_request(request)
+        query = " ".join(request.GET.get("q", "").split())[:100]
         context["section_filter"] = section if section in QuestionSection.values else ""
-        context["questions"] = self.published_questions(context["section_filter"])
+        context["topic"] = topic
+        context["topic_label"] = Topic(topic).label if topic else ""
+        context["topics"] = Topic.choices
+        context["query"] = query
+        context["questions"] = self.published_questions(context["section_filter"], topic, query)
+        context["featured_questions"] = [q for q in context["questions"] if q.is_featured][:6]
+        context["info_cards"] = self.info_cards_for(topic)
         # FAQPage JSON-LD mirrors the visible (filtered) Q&A list — spec §10
         from apps.core import seo
 
         faq = seo.faq_ld(context["questions"])
         if faq:
             context["jsonld"] = [*context.get("jsonld", []), faq]
-        context["form"] = kwargs.get("form") or QuestionForm(request=request)
+        context["form"] = kwargs.get("form") or QuestionForm(
+            request=request, initial={"topic": topic}
+        )
         context["submitted"] = kwargs.get("submitted", False)
         context["rate_limited"] = kwargs.get("rate_limited", False)
         return context

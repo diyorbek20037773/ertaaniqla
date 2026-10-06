@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "apps.directory",
     "apps.tools",
     "apps.stories",
+    "apps.posts",
     "apps.faq",
     "apps.glossary",
     "apps.feedback",
