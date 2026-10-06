@@ -389,4 +389,36 @@
   html[data-contrast="high"] :is(.news-card, .topic-card, .num-card, .num-card__note, .highlight-box, .pill-title, .acc__title, .article-card, .faq-card, .method-card) { border: 2px solid #000; }
   html[data-contrast="high"] .acc__item[open] .acc__title { background: #000; color: #fff; }
   html[data-contrast="high"] .topic-card__art, html[data-contrast="high"] .site-footer__partner { filter: grayscale(1); }
+
+  /* ---- header per the approved design: lilac language pill, light search pill, «Aa» menu ---- */
+  .lang-menu__toggle { background: var(--c-lang-pill); color: var(--c-plum-ink); }
+  .lang-menu__toggle::after { border-left-color: var(--neutral-0); }
+  .site-search { background: var(--neutral-0); background-image: none; }
+  body[data-section="women"] .site-search { background: var(--c-search-women); }
+  .site-search__input { color: var(--c-pink-800); }
+  .site-search__input::placeholder { color: var(--c-pink-800); }
+  .site-search__icon { filter: brightness(0) saturate(100%) opacity(0.75); }
+  .a11y-menu { position: relative; }
+  .a11y-menu__toggle {
+    display: inline-flex; align-items: center; justify-content: center; min-width: var(--tap-target); min-height: var(--tap-target);
+    border-radius: var(--radius-pill); background: var(--c-lang-pill); color: var(--c-plum-ink); font-weight: 600; cursor: pointer; list-style: none;
+  }
+  .a11y-menu__toggle::-webkit-details-marker { display: none; }
+  .a11y-menu__panel { margin-top: var(--space-2); }
+  .a11y-menu .a11y-toolbar { flex-wrap: wrap; white-space: normal; border: 0; padding: var(--space-4); border-radius: 20px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); }
+  @media (min-width: 64rem) {
+    .a11y-menu__panel { position: absolute; right: 0; z-index: 30; width: max-content; max-width: 22rem; }
+  }
+  html[data-contrast="high"] .a11y-menu__toggle, html[data-contrast="high"] .lang-menu__toggle { border: 2px solid #000; }
+  .section-banner__img { aspect-ratio: 1728 / 351; }
+  /* approved design: flat active tab and active disease pill (no gradients) */
+  .section-tabs__link.is-active { background: var(--c-check); background-image: none; }
+  .variant-switch__link.is-active { background: var(--c-pink-600); background-image: none; }
+  /* approved design: no logo — the menu and the pills form one group on the right */
+  @media (min-width: 64rem) {
+    .site-nav__toggle > .site-nav__menu { justify-content: flex-end; gap: clamp(2rem, 4.2vw, 4.5rem); }
+    .site-nav__primary { margin-inline: 0; }
+  }
+  /* section headings of the women's pages are set larger in the approved frames (≈43 px) */
+  body[data-section="women"] .article__body > .block--heading { font-size: clamp(1.6rem, 0.9rem + 1.9vw, 2.7rem); }
 }

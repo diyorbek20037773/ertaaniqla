@@ -601,4 +601,6 @@ def test_design_2026_cervical_page(seeded, client) -> None:
     assert 'class="text-card__label">Suhbat<' in html
     treatment = client.get("/uz/ayollar/davolash/bachadon-boyni-saratoni/").content.decode()
     assert "Davolash tanloviga taʼsir etuvchi omillar" in treatment
-    assert "steps--capsules_arrows" in treatment  # TZ 4-step route stays
+    # the approved design wins over the TZ: no 4-step route, no statistics card (D-079)
+    assert "steps--capsules_arrows" not in treatment
+    assert "boʻyicha statistika</h3>" not in html  # no statistics card

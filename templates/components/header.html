@@ -9,10 +9,9 @@
 {% get_current_language as LANGUAGE_CODE %}
 <header class="site-header" role="banner">
   <div class="container site-header__inner">
-    <a class="site-header__brand" href="/{{ LANGUAGE_CODE }}/" aria-label="{% trans 'Erta aniqla — home' %}">
-      <img class="site-header__logo" src="{% static 'img/figma/logo-asdr.svg' %}" alt="" width="269" height="73" decoding="async">
-      <span class="sr-only">{% trans "Erta aniqla" %}</span>
-    </a>
+    {% comment %} the approved design 2026-10 has no logo in the header; the home link stays for
+       screen readers and keyboard users («Asosiy» in the menu is the visible one) {% endcomment %}
+    <a class="site-header__brand sr-only" href="/{{ LANGUAGE_CODE }}/">{% trans "Erta aniqla — home" %}</a>
     {% with hotline=settings.core.SiteSettings.hotline_phone %}
       {% if hotline %}
         <a class="site-header__hotline" href="{{ hotline|phone_href }}">

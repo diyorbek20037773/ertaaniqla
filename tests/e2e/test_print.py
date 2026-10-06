@@ -61,20 +61,33 @@ def test_print_media_hides_chrome_and_expands_accordions(print_page, path: str) 
     print_page.emulate_media(media="screen")
 
 
+def open_a11y_menu(page) -> None:
+    """Settings live in the header «Aa» dropdown (approved design 2026-10); on phones it sits
+    inside the menu, which has to be opened first."""
+    toggle = page.locator(".site-nav__toggle-button")
+    if toggle.is_visible() and not page.locator(".a11y-menu__toggle").is_visible():
+        toggle.click()
+    if not page.locator('[data-a11y="contrast"]').is_visible():
+        page.click(".a11y-menu__toggle")
+
+
 def test_a11y_toolbar_persists_across_reload(browser: Browser) -> None:
     context = browser.new_context(
         viewport={"width": 390, "height": 844}, extra_http_headers={"X-E2E": "1"}
     )
     page = context.new_page()
     page.goto(BASE + "/uz/")
-    page.click('[data-a11y="font"][data-value="150"]')
+    open_a11y_menu(page)
+    # contrast first: at ×1.5 the taller panel reaches under the consent banner
     page.click('[data-a11y="contrast"]')
+    page.click('[data-a11y="font"][data-value="150"]')
     assert page.get_attribute("html", "data-font-scale") == "150"
     assert page.get_attribute("html", "data-contrast") == "high"
     page.reload()
     assert page.get_attribute("html", "data-font-scale") == "150"
     assert page.get_attribute("html", "data-contrast") == "high"
     assert page.get_attribute('[data-a11y="contrast"]', "aria-pressed") == "true"
+    open_a11y_menu(page)
     page.click('[data-a11y="contrast"]')
     assert page.get_attribute("html", "data-contrast") in (None, "")
     context.close()

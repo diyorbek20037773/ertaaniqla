@@ -127,3 +127,17 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 
 See `docs/DECISIONS.md` for the full log; IDs referenced above: D-001 (Django 5.2/Wagtail 7),
 D-003 (wireframe UI), D-004 (PII field), D-008 (Turnstile), D-009 (FTS config).
+
+## H. Approved design 2026-10 over the TZ (D-079)
+
+The client instructed that the designer's 2026-10 frames, approved by the TZ-issuing organisation,
+take precedence. Deviations from rows above:
+
+| Row | TZ item | Now | Decision |
+|---|---|---|---|
+| W-02 | «статистика по Узбекистану» card on the awareness pages | not shown on the redesigned breast / cervical pages | D-079 |
+| W-02 | stages 0–4 of breast cancer | breast «bosqichlari» shows the diagnostics frames only | D-079 |
+| W-08 | 4-step patient route on «Организация лечения» | kept on the breast treatment page; the cervical treatment page follows frame 9 (no route) | D-079 |
+| A8 | accessibility toolbar | same functions in the header «Aa» dropdown | D-079 |
+| — | header logo | not shown (frames have none); home link kept for screen readers | D-079 |
+

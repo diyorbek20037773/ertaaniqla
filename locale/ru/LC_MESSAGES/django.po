@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 22:32+0500\n"
+"POT-Creation-Date: 2026-10-06 23:29+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -430,22 +430,18 @@ msgstr "Голова (привычки)"
 msgid "Virus (HPV)"
 msgstr "Вирус (ВПЧ)"
 
-#| msgid "sections"
 msgid "Virus (infections)"
 msgstr "Вирус (инфекции)"
 
 msgid "Vitamins"
 msgstr "Витамины"
 
-#| msgid "Radiation"
 msgid "Radiation (dark)"
 msgstr "Радиация (тёмная)"
 
-#| msgid "Medical cross (white)"
 msgid "Medical cross (white square)"
 msgstr "Медицинский крест (белый квадрат)"
 
-#| msgid "service"
 msgid "Cervix"
 msgstr "Шейка матки"
 

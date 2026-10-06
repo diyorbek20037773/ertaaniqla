@@ -419,7 +419,7 @@ def test_block_types_match_spec_for_key_pages(seeded) -> None:
     assert "steps" in page_for("women.treatment.breast", "uz").block_types
     breast = page_for("women.awareness.breast", "uz")
     assert "accordion" in breast.block_types  # design 2026-10: stages live inside it
-    assert {"steps", "numbered_cards"} <= set(_accordion_block_types(breast))
+    assert {"numbered_cards", "check_row", "highlight"} <= set(_accordion_block_types(breast))
     cervical = page_for("women.awareness.cervical", "uz")
     assert {"cards_grid", "method_cards", "steps"} <= set(_accordion_block_types(cervical))
     assert "text_cards" in page_for("women.after.breast", "uz").block_types

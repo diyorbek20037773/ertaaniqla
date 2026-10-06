@@ -212,78 +212,6 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
             accordion([acc_item(title, anchor, [placeholder]) for title, anchor in sections]),
             appeal(lang, ctx),
         ]
-    stages = [
-        (
-            "0",
-            "",
-            p(
-                uz(
-                    "invaziv bo'lmagan ko'krak saratoni (karsinoma in situ) – sut bezi kanallarini "
-                    "o'rab turgan to'qimalariga tarqalmagan bo'ladi. Invaziv bo'lmagan ko'krak "
-                    "saratoni odatda mammografiya paytida aniqlanadi va kamdan-kam hollarda "
-                    "ko'krakdagi qattiqlik shaklida namoyon bo'ladi."
-                )
-            ),
-        ),
-        (
-            "1",
-            "",
-            p(
-                uz(
-                    "invaziv bo'lmagan ko'krak saratoni. Saraton o'simta yaqinida joylashgan "
-                    "to'qimalarga ta'sir qiladi. O'simtaning kattaligi 2 sm dan oshmaydi. Limfa "
-                    "bezlari normal holatda bo'ladi."
-                )
-            ),
-        ),
-        (
-            "2",
-            "",
-            p(
-                uz(
-                    "invaziv saraton. Saraton hujayralari kanallarning qoplamasi orqali atrofdagi "
-                    "ko'krak to'qimalariga tarqaladi. O'simtaning diametri 2 dan 5 sm gacha, "
-                    "qo'ltiq ostidagi limfa tugunlari o'simta tomonidan zararlanadi. Bu ko'krak "
-                    "saratonining eng keng tarqalgan turi hisoblanadi."
-                )
-            ),
-        ),
-        (
-            "3",
-            "",
-            p(
-                uz(
-                    "A bosqich. O'simtaning diametri 5 sm dan ortiq bo'lib, limfa tugunlari juda "
-                    "kattalashgan. Ular bir-biriga va atrofdagi to'qimalarga yopishgan bo'ladi."
-                )
-            ),
-        ),
-        (
-            "3",
-            "",
-            p(
-                uz(
-                    "B bosqich. Ushbu turga yallig'lanish saratoni, infiltrativ kanal saratoni "
-                    "kiradi. 3-bosqichning xarakterli belgilari terining qizarishi, apelsin "
-                    "terining paydo bo'lishidir. O'simta har xil hajmda bo'lishi mumkin. Bu "
-                    "bosqichda ko'krak terisi, ichki ko'krak limfa tugunlari yoki ko'krak devori "
-                    "zararlanadi."
-                )
-            ),
-        ),
-        (
-            "4",
-            "",
-            p(
-                uz(
-                    "O'simta ichki limfa tugunlariga ta'sir qiladi, qo'ltiq ostigacha yetib boradi "
-                    "va o'mrov, limfa tugunlari, jigar, o'pka va miya ham ta'sirlanadi. 4-bosqich "
-                    "saratoni tashxisi ko'pincha BRCA-1 va BRCA-2 genlaridagi mutatsiyaga ega "
-                    "bo'lgan ayollarga qo'yiladi."
-                )
-            ),
-        ),
-    ]
     causes = [
         (
             "women",
@@ -618,8 +546,6 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
             ),
             title=uz("Eng muhimi!"),
         ),
-        # TZ «стадии» (wins over the design, which shows only diagnostics here)
-        capsules(stages),
     ]
     when_to_see = highlight(
         p(
@@ -662,7 +588,6 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
                 )
             )
         ),
-        uz_statistics(),
         accordion(
             [
                 acc_item(
@@ -746,13 +671,12 @@ def body_breast_awareness(lang: str, ctx: SeedContext) -> Body:
                         text_cards(self_exam),
                         pill_title(uz("Qachon shifokorga murojaat qilish kerak?")),
                         when_to_see,
+                        alert(DONT_PANIC),
+                        appeal(lang, ctx),
                     ],
                 ),
             ]
         ),
-        alert(DONT_PANIC),
-        appeal(lang, ctx),
-        verify_note(lang),
     ]
 
 
@@ -1288,7 +1212,6 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
                 "bemorlarning 40% da u kechki bosqichlarda aniqlanadi."
             )
         ),
-        uz_statistics(),
         accordion(
             [
                 acc_item(
@@ -1414,8 +1337,6 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
                 ),
             ]
         ),
-        # the design puts «Murojaat qilish» inside the sections, not after the accordion
-        verify_note(lang),
     ]
 
 
@@ -1932,10 +1853,6 @@ def body_cervical_treatment(lang: str, ctx: SeedContext) -> Body:
             uz("Kasallik qanchalik erta aniqlansa, sog'ayish ehtimoli shunchalik yuqori bo'ladi.")
         ),
         appeal(lang, ctx),
-        # TZ «Организация лечения»: the 4-step patient route with the PP-402 deadlines
-        _route_intro(lang),
-        _route(lang),
-        verify_note(lang),
     ]
 
 

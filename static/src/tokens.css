@@ -41,6 +41,8 @@
   --c-acc-ring: #e29cbc;      /* accordion ring, framed content */
   --c-tile-blush: #fff3f7;    /* body of the bright risk tiles, capsules */
   --c-method-2: #c0045c;      /* method card number 02 */
+  --c-lang-pill: #ecd0ff;     /* header language pill, «Aa» */
+  --c-search-women: #ffbad4;  /* header search pill on the women's pages */
   --c-card-pink-2: #fccbdc;   /* question topic cards */
   --c-card-lilac: #d0b6ff;    /* children's cards, footer */
   --c-chip-purple: #9b64ff;   /* children's topic chip */
@@ -246,6 +248,8 @@ html[data-contrast="high"] {
   --c-note-pink: #ffffff;
   --c-tile-blush: #ffffff;
   --c-faq-side: #ffffff;
+  --c-lang-pill: #ffffff;
+  --c-search-women: #ffffff;
   --c-overlay: rgba(0, 0, 0, 0.88);
 }
 

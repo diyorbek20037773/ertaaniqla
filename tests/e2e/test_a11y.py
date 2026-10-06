@@ -42,6 +42,16 @@ PAGES = [
 ]
 
 
+def open_a11y_menu(page) -> None:
+    """The settings live in the header «Aa» dropdown (approved design 2026-10); on phones it sits
+    inside the menu, which has to be opened first."""
+    toggle = page.locator(".site-nav__toggle-button")
+    if toggle.is_visible() and not page.locator(".a11y-menu__toggle").is_visible():
+        toggle.click()
+    if not page.locator('[data-a11y="contrast"]').is_visible():
+        page.click(".a11y-menu__toggle")
+
+
 @pytest.fixture(scope="module")
 def axe_page(browser):
     assert AXE_PATH.exists(), "run `npm ci` first (axe-core)"
@@ -86,11 +96,14 @@ def test_high_contrast_theme_is_aa(axe_page, path: str) -> None:
     """ADR-0006: the high-contrast theme must pass WCAG 2.1 AA colour contrast."""
     response = axe_page.goto(BASE_URL + path, wait_until="networkidle")
     assert response is not None and response.status == 200
+    open_a11y_menu(axe_page)
     axe_page.click('[data-a11y="contrast"]')
     assert axe_page.get_attribute("html", "data-contrast") == "high"
+    axe_page.keyboard.press("Escape")  # close the dropdown: check the page, not the panel
     try:
         result = axe_page.evaluate(AXE_CONTRAST_ONLY)
         violations = [(v["id"], len(v["nodes"])) for v in result["violations"]]
         assert not violations, violations
     finally:
+        open_a11y_menu(axe_page)
         axe_page.click('[data-a11y="contrast"]')

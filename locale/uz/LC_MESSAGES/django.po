@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 22:32+0500\n"
+"POT-Creation-Date: 2026-10-06 23:29+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -433,22 +433,18 @@ msgstr "Bosh (odatlar)"
 msgid "Virus (HPV)"
 msgstr "Virus (HPV)"
 
-#| msgid "sections"
 msgid "Virus (infections)"
 msgstr "Virus (infeksiyalar)"
 
 msgid "Vitamins"
 msgstr "Vitaminlar"
 
-#| msgid "Radiation"
 msgid "Radiation (dark)"
 msgstr "Radiatsiya (toʻq)"
 
-#| msgid "Medical cross (white)"
 msgid "Medical cross (white square)"
 msgstr "Tibbiy xoch (oq kvadrat)"
 
-#| msgid "service"
 msgid "Cervix"
 msgstr "Bachadon boʻyni"
 
