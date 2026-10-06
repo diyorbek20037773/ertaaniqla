@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} media_library/video_index_page.html — «Videoroliklar» (design 2026-10, frame 6).
+   Context: page (VideoIndexPage), videos (Page of Video), topic, topics. {% endcomment %}
+{% block breadcrumbs %}{% endblock %}{# design 2026-10: lists have no trail; JSON-LD keeps it #}
+{% block content %}
+<div class="container list-page">
+  <header class="list-page__head">
+    {% include "components/bar_title.html" with title=page.title tag="h1" %}
+    {% include "components/topic_filter.html" with base_url=page.url %}
+  </header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+  {% if videos %}
+    <div class="video-grid">{% for video in videos %}{% include "media_library/_video_card.html" with url=video.watch_url %}{% endfor %}</div>
+    {% include "components/pager.html" with items=videos %}
+  {% else %}
+    <p class="empty-state">{% trans "Videos will appear here soon." %}</p>
+  {% endif %}
+</div>
+{% endblock %}

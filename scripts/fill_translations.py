@@ -15,6 +15,107 @@ ROOT = Path(__file__).resolve().parent.parent
 # msgid: (uz, ru)
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
+    # design 2026-10: landing feeds, news / articles / videos, question hub, footer site map
+    "Breast cancer": ("Koʻkrak bezi saratoni", "Рак молочной железы"),
+    "Cervical cancer": ("Bachadon boʻyni saratoni", "Рак шейки матки"),
+    "Anchor on the page": ("Sahifadagi boʻlim (anchor)", "Якорь на странице"),
+    "Optional, without # — e.g. a section of a long page.": (
+        "Ixtiyoriy, # belgisisiz — masalan, uzun sahifaning boʻlimi.",
+        "Необязательно, без # — например, раздел длинной страницы.",
+    ),
+    "or external URL": ("yoki tashqi havola", "или внешняя ссылка"),
+    "Links": ("Havolalar", "Ссылки"),
+    "Footer column": ("Footer ustuni", "Колонка подвала"),
+    "The footer site map (design 2026-10): one block per column, links in order.": (
+        "Footerdagi sayt xaritasi: har bir ustun — alohida blok, havolalar tartib bilan.",
+        "Карта сайта в подвале: каждая колонка — отдельный блок, ссылки по порядку.",
+    ),
+    "location on the map": ("xaritadagi manzil", "место на карте"),
+    "Footer location icon (e.g. Yandex Maps).": (
+        "Footerdagi manzil belgisi (masalan, Yandex Xaritalar havolasi).",
+        "Значок адреса в подвале (например, ссылка на Яндекс Карты).",
+    ),
+    "footer columns (uz)": ("footer ustunlari (uz)", "колонки подвала (uz)"),
+    "footer columns (ru)": ("footer ustunlari (ru)", "колонки подвала (ru)"),
+    "Footer site map": ("Footerdagi sayt xaritasi", "Карта сайта в подвале"),
+    "Topic": ("Mavzu", "Тема"),
+    "topic": ("mavzu", "тема"),
+    "Other / not sure": ("Boshqa / bilmayman", "Другое / не знаю"),
+    "Leave your question too": ("Siz ham oʻz savolingizni qoldiring", "Оставьте и ваш вопрос"),
+    "Which disease page shows the published question.": (
+        "Eʼlon qilingan savol qaysi kasallik sahifasida koʻrinadi.",
+        "На странице какой болезни показывается опубликованный вопрос.",
+    ),
+    "most asked": ("eng koʻp beriladigan", "часто задаваемый"),
+    "Shown as a card under «Most asked questions» (published questions only).": (
+        "«Eng koʻp berilgan savollar» ostida karta boʻlib chiqadi (faqat eʼlon qilinganlar).",
+        "Показывается карточкой в «Часто задаваемых вопросах» (только опубликованные).",
+    ),
+    "All topics": ("Barcha mavzular", "Все темы"),
+    "Without #.": ("# belgisisiz.", "Без #."),
+    "Information card": ("Maʼlumot kartasi", "Информационная карточка"),
+    "«Information you should know» cards": (
+        "«Siz bilishingiz lozim boʻlgan maʼlumotlar» kartalari",
+        "Карточки «Информация, которую нужно знать»",
+    ),
+    "Short links to pages, shown next to the most asked questions.": (
+        "Sahifalarga qisqa havolalar, eng koʻp berilgan savollar yonida chiqadi.",
+        "Короткие ссылки на страницы рядом с частыми вопросами.",
+    ),
+    "Filter on the «Videos» page; empty = shown under «All» only.": (
+        "«Videoroliklar» sahifasidagi filtr; boʻsh boʻlsa faqat «Barchasi»da chiqadi.",
+        "Фильтр на странице «Видеоролики»; пусто — только во «Все».",
+    ),
+    "videos list": ("videoroliklar roʻyxati", "список видео"),
+    "News and articles": ("Yangiliklar va maqolalar", "Новости и статьи"),
+    "News": ("Yangiliklar", "Новости"),
+    "list type": ("roʻyxat turi", "тип списка"),
+    "news / articles list": ("yangiliklar / maqolalar roʻyxati", "список новостей / статей"),
+    "date": ("sana", "дата"),
+    "picture": ("rasm", "изображение"),
+    "Two lines shown on the card (articles) and in search results.": (
+        "Kartada (maqolalar) va qidiruv natijalarida koʻrinadigan ikki qator.",
+        "Две строки на карточке (статьи) и в результатах поиска.",
+    ),
+    "Card": ("Karta", "Карточка"),
+    "news item / article": ("yangilik / maqola", "новость / статья"),
+    "news and articles": ("yangiliklar va maqolalar", "новости и статьи"),
+    "Contacts and social networks": ("Aloqa va ijtimoiy tarmoqlar", "Контакты и соцсети"),
+    "Location on the map": ("Xaritadagi manzil", "Место на карте"),
+    "Pages": ("Sahifalar", "Страницы"),
+    "Previous": ("Oldingi", "Предыдущая"),
+    "Next": ("Keyingi", "Следующая"),
+    "Filter by topic": ("Mavzu boʻyicha saralash", "Фильтр по теме"),
+    "Want a private reply? (optional)": (
+        "Shaxsiy javob kerakmi? (ixtiyoriy)",
+        "Нужен личный ответ? (необязательно)",
+    ),
+    "Search the questions": ("Savollardan qidirish", "Поиск по вопросам"),
+    "No questions match your search.": (
+        "Qidiruvingizga mos savol topilmadi.",
+        "По вашему запросу вопросов не найдено.",
+    ),
+    "Learn about %(topic)s": ("%(topic)s haqida bilib oling", "Узнайте о теме: %(topic)s"),
+    "Most asked questions": ("Eng koʻp beriladigan savollar", "Часто задаваемые вопросы"),
+    "Read the answer": ("Javobini oʻqish", "Читать ответ"),
+    "Information you should know": (
+        "Siz bilishingiz lozim boʻlgan maʼlumotlar",
+        "Информация, которую нужно знать",
+    ),
+    "News will appear here soon.": (
+        "Yangiliklar tez orada shu yerda chiqadi.",
+        "Новости скоро появятся здесь.",
+    ),
+    "Videos will appear here soon.": (
+        "Videoroliklar tez orada shu yerda chiqadi.",
+        "Видео скоро появятся здесь.",
+    ),
+    "Articles will appear here soon.": (
+        "Maqolalar tez orada shu yerda chiqadi.",
+        "Статьи скоро появятся здесь.",
+    ),
+    "More videos": ("Boshqa videoroliklar", "Другие видео"),
+    "article cardRead more": ("Koʻproq oʻqish", "Читать дальше"),
     # audit fixes 2026-09-27 (EA-*)
     "Erta aniqla — administration": ("Erta aniqla — boshqaruv", "Эрта аниқла — администрирование"),
     "Administration": ("Boshqaruv", "Администрирование"),
@@ -804,6 +905,11 @@ P: dict[str, tuple[list[str], list[str]]] = {
 }
 
 
+def _key(entry: polib.POEntry) -> str:
+    """Context entries are keyed "contextmsgid" (gettext's own separator)."""
+    return f"{entry.msgctxt}{entry.msgid}" if entry.msgctxt else entry.msgid
+
+
 def fill(lang: str, index: int) -> int:
     path = ROOT / "locale" / lang / "LC_MESSAGES" / "django.po"
     po = polib.pofile(str(path))
@@ -815,8 +921,8 @@ def fill(lang: str, index: int) -> int:
             forms = P[entry.msgid][index]
             entry.msgstr_plural = dict(enumerate(forms))
             filled += 1
-        elif entry.msgid in T or entry.msgid in F:
-            entry.msgstr = (F.get(entry.msgid) or T[entry.msgid])[index]
+        elif _key(entry) in T or _key(entry) in F:
+            entry.msgstr = (F.get(_key(entry)) or T[_key(entry)])[index]
             filled += 1
     po.metadata["Language"] = lang
     po.save(str(path))
@@ -905,8 +1011,8 @@ def unfuzzy(lang: str, index: int) -> int:
     for entry in po.fuzzy_entries():
         if entry.msgid_plural and entry.msgid in P:
             entry.msgstr_plural = dict(enumerate(P[entry.msgid][index]))
-        elif entry.msgid in F or entry.msgid in T:
-            entry.msgstr = (F.get(entry.msgid) or T[entry.msgid])[index]
+        elif _key(entry) in F or _key(entry) in T:
+            entry.msgstr = (F.get(_key(entry)) or T[_key(entry)])[index]
         else:
             continue
         entry.flags = [f for f in entry.flags if f != "fuzzy"]

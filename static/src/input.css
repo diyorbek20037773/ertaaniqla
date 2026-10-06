@@ -1,6 +1,7 @@
 @import "./fonts.css";
 @import "./tokens.css";
 @import "./components.css";
+@import "./design2026.css";
 @import "./print.css";
 
 @tailwind base;

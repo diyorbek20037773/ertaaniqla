@@ -21,7 +21,7 @@ def test_home_shows_both_section_cards(seeded, client: Client) -> None:
     assert 'class="capsule-card__link" href="/uz/bolalar/"' in html
     assert html.count('class="capsule-card"') == 2
     assert "Erta aniqla" in html
-    assert html.count('class="stat"') == 3
+    assert 'class="stat"' not in html  # design 2026-10 has no stats strip
 
 
 def test_home_featured_articles_and_videos(seeded, client: Client) -> None:
@@ -43,8 +43,8 @@ def test_home_featured_articles_and_videos(seeded, client: Client) -> None:
     html = client.get("/uz/").content.decode()
     assert "Erta aniqlang" in html
     assert "Kampaniya" in html
-    assert article.title in html
-    assert "Shifokor bilan suhbat" in html
+    # design 2026-10: the landing shows the news / videos / articles feeds instead
+    assert 'class="landing-block"' in html
     assert home.get_body_text().startswith("Erta aniqlang")
     assert str(HomeFeaturedArticle.objects.first()) == article.title
     assert str(HomeFeaturedVideo.objects.first()) == video.title

@@ -1,0 +1,11 @@
+{% comment %} posts/_article_card.html — article card (design 2026-10: white card, picture,
+   bold title, three-line summary, «Ko'proq o'qish» pill). Context: post. {% endcomment %}
+{% load i18n wagtailimages_tags %}
+<article class="article-card" data-topic="{{ post.topic }}">
+  <div class="article-card__media">
+    {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{400x170,800x340} sizes="(max-width: 48rem) 90vw, 20rem" alt="" class="article-card__img" loading="lazy" %}{% endif %}
+  </div>
+  <h3 class="article-card__title"><a class="article-card__link" href="{{ post.url }}">{{ post.title }}</a></h3>
+  {% if post.summary %}<p class="article-card__text">{{ post.summary }}</p>{% endif %}
+  <span class="pill-cta article-card__more" aria-hidden="true">{% trans "Read more" context "article card" %}</span>
+</article>

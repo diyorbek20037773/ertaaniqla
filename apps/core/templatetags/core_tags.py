@@ -358,6 +358,68 @@ def phone_href(value: str) -> str:
 
 
 @register.filter
+def localized_value(obj: Any, field: str) -> Any:
+    """Like `localized` but returns the raw value (StreamField, FK) — footer columns."""
+    if obj is None:
+        return None
+    lang = _current_language()
+    value = getattr(obj, f"{field}_{lang}", None)
+    return value if value else getattr(obj, f"{field}_uz", None)
+
+
+@register.simple_tag(takes_context=True)
+def footer_map(context: dict[str, Any], site_settings: Any) -> list[dict[str, Any]]:
+    """Footer site map of the current language with every link resolved in ~3 queries: the
+    chosen pages' translations are fetched in one go (`.localized` per link cost 2 queries
+    each, ~70 per page view)."""
+    columns = localized_value(site_settings, "footer_columns") or []
+    pages = [link.get("page") for col in columns for link in col.value["links"]]
+    keys = {page.translation_key for page in pages if page is not None}
+    lang = _current_language()
+    translated = {
+        page.translation_key: page
+        for page in Page.objects.live()
+        .filter(translation_key__in=keys, locale__language_code=lang)
+        .defer_streamfields()
+    }
+    request = context.get("request")
+    result = []
+    for col in columns:
+        links = []
+        for link in col.value["links"]:
+            page = link.get("page")
+            if page is not None:
+                target = translated.get(page.translation_key, page)
+                href = str(target.get_url(request) or "")
+            else:
+                href = str(link.get("url") or "")
+            if link.get("anchor") and href:
+                href = f"{href}#{link['anchor']}"
+            if href:
+                links.append({"label": link["label"], "href": href})
+        result.append({"title": col.value["title"], "links": links})
+    return result
+
+
+@register.simple_tag
+def cache_version() -> int:
+    """Bumped on every publish / settings save (apps.core.cache) — fragment cache keys."""
+    from apps.core.cache import page_cache_version
+
+    return page_cache_version()
+
+
+@register.filter
+def link_href(link: Any) -> str:
+    """URL of a FooterLinkBlock value: the page's translation in the current language (+anchor),
+    else the external URL."""
+    page = link.get("page")
+    href = str(page.localized.url or "") if page is not None else str(link.get("url") or "")
+    anchor = link.get("anchor")
+    return f"{href}#{anchor}" if anchor and href else href
+
+
+@register.filter
 def localized(obj: Any, field: str) -> str:
     """`{{ settings.core.SiteSettings|localized:"disclaimer" }}` → `<field>_<lang>`, uz fallback."""
     if obj is None:

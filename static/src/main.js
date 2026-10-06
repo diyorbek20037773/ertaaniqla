@@ -94,6 +94,29 @@ Alpine.data("checklist", () => ({
   },
 }));
 
+// Landing rows (videos, articles — design 2026-10): the «›» button scrolls one screen on.
+document.addEventListener("click", (event) => {
+  const next = event.target.closest("[data-scroller-next]");
+  if (!next) return;
+  const track = next.closest("[data-scroller]")?.querySelector(".scroller__track");
+  if (!track) return;
+  const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+  track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + track.clientWidth * 0.9, behavior: "smooth" });
+});
+
+// A link to #q-12 / #bosqichlari opens that <details> (question cards, footer site map).
+function openTarget() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const target = id && document.getElementById(id);
+  const details = target?.closest("details") || (target?.tagName === "DETAILS" ? target : null);
+  if (details && !details.open) {
+    details.open = true;
+    target.scrollIntoView({ block: "start" });
+  }
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+
 document.documentElement.classList.remove("no-js");
 Alpine.start();
 initToolbar();

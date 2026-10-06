@@ -1,0 +1,10 @@
+{% comment %} components/pager.html — previous / next links for a paginated list.
+   Context: items (django Page); keeps ?topic=. {% endcomment %}
+{% load i18n %}
+{% if items.has_other_pages %}
+<nav class="pager" aria-label="{% trans 'Pages' %}">
+  {% if items.has_previous %}<a class="pill-outline" rel="prev" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}page={{ items.previous_page_number }}">{% trans "Previous" %}</a>{% endif %}
+  <span class="pager__info">{{ items.number }} / {{ items.paginator.num_pages }}</span>
+  {% if items.has_next %}<a class="pill-outline" rel="next" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}page={{ items.next_page_number }}">{% trans "Next" %}</a>{% endif %}
+</nav>
+{% endif %}

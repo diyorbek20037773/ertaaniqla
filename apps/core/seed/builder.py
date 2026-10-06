@@ -74,6 +74,7 @@ class Seeder:
         self.ensure_redirects()
         self.redirect_retired()
         self.ensure_header_pages()
+        self.ensure_footer()
         return {"created": self.created, "updated": self.updated, "unchanged": self.unchanged}
 
     # --- home / site -----------------------------------------------------------------------
@@ -160,6 +161,20 @@ class Seeder:
             site_settings.save(update_fields=[f.removesuffix("_id") for f in changed])
 
     # --- glossary ----------------------------------------------------------------------------
+    def ensure_footer(self) -> None:
+        """Design 2026-10 footer site map, only while the setting is still empty."""
+        site_settings = SiteSettings.objects.get_or_create(
+            site=Site.objects.get(is_default_site=True)
+        )[0]
+        changed = []
+        for lang in self.languages:
+            field = f"footer_columns_{lang}"
+            if hasattr(site_settings, field) and not getattr(site_settings, field):
+                setattr(site_settings, field, json.dumps(tree.footer_columns(lang, self.ctx)))
+                changed.append(field)
+        if changed:
+            site_settings.save(update_fields=changed)
+
     def ensure_terms(self) -> None:
         from apps.glossary.models import Term
 
@@ -244,6 +259,8 @@ class Seeder:
         from apps.feedback.models import FeedbackPage
         from apps.glossary.models import GlossaryPage
         from apps.media_library.materials import MaterialsPage
+        from apps.media_library.videos import VideoIndexPage
+        from apps.posts.models import PostIndexPage
         from apps.sections.models import SectionIndexPage, TopicIndexPage
         from apps.stories.models import StoryIndexPage
         from apps.tools.models import ScreeningToolPage, SelfCheckPage, ToolsIndexPage
@@ -261,6 +278,8 @@ class Seeder:
             "feedback": FeedbackPage,
             "glossary": GlossaryPage,
             "materials": MaterialsPage,
+            "posts": PostIndexPage,
+            "videos": VideoIndexPage,
         }[kind]
 
     def upsert_page(self, node: Node, lang: str, parent: Any, source: Any | None) -> Any:

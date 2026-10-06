@@ -300,11 +300,6 @@
   .landing { position: relative; overflow-x: clip; }
   .landing__inner { position: relative; z-index: 1; }
   .landing__blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: clip; }
-  .landing__blob { position: absolute; width: clamp(140px, 19vw, 324px); height: auto; opacity: 0.9; }
-  .landing__blob--tl { left: -6%; top: -14%; }
-  .landing__blob--l { left: -9%; top: 28%; }
-  .landing__blob--r { right: -6%; top: 34%; }
-  .landing__blob--tr { right: -8%; top: -18%; }
   .landing__top { display: grid; gap: var(--space-8); grid-template-columns: 1fr; align-items: start; }
   .hero { padding-block: var(--space-8); }
   .hero__title { font-size: var(--fs-hero); line-height: 0.92; text-transform: uppercase; margin-bottom: var(--space-6); }

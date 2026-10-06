@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load i18n static wagtailcore_tags wagtailimages_tags core_tags %}
 {% comment %} home/home_page.html — landing page (design: Figma 2408:5, ADR-0006).
-   Context: page (HomePage), sections (list[SectionIndexPage]), featured_articles,
-   featured_videos, settings. Both sections are presented equally (TZ §II): same card
+   Context: page (HomePage), sections (list[SectionIndexPage]); design 2026-10 blocks:
+   faq_page + topics (question topic cards), news_index + news, video_index + videos,
+   articles_index + articles (HomePage.get_landing_feeds). Both sections are presented equally (TZ §II): same card
    size, same arrow affordance, only the colour and the artwork differ.
    The blobs are decoration and never carry meaning (aria-hidden). {% endcomment %}
 {% block title_suffix %}{% endblock %}{# the hero slogan already names the site (EA-13) #}
@@ -10,12 +11,6 @@
 {% block section_tabs %}{% endblock %}
 {% block content %}
 <div class="landing">
-  <div class="landing__blobs" aria-hidden="true">
-    <img src="{% static 'img/figma/blob-5.svg' %}" alt="" class="landing__blob landing__blob--tl" loading="lazy" decoding="async">
-    <img src="{% static 'img/figma/blob-6.svg' %}" alt="" class="landing__blob landing__blob--l" loading="lazy" decoding="async">
-    <img src="{% static 'img/figma/blob-8.svg' %}" alt="" class="landing__blob landing__blob--r" loading="lazy" decoding="async">
-    <img src="{% static 'img/figma/blob-6.svg' %}" alt="" class="landing__blob landing__blob--tr" loading="lazy" decoding="async">
-  </div>
 
   <div class="container landing__inner">
     <div class="landing__top">
@@ -54,45 +49,78 @@
       </section>
     </div>
 
-    {% if quick_checks %}
-      <section class="checks" aria-label="{% trans 'Self-checks' %}">
-        {% for check in quick_checks %}
-          <article class="check-card">
-            <img class="check-card__shape" src="{% static 'img/figma/card-test-1.svg' %}" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            <h2 class="check-card__title"><a class="check-card__link" href="{{ check.url }}">{{ check.title }}</a></h2>
-            <img class="icon-button check-card__arrow" src="{% static 'img/figma/btn-arrow-grey.svg' %}" alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
-          </article>
-        {% endfor %}
-      </section>
-    {% endif %}
-
     {% if page.emergency_banner %}<div class="banner banner--home">{{ page.emergency_banner|richtext }}</div>{% endif %}
 
-    {% if page.stats %}
-      <section class="stats-strip" aria-label="{% trans 'Key figures' %}">
-        {% for block in page.stats %}{% include_block block %}{% endfor %}
-      </section>
-    {% endif %}
-
-    {% if featured_articles %}
-      <section class="featured">
-        <h2>{% trans "Featured articles" %}</h2>
-        <div class="cards-grid__items">
-          {% for article in featured_articles %}
-            {% include "components/card.html" with title=article.title url=article.url text=article.summary image=article.hero_image %}
+    {% if faq_page %}
+      <section class="landing-block" aria-labelledby="home-faq">
+        <header class="landing-block__head">
+          {% trans "Most asked questions" as faq_title %}{% include "components/bar_title.html" with title=faq_title id="home-faq" %}
+          <a class="pill-outline" href="{{ faq_page.url }}">{% trans "All" %}</a>
+        </header>
+        <div class="topic-cards">
+          {% for value, label in topics %}
+            <article class="topic-card" data-topic="{{ value }}">
+              <h3 class="topic-card__title"><a class="topic-card__link" href="{{ faq_page.url }}?topic={{ value }}">{{ label }}</a></h3>
+              <span class="arrow-disc topic-card__arrow" aria-hidden="true">{% include "components/icons/arrow.svg" %}</span>
+              {% if value == "children" %}
+                <img class="topic-card__art" src="{% static 'img/figma/children-bow.svg' %}" alt="" aria-hidden="true" width="305" height="309" loading="lazy" decoding="async">
+              {% else %}
+                <img class="topic-card__art" src="{% static 'img/figma/women-ribbon.png' %}" alt="" aria-hidden="true" width="429" height="461" loading="lazy" decoding="async">
+              {% endif %}
+            </article>
           {% endfor %}
         </div>
       </section>
     {% endif %}
 
-    {% if featured_videos %}
-      <section class="featured">
-        <h2>{% trans "Featured videos" %}</h2>
-        <div class="cards-grid__items">
-          {% for video in featured_videos %}
-            {% include "components/card.html" with title=video.title text=video.doctor_name image=video.poster %}
-          {% endfor %}
-        </div>
+    {% if news_index %}
+      <section class="landing-block" aria-labelledby="home-news">
+        <header class="landing-block__head">
+          {% include "components/bar_title.html" with title=news_index.title id="home-news" %}
+          {% include "components/topic_filter.html" with base_url=news_index.url %}
+        </header>
+        {% if news %}
+          <div class="news-lead">
+            {% include "posts/_news_feature.html" with post=news.0 %}
+            <div class="news-lead__list">{% for post in news|slice:"1:" %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+          </div>
+        {% else %}
+          <p class="empty-state">{% trans "News will appear here soon." %}</p>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    {% if video_index %}
+      <section class="landing-block" aria-labelledby="home-videos">
+        <header class="landing-block__head">
+          {% include "components/bar_title.html" with title=video_index.title id="home-videos" %}
+          {% include "components/topic_filter.html" with base_url=video_index.url %}
+        </header>
+        {% if videos %}
+          <div class="scroller" data-scroller>
+            <div class="scroller__track">{% for video in videos %}{% include "media_library/_video_card.html" with url=video.watch_url %}{% endfor %}</div>
+            <button class="scroller__next" type="button" data-scroller-next aria-label="{% trans 'Next' %}">›</button>
+          </div>
+        {% else %}
+          <p class="empty-state">{% trans "Videos will appear here soon." %}</p>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    {% if articles_index %}
+      <section class="landing-block" aria-labelledby="home-articles">
+        <header class="landing-block__head">
+          {% include "components/bar_title.html" with title=articles_index.title id="home-articles" %}
+          {% include "components/topic_filter.html" with base_url=articles_index.url %}
+        </header>
+        {% if articles %}
+          <div class="scroller" data-scroller>
+            <div class="scroller__track">{% for post in articles %}{% include "posts/_article_card.html" %}{% endfor %}</div>
+            <button class="scroller__next" type="button" data-scroller-next aria-label="{% trans 'Next' %}">›</button>
+          </div>
+        {% else %}
+          <p class="empty-state">{% trans "Articles will appear here soon." %}</p>
+        {% endif %}
       </section>
     {% endif %}
 

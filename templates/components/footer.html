@@ -1,41 +1,54 @@
 {% comment %} ---------------------------------------------------------------------------
-   components/footer.html — site footer (wireframe).
-   Context: request, LANGUAGE_CODE, settings.core.SiteSettings (hotline, socials, disclaimer,
-   footer text, legal text, partner logos). Always shows the medical disclaimer (spec §8).
+   components/footer.html — site footer (design 2026-10: lilac site map, Yandex logo, contact
+   icons). Columns and links come from Settings → Site settings → «Footer site map» (uz / ru);
+   without them the utility pages are listed. Always shows the medical disclaimer (spec §8).
    --------------------------------------------------------------------------- {% endcomment %}
-{% load i18n wagtailimages_tags core_tags %}
+{% load i18n static cache wagtailimages_tags core_tags %}
 {% with s=settings.core.SiteSettings %}
 <footer class="site-footer" role="contentinfo">
-  <div class="container">
-    {% site_links as links %}
-    {% if links %}
-      <nav class="site-footer__links" aria-label="{% trans 'Site sections' %}">
-        <ul>{% for link in links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul>
-      </nav>
-    {% endif %}
+  <div class="container site-footer__inner">
+    {% cache_version as version %}
+    {% cache 3600 site_footer_map LANGUAGE_CODE version %}
+    {% footer_map s as columns %}
+    <div class="footer-map">
+      {% if columns %}
+        {% for column in columns %}
+          <nav class="footer-map__col" aria-label="{{ column.title }}">
+            <h2 class="footer-map__title">{{ column.title }}</h2>
+            <ul class="footer-map__links">
+              {% for link in column.links %}<li><a href="{{ link.href }}">{{ link.label }}</a></li>{% endfor %}
+            </ul>
+          </nav>
+        {% endfor %}
+      {% else %}
+        {% site_links as links %}
+        <nav class="footer-map__col" aria-label="{% trans 'Site sections' %}">
+          <ul class="footer-map__links">{% for link in links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul>
+        </nav>
+      {% endif %}
+    </div>
+    {% endcache %}
+    <div class="site-footer__aside">
+      {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-150 class="site-footer__partner" alt="Yandex" %}
+      {% else %}<img class="site-footer__partner" src="{% static 'img/figma/yandex-uz.png' %}" alt="Yandex Uzbekistan" width="118" height="154" loading="lazy" decoding="async">{% endif %}
+      <ul class="social-icons" aria-label="{% trans 'Contacts and social networks' %}">
+        {% if s.hotline_phone %}<li><a href="{{ s.hotline_phone|phone_href }}" aria-label="{% trans 'Hotline' %} {{ s.hotline_phone|phone_display }}">{% include "components/icons/phone.svg" %}</a></li>{% endif %}
+        {% if s.map_url %}<li><a href="{{ s.map_url }}" rel="noopener" aria-label="{% trans 'Location on the map' %}">{% include "components/icons/pin.svg" %}</a></li>{% endif %}
+        {% if s.telegram_url %}<li><a href="{{ s.telegram_url }}" rel="noopener" aria-label="Telegram">{% include "components/icons/telegram.svg" %}</a></li>{% endif %}
+        {% if s.instagram_url %}<li><a href="{{ s.instagram_url }}" rel="noopener" aria-label="Instagram">{% include "components/icons/instagram.svg" %}</a></li>{% endif %}
+        {% if s.facebook_url %}<li><a href="{{ s.facebook_url }}" rel="noopener" aria-label="Facebook">{% include "components/icons/facebook.svg" %}</a></li>{% endif %}
+        {% if s.youtube_url %}<li><a href="{{ s.youtube_url }}" rel="noopener" aria-label="YouTube">{% include "components/icons/youtube.svg" %}</a></li>{% endif %}
+        {% if s.tiktok_url %}<li><a href="{{ s.tiktok_url }}" rel="noopener" aria-label="TikTok">{% include "components/icons/tiktok.svg" %}</a></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__bottom">
     <p class="site-footer__disclaimer">{{ s|localized:"disclaimer" }}</p>
-    {% if s.hotline_phone %}
-      <p class="site-footer__hotline">{% trans "Hotline" %}: <a href="{{ s.hotline_phone|phone_href }}">{{ s.hotline_phone|phone_display }}</a>
-        {% if s.hotline_phone_secondary %}, <a href="{{ s.hotline_phone_secondary|phone_href }}">{{ s.hotline_phone_secondary|phone_display }}</a>{% endif %}</p>
-    {% endif %}
-    <ul class="site-footer__social" aria-label="{% trans 'Social networks' %}">
-      {% if s.telegram_url %}<li><a href="{{ s.telegram_url }}" rel="noopener">Telegram</a></li>{% endif %}
-      {% if s.instagram_url %}<li><a href="{{ s.instagram_url }}" rel="noopener">Instagram</a></li>{% endif %}
-      {% if s.youtube_url %}<li><a href="{{ s.youtube_url }}" rel="noopener">YouTube</a></li>{% endif %}
-      {% if s.tiktok_url %}<li><a href="{{ s.tiktok_url }}" rel="noopener">TikTok</a></li>{% endif %}
-      {% if s.facebook_url %}<li><a href="{{ s.facebook_url }}" rel="noopener">Facebook</a></li>{% endif %}
-    </ul>
     {% with footer_text=s|localized:"footer_text" %}{% if footer_text %}<p class="site-footer__text">{{ footer_text }}</p>{% endif %}{% endwith %}
     <p class="site-footer__legal">
       {% blocktrans trimmed %}Built under Presidential Resolutions PP-402 and PP-186.{% endblocktrans %}
       {% if s.privacy_page %}<a href="{{ s.privacy_page.localized.url }}">{% trans "Privacy policy" %}</a>{% endif %}
     </p>
-    <div class="site-footer__partners">
-      <span class="site-footer__partners-label">{% trans "Partners" %}:</span>
-      {% if s.partner_agency_logo %}{% image s.partner_agency_logo height-40 class="site-footer__partner-logo" %}{% else %}<span class="placeholder" translate="no">[Agency]</span>{% endif %}
-      {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-40 class="site-footer__partner-logo" %}{% else %}<span class="placeholder" translate="no">[Yandex]</span>{% endif %}
-      {% if s.partner_hamroh_logo %}{% image s.partner_hamroh_logo height-40 class="site-footer__partner-logo" %}{% else %}<span class="placeholder" translate="no">[Hamroh]</span>{% endif %}
-    </div>
   </div>
 </footer>
 {% endwith %}

@@ -1,38 +1,79 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags %}
-{% comment %} faq/faq_page.html — Context: page (FAQPage), form, submitted, questions, section_filter.
-   The form is an HTMX island (#question-form); non-JS POST re-renders the page. {% endcomment %}
+{% load i18n wagtailcore_tags core_tags %}
+{% comment %} faq/faq_page.html — «Savollaringizga javob oling» (design 2026-10, «Bosh sahifa»
+   frame 2). Left (pink): search + every published question of the topic as an accordion.
+   Right (white sheet): «<topic> haqida bilib oling», the one-line question form (HTMX island
+   #question-form), «Eng ko'p berilgan savollar» cards (questions marked «most asked») and
+   «Siz bilishingiz lozim bo'lgan ma'lumotlar» cards (CMS links).
+   Context: page, form, submitted, questions, featured_questions, info_cards, topic,
+   topic_label, topics, query. {% endcomment %}
+{% block body_class %}page-faq-hub{% endblock %}
+{% block breadcrumbs %}{% endblock %}{# the design shows none; JSON-LD keeps the trail #}
 {% block content %}
-<div class="container">
-  <header class="page-header"><h1>{{ page.title }}</h1></header>
-  {% for block in page.intro %}{% include_block block %}{% endfor %}
-
-  <section id="question-form" class="question-form">
-    {% include "faq/_form.html" %}
-  </section>
-
-  <section class="faq-list" aria-labelledby="faq-list-title">
-    <h2 id="faq-list-title">{% trans "Answered questions" %}</h2>
-    <nav class="filter-tabs" aria-label="{% trans 'Filter by section' %}">
-      <a href="{{ page.url }}#faq-list-title" {% if not section_filter %}aria-current="true"{% endif %}>{% trans "All" %}</a>
-      <a href="{{ page.url }}?section=women#faq-list-title" {% if section_filter == "women" %}aria-current="true"{% endif %}>{% trans "Women's cancer" %}</a>
-      <a href="{{ page.url }}?section=children#faq-list-title" {% if section_filter == "children" %}aria-current="true"{% endif %}>{% trans "Childhood cancer" %}</a>
-    </nav>
+<div class="faq-hub">
+  <aside class="faq-hub__side">
+    <form class="faq-search" method="get" action="{{ page.url }}" role="search">
+      {% if topic %}<input type="hidden" name="topic" value="{{ topic }}">{% endif %}
+      <label class="sr-only" for="faq-q">{% trans "Search the questions" %}</label>
+      <input class="faq-search__input" id="faq-q" type="search" name="q" value="{{ query }}" maxlength="100" placeholder="{% trans 'Search' %}">
+      <button class="faq-search__button" type="submit"><span class="sr-only">{% trans "Search" %}</span>
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </form>
     {% if questions %}
-      <div class="faq">
+      <div class="faq-list">
         {% for q in questions %}
-          <details class="faq__item" id="q-{{ q.pk }}">
-            <summary class="faq__question">{{ q.display_question }}</summary>
-            <div class="faq__answer prose">
+          <details class="faq-list__item" id="q-{{ q.pk }}">
+            <summary class="faq-list__question">{{ q.display_question }}</summary>
+            <div class="faq-list__answer prose">
               {{ q.answer|richtext }}
               {% if q.answered_by %}<p class="faq__meta">{{ q.answered_by.display_name }}{% if q.answered_by.organisation %}, {{ q.answered_by.organisation }}{% endif %}{% if q.published_at %} · {{ q.published_at|date:"d.m.Y" }}{% endif %}</p>{% endif %}
             </div>
           </details>
         {% endfor %}
       </div>
+    {% elif query %}
+      <p class="empty-state">{% trans "No questions match your search." %}</p>
     {% else %}
-      <p class="placeholder">{% trans "Answered questions will appear here." %}</p>
+      <p class="empty-state">{% trans "Answered questions will appear here." %}</p>
     {% endif %}
-  </section>
+  </aside>
+
+  <div class="faq-hub__main">
+    <h1 class="faq-hub__title">{% if topic_label %}{% blocktrans with topic=topic_label %}Learn about {{ topic }}{% endblocktrans %}{% else %}{{ page.title }}{% endif %}</h1>
+    {% include "components/topic_filter.html" with base_url=page.url %}
+    {% for block in page.intro %}{% include_block block %}{% endfor %}
+
+    <section id="question-form" class="question-form">
+      {% include "faq/_form.html" %}
+    </section>
+
+    {% if featured_questions %}
+      <section class="faq-cards" aria-labelledby="faq-most">
+        <h2 class="faq-cards__title" id="faq-most">{% trans "Most asked questions" %}</h2>
+        <div class="faq-cards__grid">
+          {% for q in featured_questions %}
+            <article class="faq-card">
+              <h3 class="faq-card__title"><a class="faq-card__link" href="#q-{{ q.pk }}">{{ q.display_question }}</a></h3>
+              <span class="faq-card__chip" aria-hidden="true">{% trans "Read the answer" %}</span>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if info_cards %}
+      <section class="faq-cards" aria-labelledby="faq-info">
+        <h2 class="faq-cards__title" id="faq-info">{% trans "Information you should know" %}</h2>
+        <div class="faq-cards__grid">
+          {% for card in info_cards %}
+            <article class="faq-card">
+              <h3 class="faq-card__title"><a class="faq-card__link" href="{{ card|link_href }}">{{ card.title }}</a></h3>
+              <span class="faq-card__chip" aria-hidden="true">{% trans "Read the answer" %}</span>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% comment %} ---------------------------------------------------------------------------
+   components/topic_filter.html — «Barchasi / Ko'krak bezi saratoni / …» pills (design 2026-10).
+   Context: base_url (list page URL), topic (current value, "" = all), topics (choices),
+   anchor (optional, without #). Plain links: works without JS, the page reloads filtered.
+   --------------------------------------------------------------------------- {% endcomment %}
+{% load i18n %}
+<nav class="topic-filter" aria-label="{% trans 'Filter by topic' %}">
+  <a class="topic-filter__pill{% if not topic %} is-active{% endif %}" href="{{ base_url }}{% if anchor %}#{{ anchor }}{% endif %}"{% if not topic %} aria-current="true"{% endif %}>{% trans "All" %}</a>
+  {% for value, label in topics %}
+    <a class="topic-filter__pill{% if topic == value %} is-active{% endif %}" href="{{ base_url }}?topic={{ value }}{% if anchor %}#{{ anchor }}{% endif %}"{% if topic == value %} aria-current="true"{% endif %}>{{ label }}</a>
+  {% endfor %}
+</nav>

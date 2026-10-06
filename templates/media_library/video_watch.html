@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} media_library/video_watch.html — one video of the «Videoroliklar» list.
+   Context: page (VideoIndexPage), video, more (up to 3 videos of the same topic). {% endcomment %}
+{% block title %}{{ video.title }}{% endblock %}
+{% block content %}
+<div class="container list-page">
+  <p><a class="pill-outline" href="{{ page.url }}">← {{ page.title }}</a></p>
+  <h1 class="post__title">{{ video.title }}</h1>
+  {% include "components/video.html" with video=video embed=video.embed %}
+  {% if more %}
+    {% trans "More videos" as more_title %}{% include "components/bar_title.html" with title=more_title %}
+    <div class="video-grid">{% for item in more %}{% include "media_library/_video_card.html" with video=item url=item.watch_url %}{% endfor %}</div>
+  {% endif %}
+</div>
+{% endblock %}

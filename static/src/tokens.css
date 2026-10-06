@@ -32,6 +32,23 @@
   --c-lime: #b2f71b;          /* stage badges, method pills */
   --c-lime-soft: #d5f96b;     /* illustration lime */
 
+  /* design 2026-10 (docs/Erta aniqla/*.png, sampled): cards, chips, footer */
+  --c-card-pink: #ffd2e2;     /* news rows */
+  --c-card-hero-pink: #ffb2cd; /* landing «Ayollar saratoni» capsule */
+  --c-card-pink-2: #fccbdc;   /* question topic cards */
+  --c-card-lilac: #d0b6ff;    /* children's cards, footer */
+  --c-chip-purple: #9b64ff;   /* children's topic chip */
+  --c-wine: #800049;          /* section titles, filter pills */
+  --c-plum: #480067;          /* footer headings */
+  --c-plum-ink: #34004a;      /* children's card title */
+  --c-text-soft: #393939;     /* news titles */
+  --c-text-muted: #616161;    /* dates */
+  --c-faq-side: #feeff4;      /* question list backdrop */
+  --c-hero-purple: #c765ff;   /* «Batafsil» */
+  --c-hero-violet: #b431df;   /* «Murojaat qilish» outline */
+  --c-social: #d9d9d9;        /* footer contact squares */
+  --c-overlay: rgba(70, 40, 50, 0.72); /* lead news panel, video dim */
+
   /* page backdrop of the women's section (sampled from the Figma exports, M5d) */
   --c-page-women: #fffafd;
   --c-blob-pink: #fec2e0;

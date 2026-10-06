@@ -1,0 +1,8 @@
+{% comment %} media_library/_video_card.html — video card (design 2026-10: dimmed poster, white
+   play disc, title bottom-left). Context: video (Video), url (watch page). {% endcomment %}
+{% load i18n wagtailimages_tags %}
+<article class="video-card" data-topic="{{ video.topic }}">
+  {% if video.poster %}{% picture video.poster format-{webp,jpeg} fill-{440x250,880x500} sizes="(max-width: 48rem) 90vw, 22rem" alt="" class="video-card__img" loading="lazy" %}{% endif %}
+  <span class="video-card__play" aria-hidden="true">{% include "components/icons/play.svg" %}</span>
+  <h3 class="video-card__title"><a class="video-card__link" href="{{ url }}">{{ video.title }}</a></h3>
+</article>

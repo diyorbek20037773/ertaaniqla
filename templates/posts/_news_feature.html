@@ -1,0 +1,12 @@
+{% comment %} posts/_news_feature.html — the large lead news card (design 2026-10: full picture,
+   frosted panel with topic chip, date and title, «Batafsil» chip). Context: post. {% endcomment %}
+{% load i18n wagtailimages_tags %}
+<article class="news-feature" data-topic="{{ post.topic }}">
+  {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{560x620,1120x1240} sizes="(max-width: 56rem) 100vw, 36rem" alt="" class="news-feature__img" %}{% endif %}
+  <span class="topic-chip news-feature__more" aria-hidden="true">{% trans "Read more" %}</span>
+  <div class="news-feature__panel">
+    <p class="news-feature__meta"><span class="topic-chip">{{ post.get_topic_display }}</span>
+      <span class="news-feature__date">{% include "components/icons/calendar.svg" %}<time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"F j, Y" }}</time></span></p>
+    <h3 class="news-feature__title"><a class="news-feature__link" href="{{ post.url }}">{{ post.title }}</a></h3>
+  </div>
+</article>

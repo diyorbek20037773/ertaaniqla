@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+{% comment %} posts/post_index_page.html — «Yangiliklar» / «Maqolalar» (design 2026-10, «Bosh sahifa»
+   frames 3–5, 7). Context: page (PostIndexPage: kind), posts (Page of PostPage), topic, topics.
+   News, «all», first page: the newest item is the large lead card next to three rows, then rows
+   in two columns. Articles: three-column white cards. {% endcomment %}
+{% block breadcrumbs %}{% endblock %}{# design 2026-10: lists have no trail; JSON-LD keeps it #}
+{% block content %}
+<div class="container list-page">
+  <header class="list-page__head">
+    {% include "components/bar_title.html" with title=page.title tag="h1" %}
+    {% include "components/topic_filter.html" with base_url=page.url %}
+  </header>
+  {% for block in page.intro %}{% include_block block %}{% endfor %}
+
+  {% if posts %}
+    {% if page.kind == "articles" %}
+      <div class="article-grid">{% for post in posts %}{% include "posts/_article_card.html" %}{% endfor %}</div>
+    {% elif not topic and posts.number == 1 %}
+      <div class="news-lead">
+        {% include "posts/_news_feature.html" with post=posts.object_list.0 %}
+        <div class="news-lead__list">{% for post in posts.object_list|slice:"1:4" %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+      </div>
+      <div class="news-grid">{% for post in posts.object_list|slice:"4:" %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+    {% else %}
+      <div class="news-grid">{% for post in posts %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+    {% endif %}
+    {% include "components/pager.html" with items=posts %}
+  {% else %}
+    <p class="empty-state">{% if page.kind == "articles" %}{% trans "Articles will appear here soon." %}{% else %}{% trans "News will appear here soon." %}{% endif %}</p>
+  {% endif %}
+</div>
+{% endblock %}

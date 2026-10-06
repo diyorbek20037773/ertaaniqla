@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 08:44+0500\n"
+"POT-Creation-Date: 2026-10-06 17:30+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -513,6 +513,14 @@ msgstr "Женский рак"
 msgid "Childhood cancer"
 msgstr "Детский рак"
 
+#| msgid "Women's cancer"
+msgid "Breast cancer"
+msgstr "Рак молочной железы"
+
+#| msgid "Childhood cancer"
+msgid "Cervical cancer"
+msgstr "Рак шейки матки"
+
 msgid "social sharing image"
 msgstr "изображение для соцсетей"
 
@@ -561,6 +569,30 @@ msgstr ""
 msgid "Medical review"
 msgstr "Медицинская проверка"
 
+#| msgid "Go to the home page"
+msgid "Anchor on the page"
+msgstr "Якорь на странице"
+
+msgid "Optional, without # — e.g. a section of a long page."
+msgstr "Необязательно, без # — например, раздел длинной страницы."
+
+#| msgid "external URL"
+msgid "or external URL"
+msgstr "или внешняя ссылка"
+
+#| msgid "Link"
+msgid "Links"
+msgstr "Ссылки"
+
+#| msgid "Two columns"
+msgid "Footer column"
+msgstr "Колонка подвала"
+
+msgid ""
+"The footer site map (design 2026-10): one block per column, links in order."
+msgstr ""
+"Карта сайта в подвале: каждая колонка — отдельный блок, ссылки по порядку."
+
 msgid "hotline phone"
 msgstr "телефон горячей линии"
 
@@ -584,6 +616,20 @@ msgstr "YouTube"
 
 msgid "TikTok"
 msgstr "TikTok"
+
+msgid "location on the map"
+msgstr "место на карте"
+
+msgid "Footer location icon (e.g. Yandex Maps)."
+msgstr "Значок адреса в подвале (например, ссылка на Яндекс Карты)."
+
+#| msgid "footer text (uz)"
+msgid "footer columns (uz)"
+msgstr "колонки подвала (uz)"
+
+#| msgid "footer text (ru)"
+msgid "footer columns (ru)"
+msgstr "колонки подвала (ru)"
 
 msgid "footer text (uz)"
 msgstr "текст подвала (uz)"
@@ -650,6 +696,10 @@ msgstr "Горячая линия"
 
 msgid "Social networks"
 msgstr "Социальные сети"
+
+#| msgid "Footer & legal"
+msgid "Footer site map"
+msgstr "Карта сайта в подвале"
 
 msgid "Footer & legal"
 msgstr "Подвал и правовые тексты"
@@ -815,6 +865,13 @@ msgstr "Вопросы и ответы"
 msgid "Section"
 msgstr "Раздел"
 
+#| msgid "Topics"
+msgid "Topic"
+msgstr "Тема"
+
+msgid "Other / not sure"
+msgstr "Другое / не знаю"
+
 msgid ""
 "I agree to the processing of my data as described in the privacy policy"
 msgstr ""
@@ -831,6 +888,10 @@ msgstr "Ваш вопрос"
 
 msgid "My question may be published anonymously with the answer"
 msgstr "Мой вопрос можно опубликовать анонимно вместе с ответом"
+
+#| msgid "Your question"
+msgid "Leave your question too"
+msgstr "Оставьте и ваш вопрос"
 
 msgid "Please describe your question in a few words."
 msgstr "Опишите ваш вопрос в нескольких словах."
@@ -863,6 +924,22 @@ msgstr ""
 
 msgid "section"
 msgstr "раздел"
+
+#| msgid "Topics"
+msgid "topic"
+msgstr "тема"
+
+msgid "Which disease page shows the published question."
+msgstr "На странице какой болезни показывается опубликованный вопрос."
+
+msgid "most asked"
+msgstr "часто задаваемый"
+
+msgid ""
+"Shown as a card under «Most asked questions» (published questions only)."
+msgstr ""
+"Показывается карточкой в «Часто задаваемых вопросах» (только "
+"опубликованные)."
 
 msgid "question"
 msgstr "вопрос"
@@ -910,11 +987,27 @@ msgstr "вопрос врачу"
 msgid "questions to a doctor"
 msgstr "вопросы врачу"
 
+#| msgid "All types"
+msgid "All topics"
+msgstr "Все темы"
+
+msgid "Without #."
+msgstr "Без #."
+
+msgid "Information card"
+msgstr "Информационная карточка"
+
 msgid "text above the form"
 msgstr "текст над формой"
 
 msgid "thank-you text"
 msgstr "текст благодарности"
+
+msgid "«Information you should know» cards"
+msgstr "Карточки «Информация, которую нужно знать»"
+
+msgid "Short links to pages, shown next to the most asked questions."
+msgstr "Короткие ссылки на страницы рядом с частыми вопросами."
 
 msgid "questions & answers page"
 msgstr "страница вопросов и ответов"
@@ -1152,6 +1245,9 @@ msgstr "Ошибка"
 msgid "title"
 msgstr "заголовок"
 
+msgid "Filter on the «Videos» page; empty = shown under «All» only."
+msgstr "Фильтр на странице «Видеоролики»; пусто — только во «Все»."
+
 msgid "source"
 msgstr "источник"
 
@@ -1222,6 +1318,46 @@ msgstr "%(label)s: тип содержимого %(mime)s не разрешён.
 
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr "Файлы субтитров должны быть WebVTT (начинаться с 'WEBVTT')."
+
+#| msgid "videos"
+msgid "videos list"
+msgstr "список видео"
+
+#| msgid "Featured articles"
+msgid "News and articles"
+msgstr "Новости и статьи"
+
+msgid "News"
+msgstr "Новости"
+
+#| msgid "All types"
+msgid "list type"
+msgstr "тип списка"
+
+msgid "news / articles list"
+msgstr "список новостей / статей"
+
+msgid "date"
+msgstr "дата"
+
+msgid "picture"
+msgstr "изображение"
+
+#| msgid "Shown in listings, the mega-menu and search results."
+msgid "Two lines shown on the card (articles) and in search results."
+msgstr "Две строки на карточке (статьи) и в результатах поиска."
+
+#| msgid "Cards"
+msgid "Card"
+msgstr "Карточка"
+
+#| msgid "featured article"
+msgid "news item / article"
+msgstr "новость / статья"
+
+#| msgid "Featured articles"
+msgid "news and articles"
+msgstr "новости и статьи"
 
 msgid "Search"
 msgstr "Поиск"
@@ -1506,11 +1642,9 @@ msgstr "этапы медицинской проверки"
 msgid "Erta aniqla"
 msgstr "Эрта аниқла"
 
-#| msgid "Erta aniqla — home"
 msgid "Erta aniqla — administration"
 msgstr "Эрта аниқла — администрирование"
 
-#| msgid "definition"
 msgid "Administration"
 msgstr "Администрирование"
 
@@ -1606,11 +1740,15 @@ msgstr "Открыть в"
 msgid "Site sections"
 msgstr "Разделы сайта"
 
+#| msgid "Social networks"
+msgid "Contacts and social networks"
+msgstr "Контакты и соцсети"
+
+msgid "Location on the map"
+msgstr "Место на карте"
+
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
 msgstr "Создан в соответствии с Постановлениями Президента ПП-402 и ПП-186."
-
-msgid "Partners"
-msgstr "Партнёры"
 
 msgid "Please correct the errors below."
 msgstr "Исправьте ошибки ниже."
@@ -1666,6 +1804,16 @@ msgstr "Проверено врачом"
 msgid "Verified by a doctor"
 msgstr "Проверено врачом"
 
+#| msgid "Page"
+msgid "Pages"
+msgstr "Страницы"
+
+msgid "Previous"
+msgstr "Предыдущая"
+
+msgid "Next"
+msgstr "Следующая"
+
 msgid "Search the site"
 msgstr "Поиск по сайту"
 
@@ -1692,6 +1840,13 @@ msgstr "Сроки"
 
 msgid "Learn more"
 msgstr "Подробнее"
+
+#| msgid "Filter by section"
+msgid "Filter by topic"
+msgstr "Фильтр по теме"
+
+msgid "All"
+msgstr "Все"
 
 msgid "The video is being processed. Please check back later."
 msgstr "Видео обрабатывается. Загляните позже."
@@ -1735,9 +1890,6 @@ msgstr[2] "%(counter)s учреждений"
 msgid "Filter institutions"
 msgstr "Фильтр учреждений"
 
-msgid "All"
-msgstr "Все"
-
 msgid "Show"
 msgstr "Показать"
 
@@ -1753,8 +1905,11 @@ msgstr "Карта учреждений"
 msgid "Thank you, your question has been sent."
 msgstr "Спасибо, ваш вопрос отправлен."
 
-msgid "Ask a doctor"
-msgstr "Спросить врача"
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Want a private reply? (optional)"
+msgstr "Нужен личный ответ? (необязательно)"
 
 msgid ""
 "We never publish names or contacts. Contacts are deleted 90 days after the "
@@ -1763,26 +1918,36 @@ msgstr ""
 "Мы никогда не публикуем имена и контакты. Контакты удаляются через 90 дней "
 "после ответа."
 
-msgid "Send question"
-msgstr "Отправить вопрос"
+#| msgid "Search the site"
+msgid "Search the questions"
+msgstr "Поиск по вопросам"
 
-msgid "Answered questions"
-msgstr "Отвеченные вопросы"
-
-msgid "Filter by section"
-msgstr "Фильтр по разделу"
+msgid "No questions match your search."
+msgstr "По вашему запросу вопросов не найдено."
 
 msgid "Answered questions will appear here."
 msgstr "Здесь появятся отвеченные вопросы."
+
+#, python-format
+msgid "Learn about %(topic)s"
+msgstr "Узнайте о теме: %(topic)s"
+
+#| msgid "Answered questions"
+msgid "Most asked questions"
+msgstr "Часто задаваемые вопросы"
+
+#| msgid "Search the site"
+msgid "Read the answer"
+msgstr "Читать ответ"
+
+msgid "Information you should know"
+msgstr "Информация, которую нужно знать"
 
 msgid "Thank you, your message has been sent."
 msgstr "Спасибо, ваше сообщение отправлено."
 
 msgid "Messages are deleted after 180 days."
 msgstr "Сообщения удаляются через 180 дней."
-
-msgid "Send"
-msgstr "Отправить"
 
 msgid "Find a term"
 msgstr "Найти термин"
@@ -1800,11 +1965,17 @@ msgctxt "hero button"
 msgid "Get help"
 msgstr "Обратиться"
 
-msgid "Self-checks"
-msgstr "Самопроверка"
+#| msgid "Stories will appear here."
+msgid "News will appear here soon."
+msgstr "Новости скоро появятся здесь."
 
-msgid "Key figures"
-msgstr "Ключевые цифры"
+#| msgid "Stories will appear here."
+msgid "Videos will appear here soon."
+msgstr "Видео скоро появятся здесь."
+
+#| msgid "Articles will appear here."
+msgid "Articles will appear here soon."
+msgstr "Статьи скоро появятся здесь."
 
 msgid "Filter by audience"
 msgstr "Фильтр по аудитории"
@@ -1826,6 +1997,15 @@ msgstr "Скопировать хэштеги"
 
 msgid "Materials will appear here."
 msgstr "Здесь появятся материалы."
+
+#| msgid "Short video"
+msgid "More videos"
+msgstr "Другие видео"
+
+#| msgid "Read more"
+msgctxt "article card"
+msgid "Read more"
+msgstr "Читать дальше"
 
 #, python-format
 msgid "%(counter)s result"
@@ -1868,6 +2048,9 @@ msgstr "Опубликовано с согласия человека."
 
 msgid "Name and details changed."
 msgstr "Имя и детали изменены."
+
+msgid "Filter by section"
+msgstr "Фильтр по разделу"
 
 msgid "Stories will appear here."
 msgstr "Здесь появятся истории."
@@ -1919,6 +2102,21 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgid "Partners"
+#~ msgstr "Партнёры"
+
+#~ msgid "Ask a doctor"
+#~ msgstr "Спросить врача"
+
+#~ msgid "Send question"
+#~ msgstr "Отправить вопрос"
+
+#~ msgid "Self-checks"
+#~ msgstr "Самопроверка"
+
+#~ msgid "Key figures"
+#~ msgstr "Ключевые цифры"
 
 #~ msgid "Get in touch"
 #~ msgstr "Связаться с нами"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 08:44+0500\n"
+"POT-Creation-Date: 2026-10-06 17:30+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -516,6 +516,14 @@ msgstr "Ayollar saratoni"
 msgid "Childhood cancer"
 msgstr "Bolalar saratoni"
 
+#| msgid "Women's cancer"
+msgid "Breast cancer"
+msgstr "Koʻkrak bezi saratoni"
+
+#| msgid "Childhood cancer"
+msgid "Cervical cancer"
+msgstr "Bachadon boʻyni saratoni"
+
 msgid "social sharing image"
 msgstr "ijtimoiy tarmoq rasmi"
 
@@ -565,6 +573,31 @@ msgstr ""
 msgid "Medical review"
 msgstr "Tibbiy tekshiruv"
 
+#| msgid "Go to the home page"
+msgid "Anchor on the page"
+msgstr "Sahifadagi boʻlim (anchor)"
+
+msgid "Optional, without # — e.g. a section of a long page."
+msgstr "Ixtiyoriy, # belgisisiz — masalan, uzun sahifaning boʻlimi."
+
+#| msgid "external URL"
+msgid "or external URL"
+msgstr "yoki tashqi havola"
+
+#| msgid "Link"
+msgid "Links"
+msgstr "Havolalar"
+
+#| msgid "Two columns"
+msgid "Footer column"
+msgstr "Footer ustuni"
+
+msgid ""
+"The footer site map (design 2026-10): one block per column, links in order."
+msgstr ""
+"Footerdagi sayt xaritasi: har bir ustun — alohida blok, havolalar tartib "
+"bilan."
+
 msgid "hotline phone"
 msgstr "ishonch telefoni"
 
@@ -588,6 +621,20 @@ msgstr "YouTube"
 
 msgid "TikTok"
 msgstr "TikTok"
+
+msgid "location on the map"
+msgstr "xaritadagi manzil"
+
+msgid "Footer location icon (e.g. Yandex Maps)."
+msgstr "Footerdagi manzil belgisi (masalan, Yandex Xaritalar havolasi)."
+
+#| msgid "footer text (uz)"
+msgid "footer columns (uz)"
+msgstr "footer ustunlari (uz)"
+
+#| msgid "footer text (ru)"
+msgid "footer columns (ru)"
+msgstr "footer ustunlari (ru)"
 
 msgid "footer text (uz)"
 msgstr "pastki matn (uz)"
@@ -656,6 +703,10 @@ msgstr "Ishonch telefoni"
 
 msgid "Social networks"
 msgstr "Ijtimoiy tarmoqlar"
+
+#| msgid "Footer & legal"
+msgid "Footer site map"
+msgstr "Footerdagi sayt xaritasi"
 
 msgid "Footer & legal"
 msgstr "Pastki qism va huquqiy matnlar"
@@ -823,6 +874,13 @@ msgstr "Savollar va javoblar"
 msgid "Section"
 msgstr "Boʻlim"
 
+#| msgid "Topics"
+msgid "Topic"
+msgstr "Mavzu"
+
+msgid "Other / not sure"
+msgstr "Boshqa / bilmayman"
+
 msgid ""
 "I agree to the processing of my data as described in the privacy policy"
 msgstr ""
@@ -840,6 +898,10 @@ msgstr "Savolingiz"
 
 msgid "My question may be published anonymously with the answer"
 msgstr "Savolim javob bilan birga anonim eʼlon qilinishi mumkin"
+
+#| msgid "Your question"
+msgid "Leave your question too"
+msgstr "Siz ham oʻz savolingizni qoldiring"
 
 msgid "Please describe your question in a few words."
 msgstr "Savolingizni bir necha soʻz bilan tasvirlang."
@@ -872,6 +934,22 @@ msgstr ""
 
 msgid "section"
 msgstr "boʻlim"
+
+#| msgid "Topics"
+msgid "topic"
+msgstr "mavzu"
+
+msgid "Which disease page shows the published question."
+msgstr "Eʼlon qilingan savol qaysi kasallik sahifasida koʻrinadi."
+
+msgid "most asked"
+msgstr "eng koʻp beriladigan"
+
+msgid ""
+"Shown as a card under «Most asked questions» (published questions only)."
+msgstr ""
+"«Eng koʻp berilgan savollar» ostida karta boʻlib chiqadi (faqat eʼlon "
+"qilinganlar)."
 
 msgid "question"
 msgstr "savol"
@@ -918,11 +996,28 @@ msgstr "shifokorga savol"
 msgid "questions to a doctor"
 msgstr "shifokorga savollar"
 
+#| msgid "All types"
+msgid "All topics"
+msgstr "Barcha mavzular"
+
+msgid "Without #."
+msgstr "# belgisisiz."
+
+msgid "Information card"
+msgstr "Maʼlumot kartasi"
+
 msgid "text above the form"
 msgstr "forma ustidagi matn"
 
 msgid "thank-you text"
 msgstr "minnatdorchilik matni"
+
+msgid "«Information you should know» cards"
+msgstr "«Siz bilishingiz lozim boʻlgan maʼlumotlar» kartalari"
+
+msgid "Short links to pages, shown next to the most asked questions."
+msgstr ""
+"Sahifalarga qisqa havolalar, eng koʻp berilgan savollar yonida chiqadi."
 
 msgid "questions & answers page"
 msgstr "savol-javob sahifasi"
@@ -1161,6 +1256,10 @@ msgstr "Xatolik"
 msgid "title"
 msgstr "sarlavha"
 
+msgid "Filter on the «Videos» page; empty = shown under «All» only."
+msgstr ""
+"«Videoroliklar» sahifasidagi filtr; boʻsh boʻlsa faqat «Barchasi»da chiqadi."
+
 msgid "source"
 msgstr "manba"
 
@@ -1233,6 +1332,46 @@ msgstr "%(label)s tarkib turi %(mime)s ruxsat etilmagan."
 
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr "Subtitr fayllari WebVTT boʻlishi kerak ('WEBVTT' bilan boshlanadi)."
+
+#| msgid "videos"
+msgid "videos list"
+msgstr "videoroliklar roʻyxati"
+
+#| msgid "Featured articles"
+msgid "News and articles"
+msgstr "Yangiliklar va maqolalar"
+
+msgid "News"
+msgstr "Yangiliklar"
+
+#| msgid "All types"
+msgid "list type"
+msgstr "roʻyxat turi"
+
+msgid "news / articles list"
+msgstr "yangiliklar / maqolalar roʻyxati"
+
+msgid "date"
+msgstr "sana"
+
+msgid "picture"
+msgstr "rasm"
+
+#| msgid "Shown in listings, the mega-menu and search results."
+msgid "Two lines shown on the card (articles) and in search results."
+msgstr "Kartada (maqolalar) va qidiruv natijalarida koʻrinadigan ikki qator."
+
+#| msgid "Cards"
+msgid "Card"
+msgstr "Karta"
+
+#| msgid "featured article"
+msgid "news item / article"
+msgstr "yangilik / maqola"
+
+#| msgid "Featured articles"
+msgid "news and articles"
+msgstr "yangiliklar va maqolalar"
 
 msgid "Search"
 msgstr "Qidiruv"
@@ -1522,11 +1661,9 @@ msgstr "tibbiy tekshiruv bosqichlari"
 msgid "Erta aniqla"
 msgstr "Erta aniqla"
 
-#| msgid "Erta aniqla — home"
 msgid "Erta aniqla — administration"
 msgstr "Erta aniqla — boshqaruv"
 
-#| msgid "definition"
 msgid "Administration"
 msgstr "Boshqaruv"
 
@@ -1622,11 +1759,15 @@ msgstr "Ochish:"
 msgid "Site sections"
 msgstr "Sayt boʻlimlari"
 
+#| msgid "Social networks"
+msgid "Contacts and social networks"
+msgstr "Aloqa va ijtimoiy tarmoqlar"
+
+msgid "Location on the map"
+msgstr "Xaritadagi manzil"
+
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
 msgstr "Prezidentning PQ-402 va PQ-186-sonli qarorlari asosida yaratilgan."
-
-msgid "Partners"
-msgstr "Hamkorlar"
 
 msgid "Please correct the errors below."
 msgstr "Quyidagi xatolarni tuzating."
@@ -1680,6 +1821,16 @@ msgstr "Shifokor tekshirgan"
 msgid "Verified by a doctor"
 msgstr "Shifokor tekshirgan"
 
+#| msgid "Page"
+msgid "Pages"
+msgstr "Sahifalar"
+
+msgid "Previous"
+msgstr "Oldingi"
+
+msgid "Next"
+msgstr "Keyingi"
+
 msgid "Search the site"
 msgstr "Sayt boʻylab qidirish"
 
@@ -1706,6 +1857,13 @@ msgstr "Muddat"
 
 msgid "Learn more"
 msgstr "Batafsil"
+
+#| msgid "Filter by section"
+msgid "Filter by topic"
+msgstr "Mavzu boʻyicha saralash"
+
+msgid "All"
+msgstr "Barchasi"
 
 msgid "The video is being processed. Please check back later."
 msgstr "Video qayta ishlanmoqda. Keyinroq qayta urinib koʻring."
@@ -1747,9 +1905,6 @@ msgstr[0] "%(counter)s ta muassasa"
 msgid "Filter institutions"
 msgstr "Muassasalarni filtrlash"
 
-msgid "All"
-msgstr "Barchasi"
-
 msgid "Show"
 msgstr "Koʻrsatish"
 
@@ -1765,8 +1920,11 @@ msgstr "Muassasalar xaritasi"
 msgid "Thank you, your question has been sent."
 msgstr "Rahmat, savolingiz yuborildi."
 
-msgid "Ask a doctor"
-msgstr "Shifokorga savol bering"
+msgid "Send"
+msgstr "Yuborish"
+
+msgid "Want a private reply? (optional)"
+msgstr "Shaxsiy javob kerakmi? (ixtiyoriy)"
 
 msgid ""
 "We never publish names or contacts. Contacts are deleted 90 days after the "
@@ -1775,26 +1933,36 @@ msgstr ""
 "Ism va aloqa maʼlumotlari hech qachon eʼlon qilinmaydi. Aloqa maʼlumotlari "
 "javobdan 90 kun oʻtgach oʻchiriladi."
 
-msgid "Send question"
-msgstr "Savolni yuborish"
+#| msgid "Search the site"
+msgid "Search the questions"
+msgstr "Savollardan qidirish"
 
-msgid "Answered questions"
-msgstr "Javob berilgan savollar"
-
-msgid "Filter by section"
-msgstr "Boʻlim boʻyicha filtrlash"
+msgid "No questions match your search."
+msgstr "Qidiruvingizga mos savol topilmadi."
 
 msgid "Answered questions will appear here."
 msgstr "Javob berilgan savollar shu yerda paydo boʻladi."
+
+#, python-format
+msgid "Learn about %(topic)s"
+msgstr "%(topic)s haqida bilib oling"
+
+#| msgid "Answered questions"
+msgid "Most asked questions"
+msgstr "Eng koʻp beriladigan savollar"
+
+#| msgid "Search the site"
+msgid "Read the answer"
+msgstr "Javobini oʻqish"
+
+msgid "Information you should know"
+msgstr "Siz bilishingiz lozim boʻlgan maʼlumotlar"
 
 msgid "Thank you, your message has been sent."
 msgstr "Rahmat, xabaringiz yuborildi."
 
 msgid "Messages are deleted after 180 days."
 msgstr "Xabarlar 180 kundan keyin oʻchiriladi."
-
-msgid "Send"
-msgstr "Yuborish"
 
 msgid "Find a term"
 msgstr "Atamani topish"
@@ -1812,11 +1980,17 @@ msgctxt "hero button"
 msgid "Get help"
 msgstr "Murojaat qilish"
 
-msgid "Self-checks"
-msgstr "Oʻz-oʻzini tekshirish"
+#| msgid "Stories will appear here."
+msgid "News will appear here soon."
+msgstr "Yangiliklar tez orada shu yerda chiqadi."
 
-msgid "Key figures"
-msgstr "Asosiy raqamlar"
+#| msgid "Stories will appear here."
+msgid "Videos will appear here soon."
+msgstr "Videoroliklar tez orada shu yerda chiqadi."
+
+#| msgid "Articles will appear here."
+msgid "Articles will appear here soon."
+msgstr "Maqolalar tez orada shu yerda chiqadi."
 
 msgid "Filter by audience"
 msgstr "Auditoriya boʻyicha filtrlash"
@@ -1838,6 +2012,15 @@ msgstr "Xeshteglarni nusxalash"
 
 msgid "Materials will appear here."
 msgstr "Materiallar shu yerda paydo boʻladi."
+
+#| msgid "Short video"
+msgid "More videos"
+msgstr "Boshqa videoroliklar"
+
+#| msgid "Read more"
+msgctxt "article card"
+msgid "Read more"
+msgstr "Koʻproq oʻqish"
 
 #, python-format
 msgid "%(counter)s result"
@@ -1878,6 +2061,9 @@ msgstr "Insonning roziligi bilan eʼlon qilingan."
 
 msgid "Name and details changed."
 msgstr "Ism va tafsilotlar oʻzgartirilgan."
+
+msgid "Filter by section"
+msgstr "Boʻlim boʻyicha filtrlash"
 
 msgid "Stories will appear here."
 msgstr "Hikoyalar shu yerda paydo boʻladi."
@@ -1925,6 +2111,21 @@ msgstr "Natijani koʻrsatish"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
+
+#~ msgid "Partners"
+#~ msgstr "Hamkorlar"
+
+#~ msgid "Ask a doctor"
+#~ msgstr "Shifokorga savol bering"
+
+#~ msgid "Send question"
+#~ msgstr "Savolni yuborish"
+
+#~ msgid "Self-checks"
+#~ msgstr "Oʻz-oʻzini tekshirish"
+
+#~ msgid "Key figures"
+#~ msgstr "Asosiy raqamlar"
 
 #~ msgid "Get in touch"
 #~ msgstr "Bogʻlanish"

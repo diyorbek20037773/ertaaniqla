@@ -1207,8 +1207,10 @@ FAQ = Node(
         "ru": "Задайте вопрос — ответят врачи. Ответы публикуются анонимно.",
     },
     extra={
+        "streams": {"info_cards": lambda lang, ctx: faq_info_cards(lang, ctx)},
         "fields": {
-            "form_intro": f"<p>{TODO}</p>",
+            # design 2026-10: the one-line form has no text above it
+            "form_intro": "",
             "thanks_text": lambda lang, ctx: p(
                 t(
                     lang,
@@ -1217,7 +1219,7 @@ FAQ = Node(
                 ),
                 TODO,
             ),
-        }
+        },
     },
 )
 
@@ -1408,6 +1410,113 @@ PRIVACY = Node(
     ],
 )
 
+# Design 2026-10 «Bosh sahifa»: news, articles and videos lists — empty until editors add items.
+NEWS = Node(
+    key="news",
+    kind="posts",
+    title={"uz": "Yangiliklar", "ru": "Новости"},
+    slug={"uz": "yangiliklar", "ru": "novosti"},
+    summary={
+        "uz": "Skrining, davlat dasturlari va loyiha yangiliklari",
+        "ru": "Новости о скрининге, государственных программах и проекте",
+    },
+    extra={"fields": {"kind": "news"}},
+)
+
+ARTICLES = Node(
+    key="articles",
+    kind="posts",
+    title={"uz": "Maqolalar", "ru": "Статьи"},
+    slug={"uz": "maqolalar", "ru": "stati"},
+    summary={
+        "uz": "Shifokorlar va mutaxassislarning tushunarli maqolalari",
+        "ru": "Понятные статьи врачей и специалистов",
+    },
+    extra={"fields": {"kind": "articles"}},
+)
+
+VIDEOS = Node(
+    key="videos",
+    kind="videos",
+    title={"uz": "Videoroliklar", "ru": "Видеоролики"},
+    slug={"uz": "videoroliklar", "ru": "video"},
+    summary={
+        "uz": "Shifokorlar bilan videolar va qisqa videoroliklar",
+        "ru": "Видео с врачами и короткие ролики",
+    },
+)
+
+
+def _card(topic: str, uz: str, ru: str, key: str, anchor: str = "") -> Callable[..., Any]:
+    def build(lang: str, ctx: SeedContext) -> dict[str, Any] | None:
+        page = ctx.page_id(key, lang)
+        if page is None:
+            return None
+        value = {
+            "topic": topic,
+            "title": t(lang, uz, ru),
+            "page": page,
+            "anchor": anchor,
+            "url": "",
+        }
+        return {"type": "card", "value": value}
+
+    return build
+
+
+# «Siz bilishingiz lozim bo'lgan ma'lumotlar» (design 2026-10, frame 2), three per topic.
+FAQ_INFO_CARDS = [
+    _card(
+        "breast",
+        "Oʻz-oʻzini tekshirish",
+        "Самообследование",
+        "women.awareness.breast",
+        "oz-ozini-tekshirish",
+    ),
+    _card(
+        "breast",
+        "Koʻkrak bezini koʻrikdan oʻtkazish",
+        "Обследование молочной железы",
+        "women.screening.breast",
+    ),
+    _card(
+        "breast",
+        "Sut bezi saratoni turlari",
+        "Виды рака молочной железы",
+        "women.awareness.breast",
+        "bosqichlari",
+    ),
+    _card(
+        "cervical",
+        "Bachadon boʻyni saratoni shakllari",
+        "Формы рака шейки матки",
+        "women.awareness.cervical",
+        "shakllari",
+    ),
+    _card("cervical", "Skrining", "Скрининг", "women.screening.cervical"),
+    _card(
+        "cervical", "Xavf omillari", "Факторы риска", "women.awareness.cervical", "xavf-omillari"
+    ),
+    _card(
+        "children",
+        "Bolalarda koʻp uchraydigan saraton turlari",
+        "Частые виды рака у детей",
+        "children.about.types",
+    ),
+    _card(
+        "children",
+        "Diagnostika va davolash",
+        "Диагностика и лечение",
+        "children.diagnosis.diagnostics",
+    ),
+    _card("children", "Oila uchun maʼlumot", "Информация для семьи", "children.family"),
+]
+
+
+def faq_info_cards(lang: str, ctx: SeedContext) -> list[dict[str, Any] | None]:
+    return [build(lang, ctx) for build in FAQ_INFO_CARDS]
+
+
 TREE: list[Node] = [
     WOMEN,
     CHILDREN,
@@ -1420,6 +1529,9 @@ TREE: list[Node] = [
     ABOUT,
     DOCTORS,
     PRIVACY,
+    NEWS,
+    ARTICLES,
+    VIDEOS,
 ]
 
 HOME = {
@@ -1459,3 +1571,155 @@ def iter_nodes(nodes: list[Node] | None = None) -> list[Node]:
         result.append(node)
         result.extend(iter_nodes(node.children))
     return result
+
+
+# ---------------------------------------------------------------------------------------------
+# Footer site map (design 2026-10) → Settings → Site settings → «Footer site map». Seeded only
+# while the setting is empty, so editors' changes are never overwritten. Link = (uz, ru, page
+# key, anchor). Anchors point at the accordion sections of the awareness pages.
+# ---------------------------------------------------------------------------------------------
+FooterLink = tuple[str, str, str, str]
+
+FOOTER: list[tuple[dict[str, str], list[FooterLink]]] = [
+    (
+        {"uz": "Erta aniqla loyihasi haqida", "ru": "О проекте «Эрта аниқла»"},
+        [
+            ("Loyiha haqida", "О проекте", "about", ""),
+            ("Hamkorlar", "Партнёры", "about", "hamkorlar"),
+            ("Eng koʻp beriladigan savollar", "Часто задаваемые вопросы", "faq", ""),
+            ("Yangiliklar", "Новости", "news", ""),
+            ("Videoroliklar", "Видеоролики", "videos", ""),
+            ("Maqolalar", "Статьи", "articles", ""),
+            ("Biz bilan bogʻlanish", "Связаться с нами", "feedback", ""),
+            ("Murojaat qilish", "Куда обратиться", "women.directory", ""),
+        ],
+    ),
+    (
+        {"uz": "Koʻkrak bezi saratoni", "ru": "Рак молочной железы"},
+        [
+            (
+                "Koʻkrak bezi saratoni nima?",
+                "Что такое рак молочной железы?",
+                "women.awareness.breast",
+                "",
+            ),
+            (
+                "Koʻkrak bezi saratoni bosqichlari",
+                "Стадии рака молочной железы",
+                "women.awareness.breast",
+                "bosqichlari",
+            ),
+            (
+                "Koʻkrak bezi saratoni sabablari",
+                "Причины рака молочной железы",
+                "women.awareness.breast",
+                "sabablari",
+            ),
+            (
+                "Koʻkrak bezi saratoni belgilari",
+                "Признаки рака молочной железы",
+                "women.awareness.breast",
+                "belgilari",
+            ),
+            ("Shifokor koʻrigi", "Осмотр у врача", "women.awareness.breast", "shifokor-korigi"),
+            (
+                "Koʻkrakni oʻz-oʻzini tekshirish",
+                "Самообследование груди",
+                "women.awareness.breast",
+                "oz-ozini-tekshirish",
+            ),
+            ("Skrining nima?", "Что такое скрининг?", "women.screening.breast", ""),
+            ("Skrining usullari", "Методы скрининга", "women.screening.breast", "usullari"),
+            (
+                "Skrining kimlarga tavsiya etiladi?",
+                "Кому рекомендован скрининг?",
+                "women.screening.breast",
+                "kimlarga",
+            ),
+            (
+                "Davlat dasturi doirasida bepul skrining",
+                "Бесплатный скрининг по госпрограмме",
+                "women.screening.breast",
+                "bepul-skrining",
+            ),
+            ("Davolashni tashkil qilish", "Организация лечения", "women.treatment.breast", ""),
+            (
+                "«Onkologik xushyorlik» xonalarida mavjud imkoniyatlar",
+                "Возможности кабинетов онконастороженности",
+                "women.support.breast",
+                "xonalar",
+            ),
+            (
+                "Bemorlar va shifokorlarning huquq va majburiyatlari",
+                "Права и обязанности пациентов и врачей",
+                "women.support.breast",
+                "huquqlar",
+            ),
+            ("Parvarish va qoʻllab-quvvatlash", "Уход и поддержка", "women.support.breast", ""),
+        ],
+    ),
+    (
+        {"uz": "Bachadon boʻyni saratoni", "ru": "Рак шейки матки"},
+        [
+            (
+                "Bachadon boʻyni saratoni nima?",
+                "Что такое рак шейки матки?",
+                "women.awareness.cervical",
+                "",
+            ),
+            (
+                "Bachadon boʻyni saratoni bosqichlari",
+                "Стадии рака шейки матки",
+                "women.awareness.cervical",
+                "bosqichlari",
+            ),
+            (
+                "Bachadon boʻyni saratoni sabablari",
+                "Причины рака шейки матки",
+                "women.awareness.cervical",
+                "xavf-omillari",
+            ),
+            (
+                "Bachadon boʻyni saratoni belgilari",
+                "Признаки рака шейки матки",
+                "women.awareness.cervical",
+                "belgilari",
+            ),
+            (
+                "Aniqlash usullari",
+                "Методы выявления",
+                "women.awareness.cervical",
+                "aniqlash-usullari",
+            ),
+            ("Xavf omillari", "Факторы риска", "women.screening.cervical", ""),
+            ("Davolash", "Лечение", "women.treatment.cervical", ""),
+        ],
+    ),
+    (
+        {"uz": "Bolalar saratoni", "ru": "Детский рак"},
+        [
+            (
+                "Bolalarda eng koʻp uchraydigan saraton turlari",
+                "Самые частые виды рака у детей",
+                "children.about.types",
+                "",
+            ),
+            ("Diagnostika va davolash", "Диагностика и лечение", "children.diagnosis", ""),
+            ("Parvarish va qoʻllab-quvvatlash", "Уход и поддержка", "children.care", ""),
+            ("Oila uchun maʼlumot", "Информация для семьи", "children.family", ""),
+            ("Kasallikdan keyingi hayot", "Жизнь после рака", "children.after", ""),
+        ],
+    ),
+]
+
+
+def footer_columns(lang: str, ctx: SeedContext) -> list[dict[str, Any]]:
+    columns = []
+    for title, links in FOOTER:
+        items = []
+        for uz, ru, key, anchor in links:
+            page = ctx.page_id(key, lang)
+            if page is not None:
+                items.append({"label": t(lang, uz, ru), "page": page, "anchor": anchor, "url": ""})
+        columns.append({"type": "column", "value": {"title": title[lang], "links": items}})
+    return columns

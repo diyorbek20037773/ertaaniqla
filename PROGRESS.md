@@ -153,6 +153,11 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] docs: ADR-0005, RUNBOOK §4 rows + §9, SECURITY, DECISIONS D-050…D-055, TODO_HARDENING H-017 done + H-024…H-028, LAUNCH_CHECKLIST §5
   - [x] verified on this machine (2026-09-17): `nginx -t` OK with sonar vhost; `compose config` (prod + profiles, sonarqube) OK; SonarQube stack healthy + real scan → quality gate PASSED; Jaeger v2 healthy, Django request exported, no query string / UA / IP in span tags, `/healthz/` not traced; Loki+Alloy ingest docker logs, `level` label, secret masking, audit LogQL query, ruler rules `health: ok`; Grafana provisions Loki datasource + dashboard and runs the LogQL
 - [ ] M8 — launch (needs client: domain, VPS, content, design)
+- [ ] **Design 2026-10** (client frames `docs/Erta aniqla/`, D-077; branch `feat/design-2026-10`)
+  - [x] Phase 1 «Bosh sahifa»: landing blocks (question topic cards, news lead + rows, video and article rows), news / articles / videos lists with topic pills, video watch page, question hub, footer site map, Yandex logo, contact icons; CMS: news/articles under their lists, videos under Snippets, «most asked» flag on questions, info cards on the FAQ page, footer columns in Site settings
+  - [ ] Phase 2 «Koʻkrak bezi saratoni»: awareness page as an accordion (stages / causes / signs / doctor exam / self-exam) + new blocks (numbered cards, check row, «Eng muhimi!», bullet cards)
+  - [ ] Phase 3 «Bachadon boʻyni saratoni»: forms / stages capsules with arrows, labelled boxes, three-column lists, risk tiles, treatment page
+  - Open with the client: which «tepa qism» is «Kontent tayyorlanmoqda» (developer asks); header logo slot is empty in the frames (logo kept)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in
   `docs/CHROME_AUDIT_PROMPT.md`; findings EA-01…EA-38; report text lives in the developer's chat).

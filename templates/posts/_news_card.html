@@ -1,0 +1,14 @@
+{% comment %} posts/_news_card.html — news row card (design 2026-10: picture left, topic chip,
+   title, date, arrow disc). Context: post (PostPage). Whole card is one link. {% endcomment %}
+{% load i18n wagtailimages_tags %}
+<article class="news-card" data-topic="{{ post.topic }}">
+  <div class="news-card__media">
+    {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{220x220,440x440} sizes="10rem" alt="" class="news-card__img" loading="lazy" %}{% endif %}
+  </div>
+  <div class="news-card__body">
+    <span class="topic-chip">{{ post.get_topic_display }}</span>
+    <h3 class="news-card__title"><a class="news-card__link" href="{{ post.url }}">{{ post.title }}</a></h3>
+    <p class="news-card__date">{% include "components/icons/calendar.svg" %}<time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"F j, Y" }}</time></p>
+  </div>
+  <span class="arrow-disc news-card__arrow" aria-hidden="true">{% include "components/icons/arrow.svg" %}</span>
+</article>
