@@ -107,7 +107,10 @@ document.addEventListener("click", (event) => {
 // A link to #q-12 / #bosqichlari opens that <details> (question cards, footer site map).
 function openTarget() {
   const id = decodeURIComponent(location.hash.slice(1));
-  const target = id && document.getElementById(id);
+  // "" is not nullish: `id && …` left a string here and `target?.closest` threw on every page
+  // without a hash — before Alpine.start(), so every widget died. Keep it null.
+  const target = id ? document.getElementById(id) : null;
+  if (!target) return;
   const details = target?.closest("details") || (target?.tagName === "DETAILS" ? target : null);
   if (details && !details.open) {
     details.open = true;
