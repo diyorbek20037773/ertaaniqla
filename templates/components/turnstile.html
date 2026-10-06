@@ -1,8 +1,10 @@
 {% comment %} ---------------------------------------------------------------------------
    components/turnstile.html — Cloudflare Turnstile widget (only when TURNSTILE_SITE_KEY set).
    Context: TURNSTILE_SITE_KEY, request (csp_nonce). The script host is allowed in CSP.
+   Turnstile has no Uzbek (it fell back to English with a console warning); Russian is the
+   better-understood fallback for visitors in Uzbekistan.
    --------------------------------------------------------------------------- {% endcomment %}
 {% if TURNSTILE_SITE_KEY %}
-  <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}" data-language="{{ LANGUAGE_CODE }}"></div>
+  <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}" data-language="ru"></div>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="{{ request.csp_nonce }}"></script>
 {% endif %}

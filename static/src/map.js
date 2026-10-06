@@ -11,6 +11,7 @@ const COLOURS = { women: "#b8336a", children: "#8a5a00", both: "#2b2b2b" };
 
 let map = null;
 let layer = null;
+let tiles = null;
 
 function readData() {
   const node = document.getElementById("map-data");
@@ -31,8 +32,9 @@ function render() {
   if (!container) return;
   const items = readData().filter((i) => typeof i.lat === "number" && typeof i.lng === "number");
   if (!map) {
-    map = L.map(container, { scrollWheelZoom: false }).setView(UZBEKISTAN_CENTER, 6);
-    L.tileLayer(TILES, { attribution: ATTRIBUTION, maxZoom: 18 }).addTo(map);
+    // no initial view: tiles are added only after fitBounds below, so the first (country-wide)
+    // tile set is never requested and then aborted — half the tile traffic on 3G
+    map = L.map(container, { scrollWheelZoom: false });
     layer = L.layerGroup().addTo(map);
   }
   layer.clearLayers();
@@ -58,6 +60,7 @@ function render() {
   } else {
     map.setView(UZBEKISTAN_CENTER, 6);
   }
+  if (!tiles) tiles = L.tileLayer(TILES, { attribution: ATTRIBUTION, maxZoom: 18 }).addTo(map);
   container.setAttribute("data-markers", String(bounds.length));
 }
 
