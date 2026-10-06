@@ -404,20 +404,24 @@ def test_uz_bodies_are_real_uzbek_with_placeholders(seeded) -> None:
     assert "Neyroblastoma" in types
 
 
+def _accordion_block_types(page) -> list[str]:
+    """Block types inside the design 2026-10 accordion sections of a page."""
+    return [
+        child.block_type
+        for item in page.body
+        if item.block_type == "accordion"
+        for section in item.value["items"]
+        for child in section["body"]
+    ]
+
+
 def test_block_types_match_spec_for_key_pages(seeded) -> None:
     assert "steps" in page_for("women.treatment.breast", "uz").block_types
     breast = page_for("women.awareness.breast", "uz")
     assert "accordion" in breast.block_types  # design 2026-10: stages live inside it
-    nested = [
-        b.block_type
-        for item in breast.body
-        for acc in [item.value]
-        if item.block_type == "accordion"
-        for i in acc["items"]
-        for b in i["body"]
-    ]
-    assert "steps" in nested and "numbered_cards" in nested
-    assert "cards_grid" in page_for("women.awareness.cervical", "uz").block_types
+    assert {"steps", "numbered_cards"} <= set(_accordion_block_types(breast))
+    cervical = page_for("women.awareness.cervical", "uz")
+    assert {"cards_grid", "method_cards", "steps"} <= set(_accordion_block_types(cervical))
     assert "text_cards" in page_for("women.after.breast", "uz").block_types
     assert page_for("women.support.breast", "uz").block_types.count("three_columns") == 1
     assert page_for("children.family", "uz").block_types.count("two_columns") == 1

@@ -27,6 +27,12 @@ ICONS: dict[str, tuple[str, str | Promise]] = {
     "hormone": (_W + "risk-hormone.png", _("Molecule (hormones)")),
     "habits": (_W + "risk-habits.png", _("Head (habits)")),
     "virus": (_W + "risk-virus.png", _("Virus (HPV)")),
+    # design 2026-10, cervical risk factors (bright pink tiles)
+    "c-virus": (_W + "risk-c-virus.png", _("Virus (infections)")),
+    "c-vitamin": (_W + "risk-c-vitamin.png", _("Vitamins")),
+    "c-radiation": (_W + "risk-c-radiation.png", _("Radiation (dark)")),
+    "c-cross": (_W + "risk-c-cross.png", _("Medical cross (white square)")),
+    "c-cervix": (_W + "risk-c-cervix.png", _("Cervix")),
 }
 
 ILLUSTRATIONS: dict[str, tuple[str, str | Promise]] = {

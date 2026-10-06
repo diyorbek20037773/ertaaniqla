@@ -3,7 +3,7 @@
   {% if value.title %}<h2 class="cards-grid__heading">{{ value.title }}</h2>{% endif %}
   <div class="cards-grid__items">
     {% for card in value.cards %}
-      {% if value.layout == "icon_tiles" %}
+      {% if value.layout == "icon_tiles" or value.layout == "icon_tiles_bright" %}
         {# icon tile (Figma 2408:255): pink square with the icon, title, short text #}
         <article class="icon-tile">
           <div class="icon-tile__art">

@@ -580,3 +580,25 @@ def test_new_blocks_render_standalone() -> None:
     assert '<h3 class="block pill-title">Qachon?</h3>' in html
     assert 'class="highlight-box__title">Muhim<' in html
     assert '<details class="acc__item" id="bolim">' in html and "<p>Matn</p>" in html
+
+
+def test_design_2026_cervical_page(seeded, client) -> None:
+    """Design 2026-10 «Bachadon boʻyni saratoni»: six anchored sections, bright risk tiles,
+    method cards, and the treatment page keeps the TZ patient route."""
+    import re
+
+    html = client.get("/uz/ayollar/ogohlik/bachadon-boyni-saratoni/").content.decode()
+    assert re.findall(r'<details class="acc__item" id="([a-z-]+)"', html) == [
+        "shakllari",
+        "bosqichlari",
+        "xavf-omillari",
+        "belgilari",
+        "aniqlash-usullari",
+        "diagnostika-tanlash",
+    ]
+    assert "cards-grid--icon_tiles_bright" in html and "risk-c-virus.png" in html
+    assert html.count('class="method-card"') == 6
+    assert 'class="text-card__label">Suhbat<' in html
+    treatment = client.get("/uz/ayollar/davolash/bachadon-boyni-saratoni/").content.decode()
+    assert "Davolash tanloviga taʼsir etuvchi omillar" in treatment
+    assert "steps--capsules_arrows" in treatment  # TZ 4-step route stays

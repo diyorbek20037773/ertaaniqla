@@ -91,13 +91,13 @@ def capsules(items: list[tuple[str, str, str]], arrows: bool = True) -> dict[str
     }
 
 
-def icon_tiles(items: list[tuple[str, str, str]]) -> dict[str, Any]:
+def icon_tiles(items: list[tuple[str, str, str]], layout: str = "icon_tiles") -> dict[str, Any]:
     """items: (icon name from apps.articles.illustrations, title, text)."""
     return {
         "type": "cards_grid",
         "value": {
             "title": "",
-            "layout": "icon_tiles",
+            "layout": layout,
             "cards": [
                 {
                     "image": None,
@@ -149,6 +149,14 @@ def num_card(
 
 def num_cards(cards: list[dict[str, Any]]) -> dict[str, Any]:
     return {"type": "numbered_cards", "value": {"cards": cards}}
+
+
+def method_cards(cards: list[tuple[str, str]]) -> dict[str, Any]:
+    """cards: (label, text html)."""
+    return {
+        "type": "method_cards",
+        "value": {"cards": [{"label": label, "text": text} for label, text in cards]},
+    }
 
 
 def highlight(text_html: str, title: str = "") -> dict[str, Any]:
@@ -801,17 +809,23 @@ def _lines(*lines: str) -> str:
 
 def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
     if lang != "uz":
-        body = _ru_skeleton(
-            lang,
-            ctx,
-            [
-                "Что такое рак шейки матки?",
-                "Формы рака шейки матки",
-                "Стадии рака шейки матки",
-                "Причины рака шейки матки",
-            ],
-        )
-        return [*body[:-1], todo_callout(lang, TZ_AWARENESS_UZ, TZ_AWARENESS_RU), body[-1]]
+        # same accordion as uz (anchors shared with the footer site map); text = translator TODO
+        sections = [
+            ("Формы рака шейки матки", "shakllari"),
+            ("Стадии рака шейки матки", "bosqichlari"),
+            ("Факторы риска рака шейки матки", "xavf-omillari"),
+            ("Признаки рака шейки матки", "belgilari"),
+            ("Методы выявления рака шейки матки", "aniqlash-usullari"),
+            ("Выбор методов диагностики", "diagnostika-tanlash"),
+        ]
+        placeholder = text_card(p(RU_TODO) + p(VERIFY))
+        return [
+            heading("Что такое рак шейки матки?"),
+            placeholder,
+            todo_callout(lang, TZ_AWARENESS_UZ, TZ_AWARENESS_RU),
+            accordion([acc_item(title, anchor, [placeholder]) for title, anchor in sections]),
+            appeal(lang, ctx),
+        ]
     forms = [
         (
             "1",
@@ -915,13 +929,352 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
             ),
         ),
     ]
-    # Figma repeats the breast-cancer cards here by mistake; the TZ risk factors keep the layout.
-    risks = [
-        ("virus", uz("HPV infeksiyasi"), f"{TODO} {VERIFY}"),
-        ("age", uz("Yosh"), f"{TODO} {VERIFY}"),
-        ("genes", uz("Irsiyat"), f"{TODO} {VERIFY}"),
-        ("habits", uz("Turmush tarzi"), f"{TODO} {VERIFY}"),
-        ("other-disease", uz("Boshqa omillar"), f"{TODO} {VERIFY}"),
+    risk_tiles = [
+        ("c-virus", uz("Infeksiyalar"), uz("OIV, genital gerpes, sitomegalovirus, xlamidioz.")),
+        (
+            "c-vitamin",
+            uz("Vitamin yetishmasligi"),
+            uz("Organizmda A va S vitaminlari yetishmovchiligi"),
+        ),
+        (
+            "c-radiation",
+            uz("Radiatsiya ta'siri"),
+            uz("kimyoviy moddalar va radiatsiyaning ta'siri"),
+        ),
+        ("c-cross", uz("Immun tizimi"), uz("Tanada immun tizimining zaiflashishi")),
+        (
+            "c-cervix",
+            uz("Bachadon bo'yni o'zgarishlari"),
+            uz("Bachadon bo'yni eroziyasi va displaziyasi."),
+        ),
+    ]
+    risk_cards = [
+        card(
+            p(
+                "<i>"
+                + uz(
+                    "Kasallikning rivojlanish xavfi yosh bilan ortadi, lekin 35 yoshdan 55 yoshgacha "
+                    "eng yuqori darajaga etadi. 20 yoshgacha bo'lgan yosh ayollar kasallikdan deyarli "
+                    "ta'sirlanmaydi va keksa ayollarda (85 yoshdan keyin) xavf yana kamayadi. Bu "
+                    "organizmdagi gormonal o'zgarishlar va HPV faolligiga bog'liq."
+                )
+                + "</i>"
+            ),
+            title=uz("Yosh"),
+        ),
+        card(
+            p(
+                uz(
+                    "HPV jinsiy yo'l bilan yuqadi, shuning uchun jinsiy xulq-atvor shakllari xavfga "
+                    "bevosita ta'sir qiladi. Xavfi yuqori bo'lgan sabablar bilan tanishib chiqing. Ular;"
+                )
+            )
+            + ul(
+                [
+                    uz(
+                        "Jinsiy faoliyat qanchalik erta boshlansa (18 yoshdan oldin), infektsiya xavfi "
+                        "shunchalik yuqori bo'ladi."
+                    ),
+                    uz(
+                        "Ko'p sonli hamkorlar (hayotda 5 dan ortiq) xavfni deyarli uch baravar oshiradi."
+                    ),
+                    uz(
+                        "Agar sherik bir necha marta jinsiy aloqada bo'lsa yoki jinsiy yo'l bilan "
+                        "yuqadigan infektsiya (masalan, xlamidiya yoki gerpes) bilan kasallangan bo'lsa, "
+                        "xavf ham ortadi."
+                    ),
+                    uz(
+                        "17 yoshdan oldin tug'ilgan yoki 5 dan ortiq homilador bo'lgan ayollar "
+                        "infektsiyani yuqtirish ehtimoli ko'proq."
+                    ),
+                    uz("Erkaklardagi sunnat ayollarda HPV infektsiyasi ehtimolini kamaytiradi."),
+                ]
+            ),
+            title=uz("Jinsiy hayot omillari"),
+        ),
+        card(
+            p(
+                "<i>"
+                + uz(
+                    "Gormonal kontratseptiv vositalardan uzoq muddatli foydalanish bachadon bo'yni "
+                    "saratoni xavfini biroz oshirishi mumkin, ammo uni to'xtatgandan keyin 5-10 yil "
+                    "ichida normal holatga qaytadi. Otoimmün kasalliklarda yoki organ "
+                    "transplantatsiyasidan keyin immunosupressantlar (immunitetni pasaytiradigan "
+                    "dorilar) doimiy HPV infektsiyasi xavfini oshiradi. OIV bilan kasallangan ayollar "
+                    "ham xavf ostida. Biroq, bepushtlikni davolash, shu jumladan IVF, saraton xavfini "
+                    "oshirmaydi; aksincha, bunday muolajalarni o'tkazayotgan ayollar ko'proq "
+                    "shifokorlar nazoratida bo'lib, muntazam tekshiruvdan o'tadilar."
+                )
+                + "</i>"
+            ),
+            title=uz("Dori-darmonlar va IVF"),
+        ),
+        card(
+            p(
+                "<i>"
+                + uz(
+                    "Atrof-muhitning ifloslanishi bilan bevosita aloqasi isbotlanmagan. Biroq qishloq "
+                    "va kam ta'minlangan hududlarda yashovchi ayollar profilaktika yordami va "
+                    "shifokorlardan foydalanish imkoniyati cheklanganligi sababli ko'proq kasal bo'lib "
+                    "qolishadi. Skrining va emlash dasturlari bo'lmagan mamlakatlarda, ayniqsa Afrika, "
+                    "Lotin Amerikasi va Osiyoda o'lim darajasi sezilarli darajada yuqori."
+                )
+                + "</i>"
+            ),
+            title=uz("Atrof muhit va yashash joyi"),
+        ),
+        card(
+            p(
+                "<i>"
+                + uz(
+                    "Chekish, ayniqsa skuamoz hujayrali karsinoma xavfini taxminan 1,5 baravar "
+                    "oshiradi. Spirtli ichimliklar bilan aloqasi topilmadi, lekin giyohvand "
+                    "moddalarni iste'mol qilish (ayniqsa, opioidlar) birgalikda infektsiyalar va "
+                    "xavfli jinsiy aloqalar tufayli xavfni oshiradi."
+                )
+                + "</i>"
+            ),
+            title=uz("Hayot tarzi"),
+        ),
+    ]
+    risks_section = [
+        text_card(
+            _lines(
+                "Bachadon bo'yni rakining asosiy sababi papillomavirus infeksiyasi, ayniqsa OPV 16 "
+                "va 18 serotiplaridir. IPV 16 yassi hujayrali saraton bilan, IPV 18 esa "
+                "adenokarsinoma bilan assotsiatsiyalanadi.",
+                "Xavf omillari quyidagilardan iborat:",
+            )
+        ),
+        icon_tiles(risk_tiles, layout="icon_tiles_bright"),
+        text_card(
+            _lines(
+                "Bachadon bo'yni saratoni samarali oldini olish mumkin bo'lgan saraton turlaridan "
+                "biridir. Deyarli barcha holatlar inson papillomavirusi (HPV) bilan bog'liq, ammo "
+                "bu xavfga ta'sir qiluvchi yagona omil emas. Turmush tarzi, yosh, jinsiy "
+                "xulq-atvor, gormonal dorilar va hatto ijtimoiy sharoitlar ham muhim rol o'ynaydi."
+            )
+        ),
+        text_cards(risk_cards, columns="3"),
+        heading(uz("Xavfni nima kamaytiradi?")),
+        text_card(
+            ul(
+                [
+                    uz(
+                        "HPV ga qarshi emlash virus keltirib chiqaradigan 10 saraton kasalligidan 9 "
+                        "tasidan himoya qiladi. Eng samarali emlash jinsiy faoliyat boshlanishidan "
+                        "oldin (11–12 yoshda), ammo emlash 45 yoshgacha bo'lgan kattalar ayollar uchun "
+                        "ham foydalidir."
+                    ),
+                    uz(
+                        "Doimiy skrining (PAP va HPV testlari) saratondan oldingi o'zgarishlarni "
+                        "aniqlashga va ularni erta davolashga yordam beradi. Skrining amalga "
+                        "oshirilgan mamlakatlarda o'lim darajasi 70% ga kamaydi."
+                    ),
+                    uz(
+                        "Prezervativdan foydalanish va erkaklarni sunnat qilish HPV va boshqa "
+                        "infektsiyalar xavfini kamaytiradi."
+                    ),
+                ]
+            )
+        ),
+        alert(
+            uz(
+                "Bachadon bo'yni saratoni oldini olish mumkin bo'lgan kasallikdir. O'z vaqtida "
+                "emlash, muntazam tekshiruvlar va xavfsiz jinsiy aloqa ayollarni kasallikdan himoya "
+                "qiladi va erta tashxis qo'yish to'liq tiklanish imkoniyatini beradi."
+            )
+        ),
+    ]
+    signs_section = [
+        text_card(
+            p(
+                uz(
+                    "Bachadon bo'yni saratoni dastlabki bosqichlarida ko'pincha simptomsiz o'tadi. "
+                    "O'sma sezilarli darajada kattalashganda birlamchi belgilar paydo bo'ladi:"
+                )
+            )
+            + ul(
+                [
+                    uz("Qonli ajralmalar;"),
+                    uz("Qindan keskin qon ketishi;"),
+                    uz("Jinsiy aloqa paytida noqulaylik;"),
+                    uz("Davomiy hayz;"),
+                    uz("Qorinning pastki qismidagi og'riq;"),
+                    uz("Oyoqlarning shishishi;"),
+                    uz("Vaznning keskin kamayishi;"),
+                    uz("Belda og'riq;"),
+                    uz("Defekatsiyaning buzilishi;"),
+                    uz("Umumiy zaiflik;"),
+                    uz("Qindan yoqimsiz hidli ajralma;"),
+                    uz("Siydik chiqarishdagi noqulaylik;"),
+                    uz("Kuchli charchoq;"),
+                ]
+            )
+            + p(
+                uz(
+                    "Ushbu alomatlar boshqa ginekologik kasalliklarda ham bo'lishi mumkin, shuning "
+                    "uchun diagnostika muhimdir."
+                )
+            )
+        ),
+        alert(
+            uz(
+                "Agar o'zingizda shunga o'xshash belgilarni sezsangiz, darhol shifokorga murojaat "
+                "qiling. Erta tashxis — to'liq sog'ayish imkoniyati demakdir."
+            )
+        ),
+        appeal(lang, ctx),
+    ]
+    detection_section = [
+        text_card(
+            _lines(
+                "Bachadon bo'yni saratoni — dastlabki bosqichlarda deyarli alomatsiz kechadigan "
+                "kasalliklardan biridir. Shu sababli uni o'z vaqtida va aniq tashxislash juda "
+                "muhim. Zamonaviy tekshiruv usullari kasallikni erta bosqichda aniqlash va eng "
+                "to'g'ri davolash yo'lini tanlash imkonini beradi. Diagnostika nimadan boshlanadi?"
+            )
+        ),
+        text_card(
+            _lines(
+                "Shifokor ayolning shikoyatlarini, hayz siklining xususiyatlarini, jinsiy hayotini, "
+                "surunkali kasalliklarini, gormonal dori vositalarini qabul qilayotgan-yo'qligini "
+                "aniqlaydi, shuningdek xavf omillarini (masalan, chekish yoki OIV/VPCh infeksiyasi) "
+                "baholaydi."
+            ),
+            label=uz("Suhbat"),
+        ),
+        text_card(
+            p(
+                uz(
+                    "Keyin ginekologik ko'rik o'tkaziladi — bu bachadon bo'yni va yaqin joylashgan "
+                    "organlarning holatini tekshirish imkonini beradi. U quyidagilarni o'z ichiga oladi:"
+                )
+            )
+            + ul(
+                [
+                    uz("Ko'zguda ko'rik — shifokor bachadon bo'ynini to'g'ridan-to'g'ri ko'radi."),
+                    uz(
+                        "Ikki qo'lli (bimanuall) tekshiruv — shifokor bachadon va qo'shimchalarni qin "
+                        "va qorin devori orqali paypaslab baholaydi."
+                    ),
+                    uz(
+                        "Rektovaginal tekshiruv — tos sohasidagi to'qimalarni va parametrial "
+                        "joylarni aniqlash uchun o'tkaziladi."
+                    ),
+                ]
+            )
+            + p(uz("Bu tekshiruvlar bir necha daqiqa davom etadi va, odatda, og'riqsiz bo'ladi.")),
+            label=uz("Ginekologik ko'rik"),
+        ),
+        text_card(
+            _lines(
+                "Tashxisni tasdiqlashning asosiy usuli — biopsiya, ya'ni bachadon bo'ynidan kichik "
+                "to'qima namunasi olib, uni mikroskop ostida tekshirishdir. Faqat gistologik tahlil "
+                "orqali saraton hujayralarining mavjudligi aniq tasdiqlanadi."
+            ),
+            label=uz("Invaziv usullar"),
+        ),
+        method_cards(
+            [
+                (
+                    uz("Standart biopsiya"),
+                    p(uz("Shifokor shubhali joydan kichik to'qima parchasini oladi.")),
+                ),
+                (
+                    uz("Nishonli biopsiya"),
+                    p(
+                        uz(
+                            "(kolposkopiya ostida) — agar bachadon bo'yni tashqi tomondan normal "
+                            "ko'rinsa, lekin Papanikolau (PAP) testi shubhali natija ko'rsatgan bo'lsa, "
+                            "qo'llaniladi."
+                        )
+                    ),
+                ),
+                (
+                    uz("Konizatsiya"),
+                    p(
+                        uz(
+                            "yoki elektropetlya eksiziyasi — kattaroq to'qima bo'lagi olinadi, bu "
+                            "nafaqat tashxis qo'yish, balki saratondan oldingi o'zgarishlarni butunlay "
+                            "olib tashlash imkonini beradi."
+                        )
+                    ),
+                ),
+            ]
+        ),
+        text_card(
+            _lines(
+                "Bular organizm to'qimalariga bevosita aralashuvsiz o'tkaziladigan tekshiruvlardir:"
+            ),
+            label=uz("Noinvaziv usullar"),
+        ),
+        method_cards(
+            [
+                (
+                    "UZI",
+                    p(uz("Tos a'zolarining UZI — o'simtaning mavjudligi va hajmini aniqlaydi.")),
+                ),
+                (
+                    "MRT",
+                    p(
+                        uz(
+                            "o'simtaning tarqalish darajasi va qo'shni organlarga ta'sirini eng aniq ko'rsatadi."
+                        )
+                    ),
+                ),
+                (
+                    "KT",
+                    p(
+                        uz(
+                            "yoki PET-KT — limfa tugunlari va boshqa organlardagi metastazlarni aniqlash imkonini beradi."
+                        )
+                    ),
+                ),
+            ]
+        ),
+        text_card(
+            _lines(
+                "Agar o'simta siydik pufagi yoki to'g'ri ichakka o'tgan bo'lishi mumkin deb taxmin "
+                "qilinsa, tsistoskopiya yoki kolonoskopiya o'tkaziladi."
+            )
+        ),
+    ]
+    choice_section = [
+        text_card(
+            _lines(
+                "Qaysi tekshiruv o'tkazilishi — bu kasallik bosqichiga, bemorning umumiy ahvoliga, "
+                "tibbiy texnika mavjudligiga va mutaxassisning tajribasiga bog'liq. Ayrim hollarda "
+                "tashxisni aniqlashtirish uchun bir necha usul birgalikda qo'llaniladi — masalan, "
+                "biopsiya UZI yoki KT nazorati ostida o'tkaziladi. Eng asosiysi - bachadon bo'yni "
+                "saratonini tashxislash har doim kompleks yondashuvni talab qiladi. U quyidagilarni "
+                "o'z ichiga oladi:"
+            )
+        ),
+        capsules(
+            [
+                ("1", "", p(uz("bemorni so'rovdan o'tkazish va tarixini yig'ish;"))),
+                ("2", "", p(uz("ginekologik tekshiruv;"))),
+                ("3", "", p(uz("biopsiya — tashxisni tasdiqlash uchun;"))),
+                (
+                    "4",
+                    "",
+                    p(
+                        uz(
+                            "vizualizatsiya usullari (UZI, MRT, KT, PET-KT) — bosqichni va o'simta "
+                            "tarqalishini aniqlash uchun."
+                        )
+                    ),
+                ),
+            ]
+        ),
+        alert(
+            uz(
+                "Tashxis qanchalik erta qo'yilsa, kasallikni to'liq davolash imkoniyati shunchalik "
+                "yuqori bo'ladi."
+            )
+        ),
+        appeal(lang, ctx),
     ]
     return [
         heading(uz("Bachadon bo'yni saratoni nima?")),
@@ -935,118 +1288,133 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
                 "bemorlarning 40% da u kechki bosqichlarda aniqlanadi."
             )
         ),
-        heading(uz("Bachadon bo'yni saratoni shakllari")),
-        capsules(forms),
-        text_card(
-            _lines(
-                "HPV bilan bog'liq bo'lmagan saraton odatda tezroq rivojlanadi va prognozi "
-                "yomonroq bo'ladi. Shu sababli, bugungi kunda HPV maqomi (statusi) davolash "
-                "rejasini tanlashda muhim omil hisoblanadi.",
-            )
-            + p("<b>" + uz("Hujayralar differensiyalanish darajasi") + "</b>")
-            + _lines(
-                "Differensiyalanish — bu o'simta hujayralari sog'lom hujayralardan qanchalik farq "
-                "qilishini bildiradi. Qanchalik farq katta bo'lsa, o'simta shunchalik tez o'sadi "
-                "va tarqalish xavfi yuqori bo'ladi.",
-                "Uchta daraja mavjud:",
-            )
-        ),
-        capsules(grades),
-        text_card(
-            ul(
-                [
-                    uz(
-                        "Yassi hujayrali saraton — barcha holatlarning taxminan 80 foizini tashkil "
-                        "etadi. Skrining tufayli ko'pincha erta bosqichda aniqlanadi va "
-                        "muvaffaqiyatli davolanadi (jarrohlik, nur yoki kimyonur terapiyasi)."
-                    ),
-                    uz(
-                        "Adenokarsinoma — 10–20 foiz hollarda uchraydi, o'tishi yassi hujayrali "
-                        "shaklga o'xshash. Davolash taktikasi bosqichga bog'liq."
-                    ),
-                    uz(
-                        "Neyroendokrin karsinoma — kam uchraydigan (1%) lekin agressiv tur. U "
-                        "tezda metastaz beradi va ko'pincha jarrohlik, kimyo va nur terapiyasining "
-                        "kombinatsiyasi bilan davolanadi."
-                    ),
-                    uz(
-                        "Germinogen o'simtalar — juda kam uchraydi, lekin o'tkir kechadi. Asosiy "
-                        "davolash usuli — jarrohlik yo'li bilan olib tashlash."
-                    ),
-                ]
-            )
-            + p("<b><i>" + uz("Metastatik jarayonlarda") + "</i></b>")
-            + p(
-                "<i>"
-                + uz(
-                    "Asosiy davolash — tizimli terapiya (kimyoterapiya, nishonli yoki "
-                    "immunoterapiya). Ayrim hollarda mahalliy usullar — metastazni jarrohlik yo'li "
-                    "bilan olib tashlash yoki nur terapiyasi — qo'shimcha sifatida qo'llaniladi."
-                )
-                + "</i>"
-            )
-            + p("<b><i>" + uz("Asosiysi") + "</i></b>")
-            + p(
-                "<i>"
-                + uz(
-                    "Bachadon bo'yni saratonining ikki asosiy shakli mavjud: yassi hujayrali va "
-                    "adenokarsinoma. HPV holatini aniqlash shifokorga eng to'g'ri davolash rejasini "
-                    "tanlashga yordam beradi. Muntazam skrining, erta tashxis va o'z vaqtida "
-                    "davolash kasallikni boshlang'ich bosqichda aniqlash imkonini beradi va to'liq "
-                    "sog'ayish ehtimolini sezilarli darajada oshiradi."
-                )
-                + "</i>"
-            ),
-            title=uz("Eng ko'p uchraydigan shakllar"),
-        ),
         uz_statistics(),
-        heading(uz("Bachadon bo'yni saratoni bosqichlari")),
-        text_card(
-            _lines(
-                "Bachadon bo'yni saratoni, ayollar reproduktiv tizimining boshqa xavfli o'simtalari "
-                "kabi, xalqaro TNM va FIGO (Xalqaro akusherlik va ginekologiya federatsiyasi) "
-                "tizimlariga ko'ra tasniflanadi. Bu tizimlar shifokorlarga o'simta qanchalik "
-                "rivojlanganini baholash va eng samarali davolash yo'lini tanlash imkonini beradi.",
-                "Bosqich — bu o'simta bachadon bo'yni chegarasidan chiqib ketganmi, yaqin "
-                "atrofdagi a'zolarga yoki limfa tugunlariga tarqalganmi, yoki uzoq metastazlar "
-                "paydo bo'lganmi, degan savollarga javob beradi. Aynan bosqich to'g'ri davolash "
-                "taktikasini tanlashda asosiy mezon hisoblanadi.",
-                "Bachadon bo'yni saratoni to'rt bosqichga bo'linadi va har biri o'z ichida kichik "
-                "guruhlarga ega.",
-            )
+        accordion(
+            [
+                acc_item(
+                    uz("Bachadon bo'yni saratoni shakllari"),
+                    "shakllari",
+                    [
+                        capsules(forms),
+                        text_card(
+                            _lines(
+                                "HPV bilan bog'liq bo'lmagan saraton odatda tezroq rivojlanadi va prognozi "
+                                "yomonroq bo'ladi. Shu sababli, bugungi kunda HPV maqomi (statusi) davolash "
+                                "rejasini tanlashda muhim omil hisoblanadi.",
+                            )
+                            + p("<b>" + uz("Hujayralar differensiyalanish darajasi") + "</b>")
+                            + _lines(
+                                "Differensiyalanish — bu o'simta hujayralari sog'lom hujayralardan qanchalik farq "
+                                "qilishini bildiradi. Qanchalik farq katta bo'lsa, o'simta shunchalik tez o'sadi "
+                                "va tarqalish xavfi yuqori bo'ladi.",
+                                "Uchta daraja mavjud:",
+                            )
+                        ),
+                        capsules(grades),
+                        text_card(
+                            ul(
+                                [
+                                    uz(
+                                        "Yassi hujayrali saraton — barcha holatlarning taxminan 80 foizini tashkil "
+                                        "etadi. Skrining tufayli ko'pincha erta bosqichda aniqlanadi va "
+                                        "muvaffaqiyatli davolanadi (jarrohlik, nur yoki kimyonur terapiyasi)."
+                                    ),
+                                    uz(
+                                        "Adenokarsinoma — 10–20 foiz hollarda uchraydi, o'tishi yassi hujayrali "
+                                        "shaklga o'xshash. Davolash taktikasi bosqichga bog'liq."
+                                    ),
+                                    uz(
+                                        "Neyroendokrin karsinoma — kam uchraydigan (1%) lekin agressiv tur. U "
+                                        "tezda metastaz beradi va ko'pincha jarrohlik, kimyo va nur terapiyasining "
+                                        "kombinatsiyasi bilan davolanadi."
+                                    ),
+                                    uz(
+                                        "Germinogen o'simtalar — juda kam uchraydi, lekin o'tkir kechadi. Asosiy "
+                                        "davolash usuli — jarrohlik yo'li bilan olib tashlash."
+                                    ),
+                                ]
+                            )
+                            + p("<b><i>" + uz("Metastatik jarayonlarda") + "</i></b>")
+                            + p(
+                                "<i>"
+                                + uz(
+                                    "Asosiy davolash — tizimli terapiya (kimyoterapiya, nishonli yoki "
+                                    "immunoterapiya). Ayrim hollarda mahalliy usullar — metastazni jarrohlik yo'li "
+                                    "bilan olib tashlash yoki nur terapiyasi — qo'shimcha sifatida qo'llaniladi."
+                                )
+                                + "</i>"
+                            )
+                            + p("<b><i>" + uz("Asosiysi") + "</i></b>")
+                            + p(
+                                "<i>"
+                                + uz(
+                                    "Bachadon bo'yni saratonining ikki asosiy shakli mavjud: yassi hujayrali va "
+                                    "adenokarsinoma. HPV holatini aniqlash shifokorga eng to'g'ri davolash rejasini "
+                                    "tanlashga yordam beradi. Muntazam skrining, erta tashxis va o'z vaqtida "
+                                    "davolash kasallikni boshlang'ich bosqichda aniqlash imkonini beradi va to'liq "
+                                    "sog'ayish ehtimolini sezilarli darajada oshiradi."
+                                )
+                                + "</i>"
+                            ),
+                            title=uz("Eng ko'p uchraydigan shakllar"),
+                        ),
+                    ],
+                ),
+                acc_item(
+                    uz("Bachadon bo'yni saratoni bosqichlari"),
+                    "bosqichlari",
+                    [
+                        text_card(
+                            _lines(
+                                "Bachadon bo'yni saratoni, ayollar reproduktiv tizimining boshqa xavfli o'simtalari "
+                                "kabi, xalqaro TNM va FIGO (Xalqaro akusherlik va ginekologiya federatsiyasi) "
+                                "tizimlariga ko'ra tasniflanadi. Bu tizimlar shifokorlarga o'simta qanchalik "
+                                "rivojlanganini baholash va eng samarali davolash yo'lini tanlash imkonini beradi.",
+                                "Bosqich — bu o'simta bachadon bo'yni chegarasidan chiqib ketganmi, yaqin "
+                                "atrofdagi a'zolarga yoki limfa tugunlariga tarqalganmi, yoki uzoq metastazlar "
+                                "paydo bo'lganmi, degan savollarga javob beradi. Aynan bosqich to'g'ri davolash "
+                                "taktikasini tanlashda asosiy mezon hisoblanadi.",
+                                "Bachadon bo'yni saratoni to'rt bosqichga bo'linadi va har biri o'z ichida kichik "
+                                "guruhlarga ega.",
+                            )
+                        ),
+                        capsules(stages),
+                        text_card(
+                            p("<b>" + uz("Prognoz va kasallik kechishi") + "</b>")
+                            + _lines(
+                                "Bachadon bo'yni saratonining prognozi bosqichga, o'simtaning agressivligiga va "
+                                "hujayra tuzilishiga bog'liq. Kasallik qanchalik erta aniqlansa, to'liq sog'ayish "
+                                "ehtimoli shunchalik yuqori bo'ladi. Shuningdek, ayolning umumiy sog'lig'i va "
+                                "boshqa kasalliklari ham davolash tanloviga ta'sir qiladi.",
+                                "Ba'zan hatto og'ir bosqichlarda ham natijalar kutilganidan yaxshiroq bo'lishi "
+                                "mumkin. Zamonaviy usullar, xususan immunoterapiya, bemorlarning umrini uzaytiradi "
+                                "va hayot sifatini yaxshilaydi.",
+                            )
+                            + p("<b>" + uz("Asosiysi") + "</b>")
+                            + _lines(
+                                "Bachadon bo'yni saratoni bosqichi o'simtaning qanchalik tarqalganini ko'rsatadi. "
+                                "To'g'ri bosqichni aniqlash — to'g'ri davolash va sog'ayish imkonini belgilovchi "
+                                "eng muhim qadamlardan biridir. Kasallik qanchalik erta tashxislansa, sog'ayish "
+                                "ehtimoli shunchalik yuqori bo'ladi."
+                            )
+                        ),
+                    ],
+                ),
+                acc_item(
+                    uz("Bachadon bo'yni rivojlanish xavf omillari"), "xavf-omillari", risks_section
+                ),
+                acc_item(uz("Bachadon bo'yni saratoni belgilari"), "belgilari", signs_section),
+                acc_item(
+                    uz("Bachadon bo'yni saratoni aniqlash usullari"),
+                    "aniqlash-usullari",
+                    detection_section,
+                ),
+                acc_item(
+                    uz("Diagnostika usullarini tanlash"), "diagnostika-tanlash", choice_section
+                ),
+            ]
         ),
-        capsules(stages),
-        text_card(
-            p("<b>" + uz("Prognoz va kasallik kechishi") + "</b>")
-            + _lines(
-                "Bachadon bo'yni saratonining prognozi bosqichga, o'simtaning agressivligiga va "
-                "hujayra tuzilishiga bog'liq. Kasallik qanchalik erta aniqlansa, to'liq sog'ayish "
-                "ehtimoli shunchalik yuqori bo'ladi. Shuningdek, ayolning umumiy sog'lig'i va "
-                "boshqa kasalliklari ham davolash tanloviga ta'sir qiladi.",
-                "Ba'zan hatto og'ir bosqichlarda ham natijalar kutilganidan yaxshiroq bo'lishi "
-                "mumkin. Zamonaviy usullar, xususan immunoterapiya, bemorlarning umrini uzaytiradi "
-                "va hayot sifatini yaxshilaydi.",
-            )
-            + p("<b>" + uz("Asosiysi") + "</b>")
-            + _lines(
-                "Bachadon bo'yni saratoni bosqichi o'simtaning qanchalik tarqalganini ko'rsatadi. "
-                "To'g'ri bosqichni aniqlash — to'g'ri davolash va sog'ayish imkonini belgilovchi "
-                "eng muhim qadamlardan biridir. Kasallik qanchalik erta tashxislansa, sog'ayish "
-                "ehtimoli shunchalik yuqori bo'ladi."
-            )
-        ),
-        heading(uz("Bachadon bo'yni saratoni sabablari")),
-        text_card(
-            _lines(
-                "Bachadon bo'yni rakining asosiy sababi papillomavirus infeksiyasi, ayniqsa OPV 16 "
-                "va 18 serotiplaridir. IPV 16 yassi hujayrali saraton bilan, IPV 18 esa "
-                "adenokarsinoma bilan assotsiatsiyalanadi.",
-                "Xavf omillari quyidagilardan iborat:",
-            )
-        ),
-        icon_tiles(risks),
-        alert(DONT_PANIC),
-        appeal(lang, ctx),
+        # the design puts «Murojaat qilish» inside the sections, not after the accordion
         verify_note(lang),
     ]
 
@@ -1469,13 +1837,105 @@ def body_breast_treatment(lang: str, ctx: SeedContext) -> Body:
 
 
 def body_cervical_treatment(lang: str, ctx: SeedContext) -> Body:
+    if lang != "uz":
+        return [
+            heading("Организация лечения"),
+            text_card(p(RU_TODO) + p(VERIFY)),
+            heading("Факторы, влияющие на выбор лечения"),
+            text_card(p(RU_TODO) + p(VERIFY)),
+            _route_intro(lang),
+            _route(lang),
+            appeal(lang, ctx),
+        ]
+    # design 2026-10, «Bachadon bo'yni saratoni» frame 9; the TZ 4-step route stays below it
     return [
-        heading(t(lang, "Davolashni tashkil etish", "Организация лечения")),
+        heading(uz("Davolashni tashkil etish")),
+        text_card(
+            _lines(
+                "Bachadon bo'yni saratonini davolash har bir ayol uchun alohida tanlanadi — "
+                "kasallik bosqichi, o'simta turi, yoshi va umumiy sog'lig'iga qarab. "
+                "Shifokorlarning asosiy maqsadi — faqat o'simtani olib tashlash emas, balki "
+                "bemorning hayot sifatini saqlab qolishdir."
+            )
+        ),
+        heading(uz("Davolash tanloviga ta'sir etuvchi omillar")),
+        text_card(
+            _lines(
+                "Eng muhim omil — o'simtaning hajmi va tarqalish darajasi. Kichik tos sohasi juda "
+                "tor anatomik joy bo'lib, bu yerda bachadon, siydik pufagi, to'g'ri ichak va yirik "
+                "qon tomirlari yaqin joylashgan. Shu sababli o'simtaning hatto kichik tarqalishi ham "
+                "davolash taktikasini o'zgartiradi.",
+                "Erta bosqichlarda (IA-IB2) saraton faqat bachadon bo'ynida bo'ladi. Bunday "
+                "hollarda odatda jarrohlik yo'li bilan davolash qo'llaniladi — o'simta butunlay "
+                "olib tashlanadi va imkon bo'lsa, ayolning tug'ish qobiliyati saqlab qolinadi.",
+                "Mahalliy tarqalgan bosqichlarda (IB3-IVA), o'simta bachadon chegarasidan chiqib, "
+                "qin, parametriy, limfa tugunlari yoki boshqa yaqin organlarga tarqalganda, asosiy "
+                "usul kimyo-nurlanish terapiyasi hisoblanadi.",
+                "Agar saraton oraliq bosqichda (IB3-IIA2) bo'lsa, shifokorlar har bir usul — "
+                "jarrohlik yoki nurlanish terapiyasining afzalliklarini solishtirib, qarorni bemor "
+                "bilan birgalikda qabul qiladilar.",
+                "IVB bosqichda, ya'ni uzoq metastazlar aniqlanganda, palliativ kimyoterapiya "
+                "qo'llaniladi — u kasallik alomatlarini yengillashtirish va hayot sifatini "
+                "yaxshilashga qaratilgan.",
+            )
+        ),
+        text_card(
+            ul(
+                [
+                    uz(
+                        "O'simta turi (gistologiya). Eng ko'p uchraydigan turlari — yassi hujayrali rak "
+                        "va adenokarsinoma. Kam uchraydigan neyroendokrin turi esa boshqa davolash "
+                        "yondashuvlarini talab qiladi."
+                    ),
+                    uz(
+                        "Kasallik qaytalanish xavfi. Operatsiyadan so'ng shifokorlar xavfni baholaydi: "
+                        "o'simtaning chuqurligi, limfa tugunlarining zararlanishi, o'simta hajmi, olib "
+                        "tashlangan to'qima chetida saraton hujayralari mavjudligi. Yuqori xavf "
+                        "aniqlansa, operatsiyadan keyin kimyo yoki nurlanish terapiyasi tavsiya etiladi."
+                    ),
+                    uz(
+                        "Umumiy sog'liq holati. Yurak-qon tomir yoki boshqa og'ir surunkali kasalliklar "
+                        "jarrohlik amaliyotiga to'sqinlik qilishi mumkin."
+                    ),
+                    uz(
+                        "Yosh va farzand ko'rish rejasi. Erta bosqichlarda tug'ish qobiliyatini saqlab "
+                        "qoluvchi organ saqlovchi operatsiyalarni o'tkazish mumkin."
+                    ),
+                    uz(
+                        "Bemorning istagi. Zamonaviy onkologiya har bir ayolning qarorini hurmat qiladi — "
+                        "bemor, masalan, operatsiya o'rniga nurlanish davosini tanlashi mumkin."
+                    ),
+                ]
+            ),
+            title=uz("Bosqichdan tashqari quyidagi omillarga ham e'tibor beriladi."),
+        ),
+        text_card(
+            p(
+                uz(
+                    "Bachadon bo'yni saratonini davolash taktikasi kasallik bosqichi, o'simta "
+                    "xususiyatlari va bemorning umumiy holatiga bog'liq."
+                )
+            )
+            + ul(
+                [
+                    uz("Erta bosqichlarda — jarrohlik afzal."),
+                    uz("Tarqalgan shakllarda — kimyo-nurlanish terapiyasi."),
+                    uz(
+                        "Metastazlar mavjud bo'lsa — tizimli kimyoterapiya asosiy usul hisoblanadi."
+                    ),
+                ]
+            ),
+            title=uz("Asosiysi"),
+            width="narrow",
+        ),
+        alert(
+            uz("Kasallik qanchalik erta aniqlansa, sog'ayish ehtimoli shunchalik yuqori bo'ladi.")
+        ),
+        appeal(lang, ctx),
+        # TZ «Организация лечения»: the 4-step patient route with the PP-402 deadlines
         _route_intro(lang),
         _route(lang),
-        heading(t(lang, "Davolash", "Лечение")),
-        text_card(p(TODO if lang == "uz" else RU_TODO) + p(VERIFY)),
-        appeal(lang, ctx),
+        verify_note(lang),
     ]
 
 

@@ -30,6 +30,13 @@ PAGES = [
     "/ru/voprosy-otvety/",
     "/uz/lugat/",
     "/uz/materiallar/",
+    # design 2026-10
+    "/uz/yangiliklar/",
+    "/uz/maqolalar/",
+    "/uz/videoroliklar/",
+    "/uz/savol-javob/?topic=breast",
+    "/uz/ayollar/ogohlik/bachadon-boyni-saratoni/",
+    "/uz/ayollar/davolash/bachadon-boyni-saratoni/",
     "/oz/",  # Uzbek Cyrillic (D-049)
     "/oz/ayollar/qayerga-murojaat/",
 ]

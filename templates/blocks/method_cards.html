@@ -1,0 +1,11 @@
+{% comment %} blocks/method_cards.html — outlined cards: pill label, text, big gradient number
+   (design 2026-10, cervical «aniqlash usullari»: biopsies, imaging). {% endcomment %}
+<ol class="block method-cards">
+  {% for card in value.cards %}
+    <li class="method-card">
+      <h3 class="method-card__label">{{ card.label }}</h3>
+      <div class="method-card__text">{{ card.text }}</div>
+      <span class="method-card__no" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+    </li>
+  {% endfor %}
+</ol>

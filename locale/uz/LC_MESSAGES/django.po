@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 17:49+0500\n"
+"POT-Creation-Date: 2026-10-06 22:32+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,6 +129,9 @@ msgstr "Kartalar"
 
 msgid "Icon tiles (risk factors)"
 msgstr "Ikonkali plitkalar (xavf omillari)"
+
+msgid "Icon tiles, bright pink (cervical cancer)"
+msgstr "Ikonka plitkalari, yorqin pushti (bachadon boʻyni saratoni)"
 
 msgid "Cards grid"
 msgstr "Kartalar toʻri"
@@ -333,14 +336,12 @@ msgstr "YouTube, Telegram posti, Instagram post/reel yoki TikTok videosi."
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
 msgstr "Joylashtirish (YouTube / Telegram / Instagram / TikTok)"
 
-#| msgid "Title"
 msgid "Title bar"
 msgstr "Sarlavha chizigʻi"
 
 msgid "Highlight box"
 msgstr "Ajratilgan quti"
 
-#| msgid "intro"
 msgid "Intro"
 msgstr "Kirish"
 
@@ -350,7 +351,6 @@ msgstr "Bandlar"
 msgid "Closing text"
 msgstr "Yakuniy matn"
 
-#| msgid "Check"
 msgid "Check row"
 msgstr "Belgili qator"
 
@@ -363,21 +363,20 @@ msgstr "Piktogrammali roʻyxat"
 msgid "Text next to the picture"
 msgstr "Rasm yonidagi matn"
 
-#| msgid "Note"
 msgid "Note box"
 msgstr "Izoh qutisi"
 
-#| msgid "Explanation"
 msgid "Exclamation mark"
 msgstr "Undov belgisi"
 
-#| msgid "icon"
 msgid "Note icon"
 msgstr "Izoh belgisi"
 
-#| msgid "Numbered list"
 msgid "Numbered cards"
 msgstr "Raqamli kartalar"
+
+msgid "Method cards (big numbers)"
+msgstr "Usul kartalari (katta raqamlar)"
 
 msgid "Anchor"
 msgstr "Anchor (havola nomi)"
@@ -387,7 +386,6 @@ msgstr ""
 "Lotin harflari va chiziqcha, masalan bosqichlari — havolalar shu bandni ocha"
 " oladi."
 
-#| msgid "Load content"
 msgid "Frame the content"
 msgstr "Kontentni ramkaga olish"
 
@@ -396,7 +394,6 @@ msgid ""
 msgstr ""
 "Ichidagi hamma narsa atrofida bitta yumaloq ramka (dizayndagi diagnostika)."
 
-#| msgid "Contact"
 msgid "Content"
 msgstr "Kontent"
 
@@ -436,6 +433,25 @@ msgstr "Bosh (odatlar)"
 msgid "Virus (HPV)"
 msgstr "Virus (HPV)"
 
+#| msgid "sections"
+msgid "Virus (infections)"
+msgstr "Virus (infeksiyalar)"
+
+msgid "Vitamins"
+msgstr "Vitaminlar"
+
+#| msgid "Radiation"
+msgid "Radiation (dark)"
+msgstr "Radiatsiya (toʻq)"
+
+#| msgid "Medical cross (white)"
+msgid "Medical cross (white square)"
+msgstr "Tibbiy xoch (oq kvadrat)"
+
+#| msgid "service"
+msgid "Cervix"
+msgstr "Bachadon boʻyni"
+
 msgid "Mammography"
 msgstr "Mammografiya"
 
@@ -457,7 +473,6 @@ msgstr "Oʻz-oʻzini tekshirish 3: yotgan holda"
 msgid "Self-exam 4: nipple and armpit"
 msgstr "Oʻz-oʻzini tekshirish 4: soʻrgʻich va qoʻltiq osti"
 
-#| msgid "e.g. mammography"
 msgid "Woman at the mammograph"
 msgstr "Mammograf yonidagi ayol"
 

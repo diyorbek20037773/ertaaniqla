@@ -39,6 +39,8 @@
   --c-note-pink: #ff93b9;     /* note box on a light card */
   --c-check: #ff6ea1;         /* check and number discs */
   --c-acc-ring: #e29cbc;      /* accordion ring, framed content */
+  --c-tile-blush: #fff3f7;    /* body of the bright risk tiles, capsules */
+  --c-method-2: #c0045c;      /* method card number 02 */
   --c-card-pink-2: #fccbdc;   /* question topic cards */
   --c-card-lilac: #d0b6ff;    /* children's cards, footer */
   --c-chip-purple: #9b64ff;   /* children's topic chip */
@@ -220,6 +222,31 @@ html[data-contrast="high"] {
   --c-lime: #ffff00;
   --shadow-card: none;
   --shadow-float: none;
+
+  /* design 2026-10 tokens: chips and buttons black, cards white (boundaries in design2026.css) */
+  --c-pink-400: #000000;
+  --c-pink-500: #000000;
+  --c-pink-600: #000000;
+  --c-check: #000000;
+  --c-chip-purple: #000000;
+  --c-hero-purple: #000000;
+  --c-hero-violet: #000000;
+  --c-method-2: #000000;
+  --c-wine: #000000;
+  --c-plum: #000000;
+  --c-plum-ink: #000000;
+  --c-text-soft: #000000;
+  --c-text-muted: #000000;
+  --c-acc-ring: #000000;
+  --c-card-pink: #ffffff;
+  --c-card-pink-2: #ffffff;
+  --c-card-lilac: #ffffff;
+  --c-card-hero-pink: #ffffff;
+  --c-card-dark-pink: #ffffff;
+  --c-note-pink: #ffffff;
+  --c-tile-blush: #ffffff;
+  --c-faq-side: #ffffff;
+  --c-overlay: rgba(0, 0, 0, 0.88);
 }
 
 /* Users who ask the OS for less transparency get solid surfaces too. */

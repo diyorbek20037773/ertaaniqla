@@ -16,6 +16,22 @@ ROOT = Path(__file__).resolve().parent.parent
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
     # design 2026-10: awareness accordion and its blocks
+    "Icon tiles, bright pink (cervical cancer)": (
+        "Ikonka plitkalari, yorqin pushti (bachadon boʻyni saratoni)",
+        "Плитки с иконками, ярко-розовые (рак шейки матки)",
+    ),
+    "Method cards (big numbers)": (
+        "Usul kartalari (katta raqamlar)",
+        "Карточки методов (крупные цифры)",
+    ),
+    "Virus (infections)": ("Virus (infeksiyalar)", "Вирус (инфекции)"),
+    "Vitamins": ("Vitaminlar", "Витамины"),
+    "Radiation (dark)": ("Radiatsiya (toʻq)", "Радиация (тёмная)"),
+    "Medical cross (white square)": (
+        "Tibbiy xoch (oq kvadrat)",
+        "Медицинский крест (белый квадрат)",
+    ),
+    "Cervix": ("Bachadon boʻyni", "Шейка матки"),
     "Title bar": ("Sarlavha chizigʻi", "Полоса заголовка"),
     "Highlight box": ("Ajratilgan quti", "Выделенный блок"),
     "Intro": ("Kirish", "Вступление"),

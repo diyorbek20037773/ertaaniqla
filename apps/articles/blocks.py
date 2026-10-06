@@ -188,7 +188,11 @@ class CardBlock(blocks.StructBlock):
 class CardsGridBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=False, max_length=160, label=_("Heading"))
     layout = blocks.ChoiceBlock(
-        choices=[("cards", _("Cards")), ("icon_tiles", _("Icon tiles (risk factors)"))],
+        choices=[
+            ("cards", _("Cards")),
+            ("icon_tiles", _("Icon tiles (risk factors)")),
+            ("icon_tiles_bright", _("Icon tiles, bright pink (cervical cancer)")),
+        ],
         default="cards",
         label=_("Layout"),
     )
@@ -601,7 +605,28 @@ class NumberedCardsBlock(blocks.StructBlock):
         template = "blocks/numbered_cards.html"
 
 
+class MethodCardBlock(blocks.StructBlock):
+    label = blocks.CharBlock(max_length=60, label=_("Label"))
+    text = blocks.RichTextBlock(features=LIST_FEATURES, label=_("Text"))
+
+    class Meta:
+        icon = "doc-full"
+
+
+class MethodCardsBlock(blocks.StructBlock):
+    """Three outlined cards with a pill label and a big gradient number 01, 02, 03 (design
+    2026-10, cervical «aniqlash usullari»)."""
+
+    cards = blocks.ListBlock(MethodCardBlock(), min_num=1, label=_("Cards"))
+
+    class Meta:
+        icon = "order"
+        label = _("Method cards (big numbers)")
+        template = "blocks/method_cards.html"
+
+
 class AccordionBodyBlock(blocks.StreamBlock):
+    heading = HeadingBlock(max_length=160)
     rich_text = RichTextBlock(features=RICH_TEXT_FEATURES)
     text_card = TextCardBlock()
     text_cards = TextCardsBlock()
@@ -612,9 +637,11 @@ class AccordionBodyBlock(blocks.StreamBlock):
     check_row = CheckRowBlock()
     highlight = HighlightBlock()
     pill_title = PillTitleBlock(max_length=160)
+    method_cards = MethodCardsBlock()
     faq_accordion = FAQAccordionBlock()
     image_gallery = ImageGalleryBlock()
     video = VideoBlock()
+    cta = CTABlock()
 
 
 class AccordionItemBlock(blocks.StructBlock):
@@ -678,6 +705,7 @@ class ArticleBodyBlock(blocks.StreamBlock):
     check_row = CheckRowBlock()
     highlight = HighlightBlock()
     pill_title = PillTitleBlock(max_length=160)
+    method_cards = MethodCardsBlock()
 
 
 class IntroBlock(blocks.StreamBlock):

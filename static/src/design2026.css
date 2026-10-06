@@ -339,4 +339,54 @@
   .icon-tile__img { width: 70%; height: 70%; object-fit: contain; }
   /* stacked blocks inside an accordion item keep the design rhythm */
   .acc__body > * + * { margin-top: clamp(1rem, 1.6vw, 1.75rem); }
+
+  /* ---- cervical cancer (design 2026-10, «Bachadon boʻyni saratoni» frames 1–9) -------------- */
+  /* bright risk tiles: hot pink square, pale pink body */
+  .cards-grid--icon_tiles_bright .cards-grid__items { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: clamp(var(--space-4), 1.6vw, 1.25rem); }
+  @media (min-width: 64rem) { .cards-grid--icon_tiles_bright .cards-grid__items { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .cards-grid--icon_tiles_bright .icon-tile { border-color: var(--c-pink-400); background: var(--c-tile-blush); }
+  .cards-grid--icon_tiles_bright .icon-tile__art { background: var(--c-pink-400); }
+
+  /* labelled frames («SUHBAT», «INVAZIV USULLAR»): wine-pink chip on a thick wine-pink border */
+  .acc__body .text-card--labelled { border: 3px solid var(--c-pink-600); background: var(--neutral-0); }
+  .acc__body .text-card__label { background: var(--c-pink-600); color: var(--neutral-0); font-size: clamp(0.95rem, 0.75rem + 0.6vw, 1.55rem); font-weight: 500; min-height: clamp(34px, 2.6vw, 46px); }
+
+  /* lists with many short items (signs) flow into three columns */
+  .text-card__text ul:has(> li:nth-child(8)) { columns: 3 15rem; column-gap: var(--space-8); }
+  .text-card__text ul:has(> li:nth-child(8)) li { break-inside: avoid; }
+
+  /* capsules joined by arrows: pink flower badge instead of the lime star */
+  .acc__body .steps--capsules_arrows .steps__item, .acc__body .steps--capsules .steps__item { border-color: var(--c-pink-400); background: var(--c-tile-blush); }
+
+  /* method cards: pill label, text, big gradient number bottom-right */
+  .method-cards { display: grid; gap: clamp(1rem, 2vw, 2rem); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin: 0; padding: 0; list-style: none; }
+  .method-card {
+    position: relative; display: flex; flex-direction: column; gap: var(--space-4); min-height: clamp(14rem, 18vw, 19rem);
+    padding: clamp(1.25rem, 2vw, 1.9rem) clamp(1.25rem, 2vw, 1.9rem) clamp(5.5rem, 8vw, 8.5rem);
+    border: 3px solid var(--c-pink-600); border-radius: clamp(24px, 2.4vw, 40px); background: var(--neutral-0);
+    font-size: clamp(0.9rem, 0.8rem + 0.3vw, 1.15rem); line-height: 1.3;
+  }
+  .method-card__label { align-self: flex-start; margin: 0 0 var(--space-4); padding: 0.35em 1.2em; border: 2px solid var(--c-pink-600); border-radius: var(--radius-pill); font-size: clamp(0.8rem, 0.7rem + 0.3vw, 1.05rem); font-weight: 500; text-transform: uppercase; color: var(--neutral-900); }
+  .method-card__text > :last-child { margin-bottom: 0; }
+  .method-card__no { position: absolute; right: clamp(1rem, 2vw, 2rem); bottom: clamp(0.25rem, 1vw, 1rem); font-size: clamp(4rem, 3rem + 4vw, 8.5rem); font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--c-pink-500); }
+  .method-card:nth-child(3n + 2) .method-card__no { color: var(--c-method-2); }
+  .method-card:nth-child(3n + 3) .method-card__no { color: var(--c-pink-750); }
+  .steps--capsules_arrows .steps__number, .steps--capsules .steps__number { background: var(--c-pink-600); color: var(--neutral-0); }
+  /* four capsules (stages I–IV, diagnostic steps) sit in one row, as in the design */
+  @media (min-width: 64rem) {
+    .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .steps--capsules_arrows .steps__list:has(> .steps__item:nth-child(4):last-child) .steps__item:nth-child(3n)::after { display: block; }
+  }
+
+  /* design 2026-10: flat pink alert disc and «Murojaat qilish» pill (no gradients) */
+  .callout--alert .callout__icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--c-pink-500); color: var(--neutral-0); font-size: clamp(1.8rem, 1rem + 2.4vw, 3.6rem); font-weight: 700; line-height: 1;
+  }
+  .cta--bare .button { background: var(--c-pink-500); background-image: none; color: var(--neutral-0); }
+
+  /* high-contrast theme: white cards need a visible black boundary (WCAG 1.4.11) */
+  html[data-contrast="high"] :is(.news-card, .topic-card, .num-card, .num-card__note, .highlight-box, .pill-title, .acc__title, .article-card, .faq-card, .method-card) { border: 2px solid #000; }
+  html[data-contrast="high"] .acc__item[open] .acc__title { background: #000; color: #fff; }
+  html[data-contrast="high"] .topic-card__art, html[data-contrast="high"] .site-footer__partner { filter: grayscale(1); }
 }

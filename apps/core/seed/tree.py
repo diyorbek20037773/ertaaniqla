@@ -1691,7 +1691,7 @@ FOOTER: list[tuple[dict[str, str], list[FooterLink]]] = [
                 "women.awareness.cervical",
                 "aniqlash-usullari",
             ),
-            ("Xavf omillari", "Факторы риска", "women.screening.cervical", ""),
+            ("Xavf omillari", "Факторы риска", "women.awareness.cervical", "xavf-omillari"),
             ("Davolash", "Лечение", "women.treatment.cervical", ""),
         ],
     ),

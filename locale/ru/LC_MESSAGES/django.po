@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 17:49+0500\n"
+"POT-Creation-Date: 2026-10-06 22:32+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,6 +128,9 @@ msgstr "Карточки"
 
 msgid "Icon tiles (risk factors)"
 msgstr "Плитки с иконками (факторы риска)"
+
+msgid "Icon tiles, bright pink (cervical cancer)"
+msgstr "Плитки с иконками, ярко-розовые (рак шейки матки)"
 
 msgid "Cards grid"
 msgstr "Сетка карточек"
@@ -330,14 +333,12 @@ msgstr "YouTube, пост Telegram, пост/reel Instagram или видео Ti
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
 msgstr "Встраивание (YouTube / Telegram / Instagram / TikTok)"
 
-#| msgid "Title"
 msgid "Title bar"
 msgstr "Полоса заголовка"
 
 msgid "Highlight box"
 msgstr "Выделенный блок"
 
-#| msgid "intro"
 msgid "Intro"
 msgstr "Вступление"
 
@@ -347,7 +348,6 @@ msgstr "Пункты"
 msgid "Closing text"
 msgstr "Заключительный текст"
 
-#| msgid "Check"
 msgid "Check row"
 msgstr "Ряд с галочками"
 
@@ -360,21 +360,20 @@ msgstr "Список с пиктограммами"
 msgid "Text next to the picture"
 msgstr "Текст рядом с картинкой"
 
-#| msgid "Note"
 msgid "Note box"
 msgstr "Блок примечания"
 
-#| msgid "Explanation"
 msgid "Exclamation mark"
 msgstr "Восклицательный знак"
 
-#| msgid "icon"
 msgid "Note icon"
 msgstr "Значок примечания"
 
-#| msgid "Numbered list"
 msgid "Numbered cards"
 msgstr "Нумерованные карточки"
+
+msgid "Method cards (big numbers)"
+msgstr "Карточки методов (крупные цифры)"
 
 msgid "Anchor"
 msgstr "Якорь"
@@ -384,7 +383,6 @@ msgstr ""
 "Латинские буквы и дефисы, например bosqichlari — ссылки смогут открыть этот "
 "пункт."
 
-#| msgid "Load content"
 msgid "Frame the content"
 msgstr "Обвести содержимое рамкой"
 
@@ -393,7 +391,6 @@ msgid ""
 msgstr ""
 "Одна скруглённая рамка вокруг всего содержимого (диагностика в дизайне)."
 
-#| msgid "Contact"
 msgid "Content"
 msgstr "Содержимое"
 
@@ -433,6 +430,25 @@ msgstr "Голова (привычки)"
 msgid "Virus (HPV)"
 msgstr "Вирус (ВПЧ)"
 
+#| msgid "sections"
+msgid "Virus (infections)"
+msgstr "Вирус (инфекции)"
+
+msgid "Vitamins"
+msgstr "Витамины"
+
+#| msgid "Radiation"
+msgid "Radiation (dark)"
+msgstr "Радиация (тёмная)"
+
+#| msgid "Medical cross (white)"
+msgid "Medical cross (white square)"
+msgstr "Медицинский крест (белый квадрат)"
+
+#| msgid "service"
+msgid "Cervix"
+msgstr "Шейка матки"
+
 msgid "Mammography"
 msgstr "Маммография"
 
@@ -454,7 +470,6 @@ msgstr "Самообследование 3: лёжа"
 msgid "Self-exam 4: nipple and armpit"
 msgstr "Самообследование 4: сосок и подмышка"
 
-#| msgid "e.g. mammography"
 msgid "Woman at the mammograph"
 msgstr "Женщина у маммографа"
 
