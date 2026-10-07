@@ -159,7 +159,9 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] Phase 3 «Bachadon boʻyni saratoni»: awareness page = intro + accordion (shakllari / bosqichlari / xavf-omillari / belgilari / aniqlash-usullari / diagnostika-tanlash); new `method_cards` block, `icon_tiles_bright` layout, pink labelled frames, three-column sign list, flat alert disc and CTA; treatment page = frame 9 + the TZ 4-step route. Frame 8 («Xavf omillari» page — its tab label replaces «Skrining» only in that frame) is merged into the «xavf-omillari» section; the footer link points there (deviation, tell the client)
   - [x] D-079 (client: approved design wins over the TZ): TZ extras removed from the redesigned pages, no header logo, «Aa» accessibility dropdown, lilac/light header pills, flat active states, new pink banner; footer keeps one small disclaimer + privacy row (client choice)
   - [x] QA: unit 554 passed, e2e 58 passed (axe incl. high contrast on the new pages — new tokens overridden in the high-contrast theme), Lighthouse/pa11y not re-run locally
-  - Open with the client: which «tepa qism» is «Kontent tayyorlanmoqda» (developer asks); header logo slot is empty in the frames (logo kept)
+  - [x] Hover/focus feedback (developer request 2026-10-07): buttons and pills scale 1.05, cards lift 4px; pointer devices only, off with reduced motion (OS or «Aa» menu)
+  - [x] Fix: page and footer caches are keyed on the static-manifest hash, so a deploy no longer leaves cached pages pointing at deleted hashed CSS (seen on /uz/ and /oz/ after e4cf39b)
+  - Open with the client: which «tepa qism» is «Kontent tayyorlanmoqda» (developer asks); social links, hotline, map URL, notification channel for submissions (see chat 2026-10-07)
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in
   `docs/CHROME_AUDIT_PROMPT.md`; findings EA-01…EA-38; report text lives in the developer's chat).
