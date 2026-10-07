@@ -402,11 +402,12 @@ def footer_map(context: dict[str, Any], site_settings: Any) -> list[dict[str, An
 
 
 @register.simple_tag
-def cache_version() -> int:
-    """Bumped on every publish / settings save (apps.core.cache) — fragment cache keys."""
-    from apps.core.cache import page_cache_version
+def cache_version() -> str:
+    """Bumped on every publish / settings save and on every deploy (apps.core.cache) — fragment
+    cache keys."""
+    from apps.core.cache import build_id, page_cache_version
 
-    return page_cache_version()
+    return f"{build_id()}-{page_cache_version()}"
 
 
 @register.filter

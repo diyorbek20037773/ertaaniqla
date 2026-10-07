@@ -3,13 +3,14 @@ cookies/POST/HTMX partial keys, and the analytics/a11y client hooks."""
 
 from __future__ import annotations
 
+import json
 import re
 
 import pytest
 from django.test import Client, override_settings
 
 from apps.articles.models import ArticlePage
-from apps.core.cache import bump_page_cache, page_cache_version
+from apps.core.cache import build_id, bump_page_cache, page_cache_key, page_cache_version
 
 pytestmark = pytest.mark.django_db
 
@@ -65,6 +66,21 @@ def test_cache_disabled_by_default(seeded, client: Client) -> None:
 def test_version_bump() -> None:
     v = page_cache_version()
     assert bump_page_cache() == v + 1
+
+
+def test_new_deploy_gets_a_fresh_cache(tmp_path, rf, settings) -> None:
+    """Cached HTML names hashed CSS/JS files; after a deploy those files are gone, so the key
+    carries the static-manifest hash (otherwise a page served from cache loads no styles)."""
+    settings.STATIC_ROOT = tmp_path
+    request = rf.get("/uz/")
+    keys = []
+    for hashed in ("main.aaa.css", "main.bbb.css"):
+        manifest = json.dumps({"paths": {"main.css": hashed}})
+        (tmp_path / "staticfiles.json").write_text(manifest, encoding="utf-8")
+        build_id.cache_clear()
+        keys.append(page_cache_key(request))
+    build_id.cache_clear()
+    assert keys[0] != keys[1]
 
 
 def test_consent_banner_and_toolbar_markup(seeded, client: Client) -> None:

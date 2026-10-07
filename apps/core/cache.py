@@ -1,16 +1,20 @@
 """Per-view page cache for anonymous HTML (spec §4.5).
 
-Key = (version, language, path, query, HX-Request). The version is bumped on every
+Key = (build, version, language, path, query, HX-Request). The version is bumped on every
 publish/unpublish/move/delete and on Site-settings save (`bump_page_cache`), so stale pages
-never survive an edit. The CSP nonce baked into the cached HTML is swapped for the current
-request's nonce on every hit. Only 200 text/html GET/HEAD responses without cookies are
-cached; nothing is cached for logged-in users or when `PAGE_CACHE_SECONDS` is 0.
+never survive an edit; the build id changes with every deploy, so cached HTML never points at
+hashed CSS/JS files the new release no longer has. The CSP nonce baked into the cached HTML
+is swapped for the current request's nonce on every hit. Only 200 text/html GET/HEAD responses
+without cookies are cached; nothing is cached for logged-in users or when `PAGE_CACHE_SECONDS`
+is 0.
 """
 
 from __future__ import annotations
 
 import hashlib
 from collections.abc import Callable
+from functools import cache as memoize
+from pathlib import Path
 from typing import Any
 
 from django.conf import settings
@@ -24,6 +28,17 @@ STALE_WHILE_REVALIDATE = 3600
 
 def cache_seconds() -> int:
     return int(getattr(settings, "PAGE_CACHE_SECONDS", 0) or 0)
+
+
+@memoize
+def build_id() -> str:
+    """Identity of the deployed static build: hash of the staticfiles manifest (falls back to
+    APP_RELEASE when collectstatic has not run, e.g. in dev and tests)."""
+    manifest = Path(settings.STATIC_ROOT or "") / "staticfiles.json"
+    try:
+        return hashlib.sha256(manifest.read_bytes()).hexdigest()[:12]
+    except OSError:
+        return str(getattr(settings, "APP_RELEASE", "dev"))
 
 
 def page_cache_version() -> int:
@@ -43,6 +58,7 @@ def bump_page_cache() -> int:
 def page_cache_key(request: HttpRequest) -> str:
     raw = "|".join(
         [
+            build_id(),
             str(page_cache_version()),
             translation.get_language() or "",
             request.path,
