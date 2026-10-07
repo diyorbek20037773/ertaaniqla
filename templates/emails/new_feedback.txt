@@ -1,0 +1,6 @@
+{% load i18n %}{% blocktrans with id=submission_id %}New feedback #{{ id }}{% endblocktrans %} ({{ kind }}, {{ language }})
+{% if page_url %}{% trans "Page:" %} {{ page_url }}
+{% endif %}
+{% trans "Open in the CMS to read it:" %} {{ cms_url }}
+
+— Erta aniqla

@@ -54,7 +54,7 @@ def test_submit_creates_encrypted_question_and_emails_moderators(
         assert cur.fetchone()[0].startswith("enc:v1:")
     assert len(mail.outbox) == 1
     assert "+998" not in mail.outbox[0].body
-    assert f"#{question.pk}" in mail.outbox[0].subject
+    assert mail.outbox[0].subject.startswith(f"[Erta aniqla] Yangi savol #{question.pk}")
 
 
 @override_settings(

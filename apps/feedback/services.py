@@ -8,6 +8,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import get_language
 
+from apps.core.queue import enqueue_on_commit
 from apps.feedback.models import FeedbackSubmission
 
 logger = logging.getLogger("ertaaniqla.feedback")
@@ -18,6 +19,9 @@ def submit_feedback(form: Any, request: Any) -> FeedbackSubmission:
     submission.language = get_language() or settings.LANGUAGE_CODE
     submission.user_agent = str(request.META.get("HTTP_USER_AGENT", ""))[:300]
     submission.save()
+    from apps.feedback.tasks import notify_moderators
+
+    enqueue_on_commit(notify_moderators, submission.pk)
     logger.info("feedback %s submitted (kind=%s)", submission.pk, submission.kind)
     return submission
 

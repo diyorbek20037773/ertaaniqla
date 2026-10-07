@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 23:29+0500\n"
+"POT-Creation-Date: 2026-10-08 00:57+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,8 +234,7 @@ msgstr "Video tanlang yoki tashqi havola kiriting."
 
 msgid "Only YouTube, Telegram, Instagram and TikTok links are supported."
 msgstr ""
-"Faqat YouTube, Telegram, Instagram va TikTok havolalari qoʻllab-"
-"quvvatlanadi."
+"Faqat YouTube, Telegram, Instagram va TikTok havolalari qoʻllab-quvvatlanadi."
 
 msgid "Images"
 msgstr "Rasmlar"
@@ -383,14 +382,13 @@ msgstr "Anchor (havola nomi)"
 
 msgid "Latin letters and dashes, e.g. bosqichlari — links can open this item."
 msgstr ""
-"Lotin harflari va chiziqcha, masalan bosqichlari — havolalar shu bandni ocha"
-" oladi."
+"Lotin harflari va chiziqcha, masalan bosqichlari — havolalar shu bandni ocha "
+"oladi."
 
 msgid "Frame the content"
 msgstr "Kontentni ramkaga olish"
 
-msgid ""
-"One rounded frame around everything inside (diagnostics in the design)."
+msgid "One rounded frame around everything inside (diagnostics in the design)."
 msgstr ""
 "Ichidagi hamma narsa atrofida bitta yumaloq ramka (dizayndagi diagnostika)."
 
@@ -638,8 +636,8 @@ msgid ""
 "Shown when the page is shared in Telegram/Facebook. Generated automatically "
 "if empty."
 msgstr ""
-"Sahifa Telegram/Facebookʼda ulashilganda koʻrsatiladi. Boʻsh boʻlsa "
-"avtomatik yaratiladi."
+"Sahifa Telegram/Facebookʼda ulashilganda koʻrsatiladi. Boʻsh boʻlsa avtomatik"
+" yaratiladi."
 
 msgid "generated sharing image"
 msgstr "avtomatik yaratilgan ulashish rasmi"
@@ -704,11 +702,22 @@ msgstr ""
 msgid "hotline phone"
 msgstr "ishonch telefoni"
 
-msgid "Format: +998 XX XXX-XX-XX"
-msgstr "Format: +998 XX XXX-XX-XX"
+msgid "Format: +998 XX XXX-XX-XX or a short number such as 1303"
+msgstr "Format: +998 XX XXX-XX-XX yoki 1303 kabi qisqa raqam"
 
 msgid "second hotline phone"
 msgstr "ikkinchi ishonch telefoni"
+
+msgid "address (uz)"
+msgstr "manzil (uz)"
+
+msgid "Footer location icon; opens Yandex Maps when no map link is set."
+msgstr ""
+"Footerdagi manzil belgisi; xarita havolasi boʻlmasa, Yandex Xaritalarda "
+"ochiladi."
+
+msgid "address (ru)"
+msgstr "manzil (ru)"
 
 msgid "Telegram channel"
 msgstr "Telegram kanali"
@@ -799,8 +808,8 @@ msgstr "Yandex logotipi"
 msgid "Hamroh logo"
 msgstr "Hamroh logotipi"
 
-msgid "Hotline"
-msgstr "Ishonch telefoni"
+msgid "Contacts"
+msgstr "Aloqa maʼlumotlari"
 
 msgid "Social networks"
 msgstr "Ijtimoiy tarmoqlar"
@@ -886,12 +895,6 @@ msgstr "tuman (uz)"
 msgid "district (ru)"
 msgstr "tuman (ru)"
 
-msgid "address (uz)"
-msgstr "manzil (uz)"
-
-msgid "address (ru)"
-msgstr "manzil (ru)"
-
 msgid "phone"
 msgstr "telefon"
 
@@ -928,8 +931,7 @@ msgstr "tashqi ID"
 msgid ""
 "Identifier in an external registry (e.g. DMED) for future synchronisation."
 msgstr ""
-"Kelajakda sinxronlash uchun tashqi reyestrdagi (masalan, DMED) "
-"identifikator."
+"Kelajakda sinxronlash uchun tashqi reyestrdagi (masalan, DMED) identifikator."
 
 msgid "external source"
 msgstr "tashqi manba"
@@ -980,8 +982,7 @@ msgstr "Mavzu"
 msgid "Other / not sure"
 msgstr "Boshqa / bilmayman"
 
-msgid ""
-"I agree to the processing of my data as described in the privacy policy"
+msgid "I agree to the processing of my data as described in the privacy policy"
 msgstr ""
 "Maxfiylik siyosatida tavsiflanganidek, maʼlumotlarim qayta ishlanishiga "
 "roziman"
@@ -1118,6 +1119,10 @@ msgstr ""
 msgid "questions & answers page"
 msgstr "savol-javob sahifasi"
 
+#, python-format
+msgid "[Erta aniqla] New question #%(id)s (%(section)s)"
+msgstr "[Erta aniqla] Yangi savol #%(id)s (%(section)s)"
+
 msgid "Feedback"
 msgstr "Qayta aloqa"
 
@@ -1165,6 +1170,10 @@ msgstr "qayta aloqa xabarlari"
 
 msgid "feedback page"
 msgstr "qayta aloqa sahifasi"
+
+#, python-format
+msgid "[Erta aniqla] New feedback #%(id)s (%(kind)s)"
+msgstr "[Erta aniqla] Yangi murojaat #%(id)s (%(kind)s)"
 
 msgid "Glossary"
 msgstr "Lugʻat"
@@ -1501,8 +1510,8 @@ msgid ""
 "topic (302). The overview stays visible in preview."
 msgstr ""
 "Dizaynda boʻlim sharhi yoʻq: tashrif buyuruvchilar toʻgʻridan-toʻgʻri "
-"menyuning birinchi mavzusiga oʻtadi (302). Sharh oldindan koʻrishda koʻrinib"
-" turadi."
+"menyuning birinchi mavzusiga oʻtadi (302). Sharh oldindan koʻrishda koʻrinib "
+"turadi."
 
 msgid "Section identity"
 msgstr "Boʻlim identikasi"
@@ -1517,8 +1526,8 @@ msgid "children are variants of one topic"
 msgstr "ichki sahifalar bitta mavzuning variantlari"
 
 msgid ""
-"E.g. breast / cervical cancer: the topic opens its first child page (302) "
-"and every child shows a switch between the variants (Figma design)."
+"E.g. breast / cervical cancer: the topic opens its first child page (302) and"
+" every child shows a switch between the variants (Figma design)."
 msgstr ""
 "Masalan, koʻkrak / bachadon boʻyni saratoni: mavzu birinchi ichki sahifani "
 "ochadi (302), har bir ichki sahifada variantlar oʻrtasida almashtirgich "
@@ -1728,8 +1737,8 @@ msgid "Approve with comment"
 msgstr "Izoh bilan tasdiqlash"
 
 msgid ""
-"Members of the chosen groups (doctors) approve the page; approval marks it "
-"as medically verified with the reviewer's name and date."
+"Members of the chosen groups (doctors) approve the page; approval marks it as"
+" medically verified with the reviewer's name and date."
 msgstr ""
 "Tanlangan guruhlar aʼzolari (shifokorlar) sahifani tasdiqlaydi; tasdiqlash "
 "sahifani tekshiruvchining ismi va sanasi bilan «shifokor tekshirgan» deb "
@@ -1845,6 +1854,9 @@ msgstr "Sayt boʻlimlari"
 msgid "Contacts and social networks"
 msgstr "Aloqa va ijtimoiy tarmoqlar"
 
+msgid "Hotline"
+msgstr "Ishonch telefoni"
+
 msgid "Location on the map"
 msgstr "Xaritadagi manzil"
 
@@ -1952,8 +1964,8 @@ msgid "Account temporarily locked"
 msgstr "Hisob vaqtincha bloklangan"
 
 msgid ""
-"Too many failed sign-in attempts. Please try again in one hour or contact "
-"the administrator."
+"Too many failed sign-in attempts. Please try again in one hour or contact the"
+" administrator."
 msgstr ""
 "Tizimga kirishga muvaffaqiyatsiz urinishlar juda koʻp. Bir soatdan soʻng "
 "qayta urinib koʻring yoki administratorga murojaat qiling."
@@ -1971,8 +1983,7 @@ msgid ""
 "review."
 msgstr ""
 "Belgi tibbiy ekspert sahifani «Tibbiy tekshiruv» jarayonida tasdiqlaganda "
-"avtomatik qoʻyiladi. Tekshiruv soʻrash uchun sahifani moderatsiyaga "
-"yuboring."
+"avtomatik qoʻyiladi. Tekshiruv soʻrash uchun sahifani moderatsiyaga yuboring."
 
 msgid "Results"
 msgstr "Natijalar"
@@ -1996,6 +2007,29 @@ msgstr "Bu yerda xarita koʻrsatiladi."
 
 msgid "Map of institutions"
 msgstr "Muassasalar xaritasi"
+
+#, python-format
+msgid "New feedback #%(id)s"
+msgstr "Yangi murojaat #%(id)s"
+
+msgid "Page:"
+msgstr "Sahifa:"
+
+msgid "Open in the CMS to read it"
+msgstr "Oʻqish uchun CMSda oching"
+
+msgid "Open in the CMS to read it:"
+msgstr "Oʻqish uchun CMSda oching:"
+
+#, python-format
+msgid "New question #%(id)s"
+msgstr "Yangi savol #%(id)s"
+
+msgid "Open in the CMS to answer"
+msgstr "Javob berish uchun CMSda oching"
+
+msgid "Open in the CMS to answer:"
+msgstr "Javob berish uchun CMSda oching:"
 
 msgid "Thank you, your question has been sent."
 msgstr "Rahmat, savolingiz yuborildi."
@@ -2106,8 +2140,7 @@ msgid "In Uzbek"
 msgstr "Oʻzbek tilida"
 
 msgid ""
-"Nothing found. Try another word, for example the name of a symptom or a "
-"test."
+"Nothing found. Try another word, for example the name of a symptom or a test."
 msgstr ""
 "Hech narsa topilmadi. Boshqa soʻzni sinab koʻring, masalan, belgi yoki "
 "tekshiruv nomini."
@@ -2195,9 +2228,6 @@ msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
 
 #~ msgid "Ask a doctor"
 #~ msgstr "Shifokorga savol bering"
-
-#~ msgid "Send question"
-#~ msgstr "Savolni yuborish"
 
 #~ msgid "Self-checks"
 #~ msgstr "Oʻz-oʻzini tekshirish"

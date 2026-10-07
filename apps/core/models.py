@@ -258,9 +258,19 @@ class SiteSettings(BaseSiteSetting):
     """Editor-controlled global values (spec §4.3 'Site settings')."""
 
     hotline_phone = models.CharField(
-        _("hotline phone"), max_length=32, blank=True, help_text=_("Format: +998 XX XXX-XX-XX")
+        _("hotline phone"),
+        max_length=32,
+        blank=True,
+        help_text=_("Format: +998 XX XXX-XX-XX or a short number such as 1303"),
     )
     hotline_phone_secondary = models.CharField(_("second hotline phone"), max_length=32, blank=True)
+    address_uz = models.CharField(
+        _("address (uz)"),
+        max_length=300,
+        blank=True,
+        help_text=_("Footer location icon; opens Yandex Maps when no map link is set."),
+    )
+    address_ru = models.CharField(_("address (ru)"), max_length=300, blank=True)
     telegram_url = models.URLField(_("Telegram channel"), blank=True)
     instagram_url = models.URLField(_("Instagram"), blank=True)
     facebook_url = models.URLField(_("Facebook"), blank=True)
@@ -356,8 +366,13 @@ class SiteSettings(BaseSiteSetting):
 
     panels = [
         MultiFieldPanel(
-            [FieldPanel("hotline_phone"), FieldPanel("hotline_phone_secondary")],
-            heading=_("Hotline"),
+            [
+                FieldPanel("hotline_phone"),
+                FieldPanel("hotline_phone_secondary"),
+                FieldPanel("address_uz"),
+                FieldPanel("address_ru"),
+            ],
+            heading=_("Contacts"),
         ),
         MultiFieldPanel(
             [

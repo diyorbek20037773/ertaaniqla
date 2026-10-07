@@ -2,8 +2,8 @@
    components/header.html — site header (design: Figma 2408:78, ADR-0006).
    Context: request, LANGUAGE_CODE, page (optional), section_key, settings.core.SiteSettings
    States: mobile (menu behind <details> toggle), desktop (logo · menu · language + search
-   pills in one row). Section colour comes from `data-section` on <body>. Hotline number
-   comes from Site settings and is kept from the TZ (§II) although Figma has no hotline.
+   pills in one row). Section colour comes from `data-section` on <body>. No hotline here: the
+   approved design 2026-10 shows it only as the footer phone icon (D-079, D-080).
    --------------------------------------------------------------------------- {% endcomment %}
 {% load i18n static core_tags %}
 {% get_current_language as LANGUAGE_CODE %}
@@ -12,13 +12,6 @@
     {% comment %} the approved design 2026-10 has no logo in the header; the home link stays for
        screen readers and keyboard users («Asosiy» in the menu is the visible one) {% endcomment %}
     <a class="site-header__brand sr-only" href="/{{ LANGUAGE_CODE }}/">{% trans "Erta aniqla — home" %}</a>
-    {% with hotline=settings.core.SiteSettings.hotline_phone %}
-      {% if hotline %}
-        <a class="site-header__hotline" href="{{ hotline|phone_href }}">
-          <span class="site-header__hotline-label">{% trans "Hotline" %}</span> {{ hotline|phone_display }}
-        </a>
-      {% endif %}
-    {% endwith %}
     {% block header_nav %}{% main_nav %}{% endblock %}
   </div>
 </header>

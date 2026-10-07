@@ -444,7 +444,8 @@ EMAIL_USE_TLS = _email.get("EMAIL_USE_TLS", False)
 EMAIL_USE_SSL = _email.get("EMAIL_USE_SSL", False)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@ertaaniqla.uz")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
-MODERATION_EMAIL = env("MODERATION_EMAIL", default="editor@ertaaniqla.uz")
+# comma-separated: every address gets the «new question» / «new feedback» notice
+MODERATION_EMAILS = env.list("MODERATION_EMAIL", default=["editor@ertaaniqla.uz"])
 WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 # ---------------------------------------------------------------------------

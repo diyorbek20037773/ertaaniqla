@@ -161,7 +161,11 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] QA: unit 554 passed, e2e 58 passed (axe incl. high contrast on the new pages — new tokens overridden in the high-contrast theme), Lighthouse/pa11y not re-run locally
   - [x] Hover/focus feedback (developer request 2026-10-07): buttons and pills scale 1.05, cards lift 4px; pointer devices only, off with reduced motion (OS or «Aa» menu)
   - [x] Fix: page and footer caches are keyed on the static-manifest hash, so a deploy no longer leaves cached pages pointing at deleted hashed CSS (seen on /uz/ and /oz/ after e4cf39b)
-  - Open with the client: which «tepa qism» is «Kontent tayyorlanmoqda» (developer asks); social links, hotline, map URL, notification channel for submissions (see chat 2026-10-07)
+  - Open with the client: which «tepa qism» is «Kontent tayyorlanmoqda» (developer asks)
+  - [x] Client answers 2026-10-08 (D-080): hotline 1303 + address in the footer icons; moderation e-mails to info@cancercenter.uz and n.akhatov@asr.gov.uz (SMTP still missing on Railway — console backend); feedback submissions notify too; placeholder map for the client (page → block → text)
+  - Client, later / waiting: social links (client sends), partner logos (requested), institutions CSV (being prepared), Turnstile keys (will be obtained); privacy policy text — later; children's section design — next stage, women's oncology is the priority; server stays on Railway for now (VPS later)
+  - Client, last step: CMS accounts — 2 admins per oncology section (women now; children and others later), each limited to its own section (Wagtail group page permissions on the section subtree + topic-scoped snippets); client asks for plain login/password — 2FA is a TZ/spec requirement, confirm with the client before relaxing it; editor video guide uz + ru (3–5 min); Telegram notifications, admin dashboard panels
+  - Incoming: light redesign by @chillcrush (per Aziza Umarova), content unchanged — wait for the frames before further visual work
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in
   `docs/CHROME_AUDIT_PROMPT.md`; findings EA-01…EA-38; report text lives in the developer's chat).

@@ -1,0 +1,7 @@
+{% load i18n %}<!DOCTYPE html>
+<html><body style="font-family: sans-serif; font-size: 16px; color: #111;">
+<p><strong>{% blocktrans with id=submission_id %}New feedback #{{ id }}{% endblocktrans %}</strong> ({{ kind }}, {{ language }})</p>
+{% if page_url %}<p>{% trans "Page:" %} {{ page_url }}</p>{% endif %}
+<p><a href="{{ cms_url }}">{% trans "Open in the CMS to read it" %}</a></p>
+<p style="color: #5c5c5c;">— Erta aniqla</p>
+</body></html>

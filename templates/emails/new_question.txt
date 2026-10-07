@@ -1,7 +1,7 @@
-New question #{{ question_id }} ({{ section }}, {{ language }})
+{% load i18n %}{% blocktrans with id=question_id %}New question #{{ id }}{% endblocktrans %} ({{ section }}, {{ language }})
 
 "{{ excerpt }}…"
 
-Open in the CMS to answer: {{ cms_url }}
+{% trans "Open in the CMS to answer:" %} {{ cms_url }}
 
 — Erta aniqla

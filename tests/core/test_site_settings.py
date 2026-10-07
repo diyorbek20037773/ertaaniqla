@@ -39,6 +39,24 @@ def test_header_footer_use_settings(site_settings, client: Client) -> None:
     assert "Сайт не ставит диагноз" in ru
 
 
+def test_footer_short_hotline_and_address(site_settings, client: Client) -> None:
+    """Client data 2026-10-08: hotline 1303 and the centre's address; the approved design shows
+    both only as footer icons (no hotline in the header)."""
+    site_settings.hotline_phone = "1303"
+    site_settings.address_uz = "Toshkent shahri, Olmazor tumani"
+    site_settings.address_ru = "г. Ташкент, Алмазарский район"
+    site_settings.save()
+    html = client.get("/uz/").content.decode()
+    assert 'href="tel:1303"' in html
+    assert "site-header__hotline" not in html
+    assert 'href="https://yandex.uz/maps/?text=Toshkent%20shahri%2C%20Olmazor%20tumani"' in html
+    assert 'title="Toshkent shahri, Olmazor tumani"' in html
+    assert 'title="г. Ташкент, Алмазарский район"' in client.get("/ru/").content.decode()
+    site_settings.map_url = "https://yandex.uz/maps/-/CHpQ"
+    site_settings.save()
+    assert 'href="https://yandex.uz/maps/-/CHpQ"' in client.get("/uz/").content.decode()
+
+
 def test_emergency_banner(site_settings, client: Client) -> None:
     html = client.get("/uz/bolalar/").content.decode()
     assert "banner--emergency" in html

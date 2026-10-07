@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import pytest
-from django.test import Client
+from django.core import mail
+from django.test import Client, override_settings
 from freezegun import freeze_time
 
 from apps.feedback.models import FeedbackPage, FeedbackSubmission
@@ -40,6 +41,21 @@ def test_submit_stores_submission(page, client: Client) -> None:
     assert item.page_url == "/uz/ayollar/" and item.user_agent.startswith("Mozilla")
     assert item.language == "uz"
     assert str(item).startswith(f"#{item.pk}")
+
+
+@override_settings(MODERATION_EMAILS=["info@example.uz", "head@example.uz"])
+def test_submit_notifies_every_moderator_without_personal_data(
+    page, client: Client, django_capture_on_commit_callbacks
+) -> None:
+    with django_capture_on_commit_callbacks(execute=True):
+        client.post(page.url, VALID)
+    item = FeedbackSubmission.objects.get()
+    assert len(mail.outbox) == 1
+    message = mail.outbox[0]
+    assert message.to == ["info@example.uz", "head@example.uz"]
+    assert message.subject.startswith(f"[Erta aniqla] Yangi murojaat #{item.pk}")
+    assert f"/snippets/feedback/feedbacksubmission/edit/{item.pk}/" in message.body
+    assert "me@example.uz" not in message.body and "Xarita" not in message.body
 
 
 def test_external_page_url_is_dropped_and_validation(page, client: Client) -> None:

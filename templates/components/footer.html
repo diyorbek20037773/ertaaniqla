@@ -32,8 +32,8 @@
       {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-150 class="site-footer__partner" alt="Yandex" %}
       {% else %}<img class="site-footer__partner" src="{% static 'img/figma/yandex-uz.png' %}" alt="Yandex Uzbekistan" width="118" height="154" loading="lazy" decoding="async">{% endif %}
       <ul class="social-icons" aria-label="{% trans 'Contacts and social networks' %}">
-        {% if s.hotline_phone %}<li><a href="{{ s.hotline_phone|phone_href }}" aria-label="{% trans 'Hotline' %} {{ s.hotline_phone|phone_display }}">{% include "components/icons/phone.svg" %}</a></li>{% endif %}
-        {% if s.map_url %}<li><a href="{{ s.map_url }}" rel="noopener" aria-label="{% trans 'Location on the map' %}">{% include "components/icons/pin.svg" %}</a></li>{% endif %}
+        {% if s.hotline_phone %}<li><a href="{{ s.hotline_phone|phone_href }}" title="{% trans 'Hotline' %} {{ s.hotline_phone|phone_display }}" aria-label="{% trans 'Hotline' %} {{ s.hotline_phone|phone_display }}">{% include "components/icons/phone.svg" %}</a></li>{% endif %}
+        {% with address=s|localized:"address" %}{% if s.map_url or address %}<li><a href="{% if s.map_url %}{{ s.map_url }}{% else %}https://yandex.uz/maps/?text={{ address|urlencode }}{% endif %}" rel="noopener"{% if address %} title="{{ address }}"{% endif %} aria-label="{% trans 'Location on the map' %}{% if address %}: {{ address }}{% endif %}">{% include "components/icons/pin.svg" %}</a></li>{% endif %}{% endwith %}
         {% if s.telegram_url %}<li><a href="{{ s.telegram_url }}" rel="noopener" aria-label="Telegram">{% include "components/icons/telegram.svg" %}</a></li>{% endif %}
         {% if s.instagram_url %}<li><a href="{{ s.instagram_url }}" rel="noopener" aria-label="Instagram">{% include "components/icons/instagram.svg" %}</a></li>{% endif %}
         {% if s.facebook_url %}<li><a href="{{ s.facebook_url }}" rel="noopener" aria-label="Facebook">{% include "components/icons/facebook.svg" %}</a></li>{% endif %}

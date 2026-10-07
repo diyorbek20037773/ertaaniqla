@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 23:29+0500\n"
+"POT-Creation-Date: 2026-10-08 00:57+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -386,8 +386,7 @@ msgstr ""
 msgid "Frame the content"
 msgstr "Обвести содержимое рамкой"
 
-msgid ""
-"One rounded frame around everything inside (diagnostics in the design)."
+msgid "One rounded frame around everything inside (diagnostics in the design)."
 msgstr ""
 "Одна скруглённая рамка вокруг всего содержимого (диагностика в дизайне)."
 
@@ -670,8 +669,8 @@ msgstr "проверено врачом"
 msgid ""
 "Shows the 'Verified by a doctor' badge. Set by the medical review workflow."
 msgstr ""
-"Показывает отметку «Проверено врачом». Устанавливается процессом медицинской"
-" проверки."
+"Показывает отметку «Проверено врачом». Устанавливается процессом медицинской "
+"проверки."
 
 msgid "Medical review"
 msgstr "Медицинская проверка"
@@ -699,11 +698,20 @@ msgstr ""
 msgid "hotline phone"
 msgstr "телефон горячей линии"
 
-msgid "Format: +998 XX XXX-XX-XX"
-msgstr "Формат: +998 XX XXX-XX-XX"
+msgid "Format: +998 XX XXX-XX-XX or a short number such as 1303"
+msgstr "Формат: +998 XX XXX-XX-XX или короткий номер, например 1303"
 
 msgid "second hotline phone"
 msgstr "второй телефон горячей линии"
+
+msgid "address (uz)"
+msgstr "адрес (uz)"
+
+msgid "Footer location icon; opens Yandex Maps when no map link is set."
+msgstr "Значок адреса в футере; без ссылки на карту открывает Яндекс Карты."
+
+msgid "address (ru)"
+msgstr "адрес (ru)"
 
 msgid "Telegram channel"
 msgstr "Telegram-канал"
@@ -792,8 +800,8 @@ msgstr "Логотип Яндекса"
 msgid "Hamroh logo"
 msgstr "Логотип Hamroh"
 
-msgid "Hotline"
-msgstr "Горячая линия"
+msgid "Contacts"
+msgstr "Контакты"
 
 msgid "Social networks"
 msgstr "Социальные сети"
@@ -878,12 +886,6 @@ msgstr "район (uz)"
 
 msgid "district (ru)"
 msgstr "район (ru)"
-
-msgid "address (uz)"
-msgstr "адрес (uz)"
-
-msgid "address (ru)"
-msgstr "адрес (ru)"
 
 msgid "phone"
 msgstr "телефон"
@@ -971,8 +973,7 @@ msgstr "Тема"
 msgid "Other / not sure"
 msgstr "Другое / не знаю"
 
-msgid ""
-"I agree to the processing of my data as described in the privacy policy"
+msgid "I agree to the processing of my data as described in the privacy policy"
 msgstr ""
 "Я согласен(на) на обработку моих данных согласно политике конфиденциальности"
 
@@ -1035,8 +1036,7 @@ msgstr "часто задаваемый"
 msgid ""
 "Shown as a card under «Most asked questions» (published questions only)."
 msgstr ""
-"Показывается карточкой в «Часто задаваемых вопросах» (только "
-"опубликованные)."
+"Показывается карточкой в «Часто задаваемых вопросах» (только опубликованные)."
 
 msgid "question"
 msgstr "вопрос"
@@ -1108,6 +1108,10 @@ msgstr "Короткие ссылки на страницы рядом с час
 msgid "questions & answers page"
 msgstr "страница вопросов и ответов"
 
+#, python-format
+msgid "[Erta aniqla] New question #%(id)s (%(section)s)"
+msgstr "[Erta aniqla] Новый вопрос #%(id)s (%(section)s)"
+
 msgid "Feedback"
 msgstr "Обратная связь"
 
@@ -1156,6 +1160,10 @@ msgstr "сообщения обратной связи"
 msgid "feedback page"
 msgstr "страница обратной связи"
 
+#, python-format
+msgid "[Erta aniqla] New feedback #%(id)s (%(kind)s)"
+msgstr "[Erta aniqla] Новое обращение #%(id)s (%(kind)s)"
+
 msgid "Glossary"
 msgstr "Словарь"
 
@@ -1203,8 +1211,8 @@ msgid ""
 "Optional home-only banner (e.g. screening campaign month). The site-wide "
 "banner lives in Settings → Site settings."
 msgstr ""
-"Необязательный баннер только для главной (например, месяц скрининга). Баннер"
-" для всего сайта: Настройки → Настройки сайта."
+"Необязательный баннер только для главной (например, месяц скрининга). Баннер "
+"для всего сайта: Настройки → Настройки сайта."
 
 msgid "statistics strip (3 stats)"
 msgstr "полоса статистики (3 показателя)"
@@ -1284,8 +1292,8 @@ msgstr "декоративное (alt-текст не нужен)"
 msgid ""
 "Only for purely decorative images. Content images must describe themselves."
 msgstr ""
-"Только для чисто декоративных изображений. Содержательные изображения должны"
-" иметь описание."
+"Только для чисто декоративных изображений. Содержательные изображения должны "
+"иметь описание."
 
 msgid "image"
 msgstr "изображение"
@@ -1500,8 +1508,8 @@ msgid "children are variants of one topic"
 msgstr "дочерние страницы — варианты одной темы"
 
 msgid ""
-"E.g. breast / cervical cancer: the topic opens its first child page (302) "
-"and every child shows a switch between the variants (Figma design)."
+"E.g. breast / cervical cancer: the topic opens its first child page (302) and"
+" every child shows a switch between the variants (Figma design)."
 msgstr ""
 "Например, рак молочной железы / шейки матки: тема открывает первую дочернюю "
 "страницу (302), а на каждой дочерней странице есть переключатель вариантов "
@@ -1557,8 +1565,7 @@ msgstr "документ согласия (приватный)"
 
 msgid "Scanned consent form. Stored as a private document, never public."
 msgstr ""
-"Скан формы согласия. Хранится как приватный документ, никогда не "
-"публикуется."
+"Скан формы согласия. Хранится как приватный документ, никогда не публикуется."
 
 msgid "Person"
 msgstr "Человек"
@@ -1710,8 +1717,8 @@ msgid "Approve with comment"
 msgstr "Одобрить с комментарием"
 
 msgid ""
-"Members of the chosen groups (doctors) approve the page; approval marks it "
-"as medically verified with the reviewer's name and date."
+"Members of the chosen groups (doctors) approve the page; approval marks it as"
+" medically verified with the reviewer's name and date."
 msgstr ""
 "Участники выбранных групп (врачи) одобряют страницу; одобрение отмечает её "
 "как проверенную врачом с именем проверяющего и датой."
@@ -1826,6 +1833,9 @@ msgstr "Разделы сайта"
 msgid "Contacts and social networks"
 msgstr "Контакты и соцсети"
 
+msgid "Hotline"
+msgstr "Горячая линия"
+
 msgid "Location on the map"
 msgstr "Место на карте"
 
@@ -1935,11 +1945,11 @@ msgid "Account temporarily locked"
 msgstr "Аккаунт временно заблокирован"
 
 msgid ""
-"Too many failed sign-in attempts. Please try again in one hour or contact "
-"the administrator."
+"Too many failed sign-in attempts. Please try again in one hour or contact the"
+" administrator."
 msgstr ""
-"Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к"
-" администратору."
+"Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к "
+"администратору."
 
 #, python-format
 msgid "Verified by a doctor: %(name)s, %(date)s."
@@ -1953,8 +1963,8 @@ msgid ""
 "the “Medical review” workflow. Submit the page for moderation to request a "
 "review."
 msgstr ""
-"Отметка ставится автоматически, когда медицинский эксперт одобряет страницу "
-"в процессе «Медицинская проверка». Чтобы запросить проверку, отправьте "
+"Отметка ставится автоматически, когда медицинский эксперт одобряет страницу в"
+" процессе «Медицинская проверка». Чтобы запросить проверку, отправьте "
 "страницу на модерацию."
 
 msgid "Results"
@@ -1981,6 +1991,29 @@ msgstr "Здесь будет карта."
 
 msgid "Map of institutions"
 msgstr "Карта учреждений"
+
+#, python-format
+msgid "New feedback #%(id)s"
+msgstr "Новое обращение #%(id)s"
+
+msgid "Page:"
+msgstr "Страница:"
+
+msgid "Open in the CMS to read it"
+msgstr "Открыть в CMS, чтобы прочитать"
+
+msgid "Open in the CMS to read it:"
+msgstr "Открыть в CMS, чтобы прочитать:"
+
+#, python-format
+msgid "New question #%(id)s"
+msgstr "Новый вопрос #%(id)s"
+
+msgid "Open in the CMS to answer"
+msgstr "Открыть в CMS, чтобы ответить"
+
+msgid "Open in the CMS to answer:"
+msgstr "Открыть в CMS, чтобы ответить:"
 
 msgid "Thank you, your question has been sent."
 msgstr "Спасибо, ваш вопрос отправлен."
@@ -2093,8 +2126,7 @@ msgid "In Uzbek"
 msgstr "На узбекском"
 
 msgid ""
-"Nothing found. Try another word, for example the name of a symptom or a "
-"test."
+"Nothing found. Try another word, for example the name of a symptom or a test."
 msgstr ""
 "Ничего не найдено. Попробуйте другое слово, например название симптома или "
 "обследования."
@@ -2187,9 +2219,6 @@ msgstr "Инструменты появятся здесь после медиц
 #~ msgid "Ask a doctor"
 #~ msgstr "Спросить врача"
 
-#~ msgid "Send question"
-#~ msgstr "Отправить вопрос"
-
 #~ msgid "Self-checks"
 #~ msgstr "Самопроверка"
 
@@ -2210,5 +2239,5 @@ msgstr "Инструменты появятся здесь после медиц
 #~ "This site is an information and education resource. It does not make a "
 #~ "diagnosis. If you notice symptoms, contact a doctor."
 #~ msgstr ""
-#~ "Этот сайт — информационно-образовательный ресурс. Он не ставит диагноз. Если"
-#~ " вы заметили симптомы, обратитесь к врачу."
+#~ "Этот сайт — информационно-образовательный ресурс. Он не ставит диагноз. Если "
+#~ "вы заметили симптомы, обратитесь к врачу."

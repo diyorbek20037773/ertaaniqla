@@ -144,8 +144,6 @@
   .site-header__inner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); min-height: 56px; }
   .site-header__brand { display: inline-flex; align-items: center; text-decoration: none; color: var(--neutral-900); }
   .site-header__logo { display: block; width: clamp(150px, 16vw, 269px); height: auto; }
-  .site-header__hotline { margin-left: auto; text-decoration: none; font-weight: 700; font-size: var(--fs-ui); color: var(--c-pink-700); }
-  .site-header__hotline-label { font-weight: 400; color: var(--neutral-600); }
 
   /* components/banner.html */
   .banner { background: var(--warning-bg); border-block: 1px solid var(--warning); padding-block: var(--space-3); }

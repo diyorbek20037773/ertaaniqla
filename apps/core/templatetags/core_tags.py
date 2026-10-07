@@ -352,6 +352,8 @@ def phone_display(value: str) -> str:
 @register.filter
 def phone_href(value: str) -> str:
     digits = _DIGITS.sub("", value or "")
+    if 0 < len(digits) <= 6:  # short service number such as the 1303 hotline: no country code
+        return f"tel:{digits}"
     if len(digits) == 9:
         digits = "998" + digits
     return f"tel:+{digits}" if digits else ""
