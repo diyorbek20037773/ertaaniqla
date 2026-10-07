@@ -421,4 +421,42 @@
   }
   /* section headings of the women's pages are set larger in the approved frames (≈43 px) */
   body[data-section="women"] .article__body > .block--heading { font-size: clamp(1.6rem, 0.9rem + 1.9vw, 2.7rem); }
+
+  /* ---- hover / focus feedback (developer request 2026-10-07) --------------------------------
+     Buttons grow slightly, cards lift; only on devices with a real pointer, keyboard focus gets
+     the same cue, and «reduce motion» (OS or toolbar) turns it off. */
+  :is(.pill, .pill-cta, .pill-outline, .topic-filter__pill, .button, .hero__action, .ask-form__send,
+      .faq-search__button, .site-search__button, .a11y-menu__toggle, .lang-menu__toggle, .section-tabs__link,
+      .variant-switch__link, .acc__disc, .arrow-disc, .scroller__next, .social-icons a, .faq-card__chip) {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  }
+  :is(.topic-card, .news-card, .news-feature, .article-card, .video-card, .faq-card, .capsule-card,
+      .check-card, .card, .acc__summary) {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :is(.pill, .pill-cta, .pill-outline, .topic-filter__pill, .button, .hero__action, .ask-form__send,
+        .a11y-menu__toggle, .lang-menu__toggle, .section-tabs__link, .variant-switch__link, .scroller__next,
+        .social-icons a):hover {
+      transform: scale(1.05); box-shadow: 0 6px 16px rgba(128, 0, 73, 0.18);
+    }
+    :is(.faq-search__button, .site-search__button):hover { transform: scale(1.12); }
+    :is(.topic-card, .news-card, .news-feature, .article-card, .video-card, .faq-card, .capsule-card,
+        .check-card, .card):hover {
+      transform: translateY(-4px); box-shadow: 0 14px 30px rgba(128, 0, 73, 0.16);
+    }
+    :is(.topic-card, .news-card, .article-card, .faq-card):hover :is(.arrow-disc, .pill-cta, .faq-card__chip) { transform: scale(1.1); }
+    .video-card:hover .video-card__play { transform: translate(0, 0) scale(1.12); }
+    .acc__summary:hover { transform: scale(1.01); }
+    .acc__summary:hover .acc__disc { transform: scale(1.08); }
+  }
+  :is(.pill, .pill-cta, .pill-outline, .topic-filter__pill, .button, .hero__action, .ask-form__send,
+      .section-tabs__link, .variant-switch__link):focus-visible { transform: scale(1.05); }
+  .video-card__play { transition: transform 0.2s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    :is(.pill, .pill-cta, .pill-outline, .topic-filter__pill, .button, .hero__action, .ask-form__send, .section-tabs__link,
+        .variant-switch__link, .topic-card, .news-card, .news-feature, .article-card, .video-card, .faq-card,
+        .capsule-card, .check-card, .card, .acc__summary, .acc__disc, .arrow-disc):is(:hover, :focus-visible) { transform: none; }
+  }
+  html[data-reduce-motion="true"] :is(:hover, :focus-visible) { transform: none !important; }
 }
