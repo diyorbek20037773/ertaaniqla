@@ -89,8 +89,17 @@
     .site-nav__primary { gap: clamp(1rem, 1.7vw, 2rem); margin-inline: 0; }
     .search-menu__panel, .a11y-menu__panel { position: absolute; right: 0; left: auto; z-index: 30; width: max-content; }
   }
-  /* the hotline label goes first when the row gets tight */
-  @media (min-width: 64rem) and (max-width: 87.99rem) { .hotline__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
+  /* one row on desktop: links never wrap; when the row gets tight the hotline label goes first
+     (the number stays), then the whole hotline (it is still in the footer) */
+  @media (min-width: 64rem) {
+    .site-nav__link { white-space: nowrap; }
+    .site-nav__utils { flex-wrap: nowrap; }
+  }
+  @media (min-width: 64rem) and (max-width: 99.99rem) { .hotline__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
+  @media (min-width: 64rem) and (max-width: 79.99rem) {
+    .hotline { display: none; }
+    .site-nav__primary { gap: 1rem; }
+  }
   @media (max-width: 63.99rem) {
     .site-nav__utils { flex-wrap: wrap; }
     .search-menu__panel { padding-inline: 0; }
