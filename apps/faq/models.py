@@ -247,9 +247,9 @@ class FAQPage(BasePage):
     def published_questions(
         self, section: str = "", topic: str = "", query: str = ""
     ) -> list[Question]:
-        qs = Question.objects.filter(status=QuestionStatus.PUBLISHED).select_related(
-            "answered_by", "article"
-        )
+        qs = Question.objects.filter(
+            status=QuestionStatus.PUBLISHED, language=self.locale.language_code
+        ).select_related("answered_by", "article")
         if section in QuestionSection.values:
             qs = qs.filter(section=section)
         if topic in Topic.values:

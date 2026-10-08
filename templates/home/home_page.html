@@ -32,7 +32,10 @@
         <p class="eyebrow">{% firstof page.directions_eyebrow _("Directions") %}</p>
         <h2 class="display-title" id="home-directions">{% firstof page.directions_title _("Most asked questions") %}</h2>
       </div>
-      <p class="home-block__aside">{% firstof page.directions_text _("Each direction covers signs, screening, treatment and support.") %}</p>
+      <div class="home-block__aside">
+        <p>{% firstof page.directions_text _("Each direction covers signs, screening, treatment and support.") %}</p>
+        {% if faq_page %}<a class="btn btn--outline" href="{{ faq_page.url }}">{% trans "All questions" %} {% include "components/icons/arrow-right.svg" %}</a>{% endif %}
+      </div>
     </header>
     {% include "home/_direction_cards.html" with cards=page.directions %}
     </div>

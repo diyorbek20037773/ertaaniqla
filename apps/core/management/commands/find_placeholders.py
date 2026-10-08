@@ -36,6 +36,17 @@ class Command(BaseCommand):
                     f"{page.locale.language_code}  {page.url or page.url_path}  "
                     f"TODO={counts['TODO']} VERIFY={counts['VERIFY']}  (id {page.pk})"
                 )
+        from apps.faq.models import Question, QuestionStatus
+
+        for question in Question.objects.filter(status=QuestionStatus.PUBLISHED).order_by("pk"):
+            counts = count_placeholders([question.answer, question.public_question])
+            if counts:
+                found += 1
+                self.stdout.write(
+                    f"{question.language}  question #{question.pk} "
+                    f"«{question.display_question[:60]}»  "
+                    f"TODO={counts['TODO']} VERIFY={counts['VERIFY']}"
+                )
         for site_settings in SiteSettings.objects.select_related("site"):
             counts = count_placeholders(site_settings.__dict__)
             if counts:

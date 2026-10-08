@@ -48,6 +48,7 @@ class Command(BaseCommand):
         from django.core.management import call_command
 
         call_command("seed_home_design", stdout=self.stdout)
+        call_command("seed_faq_questions", stdout=self.stdout)
         self.stdout.write(
             self.style.SUCCESS(
                 f"seed_content: created={result['created']} updated={result['updated']} "

@@ -192,3 +192,18 @@ def test_privacy_policy_is_linked_from_the_form_and_footer(page, client: Client)
         assert f'class="field__link" href="{policy_url}"' in html, form_url
         assert html.count(f'href="{policy_url}"') >= 2  # form + footer
         assert client.get(policy_url).status_code == 200
+
+
+def test_design_questions_seeded_once_per_language(seeded, client: Client) -> None:
+    """Final design (D-081): the question page opens with the most asked questions — editorial
+    entries with placeholder answers, one set per language, added once."""
+    from django.core.management import call_command
+
+    call_command("seed_faq_questions")
+    call_command("seed_faq_questions")
+    assert Question.objects.filter(language="uz", topic="breast").count() == 7
+    html = client.get("/uz/savol-javob/?topic=breast").content.decode()
+    assert "Skrining oʻzi nima?" in html and "Что такое скрининг?" not in html
+    assert html.index("Koʻkrak bezi saratoni nima?") < html.index("Davolash qanday tashkil")
+    ru = client.get("/ru/voprosy-otvety/?topic=breast").content.decode()
+    assert "Что такое скрининг?" in ru and "Skrining oʻzi nima?" not in ru

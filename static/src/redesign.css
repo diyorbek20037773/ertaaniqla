@@ -150,6 +150,7 @@
   .home-block { margin-block: clamp(3.5rem, 2.5rem + 4vw, 8rem); }
   .home-block__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-4) var(--space-8); margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.75rem); }
   .home-block__aside { max-width: 22rem; margin: 0; color: var(--c-muted); font-size: 0.98rem; line-height: 1.45; }
+  .home-block__aside p { margin: 0 0 var(--space-4); }
 
   /* direction cards: three pastel cards; a row that scrolls on narrow screens */
   .dir-scroller { position: relative; }
