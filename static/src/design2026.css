@@ -69,8 +69,6 @@
   /* the 2026-10 landing has lighter section capsules and no background blobs */
   .landing .capsule-card { background: var(--c-card-hero-pink); }
   .landing .capsule-card[data-section="children"] { background: var(--c-card-lilac); }
-  .hero__action--alt { background: var(--c-hero-purple); background-image: none; color: var(--neutral-0); }
-  .hero__action:not(.hero__action--alt) { background: transparent; background-image: none; border: 2px solid var(--c-hero-violet); color: var(--c-hero-violet); font-weight: 600; }
 
   .topic-cards { display: grid; gap: clamp(1rem, 2vw, 3.3rem); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
   .topic-card {

@@ -1,33 +1,39 @@
 {% extends "base.html" %}
 {% load i18n wagtailcore_tags %}
-{% comment %} posts/post_index_page.html — «Yangiliklar» / «Maqolalar» (design 2026-10, «Bosh sahifa»
-   frames 3–5, 7). Context: page (PostIndexPage: kind), posts (Page of PostPage), topic, topics.
-   News, «all», first page: the newest item is the large lead card next to three rows, then rows
-   in two columns. Articles: three-column white cards. {% endcomment %}
-{% block breadcrumbs %}{% endblock %}{# design 2026-10: lists have no trail; JSON-LD keeps it #}
+{% comment %} posts/post_index_page.html — «Yangiliklar» / «Maqolalar» (final design, D-081:
+   docs/oxirigi_variant Frame-4, Frame-2). Context: page (PostIndexPage: kind, eyebrow, lead),
+   posts (Page of PostPage), topic, topics, query.
+   News: the newest item beside its text, then a three-column grid and numbered pages.
+   Articles: description + search, a large first card, three columns, «Yana yuklash». {% endcomment %}
+{% block breadcrumbs %}{% endblock %}{# rendered inside the list head #}
 {% block content %}
-<div class="container list-page">
-  <header class="list-page__head">
-    {% include "components/bar_title.html" with title=page.title tag="h1" %}
-    {% include "components/topic_filter.html" with base_url=page.url %}
-  </header>
+<div class="container container--narrow list-page">
+  {% if page.kind == "articles" %}
+    {% include "components/list_head.html" with eyebrow=page.eyebrow|default:_("Important to know") lead=page.lead search_placeholder=_("Search the articles") %}
+    {% blocktrans trimmed count counter=posts.paginator.count asvar count_label %}{{ counter }} article{% plural %}{{ counter }} articles{% endblocktrans %}
+  {% else %}
+    {% include "components/list_head.html" with eyebrow=page.eyebrow|default:_("Latest news") lead=page.lead %}
+    {% blocktrans trimmed count counter=posts.paginator.count asvar count_label %}{{ counter }} news item{% plural %}{{ counter }} news items{% endblocktrans %}
+  {% endif %}
+  {% include "components/topic_filter.html" with base_url=page.url %}
   {% for block in page.intro %}{% include_block block %}{% endfor %}
 
   {% if posts %}
     {% if page.kind == "articles" %}
-      <div class="article-grid">{% for post in posts %}{% include "posts/_article_card.html" %}{% endfor %}</div>
-    {% elif not topic and posts.number == 1 %}
-      <div class="news-lead">
-        {% include "posts/_news_feature.html" with post=posts.object_list.0 %}
-        <div class="news-lead__list">{% for post in posts.object_list|slice:"1:4" %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+      {% if posts.number == 1 and not query %}{% include "posts/_article_card.html" with post=posts.object_list.0 featured=True %}{% endif %}
+      <div class="card-grid" id="post-grid">
+        {% for post in posts %}{% if posts.number > 1 or query or not forloop.first %}{% include "posts/_article_card.html" %}{% endif %}{% endfor %}
       </div>
-      <div class="news-grid">{% for post in posts.object_list|slice:"4:" %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+      {% include "components/load_more.html" with items=posts target="post-grid" %}
     {% else %}
-      <div class="news-grid">{% for post in posts %}{% include "posts/_news_card.html" %}{% endfor %}</div>
+      {% if posts.number == 1 and not topic %}{% include "posts/_news_feature.html" with post=posts.object_list.0 layout="side" %}{% endif %}
+      <div class="card-grid" id="post-grid">
+        {% for post in posts %}{% if posts.number > 1 or topic or not forloop.first %}{% include "posts/_news_card.html" %}{% endif %}{% endfor %}
+      </div>
+      {% include "components/pager.html" with items=posts %}
     {% endif %}
-    {% include "components/pager.html" with items=posts %}
   {% else %}
-    <p class="empty-state">{% if page.kind == "articles" %}{% trans "Articles will appear here soon." %}{% else %}{% trans "News will appear here soon." %}{% endif %}</p>
+    <p class="empty-state">{% if query %}{% trans "Nothing found. Try another word." %}{% elif page.kind == "articles" %}{% trans "Articles will appear here soon." %}{% else %}{% trans "News will appear here soon." %}{% endif %}</p>
   {% endif %}
 </div>
 {% endblock %}

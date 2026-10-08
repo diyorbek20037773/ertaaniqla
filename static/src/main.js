@@ -94,15 +94,29 @@ Alpine.data("checklist", () => ({
   },
 }));
 
-// Landing rows (videos, articles — design 2026-10): the «›» button scrolls one screen on.
+// Horizontal rows (landing direction cards): «›» scrolls one screen on (wrapping to the start),
+// «‹» one screen back. The arrows only show while the row overflows ([data-overflow]).
 document.addEventListener("click", (event) => {
-  const next = event.target.closest("[data-scroller-next]");
-  if (!next) return;
-  const track = next.closest("[data-scroller]")?.querySelector(".scroller__track");
+  const button = event.target.closest("[data-scroller-next], [data-scroller-prev]");
+  if (!button) return;
+  const track = button.closest("[data-scroller]")?.querySelector(".scroller__track");
   if (!track) return;
+  const step = track.clientWidth * 0.9;
+  if (button.hasAttribute("data-scroller-prev")) {
+    track.scrollTo({ left: Math.max(0, track.scrollLeft - step), behavior: "smooth" });
+    return;
+  }
   const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-  track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + track.clientWidth * 0.9, behavior: "smooth" });
+  track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step, behavior: "smooth" });
 });
+function markOverflow() {
+  document.querySelectorAll("[data-scroller]").forEach((row) => {
+    const track = row.querySelector(".scroller__track");
+    if (track) row.toggleAttribute("data-overflow", track.scrollWidth > track.clientWidth + 4);
+  });
+}
+markOverflow();
+window.addEventListener("resize", markOverflow);
 
 // A link to #q-12 / #bosqichlari opens that <details> (question cards, footer site map).
 function openTarget() {

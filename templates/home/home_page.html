@@ -1,130 +1,112 @@
 {% extends "base.html" %}
 {% load i18n static wagtailcore_tags wagtailimages_tags core_tags %}
-{% comment %} home/home_page.html — landing page (design: Figma 2408:5, ADR-0006).
-   Context: page (HomePage), sections (list[SectionIndexPage]); design 2026-10 blocks:
-   faq_page + topics (question topic cards), news_index + news, video_index + videos,
-   articles_index + articles (HomePage.get_landing_feeds). Both sections are presented equally (TZ §II): same card
-   size, same arrow affordance, only the colour and the artwork differ.
-   The blobs are decoration and never carry meaning (aria-hidden). {% endcomment %}
+{% comment %} home/home_page.html — landing page (final design, docs/oxirigi_variant «lending new (1)»,
+   D-081). Blocks: hero (eyebrow, serif title, two buttons) · «Yo'nalishlar» cards ·
+   «Bepul skrining» panel (region → directory, three steps) · news (lead + rows) ·
+   «Savolingiz bormi?» panel. Every text is a HomePage field (CMS); empty fields fall back to
+   the design wording below, empty cards to one card per topic.
+   Context: page (HomePage), sections, directory_url, regions, faq_page, topics, news_index, news.
+   The ribbons are decoration and never carry meaning (aria-hidden). {% endcomment %}
 {% block title_suffix %}{% endblock %}{# the hero slogan already names the site (EA-13) #}
 {% block breadcrumbs %}{% endblock %}
 {% block section_tabs %}{% endblock %}
 {% block content %}
 <div class="landing">
+  <section class="container home-hero">
+    <p class="eyebrow">{% firstof page.hero_eyebrow _("Cancer early detection portal") %}</p>
+    {% with lines=page.hero_title_lines %}
+      <h1 class="home-hero__title"><span class="home-hero__main">{{ lines.0 }}</span>{% if lines.1 %} <span class="home-hero__second"><em class="home-hero__accent">{{ lines.1 }}</em>{% if lines.2 %} <em>{{ lines.2 }}</em>{% endif %}</span>{% endif %}</h1>
+    {% endwith %}
+    {% if page.hero_subtitle %}<p class="home-hero__lead">{{ page.hero_subtitle }}</p>{% endif %}
+    <p class="home-hero__actions">
+      {% if directory_url %}<a class="btn btn--primary btn--lg" href="{{ directory_url }}">{% trans "Find a screening place" %} {% include "components/icons/arrow-right.svg" %}</a>{% endif %}
+      <a class="btn btn--outline btn--lg" href="#yonalishlar">{% trans "Explore the directions" %}</a>
+    </p>
+  </section>
 
-  <div class="container landing__inner">
-    <div class="landing__top">
-      <section class="hero">
-        {% with parts=page.hero_title_parts %}
-          <h1 class="hero__title"><span class="hero__title-main u-gradient-text">{{ parts.0 }}</span>{% if parts.1 %} <span class="hero__title-rest">{{ parts.1 }}</span>{% endif %}</h1>
-        {% endwith %}
-        {% if page.hero_subtitle %}<p class="hero__subtitle">{{ page.hero_subtitle }}</p>{% endif %}
-        <p class="hero__actions">
-          {% header_links as hl %}
-          {% if hl.about %}<a class="pill hero__action hero__action--alt" href="{{ hl.about }}">{% trans "Read more" %}</a>
-          {% elif sections %}<a class="pill hero__action hero__action--alt" href="{{ sections.0.url }}">{% trans "Read more" %}</a>{% endif %}
-          {% if directory_url %}<a class="pill pill--active hero__action" href="{{ directory_url }}">{% trans "Get help" context "hero button" %}</a>{% endif %}
-        </p>
-      </section>
+  {% if page.emergency_banner %}<div class="container"><div class="banner banner--home">{{ page.emergency_banner|richtext }}</div></div>{% endif %}
 
-      <section class="landing__sections" aria-label="{% trans 'Sections' %}">
-        {% for section in sections %}
-          <article class="capsule-card" data-section="{{ section.section_key }}">
-            <h2 class="capsule-card__title u-gradient-text">
-              <a class="capsule-card__link" href="{{ section.url }}">{{ section.title }}</a>
-            </h2>
-            {% if section.tagline %}<p class="capsule-card__text">{{ section.tagline }}</p>{% endif %}
-            <img class="icon-button capsule-card__arrow"
-                 src="{% if section.section_key == 'children' %}{% static 'img/figma/btn-arrow-purple.svg' %}{% else %}{% static 'img/figma/btn-arrow-pink.svg' %}{% endif %}"
-                 alt="" aria-hidden="true" width="88" height="88" loading="lazy" decoding="async">
-            <span class="capsule-card__clip" aria-hidden="true">{# clips the bleeding artwork, not the arrow #}
-            {% if section.section_key == "children" %}
-              <img class="capsule-card__art" src="{% static 'img/figma/children-bow.svg' %}" alt="" aria-hidden="true" width="305" height="309" loading="lazy" decoding="async">
-            {% else %}
-              <img class="capsule-card__art" src="{% static 'img/figma/women-ribbon.png' %}" alt="" aria-hidden="true" width="429" height="461" loading="lazy" decoding="async">
-            {% endif %}
-            </span>
-          </article>
-        {% endfor %}
-      </section>
+  <section class="container home-block" id="yonalishlar" aria-labelledby="home-directions">
+    <header class="home-block__head">
+      <div>
+        <p class="eyebrow">{% firstof page.directions_eyebrow _("Directions") %}</p>
+        <h2 class="display-title" id="home-directions">{% firstof page.directions_title _("Most asked questions") %}</h2>
+      </div>
+      <p class="home-block__aside">{% firstof page.directions_text _("Each direction covers signs, screening, treatment and support.") %}</p>
+    </header>
+    {% include "home/_direction_cards.html" with cards=page.directions %}
     </div>
+  </section>
 
-    {% if page.emergency_banner %}<div class="banner banner--home">{{ page.emergency_banner|richtext }}</div>{% endif %}
-
-    {% if faq_page %}
-      <section class="landing-block" aria-labelledby="home-faq">
-        <header class="landing-block__head">
-          {% trans "Most asked questions" as faq_title %}{% include "components/bar_title.html" with title=faq_title id="home-faq" %}
-          <a class="pill-outline" href="{{ faq_page.url }}">{% trans "All" %}</a>
-        </header>
-        <div class="topic-cards">
-          {% for value, label in topics %}
-            <article class="topic-card" data-topic="{{ value }}">
-              <h3 class="topic-card__title"><a class="topic-card__link" href="{{ faq_page.url }}?topic={{ value }}">{{ label }}</a></h3>
-              <span class="arrow-disc topic-card__arrow" aria-hidden="true">{% include "components/icons/arrow.svg" %}</span>
-              {% if value == "children" %}
-                <img class="topic-card__art" src="{% static 'img/figma/children-bow.svg' %}" alt="" aria-hidden="true" width="305" height="309" loading="lazy" decoding="async">
-              {% else %}
-                <img class="topic-card__art" src="{% static 'img/figma/women-ribbon.png' %}" alt="" aria-hidden="true" width="429" height="461" loading="lazy" decoding="async">
-              {% endif %}
-            </article>
-          {% endfor %}
+  {% if directory_url %}
+    <section class="container home-block" aria-labelledby="home-screening">
+      <div class="screening-panel">
+        <div class="screening-panel__intro">
+          <p class="eyebrow eyebrow--light">{% firstof page.screening_eyebrow _("Free screening") %}</p>
+          <h2 class="display-title" id="home-screening">{% firstof page.screening_title _("Where can I get screened?") %}</h2>
+          {% if page.screening_text %}<p class="screening-panel__text">{{ page.screening_text }}</p>{% endif %}
+          <form class="screening-panel__form" method="get" action="{{ directory_url }}">
+            <label class="screening-panel__label" for="home-region">{% trans "Region" %}</label>
+            <select class="screening-panel__select" id="home-region" name="region">
+              <option value="">{% trans "All regions" %}</option>
+              {% for region in regions %}<option value="{{ region.code }}">{% if LANGUAGE_CODE == "ru" %}{{ region.name_ru }}{% else %}{{ region.name_uz }}{% endif %}</option>{% endfor %}
+            </select>
+            <button class="btn btn--primary btn--lg" type="submit">{% trans "Show institutions" %}</button>
+          </form>
         </div>
-      </section>
-    {% endif %}
-
-    {% if news_index %}
-      <section class="landing-block" aria-labelledby="home-news">
-        <header class="landing-block__head">
-          {% include "components/bar_title.html" with title=news_index.title id="home-news" %}
-          {% include "components/topic_filter.html" with base_url=news_index.url %}
-        </header>
-        {% if news %}
-          <div class="news-lead">
-            {% include "posts/_news_feature.html" with post=news.0 %}
-            <div class="news-lead__list">{% for post in news|slice:"1:" %}{% include "posts/_news_card.html" %}{% endfor %}</div>
-          </div>
-        {% else %}
-          <p class="empty-state">{% trans "News will appear here soon." %}</p>
+        {% if page.screening_steps %}
+          <ol class="screening-steps">
+            {% for block in page.screening_steps %}
+              {% with step=block.value %}
+                <li class="screening-steps__item">
+                  <span class="screening-steps__no" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+                  <div>
+                    <h3 class="screening-steps__title">{{ step.title }}</h3>
+                    {% if step.text %}<p class="screening-steps__text">{{ step.text }}</p>{% endif %}
+                    {% if step.link_label %}{% with href=step|link_href %}{% if href %}<a class="screening-steps__link" href="{{ href }}">{{ step.link_label }} {% include "components/icons/arrow-right.svg" %}</a>{% endif %}{% endwith %}{% endif %}
+                  </div>
+                </li>
+              {% endwith %}
+            {% endfor %}
+          </ol>
         {% endif %}
-      </section>
-    {% endif %}
+      </div>
+    </section>
+  {% endif %}
 
-    {% if video_index %}
-      <section class="landing-block" aria-labelledby="home-videos">
-        <header class="landing-block__head">
-          {% include "components/bar_title.html" with title=video_index.title id="home-videos" %}
-          {% include "components/topic_filter.html" with base_url=video_index.url %}
-        </header>
-        {% if videos %}
-          <div class="scroller" data-scroller>
-            <div class="scroller__track">{% for video in videos %}{% include "media_library/_video_card.html" with url=video.watch_url %}{% endfor %}</div>
-            <button class="scroller__next" type="button" data-scroller-next aria-label="{% trans 'Next' %}">›</button>
-          </div>
-        {% else %}
-          <p class="empty-state">{% trans "Videos will appear here soon." %}</p>
-        {% endif %}
-      </section>
-    {% endif %}
+  {% if news_index %}
+    <section class="container home-block" aria-labelledby="home-news">
+      <header class="home-block__head">
+        <div>
+          <p class="eyebrow">{% firstof news_index.eyebrow _("News") %}</p>
+          <h2 class="display-title" id="home-news">{{ news_index.title }}</h2>
+        </div>
+        <a class="btn btn--outline" href="{{ news_index.url }}">{% trans "All news" %} {% include "components/icons/arrow-right.svg" %}</a>
+      </header>
+      {% if news %}
+        <div class="news-home">
+          {% include "posts/_news_feature.html" with post=news.0 %}
+          <div class="news-home__list">{% for post in news|slice:"1:" %}{% include "posts/_news_row.html" %}{% endfor %}</div>
+        </div>
+      {% else %}
+        <p class="empty-state">{% trans "News will appear here soon." %}</p>
+      {% endif %}
+    </section>
+  {% endif %}
 
-    {% if articles_index %}
-      <section class="landing-block" aria-labelledby="home-articles">
-        <header class="landing-block__head">
-          {% include "components/bar_title.html" with title=articles_index.title id="home-articles" %}
-          {% include "components/topic_filter.html" with base_url=articles_index.url %}
-        </header>
-        {% if articles %}
-          <div class="scroller" data-scroller>
-            <div class="scroller__track">{% for post in articles %}{% include "posts/_article_card.html" %}{% endfor %}</div>
-            <button class="scroller__next" type="button" data-scroller-next aria-label="{% trans 'Next' %}">›</button>
-          </div>
-        {% else %}
-          <p class="empty-state">{% trans "Articles will appear here soon." %}</p>
-        {% endif %}
-      </section>
-    {% endif %}
+  {% for block in page.body %}<div class="container">{% include_block block %}</div>{% endfor %}
 
-    {% for block in page.body %}{% include_block block %}{% endfor %}
-  </div>
+  <section class="container home-block">
+    <div class="ask-cta">
+      <div>
+        <h2 class="display-title">{% firstof page.cta_title _("Any questions?") %}</h2>
+        <p class="ask-cta__text">{% firstof page.cta_text _("Send a question to the specialists or call the hotline. You are not alone.") %}</p>
+      </div>
+      <p class="ask-cta__actions">
+        {% if faq_page %}<a class="btn btn--dark btn--lg" href="{{ faq_page.url }}#question-form">{% trans "Ask a question" context "home cta" %}</a>{% endif %}
+        {% with hotline=settings.core.SiteSettings.hotline_phone %}{% if hotline %}<a class="btn btn--outline btn--lg" href="{{ hotline|phone_href }}">{% include "components/icons/phone.svg" %} {{ hotline|phone_display }}</a>{% endif %}{% endwith %}
+      </p>
+    </div>
+  </section>
 </div>
 {% endblock %}

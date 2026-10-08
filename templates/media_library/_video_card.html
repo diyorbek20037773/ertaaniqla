@@ -1,8 +1,13 @@
-{% comment %} media_library/_video_card.html — video card (design 2026-10: dimmed poster, white
-   play disc, title bottom-left). Context: video (Video), url (watch page). {% endcomment %}
-{% load i18n wagtailimages_tags %}
+{% comment %} media_library/_video_card.html — video card (final design, D-081): pastel poster
+   with a white play disc and the duration, then the topic (small caps) and the title.
+   Context: video (Video), url (watch page). {% endcomment %}
+{% load i18n wagtailimages_tags core_tags %}
 <article class="video-card" data-topic="{{ video.topic }}">
-  {% if video.poster %}{% picture video.poster format-{webp,jpeg} fill-{440x250,880x500} sizes="(max-width: 48rem) 90vw, 22rem" alt="" class="video-card__img" loading="lazy" %}{% endif %}
-  <span class="video-card__play" aria-hidden="true">{% include "components/icons/play.svg" %}</span>
+  <div class="video-card__media">
+    {% if video.poster %}{% picture video.poster format-{webp,jpeg} fill-{440x280,880x560} sizes="(max-width: 48rem) 90vw, 18rem" alt="" class="video-card__img" loading="lazy" %}{% endif %}
+    <span class="video-card__play" aria-hidden="true">{% include "components/icons/play.svg" %}</span>
+    {% if video.duration %}<span class="video-card__time">{{ video.duration|duration }}</span>{% endif %}
+  </div>
+  <p class="video-card__topic">{{ video.get_topic_display }}</p>
   <h3 class="video-card__title"><a class="video-card__link" href="{{ url }}">{{ video.title }}</a></h3>
 </article>

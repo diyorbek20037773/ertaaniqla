@@ -1,10 +1,13 @@
-{% comment %} components/pager.html — previous / next links for a paginated list.
-   Context: items (django Page); keeps ?topic=. {% endcomment %}
+{% comment %} components/pager.html — numbered pages with ← → (final design, D-081, news list).
+   Context: items (django Page); keeps ?topic= and ?q=. {% endcomment %}
 {% load i18n %}
 {% if items.has_other_pages %}
 <nav class="pager" aria-label="{% trans 'Pages' %}">
-  {% if items.has_previous %}<a class="pill-outline" rel="prev" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}page={{ items.previous_page_number }}">{% trans "Previous" %}</a>{% endif %}
-  <span class="pager__info">{{ items.number }} / {{ items.paginator.num_pages }}</span>
-  {% if items.has_next %}<a class="pill-outline" rel="next" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}page={{ items.next_page_number }}">{% trans "Next" %}</a>{% endif %}
+  {% if items.has_previous %}<a class="pager__step" rel="prev" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ items.previous_page_number }}" aria-label="{% trans 'Previous' %}">{% include "components/icons/arrow-left.svg" %}</a>{% else %}<span class="pager__step is-disabled" aria-hidden="true">{% include "components/icons/arrow-left.svg" %}</span>{% endif %}
+  {% for number in items.paginator.page_range %}
+    {% if number == items.number %}<span class="pager__page is-active" aria-current="page">{{ number }}</span>
+    {% else %}<a class="pager__page" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ number }}">{{ number }}</a>{% endif %}
+  {% endfor %}
+  {% if items.has_next %}<a class="pager__step" rel="next" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ items.next_page_number }}" aria-label="{% trans 'Next' %}">{% include "components/icons/arrow-right.svg" %}</a>{% else %}<span class="pager__step is-disabled" aria-hidden="true">{% include "components/icons/arrow-right.svg" %}</span>{% endif %}
 </nav>
 {% endif %}

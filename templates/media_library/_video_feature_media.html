@@ -1,0 +1,8 @@
+{% comment %} media_library/_video_feature_media.html — large poster with the play disc and the
+   duration; a link to the watch page (the player loads there after consent). Context: video. {% endcomment %}
+{% load i18n wagtailimages_tags core_tags %}
+<a class="video-feature__media" href="{{ video.watch_url }}" tabindex="-1" aria-hidden="true">
+  {% if video.poster %}{% picture video.poster format-{webp,jpeg} fill-{880x500,1760x1000} sizes="(max-width: 56rem) 100vw, 55rem" alt="" class="video-feature__img" %}{% endif %}
+  <span class="video-card__play video-feature__play">{% include "components/icons/play.svg" %}</span>
+  {% if video.duration %}<span class="video-card__time">{{ video.duration|duration }}</span>{% endif %}
+</a>

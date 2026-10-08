@@ -1,6 +1,6 @@
 {% comment %} ---------------------------------------------------------------------------
-   components/footer.html — site footer (design 2026-10: lilac site map, Yandex logo, contact
-   icons). Columns and links come from Settings → Site settings → «Footer site map» (uz / ru);
+   components/footer.html — site footer (final design, D-081: plum band, four-column site map,
+   contact icons and the Yandex logo bottom-right). Columns and links come from Settings → Site settings → «Footer site map» (uz / ru);
    without them the utility pages are listed. Always shows the medical disclaimer (spec §8).
    --------------------------------------------------------------------------- {% endcomment %}
 {% load i18n static cache wagtailimages_tags core_tags %}
@@ -29,8 +29,6 @@
     </div>
     {% endcache %}
     <div class="site-footer__aside">
-      {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-150 class="site-footer__partner" alt="Yandex" %}
-      {% else %}<img class="site-footer__partner" src="{% static 'img/figma/yandex-uz.png' %}" alt="Yandex Uzbekistan" width="118" height="154" loading="lazy" decoding="async">{% endif %}
       <ul class="social-icons" aria-label="{% trans 'Contacts and social networks' %}">
         {% if s.hotline_phone %}<li><a href="{{ s.hotline_phone|phone_href }}" title="{% trans 'Hotline' %} {{ s.hotline_phone|phone_display }}" aria-label="{% trans 'Hotline' %} {{ s.hotline_phone|phone_display }}">{% include "components/icons/phone.svg" %}</a></li>{% endif %}
         {% with address=s|localized:"address" %}{% if s.map_url or address %}<li><a href="{% if s.map_url %}{{ s.map_url }}{% else %}https://yandex.uz/maps/?text={{ address|urlencode }}{% endif %}" rel="noopener"{% if address %} title="{{ address }}"{% endif %} aria-label="{% trans 'Location on the map' %}{% if address %}: {{ address }}{% endif %}">{% include "components/icons/pin.svg" %}</a></li>{% endif %}{% endwith %}
@@ -40,9 +38,12 @@
         {% if s.youtube_url %}<li><a href="{{ s.youtube_url }}" rel="noopener" aria-label="YouTube">{% include "components/icons/youtube.svg" %}</a></li>{% endif %}
         {% if s.tiktok_url %}<li><a href="{{ s.tiktok_url }}" rel="noopener" aria-label="TikTok">{% include "components/icons/tiktok.svg" %}</a></li>{% endif %}
       </ul>
+      {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-150 class="site-footer__partner" alt="Yandex" %}
+      {% else %}<img class="site-footer__partner" src="{% static 'img/figma/yandex-uz.png' %}" alt="Yandex Uzbekistan" width="118" height="154" loading="lazy" decoding="async">{% endif %}
     </div>
   </div>
   <div class="container site-footer__bottom">
+    <p class="site-footer__copy">© {% now "Y" %} {% trans "Erta aniqla" %}</p>
     <p class="site-footer__disclaimer">{{ s|localized:"disclaimer" }}</p>
     {% with footer_text=s|localized:"footer_text" %}{% if footer_text %}<p class="site-footer__text">{{ footer_text }}</p>{% endif %}{% endwith %}
     <p class="site-footer__legal">

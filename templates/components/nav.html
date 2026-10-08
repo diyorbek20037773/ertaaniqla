@@ -1,12 +1,14 @@
 {% comment %} ---------------------------------------------------------------------------
-   components/nav.html — primary navigation (Figma header, D-064): Asosiy · Haqimizda ·
-   Bo'limlar ▾ (both sections, 5 TZ items each + sub-items) · Shifokorlar · Savol-Javob,
-   then the language dropdown («Uz ▾») and the search pill. Rendered by {% main_nav %}.
-   Context: sections (list[NavSection]), links (dict: home, about, doctors, faq → URL; an
-   item without a page is left out), LANGUAGE_CODE, section_key (active section), request.
+   components/nav.html — primary navigation (final design, D-081): Asosiy · Haqimizda ·
+   Bo'limlar ▾ (both sections, 5 TZ items each + sub-items) · Savol-Javob on the left; the
+   hotline, the UZ / ЎЗ / RU switch, «Aa» (accessibility, spec A8), the search button and the
+   «Skrining joyini toping» CTA on the right. Rendered by {% main_nav %}.
+   Context: sections (list[NavSection]), links (dict: home, about, faq, directory → URL; an
+   item without a page is left out), languages (language_versions), settings, LANGUAGE_CODE,
+   section_key (active section), request.
    States: mobile — everything behind the «Menu» disclosure, dropdowns are disclosures
-           (works without JS); desktop — one row, «Bo'limlar» and the language are dropdowns
-           (nav.js: one open at a time, Esc / outside click closes).
+           (works without JS); desktop — one row, «Bo'limlar», «Aa» and the search are
+           dropdowns (nav.js: one open at a time, Esc / outside click closes).
    --------------------------------------------------------------------------- {% endcomment %}
 {% load i18n static core_tags %}
 <nav class="site-nav" aria-label="{% trans 'Main navigation' %}">
@@ -54,32 +56,39 @@
             </ul>
           </details>
         </li>
-        {% if links.doctors %}
-          <li><a class="site-nav__link" href="{{ links.doctors }}"{% if request.path == links.doctors %} aria-current="page"{% endif %}>{% trans "Doctors" context "header menu" %}</a></li>
-        {% endif %}
         {% if links.faq %}
           <li><a class="site-nav__link" href="{{ links.faq }}"{% if request.path == links.faq %} aria-current="page"{% endif %}>{% trans "Q&A" context "header menu" %}</a></li>
         {% endif %}
       </ul>
       <div class="site-nav__utils">
-        {% comment %} accessibility settings (spec A8) folded into an «Aa» dropdown: the approved
-           design has no toolbar row; the state is kept in localStorage as before {% endcomment %}
+        {% with hotline=settings.core.SiteSettings.hotline_phone %}{% if hotline %}
+          <a class="hotline" href="{{ hotline|phone_href }}">{% include "components/icons/phone.svg" %}<span class="hotline__label">{% trans "Hotline" %}</span> <strong class="hotline__number">{{ hotline|phone_display }}</strong></a>
+        {% endif %}{% endwith %}
+        {# «UZ» is protected from the Cyrillic middleware by translate="no" (D-049) #}
+        <ul class="lang-seg" aria-label="{% trans 'Language' %}">
+          {% for lang in languages %}
+            <li>{% if lang.is_current %}<span class="lang-seg__item is-active" aria-current="true" lang="{{ lang.code }}" translate="no" title="{{ lang.name }}">{% if lang.code == "uz" %}UZ{% elif lang.code == "ru" %}RU{% else %}ЎЗ{% endif %}</span>{% else %}<a class="lang-seg__item" href="{{ lang.url }}" hreflang="{{ lang.code }}" lang="{{ lang.code }}" rel="alternate" translate="no" title="{{ lang.name }}"{% if lang.keep %} data-script-keep{% endif %}>{% if lang.code == "uz" %}UZ{% elif lang.code == "ru" %}RU{% else %}ЎЗ{% endif %}</a>{% endif %}</li>
+          {% endfor %}
+        </ul>
+        {% comment %} accessibility settings (spec A8): the design has no toolbar row, so they sit
+           behind a round «Aa» button; the state is kept in localStorage as before {% endcomment %}
         <details class="nav-dropdown a11y-menu">
-          <summary class="a11y-menu__toggle"><span aria-hidden="true">Aa</span><span class="sr-only">{% trans "Accessibility" %}</span></summary>
+          <summary class="icon-circle a11y-menu__toggle"><span aria-hidden="true">Aa</span><span class="sr-only">{% trans "Accessibility" %}</span></summary>
           <div class="nav-dropdown__panel a11y-menu__panel">{% include "components/a11y_toolbar.html" %}</div>
         </details>
-        <details class="nav-dropdown lang-menu">
-          {# «Uz» is transliterated to «Уз» on /oz/ pages by the Cyrillic middleware (D-049) #}
-          <summary class="lang-menu__toggle"><span class="lang-menu__current">{% if LANGUAGE_CODE == "ru" %}Ru{% else %}Uz{% endif %}</span><span class="sr-only"> — {% trans "Language" %}</span></summary>
-          <div class="nav-dropdown__panel lang-menu__panel">{% lang_switch %}</div>
+        <details class="nav-dropdown search-menu">
+          <summary class="icon-circle search-menu__toggle">{% include "components/icons/search.svg" %}<span class="sr-only">{% trans "Search" %}</span></summary>
+          <div class="nav-dropdown__panel search-menu__panel">
+            <form class="site-search" role="search" action="{% url 'search:search' %}" method="get">
+              <label class="sr-only" for="site-search-q">{% trans "Search" %}</label>
+              <input class="site-search__input" id="site-search-q" name="q" type="search" placeholder="{% trans 'Search' %}" autocomplete="off">
+              <button class="site-search__button" type="submit">{% trans "Search" %}</button>
+            </form>
+          </div>
         </details>
-        <form class="site-search" role="search" action="{% url 'search:search' %}" method="get">
-          <label class="sr-only" for="site-search-q">{% trans "Search" %}</label>
-          <input class="site-search__input" id="site-search-q" name="q" type="search" placeholder="{% trans 'Search' %}" autocomplete="off">
-          <button class="site-search__button" type="submit" aria-label="{% trans 'Search' %}">
-            <img class="site-search__icon" src="{% static 'img/figma/icon-search.svg' %}" alt="" width="18" height="19">
-          </button>
-        </form>
+        {% if links.directory %}
+          <a class="btn btn--primary site-nav__cta" href="{{ links.directory }}">{% trans "Find a screening place" %}</a>
+        {% endif %}
       </div>
     </div>
   </details>

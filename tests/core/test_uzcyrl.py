@@ -178,8 +178,8 @@ def test_cyrillic_page_links_titles_and_alternates(seeded, client: Client) -> No
         in html
     )
     # switcher: the Latin link is kept, Cyrillic is current, names are never transliterated
-    assert 'aria-current="true" lang="uz-Cyrl" translate="no">Ўзбекча</span>' in html
-    assert ">Oʻzbekcha</a>" in html
+    assert 'aria-current="true" lang="uz-Cyrl" translate="no" title="Ўзбекча">ЎЗ</span>' in html
+    assert 'translate="no" title="Oʻzbekcha" data-script-keep>UZ</a>' in html
     # every other internal Uzbek link stays inside /oz/
     assert re.findall(r'<a [^>]*href="(/uz/[^"]*)"', html) == [
         "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/"

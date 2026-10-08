@@ -32,8 +32,20 @@ def ready_videos(topic: str = "") -> models.QuerySet[Any]:
 
 class VideoIndexPage(RoutablePageMixin, BasePage):
     intro = StreamField(IntroBlock(), blank=True, verbose_name=_("intro"))
+    eyebrow = models.CharField(
+        _("eyebrow"),
+        max_length=80,
+        blank=True,
+        help_text=_("Small line above the title (empty = the design's wording)."),
+    )
+    lead = models.CharField(_("short description"), max_length=300, blank=True)
 
-    content_panels = [*Page.content_panels, FieldPanel("intro")]
+    content_panels = [
+        *Page.content_panels,
+        FieldPanel("eyebrow"),
+        FieldPanel("lead"),
+        FieldPanel("intro"),
+    ]
     parent_page_types = ["home.HomePage"]
     subpage_types: list[str] = []
     template = "media_library/video_index_page.html"

@@ -1,0 +1,13 @@
+{% comment %} components/load_more.html — «Yana yuklash» under a card grid (final design, D-081).
+   A plain link to the next page; with HTMX the next page's cards are appended to #<target> and
+   this bar is replaced by the next page's own bar (hx-select-oob).
+   Context: items (django Page), target (grid element id); keeps ?topic= and ?q=. {% endcomment %}
+{% load i18n %}
+<div class="load-more" id="load-more">
+  {% if items.has_next %}
+    <a class="btn btn--outline" href="?{% if topic %}topic={{ topic }}&amp;{% endif %}{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ items.next_page_number }}"
+       hx-get="?{% if topic %}topic={{ topic }}&amp;{% endif %}{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ items.next_page_number }}"
+       hx-target="#{{ target }}" hx-select="#{{ target }} > *" hx-swap="beforeend" hx-select-oob="#load-more" hx-push-url="false">{% trans "Load more" %}</a>
+  {% endif %}
+  {% if items.paginator.count %}<p class="load-more__count">{% blocktrans trimmed with shown=items.end_index total=items.paginator.count %}Showing {{ shown }} of {{ total }}{% endblocktrans %}</p>{% endif %}
+</div>

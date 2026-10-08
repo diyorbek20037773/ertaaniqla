@@ -8,13 +8,45 @@ from typing import Any
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
 from wagtail.search import index
 
 from apps.articles.blocks import IntroBlock, StatBlock, stream_plain_text
-from apps.core.models import BasePage
+from apps.core.models import BasePage, FooterLinkBlock, Topic
+
+
+class DirectionCardBlock(blocks.StructBlock):
+    """Landing «Yo'nalishlar» card (final design, D-081): number, title, short text, three links."""
+
+    topic = blocks.ChoiceBlock(choices=Topic.choices, label=_("Topic (card colour)"))
+    title = blocks.CharBlock(max_length=80, label=_("Title"))
+    text = blocks.TextBlock(required=False, max_length=240, label=_("Short description"))
+    page = blocks.PageChooserBlock(required=False, label=_("Page opened by the arrow"))
+    links = blocks.ListBlock(FooterLinkBlock(), max_num=4, label=_("Links"))
+
+    class Meta:
+        icon = "folder-open-inverse"
+        label = _("Direction card")
+
+
+class ScreeningStepBlock(blocks.StructBlock):
+    """One numbered step of the landing «Bepul skrining» panel."""
+
+    title = blocks.CharBlock(max_length=80, label=_("Title"))
+    text = blocks.TextBlock(required=False, max_length=240, label=_("Text"))
+    link_label = blocks.CharBlock(required=False, max_length=60, label=_("Link label"))
+    page = blocks.PageChooserBlock(required=False, label=_("Link page"))
+    anchor = blocks.CharBlock(
+        required=False, max_length=80, label=_("Anchor on the page"), help_text=_("Without #.")
+    )
+    url = blocks.URLBlock(required=False, label=_("or external URL"))
+
+    class Meta:
+        icon = "list-ol"
+        label = _("Step")
 
 
 class HomePage(BasePage):
@@ -25,6 +57,34 @@ class HomePage(BasePage):
         help_text=_("Key idea of the portal — early detection. Filled by the copywriter."),
     )
     hero_subtitle = models.CharField(_("hero subtitle"), max_length=300, blank=True)
+    hero_eyebrow = models.CharField(
+        _("hero eyebrow"),
+        max_length=120,
+        blank=True,
+        help_text=_("Small line above the title (empty = the design's wording)."),
+    )
+    # final design (D-081): every landing block is edited here; empty fields fall back to the
+    # design's wording (translated), empty card lists to the section cards
+    directions_eyebrow = models.CharField(_("eyebrow"), max_length=80, blank=True)
+    directions_title = models.CharField(_("title"), max_length=160, blank=True)
+    directions_text = models.CharField(_("text on the right"), max_length=300, blank=True)
+    directions = StreamField(
+        [("card", DirectionCardBlock())],
+        blank=True,
+        max_num=3,
+        verbose_name=_("direction cards"),
+    )
+    screening_eyebrow = models.CharField(_("eyebrow"), max_length=80, blank=True)
+    screening_title = models.CharField(_("title"), max_length=160, blank=True)
+    screening_text = models.TextField(_("text"), max_length=500, blank=True)
+    screening_steps = StreamField(
+        [("step", ScreeningStepBlock())],
+        blank=True,
+        max_num=3,
+        verbose_name=_("steps"),
+    )
+    cta_title = models.CharField(_("title"), max_length=120, blank=True)
+    cta_text = models.CharField(_("text"), max_length=300, blank=True)
     emergency_banner = RichTextField(
         _("home emergency banner"),
         blank=True,
@@ -44,7 +104,32 @@ class HomePage(BasePage):
 
     content_panels = [
         *Page.content_panels,
-        MultiFieldPanel([FieldPanel("hero_title"), FieldPanel("hero_subtitle")], heading=_("Hero")),
+        MultiFieldPanel(
+            [FieldPanel("hero_eyebrow"), FieldPanel("hero_title"), FieldPanel("hero_subtitle")],
+            heading=_("Hero"),
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("directions_eyebrow"),
+                FieldPanel("directions_title"),
+                FieldPanel("directions_text"),
+                FieldPanel("directions"),
+            ],
+            heading=_("«Directions» cards"),
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("screening_eyebrow"),
+                FieldPanel("screening_title"),
+                FieldPanel("screening_text"),
+                FieldPanel("screening_steps"),
+            ],
+            heading=_("«Free screening» panel"),
+        ),
+        MultiFieldPanel(
+            [FieldPanel("cta_title"), FieldPanel("cta_text")],
+            heading=_("«Any questions?» panel"),
+        ),
         FieldPanel("emergency_banner"),
         # Design 2026-10 replaced «featured articles / videos» and the stats strip with the
         # news, videos and articles feeds; their panels are hidden, the data stays until a
@@ -80,6 +165,15 @@ class HomePage(BasePage):
     def get_body_text(self) -> str:
         return f"{self.hero_title} {self.hero_subtitle} {stream_plain_text(self.body)}"
 
+    @property
+    def hero_title_lines(self) -> tuple[str, str, str]:
+        """Final design hero: «ERTA ANIQLA» in bold capitals, then «hayotni saqla» in italics with
+        the first word in raspberry. Returns (main, accent word, rest of the second line)."""
+        main, rest = self.hero_title_parts
+        main = main.rstrip(" –—-")
+        accent, _sep, tail = rest.partition(" ")
+        return main, accent, tail
+
     def get_sections(self) -> list[Page]:
         from apps.sections.models import SectionIndexPage
 
@@ -104,6 +198,12 @@ class HomePage(BasePage):
 
         page = DirectoryPage.objects.live().filter(locale=self.locale).first()
         return str(page.url or "") if page is not None else ""
+
+    def get_regions(self) -> list[Any]:
+        """Regions for the «Bepul skrining» select (opens the directory filtered by region)."""
+        from apps.directory.models import Region
+
+        return list(Region.objects.all())
 
     def get_quick_checks(self, request: Any) -> list[Page]:
         """Flag-enabled tool pages shown as the landing page's check cards (Figma 2408:26)."""
@@ -146,6 +246,7 @@ class HomePage(BasePage):
         context["sections"] = self.get_sections()
         context["quick_checks"] = self.get_quick_checks(request)
         context["directory_url"] = self.get_directory_url()
+        context["regions"] = self.get_regions()
         context["featured_articles"] = [
             item.article.specific
             for item in self.featured_articles.select_related("article")

@@ -32,6 +32,8 @@ export function initNav() {
   dropdowns.forEach((dropdown) => {
     dropdown.addEventListener("toggle", () => {
       if (dropdown.open) closeAll(dropdown);
+      // the search button opens a one-field panel: type straight away
+      if (dropdown.open) dropdown.querySelector(".search-menu__panel input")?.focus();
     });
   });
   document.addEventListener("keydown", (event) => {

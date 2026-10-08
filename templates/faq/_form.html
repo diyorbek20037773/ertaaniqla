@@ -1,8 +1,8 @@
 {% load i18n wagtailcore_tags %}
-{% comment %} faq/_form.html — one-line question form or thank-you (HTMX partial, design 2026-10:
-   pill input + «Yuborish»). Below it: privacy consent (required by law), optional contact and
-   publication consent. The topic comes from the page filter. Context: page, form, submitted,
-   rate_limited. {% endcomment %}
+{% comment %} faq/_form.html — question form or thank-you (HTMX partial; final design, D-081:
+   labelled fields on the dark panel — question, optional name, optional phone / e-mail —
+   then the privacy consent required by law, the publication consent and «Savolni yuborish»).
+   The topic comes from the page filter. Context: page, form, submitted, rate_limited. {% endcomment %}
 {% if submitted %}
   <div class="form-success" role="status" tabindex="-1">
     <h2>{% trans "Thank you, your question has been sent." %}</h2>
@@ -14,22 +14,15 @@
     {% csrf_token %}
     {% include "components/form_rate_limited.html" %}
     {% include "components/form_errors.html" %}
-    <div class="ask-form__row">
-      <label class="sr-only" for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
-      {{ form.text }}
-      <button type="submit" class="ask-form__send">{% trans "Send" %}</button>
-    </div>
-    {% if form.text.errors %}<p class="field__error" id="id_text_error" role="alert">{{ form.text.errors|join:" " }}</p>{% endif %}
+    {% include "components/form_field.html" with field=form.text %}
+    {% include "components/form_field.html" with field=form.name %}
+    {% include "components/form_field.html" with field=form.contact %}
     {{ form.topic.as_hidden }}
     {% include "components/form_field.html" with field=form.consent_privacy %}
-    <details class="ask-form__more"{% if form.contact.errors or form.name.errors %} open{% endif %}>
-      <summary>{% trans "Want a private reply? (optional)" %}</summary>
-      {% include "components/form_field.html" with field=form.name %}
-      {% include "components/form_field.html" with field=form.contact %}
-      {% include "components/form_field.html" with field=form.consent_to_publish %}
-    </details>
+    {% include "components/form_field.html" with field=form.consent_to_publish %}
     <div class="hp-wrap" aria-hidden="true">{{ form.website }}</div>
     {% include "components/turnstile.html" %}
+    <button type="submit" class="btn btn--primary btn--lg ask-form__send">{% trans "Send the question" %}</button>
     <p class="tool-form__note">{% trans "We never publish names or contacts. Contacts are deleted 90 days after the answer." %}</p>
   </form>
 {% endif %}

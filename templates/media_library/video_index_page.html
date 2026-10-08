@@ -1,18 +1,32 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags %}
-{% comment %} media_library/video_index_page.html — «Videoroliklar» (design 2026-10, frame 6).
-   Context: page (VideoIndexPage), videos (Page of Video), topic, topics. {% endcomment %}
-{% block breadcrumbs %}{% endblock %}{# design 2026-10: lists have no trail; JSON-LD keeps it #}
+{% load i18n wagtailcore_tags core_tags %}
+{% comment %} media_library/video_index_page.html — «Videoroliklar» (final design, D-081:
+   docs/oxirigi_variant Frame). Context: page (VideoIndexPage: eyebrow, lead), videos (Page of
+   Video with watch_url), topic, topics. First page: the newest video large (poster → watch page,
+   no third-party request before consent), then «Boshqa videolar» and «Yana yuklash». {% endcomment %}
+{% block breadcrumbs %}{% endblock %}{# rendered inside the list head #}
 {% block content %}
-<div class="container list-page">
-  <header class="list-page__head">
-    {% include "components/bar_title.html" with title=page.title tag="h1" %}
-    {% include "components/topic_filter.html" with base_url=page.url %}
-  </header>
+<div class="container container--narrow list-page">
+  {% include "components/list_head.html" with eyebrow=page.eyebrow|default:_("Doctors explain") lead=page.lead %}
+  {% blocktrans trimmed count counter=videos.paginator.count asvar count_label %}{{ counter }} video{% plural %}{{ counter }} videos{% endblocktrans %}
+  {% include "components/topic_filter.html" with base_url=page.url %}
   {% for block in page.intro %}{% include_block block %}{% endfor %}
   {% if videos %}
-    <div class="video-grid">{% for video in videos %}{% include "media_library/_video_card.html" with url=video.watch_url %}{% endfor %}</div>
-    {% include "components/pager.html" with items=videos %}
+    {% if videos.number == 1 %}
+      {% with video=videos.object_list.0 %}
+        <article class="video-feature" data-topic="{{ video.topic }}">
+          {% include "media_library/_video_feature_media.html" %}
+          <p class="card-meta"><span class="topic-chip topic-chip--sm">{{ video.get_topic_display }}</span>{% if video.duration %} <span>{{ video.duration|duration }}</span>{% endif %}</p>
+          <h2 class="video-feature__title"><a class="video-feature__link" href="{{ video.watch_url }}">{{ video.title }}</a></h2>
+          {% if video.doctor_name %}<p class="video-feature__doctor"><span class="video-feature__avatar" aria-hidden="true"></span><span><strong>{{ video.doctor_name }}</strong>{% if video.doctor_org %}<br><span>{{ video.doctor_org }}</span>{% endif %}</span></p>{% endif %}
+        </article>
+      {% endwith %}
+      {% if videos.object_list|length > 1 %}<h2 class="list-subtitle">{% trans "Other videos" %}</h2>{% endif %}
+    {% endif %}
+    <div class="card-grid" id="video-grid">
+      {% for video in videos %}{% if videos.number > 1 or not forloop.first %}{% include "media_library/_video_card.html" with url=video.watch_url %}{% endif %}{% endfor %}
+    </div>
+    {% include "components/load_more.html" with items=videos target="video-grid" %}
   {% else %}
     <p class="empty-state">{% trans "Videos will appear here soon." %}</p>
   {% endif %}

@@ -184,6 +184,103 @@ body[data-section="children"] {
 }
 
 /* ---------------------------------------------------------------------------
+   Final design (docs/oxirigi_variant, D-081): warm paper background, plum ink and surfaces,
+   raspberry actions, mauve accordions, blush / lilac cards, serif headings. The older tokens
+   are re-pointed here so every existing component follows the new palette.
+   --------------------------------------------------------------------------- */
+:root {
+  --c-bg: #faf7f5;            /* page */
+  --c-ink: #2b1a2e;           /* text, dark panels, footer, active pills */
+  --c-ink-2: #3d2a40;         /* hover of dark buttons */
+  --c-muted: #6b5a6d;         /* secondary copy (5.6:1 on --c-bg) */
+  --c-rasp: #b8336a;          /* primary buttons, links, eyebrows */
+  --c-rasp-dark: #9a2756;     /* hover */
+  --c-rasp-light: #f2a7c6;    /* eyebrows and links on dark panels */
+  --c-mauve: #a34f72;         /* open accordion, active disease pill, discs */
+  --c-mauve-ink: #7a2f52;     /* accordion titles on blush */
+  --c-blush: #f7e4ea;         /* breast card, question band, «Savolingiz bormi?» */
+  --c-blush-2: #f3dce5;       /* cervical card */
+  --c-blush-3: #f3d6e0;       /* accordion bar, dark numbered card */
+  --c-blush-4: #faf0f3;       /* light numbered card, tile body */
+  --c-lilac-bg: #ece6f7;      /* children's card */
+  --c-lilac-ink: #7d6caf;     /* children's accents */
+  --c-flower: #e597b6;        /* list bullets */
+  --c-line: #e8dde2;          /* card borders, separators */
+  --c-ribbon-breast: #f2bfd0;
+  --c-ribbon-cervical: #bcdcdc;
+  --c-ribbon-children: #f1e2a6;
+
+  --font-serif: "Instrument Serif", "Playfair Cyrillic", Georgia, "Times New Roman", serif;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --fs-display: clamp(2rem, 1.35rem + 1.75vw, 3.2rem);       /* section titles ≈ 58 px @1920 */
+  --fs-hero-final: clamp(2.6rem, 1rem + 5.4vw, 7rem);        /* «ERTA ANIQLA» ≈ 120 px @1920 */
+  --radius-card: clamp(20px, 1.6vw, 30px);
+  --radius-panel: clamp(24px, 2.2vw, 40px);
+  --container: 1170px;        /* landing content width (frame: 1170 of 1920) */
+  --container-narrow: 880px;  /* lists, questions, topic pages */
+  --gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
+
+  /* older tokens → final palette */
+  --neutral-50: var(--c-bg);
+  --neutral-900: var(--c-ink);
+  --neutral-800: var(--c-ink);
+  --neutral-600: var(--c-muted);
+  --c-pink-200: var(--c-blush);
+  --c-pink-300: var(--c-blush-2);
+  --c-pink-400: var(--c-rasp);
+  --c-pink-500: var(--c-rasp);
+  --c-pink-600: var(--c-mauve);
+  --c-pink-700: var(--c-rasp);
+  --c-pink-750: var(--c-ink);
+  --c-pink-800: var(--c-mauve-ink);
+  --c-pink-900: var(--c-ink);
+  --c-card-pink: var(--c-blush);
+  --c-card-pink-2: var(--c-blush-2);
+  --c-card-hero-pink: var(--c-blush-4);
+  --c-card-dark-pink: var(--c-blush-3);
+  --c-note-pink: #ffffff;
+  --c-check: var(--c-mauve);
+  --c-acc-ring: var(--c-line);
+  --c-tile-blush: var(--c-blush-4);
+  --c-method-2: var(--c-mauve);
+  --c-card-lilac: var(--c-lilac-bg);
+  --c-chip-purple: var(--c-lilac-ink);
+  --c-wine: var(--c-ink);
+  --c-plum: var(--c-ink);
+  --c-plum-ink: var(--c-ink);
+  --c-text-soft: var(--c-ink);
+  --c-text-muted: var(--c-muted);
+  --c-lime: var(--c-blush-3);
+  --c-lime-soft: var(--c-blush-3);
+  --brand-w: var(--c-rasp);
+  --brand-w-soft: var(--c-blush);
+  --brand-c: #5b4a94;
+  --brand-c-soft: var(--c-lilac-bg);
+  --brand: var(--c-rasp);
+  --brand-soft: var(--c-blush);
+  --grad-title-w: linear-gradient(90deg, var(--c-ink), var(--c-ink));
+  --grad-cta-w: linear-gradient(90deg, var(--c-rasp), var(--c-rasp));
+  --grad-title-c: linear-gradient(90deg, var(--c-ink), var(--c-ink));
+  --grad-cta-c: linear-gradient(90deg, #5b4a94, #5b4a94);
+  --grad-hero: linear-gradient(90deg, var(--c-ink), var(--c-ink));
+  --grad-capsule-w: var(--grad-title-w);
+  --grad-capsule-c: var(--grad-title-c);
+  --grad-title: var(--grad-title-w);
+  --grad-cta: var(--grad-cta-w);
+  --glass-bg: #ffffff;
+  --glass-border: var(--c-line);
+  --glass-blur: 0px;
+  --glass-border-width: 1px;
+  --stage-bg: var(--c-blush-4);
+  --stage-border: var(--c-line);
+  --radius-glass: var(--radius-card);
+  --shadow-card: 0 1px 2px rgba(43, 26, 46, 0.04);
+  --shadow-float: 0 18px 40px rgba(43, 26, 46, 0.14);
+}
+body[data-section="women"] { --brand: var(--c-rasp); --brand-soft: var(--c-blush); --grad-title: var(--grad-title-w); --grad-cta: var(--grad-cta-w); }
+body[data-section="children"] { --brand: #5b4a94; --brand-soft: var(--c-lilac-bg); --grad-title: var(--grad-title-c); --grad-cta: var(--grad-cta-c); --glass-border: var(--c-line); }
+
+/* ---------------------------------------------------------------------------
    High-contrast theme (accessibility toolbar). The Figma palette is kept
    pixel-perfect in the default theme by the client's decision (ADR-0006);
    full WCAG 2.1 AA contrast is guaranteed here: gradients and glass collapse
@@ -251,6 +348,24 @@ html[data-contrast="high"] {
   --c-lang-pill: #ffffff;
   --c-search-women: #ffffff;
   --c-overlay: rgba(0, 0, 0, 0.88);
+  /* final design (D-081) */
+  --c-bg: #ffffff;
+  --c-ink: #000000;
+  --c-ink-2: #000000;
+  --c-muted: #000000;
+  --c-rasp: #000000;
+  --c-rasp-dark: #000000;
+  --c-rasp-light: #ffff00;
+  --c-mauve: #000000;
+  --c-mauve-ink: #000000;
+  --c-blush: #ffffff;
+  --c-blush-2: #ffffff;
+  --c-blush-3: #ffffff;
+  --c-blush-4: #ffffff;
+  --c-lilac-bg: #ffffff;
+  --c-lilac-ink: #000000;
+  --c-flower: #000000;
+  --c-line: #000000;
 }
 
 /* Users who ask the OS for less transparency get solid surfaces too. */

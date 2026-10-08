@@ -10,6 +10,7 @@ from wagtail.models import Locale
 
 from apps.articles.models import ArticlePage
 from apps.core.templatetags.core_tags import (
+    duration,
     localized,
     phone_display,
     phone_href,
@@ -135,3 +136,11 @@ def test_language_switch_keeps_search_query_and_filters(seeded, client) -> None:
     assert "utm=x" not in html.split("<main", 1)[0]
     html = client.get("/uz/ayollar/qayerga-murojaat/?region=tashkent-city").content.decode()
     assert 'href="/ru/zhenskiy/kuda-obratitsya/?region=tashkent-city"' in html
+
+
+@pytest.mark.parametrize(
+    ("seconds", "label"), [(95, "1:35"), (3725, "1:02:05"), (0, "0:00"), (None, "")]
+)
+def test_duration_filter(seconds, label) -> None:
+    """Video card badge (final design, D-081)."""
+    assert duration(seconds) == label

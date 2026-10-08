@@ -1,0 +1,23 @@
+{% comment %} components/list_head.html — head of a list page (final design, D-081): breadcrumbs,
+   eyebrow, serif title, optional description and search field.
+   Context: page, eyebrow, lead (optional), search_placeholder (optional → shows the field),
+   query, topic. {% endcomment %}
+{% load i18n core_tags %}
+<header class="list-head">
+  {% breadcrumbs %}
+  {% if eyebrow %}<p class="eyebrow">{{ eyebrow }}</p>{% endif %}
+  <div class="list-head__row">
+    <div>
+      <h1 class="display-title list-head__title">{{ page.title }}</h1>
+      {% if lead %}<p class="list-head__lead">{{ lead }}</p>{% endif %}
+    </div>
+    {% if search_placeholder %}
+      <form class="pill-search" method="get" action="{{ page.url }}" role="search">
+        {% if topic %}<input type="hidden" name="topic" value="{{ topic }}">{% endif %}
+        <label class="sr-only" for="list-q">{{ search_placeholder }}</label>
+        {% include "components/icons/search.svg" %}
+        <input class="pill-search__input" id="list-q" type="search" name="q" value="{{ query }}" maxlength="100" placeholder="{{ search_placeholder }}">
+      </form>
+    {% endif %}
+  </div>
+</header>

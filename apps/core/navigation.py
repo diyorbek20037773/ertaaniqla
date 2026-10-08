@@ -165,6 +165,12 @@ def build_header_links(language_code: str) -> dict[str, str]:
     faq = next((link for link in build_site_links(language_code) if link.key == "faq"), None)
     if faq is not None and faq.url:
         urls["faq"] = faq.url
+    # final design (D-081): «Skrining joyini toping» in the header opens the institution directory
+    from apps.directory.models import DirectoryPage
+
+    directory = DirectoryPage.objects.live().filter(locale=locale).first()
+    if directory is not None and directory.url:
+        urls["directory"] = str(directory.url)
     return urls
 
 

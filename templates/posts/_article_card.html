@@ -1,11 +1,14 @@
-{% comment %} posts/_article_card.html — article card (design 2026-10: white card, picture,
-   bold title, three-line summary, «Ko'proq o'qish» pill). Context: post. {% endcomment %}
+{% comment %} posts/_article_card.html — article card (final design, D-081): white card, picture,
+   topic chip + reading time, title, two-line summary, «O'qish →». `featured` = the large first
+   card of the list. Context: post, featured (optional). {% endcomment %}
 {% load i18n wagtailimages_tags %}
-<article class="article-card" data-topic="{{ post.topic }}">
+<article class="article-card{% if featured %} article-card--featured{% endif %}" data-topic="{{ post.topic }}">
   <div class="article-card__media">
-    {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{400x170,800x340} sizes="(max-width: 48rem) 90vw, 20rem" alt="" class="article-card__img" loading="lazy" %}{% endif %}
+    {% if post.image %}{% if featured %}{% picture post.image format-{webp,jpeg} fill-{800x500,1600x1000} sizes="(max-width: 56rem) 100vw, 52rem" alt="" class="article-card__img" loading="lazy" %}{% else %}{% picture post.image format-{webp,jpeg} fill-{400x250,800x500} sizes="(max-width: 48rem) 90vw, 18rem" alt="" class="article-card__img" loading="lazy" %}{% endif %}{% endif %}
   </div>
+  <p class="card-meta"><span class="topic-chip topic-chip--sm">{{ post.get_topic_display }}</span> <span class="card-meta__time">{% if featured %}{% blocktrans trimmed count minutes=post.reading_time %}Reading time: {{ minutes }} min{% plural %}Reading time: {{ minutes }} min{% endblocktrans %}{% else %}{% blocktrans trimmed count minutes=post.reading_time %}{{ minutes }} min{% plural %}{{ minutes }} min{% endblocktrans %}{% endif %}</span></p>
   <h3 class="article-card__title"><a class="article-card__link" href="{{ post.url }}">{{ post.title }}</a></h3>
   {% if post.summary %}<p class="article-card__text">{{ post.summary }}</p>{% endif %}
-  <span class="pill-cta article-card__more" aria-hidden="true">{% trans "Read more" context "article card" %}</span>
+  {% if featured %}<span class="btn btn--primary btn--sm article-card__more" aria-hidden="true">{% trans "Read the article" %} {% include "components/icons/arrow-right.svg" %}</span>
+  {% else %}<span class="text-link article-card__more" aria-hidden="true">{% trans "Read" context "article card" %} {% include "components/icons/arrow-right.svg" %}</span>{% endif %}
 </article>

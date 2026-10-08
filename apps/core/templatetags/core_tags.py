@@ -74,6 +74,8 @@ def main_nav(context: dict[str, Any]) -> dict[str, Any]:
     return {
         "sections": get_navigation(lang),
         "links": get_header_links(lang),
+        "languages": language_versions(context),
+        "settings": context.get("settings"),
         "LANGUAGE_CODE": lang,
         "request": context.get("request"),
         "page": context.get("page"),
@@ -347,6 +349,18 @@ def phone_display(value: str) -> str:
     if len(digits) == 9:
         return f"+998 {digits[0:2]} {digits[2:5]}-{digits[5:7]}-{digits[7:9]}"
     return value or ""
+
+
+@register.filter
+def duration(seconds: Any) -> str:
+    """Video length for the card badge: 95 → «1:35», 3725 → «1:02:05»."""
+    try:
+        total = int(seconds)
+    except (TypeError, ValueError):
+        return ""
+    hours, rest = divmod(max(total, 0), 3600)
+    minutes, secs = divmod(rest, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
 
 
 @register.filter

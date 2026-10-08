@@ -38,8 +38,21 @@ class PostIndexPage(BasePage):
         _("list type"), max_length=16, choices=PostKind.choices, default=PostKind.NEWS
     )
     intro = StreamField(IntroBlock(), blank=True, verbose_name=_("intro"))
+    eyebrow = models.CharField(
+        _("eyebrow"),
+        max_length=80,
+        blank=True,
+        help_text=_("Small line above the title (empty = the design's wording)."),
+    )
+    lead = models.CharField(_("short description"), max_length=300, blank=True)
 
-    content_panels = [*Page.content_panels, FieldPanel("kind"), FieldPanel("intro")]
+    content_panels = [
+        *Page.content_panels,
+        FieldPanel("kind"),
+        FieldPanel("eyebrow"),
+        FieldPanel("lead"),
+        FieldPanel("intro"),
+    ]
     parent_page_types = ["home.HomePage"]
     subpage_types = ["posts.PostPage"]
     template = "posts/post_index_page.html"
@@ -50,17 +63,23 @@ class PostIndexPage(BasePage):
     def get_body_text(self) -> str:
         return stream_plain_text(self.intro)
 
-    def get_posts(self, topic: str = "") -> models.QuerySet[PostPage]:
+    def get_posts(self, topic: str = "", query: str = "") -> models.QuerySet[PostPage]:
         posts = PostPage.objects.child_of(self).live().select_related("image")
         if topic:
             posts = posts.filter(topic=topic)
+        if query:  # the articles list has a search field (final design, D-081)
+            posts = posts.filter(
+                models.Q(title__icontains=query) | models.Q(summary__icontains=query)
+            )
         return posts.order_by("-date", "-first_published_at")
 
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context(request, *args, **kwargs)
         topic = topic_from_request(request)
-        paginator = Paginator(self.get_posts(topic), PAGE_SIZE)
+        query = " ".join(request.GET.get("q", "").split())[:100]
+        paginator = Paginator(self.get_posts(topic, query), PAGE_SIZE)
         context["topic"] = topic
+        context["query"] = query
         context["topics"] = Topic.choices
         context["posts"] = paginator.get_page(request.GET.get("page"))
         return context

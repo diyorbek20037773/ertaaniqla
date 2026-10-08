@@ -24,6 +24,8 @@ case "$ROLE" in
         python manage.py import_institutions data/institutions.sample.csv --if-empty
         python manage.py regenerate_social_images
       fi
+      # final design (D-081): fills only EMPTY landing blocks, editors' text is kept
+      python manage.py seed_home_design
       python manage.py sync_site
     fi
     exec gunicorn config.wsgi:application \

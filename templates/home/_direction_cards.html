@@ -1,0 +1,37 @@
+{% comment %} home/_direction_cards.html — «Yo'nalishlar» cards (final design, D-081): number, serif
+   title, text, links, corner arrow; a horizontal row with ‹ › on narrow screens. Used on the
+   landing and the question page. Context: cards (HomePage.directions StreamValue), topics and
+   faq_page (fallback: one card per topic when no card is set in the CMS). {% endcomment %}
+{% load i18n wagtailcore_tags core_tags %}
+<div class="dir-scroller" data-scroller>
+  <button class="dir-scroller__nav dir-scroller__nav--prev" type="button" data-scroller-prev aria-label="{% trans 'Previous' %}">{% include "components/icons/arrow-left.svg" %}</button>
+  <div class="dir-cards scroller__track">
+    {% if cards %}
+      {% for block in cards %}
+        {% with card=block.value %}
+          <article class="dir-card" data-topic="{{ card.topic }}">
+            <span class="dir-card__ribbon" aria-hidden="true"></span>
+            <p class="dir-card__no" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</p>
+            <h3 class="dir-card__title">{% if card.page %}<a class="dir-card__link" href="{{ card.page.localized.url }}">{{ card.title }}</a>{% else %}{{ card.title }}{% endif %}</h3>
+            {% if card.text %}<p class="dir-card__text">{{ card.text }}</p>{% endif %}
+            {% if card.links %}
+              <ul class="dir-card__links">
+                {% for link in card.links %}<li><a href="{{ link|link_href }}">{{ link.label }} {% include "components/icons/arrow-right.svg" %}</a></li>{% endfor %}
+              </ul>
+            {% endif %}
+            {% if card.page %}<a class="dir-card__arrow" href="{{ card.page.localized.url }}" tabindex="-1" aria-hidden="true">{% include "components/icons/arrow.svg" %}</a>{% endif %}
+          </article>
+        {% endwith %}
+      {% endfor %}
+    {% elif faq_page %}
+      {% for value, label in topics %}
+        <article class="dir-card" data-topic="{{ value }}">
+          <span class="dir-card__ribbon" aria-hidden="true"></span>
+          <p class="dir-card__no" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</p>
+          <h3 class="dir-card__title"><a class="dir-card__link" href="{{ faq_page.url }}?topic={{ value }}">{{ label }}</a></h3>
+          <a class="dir-card__arrow" href="{{ faq_page.url }}?topic={{ value }}" tabindex="-1" aria-hidden="true">{% include "components/icons/arrow.svg" %}</a>
+        </article>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <button class="dir-scroller__nav dir-scroller__nav--next" type="button" data-scroller-next aria-label="{% trans 'Next' %}">{% include "components/icons/arrow-right.svg" %}</button>

@@ -34,6 +34,15 @@ class QuestionSection(models.TextChoices):
     OTHER = "other", _("Other")
 
 
+class QuestionCategory(models.TextChoices):
+    """The «Mavzular» side list of the question page (final design, D-081)."""
+
+    GENERAL = "general", _("General information")
+    SIGNS = "signs", _("Signs and causes")
+    SCREENING = "screening", _("Screening")
+    TREATMENT = "treatment", _("Treatment")
+
+
 class QuestionStatus(models.TextChoices):
     NEW = "new", _("New")
     ANSWERED = "answered", _("Answered (private)")
@@ -60,6 +69,23 @@ class Question(index.Indexed, TimeStampedModel):
         blank=True,
         db_index=True,
         help_text=_("Which disease page shows the published question."),
+    )
+    category = models.CharField(
+        _("category"),
+        max_length=16,
+        choices=QuestionCategory.choices,
+        blank=True,
+        db_index=True,
+        help_text=_("Groups published questions in the side list of the question page."),
+    )
+    article = models.ForeignKey(
+        "wagtailcore.Page",
+        verbose_name=_("full article"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_("Optional «Full article» link under the answer."),
     )
     is_featured = models.BooleanField(
         _("most asked"),
@@ -100,6 +126,7 @@ class Question(index.Indexed, TimeStampedModel):
                 FieldPanel("status"),
                 FieldPanel("section"),
                 FieldPanel("topic"),
+                FieldPanel("category"),
                 FieldPanel("is_featured"),
                 FieldPanel("language", read_only=True),
                 FieldPanel("consent_to_publish", read_only=True),
@@ -115,7 +142,12 @@ class Question(index.Indexed, TimeStampedModel):
             heading=_("Submitted"),
         ),
         MultiFieldPanel(
-            [FieldPanel("public_question"), FieldPanel("answer"), FieldPanel("answered_by")],
+            [
+                FieldPanel("public_question"),
+                FieldPanel("answer"),
+                FieldPanel("answered_by"),
+                FieldPanel("article"),
+            ],
             heading=_("Answer"),
         ),
     ]
@@ -215,7 +247,9 @@ class FAQPage(BasePage):
     def published_questions(
         self, section: str = "", topic: str = "", query: str = ""
     ) -> list[Question]:
-        qs = Question.objects.filter(status=QuestionStatus.PUBLISHED).select_related("answered_by")
+        qs = Question.objects.filter(status=QuestionStatus.PUBLISHED).select_related(
+            "answered_by", "article"
+        )
         if section in QuestionSection.values:
             qs = qs.filter(section=section)
         if topic in Topic.values:
@@ -248,9 +282,29 @@ class FAQPage(BasePage):
         context["topic_label"] = Topic(topic).label if topic else ""
         context["topics"] = Topic.choices
         context["query"] = query
-        context["questions"] = self.published_questions(context["section_filter"], topic, query)
+        questions = self.published_questions(context["section_filter"], topic, query)
+        # «Mavzular» side list (final design, D-081): counts per category, ?category= filters
+        category = request.GET.get("category", "")
+        category = category if category in QuestionCategory.values else ""
+        counts = dict.fromkeys(QuestionCategory.values, 0)
+        for question in questions:
+            if question.category in counts:
+                counts[question.category] += 1
+        context["category"] = category
+        context["categories"] = [
+            (value, label, counts[value]) for value, label in QuestionCategory.choices
+        ]
+        context["all_count"] = len(questions)
+        context["questions"] = (
+            [q for q in questions if q.category == category] if category else questions
+        )
         context["featured_questions"] = [q for q in context["questions"] if q.is_featured][:6]
         context["info_cards"] = self.info_cards_for(topic)
+        # final design (D-081): the landing's «Yo'nalishlar» cards repeat under the questions
+        home = self.get_parent().specific
+        context["direction_cards"] = getattr(home, "directions", None)
+        context["home_page"] = home
+        context["faq_page"] = self
         # FAQPage JSON-LD mirrors the visible (filtered) Q&A list — spec §10
         from apps.core import seo
 

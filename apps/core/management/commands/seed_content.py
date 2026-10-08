@@ -45,6 +45,9 @@ class Command(BaseCommand):
                 f"The first language must be the default ({settings.LANGUAGE_CODE})."
             )
         result = Seeder(languages).run()
+        from django.core.management import call_command
+
+        call_command("seed_home_design", stdout=self.stdout)
         self.stdout.write(
             self.style.SUCCESS(
                 f"seed_content: created={result['created']} updated={result['updated']} "

@@ -53,10 +53,10 @@ def test_news_newest_first_lead_card_and_topic_filter(seeded, client: Client) ->
     assert (
         html.index("Yangi yangilik") < html.index("Bolalar yangiligi") < html.index("Eski yangilik")
     )
-    assert 'class="news-feature"' in html  # lead card on the «all» list
+    assert 'class="news-feature news-feature--side"' in html  # lead item on the «all» list
     filtered = client.get(f"{index.url}?topic=breast").content.decode()
     assert "Eski yangilik" in filtered and "Yangi yangilik" not in filtered
-    assert 'class="news-feature"' not in filtered
+    assert 'class="news-feature' not in filtered
     assert 'aria-current="true">Koʻkrak bezi saratoni</a>' in filtered
     unknown = client.get(f"{index.url}?topic=<script>").content.decode()
     assert "Yangi yangilik" in unknown and "<script>" not in unknown
@@ -65,7 +65,10 @@ def test_news_newest_first_lead_card_and_topic_filter(seeded, client: Client) ->
 def test_article_cards_and_post_page(seeded, client: Client) -> None:
     post = _post(_index(PostKind.ARTICLES), "Bosqichlar haqida", "cervical", 2)
     html = client.get(_index(PostKind.ARTICLES).url).content.decode()
-    assert 'class="article-card"' in html and "Koʻproq oʻqish" in html
+    assert 'class="article-card article-card--featured"' in html and "Maqolani oʻqish" in html
+    articles = _index(PostKind.ARTICLES).url
+    assert "Bosqichlar" in client.get(f"{articles}?q=bosqich").content.decode()
+    assert "Bosqichlar haqida" not in client.get(f"{articles}?q=zzz").content.decode()
     page = client.get(post.url)
     assert page.status_code == 200
     assert "Bachadon boʻyni saratoni" in page.content.decode()  # topic chip
@@ -110,14 +113,20 @@ def test_question_hub_topic_featured_info_cards_and_search(seeded, client: Clien
         "answer": "<p>Javob</p>",
     }
     Question.objects.create(
-        text="KBS nima?", section="women", topic="breast", is_featured=True, **common
+        text="KBS nima?", section="women", topic="breast", category="general", **common
+    )
+    Question.objects.create(
+        text="KBS belgilari?", section="women", topic="breast", category="signs", **common
     )
     Question.objects.create(text="BBS nima?", section="women", topic="cervical", **common)
     html = client.get(f"{faq.url}?topic=breast").content.decode()
-    assert "Koʻkrak bezi saratoni haqida bilib oling" in html
+    assert "Koʻkrak bezi saratoni haqida <em>bilib oling</em>" in html
     assert "KBS nima?" in html and "BBS nima?" not in html
-    assert 'class="faq-card__link" href="#q-' in html  # «most asked» card
-    assert "#oz-ozini-tekshirish" in html  # seeded «information you should know» card
+    assert 'class="qa-item" id="q-' in html
+    # «Mavzular» side list: counts per category, ?category= narrows the list
+    assert '<span>Belgilar va sabablar</span><span class="faq-topics__count">1</span>' in html
+    signs = client.get(f"{faq.url}?topic=breast&category=signs").content.decode()
+    assert "KBS belgilari?" in signs and "KBS nima?" not in signs
     searched = client.get(f"{faq.url}?q=BBS").content.decode()
     assert "BBS nima?" in searched and "KBS nima?" not in searched
 

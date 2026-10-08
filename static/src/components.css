@@ -304,7 +304,6 @@
   .hero__subtitle { font-size: var(--fs-lead); color: var(--neutral-900); max-width: var(--measure); }
   .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block: var(--space-6); }
   .hero__action { text-decoration: none; }
-  .hero__action--alt { background-image: var(--grad-cta-c); color: var(--neutral-0); }
   /* Figma landing: «ERTA ANIQLA –» gradient over two lines, «HAYOTNI SAQLA» grey, 64px */
   .hero__title-main, .hero__title-rest { display: block; }
   .hero__title-rest { font-size: clamp(1.4rem, 0.5rem + 3.1vw, 3.5rem); color: var(--neutral-600); line-height: 1.1; margin-top: 0.1em; }

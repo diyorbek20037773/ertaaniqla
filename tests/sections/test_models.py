@@ -170,18 +170,21 @@ def test_figma_header_menu_links(seeded, client: Client) -> None:
         "about": "/uz/haqimizda/",
         "doctors": "/uz/shifokorlar/",
         "faq": "/uz/savol-javob/",
+        "directory": "/uz/ayollar/qayerga-murojaat/",
     }
     assert get_header_links("ru")["about"] == "/ru/o-portale/"
     html = client.get("/uz/bolalar/").content.decode()
     for label, url in [
         ("Asosiy", "/uz/"),
         ("Haqimizda", "/uz/haqimizda/"),
-        ("Shifokorlar", "/uz/shifokorlar/"),
         ("Savol-Javob", "/uz/savol-javob/"),
     ]:
         assert f'href="{url}">{label}</a>' in html or f'href="{url}" aria-current' in html
     assert 'class="site-search"' in html and 'name="q"' in html
-    assert "lang-menu__toggle" in html
+    assert 'class="lang-seg"' in html
+    # final design (D-081): no «Shifokorlar» item; «Skrining joyini toping» opens the directory
+    assert 'href="/uz/shifokorlar/">Shifokorlar</a>' not in html
+    assert 'class="btn btn--primary site-nav__cta" href="/uz/ayollar/qayerga-murojaat/"' in html
     assert client.get("/uz/haqimizda/").status_code == 200
     assert client.get("/ru/vrachi/").status_code == 200
 

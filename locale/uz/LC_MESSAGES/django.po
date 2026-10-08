@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-08 00:57+0500\n"
+"POT-Creation-Date: 2026-10-08 12:08+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1008,6 +1008,18 @@ msgstr "Savolingizni bir necha soʻz bilan tasvirlang."
 msgid "Other"
 msgstr "Boshqa"
 
+msgid "General information"
+msgstr "Umumiy maʼlumot"
+
+msgid "Signs and causes"
+msgstr "Belgilar va sabablar"
+
+msgid "Screening"
+msgstr "Skrining"
+
+msgid "Treatment"
+msgstr "Davolash"
+
 msgid "New"
 msgstr "Yangi"
 
@@ -1039,6 +1051,20 @@ msgstr "mavzu"
 
 msgid "Which disease page shows the published question."
 msgstr "Eʼlon qilingan savol qaysi kasallik sahifasida koʻrinadi."
+
+msgid "category"
+msgstr "kategoriya"
+
+msgid "Groups published questions in the side list of the question page."
+msgstr ""
+"Eʼlon qilingan savollarni savol-javob sahifasidagi «Mavzular» roʻyxati "
+"boʻyicha guruhlaydi."
+
+msgid "full article"
+msgstr "toʻliq maqola"
+
+msgid "Optional «Full article» link under the answer."
+msgstr "Javob ostidagi «Toʻliq maqola» havolasi (ixtiyoriy)."
 
 msgid "most asked"
 msgstr "eng koʻp beriladigan"
@@ -1207,6 +1233,27 @@ msgstr "lugʻat sahifasi"
 msgid "Home"
 msgstr "Bosh sahifa"
 
+msgid "Topic (card colour)"
+msgstr "Mavzu (karta rangi)"
+
+msgid "Short description"
+msgstr "Qisqa tavsif"
+
+msgid "Page opened by the arrow"
+msgstr "Strelka ochadigan sahifa"
+
+msgid "Direction card"
+msgstr "Yoʻnalish kartasi"
+
+msgid "Link label"
+msgstr "Havola matni"
+
+msgid "Link page"
+msgstr "Havola sahifasi"
+
+msgid "Step"
+msgstr "Qadam"
+
 msgid "hero title"
 msgstr "asosiy sarlavha"
 
@@ -1215,6 +1262,30 @@ msgstr "Portalning asosiy gʻoyasi — erta aniqlash. Kopirayter toʻldiradi."
 
 msgid "hero subtitle"
 msgstr "asosiy sarlavha osti"
+
+msgid "hero eyebrow"
+msgstr "sarlavha ustidagi qator"
+
+msgid "Small line above the title (empty = the design's wording)."
+msgstr "Sarlavha ustidagi kichik qator (boʻsh boʻlsa — dizayndagi matn)."
+
+msgid "eyebrow"
+msgstr "sarlavha ustidagi qator"
+
+msgid "title"
+msgstr "sarlavha"
+
+msgid "text on the right"
+msgstr "oʻngdagi matn"
+
+msgid "direction cards"
+msgstr "yoʻnalish kartalari"
+
+msgid "text"
+msgstr "matn"
+
+msgid "steps"
+msgstr "qadamlar"
 
 msgid "home emergency banner"
 msgstr "bosh sahifa shoshilinch banneri"
@@ -1234,6 +1305,15 @@ msgstr "qoʻshimcha kontent"
 
 msgid "Hero"
 msgstr "Bosh blok (hero)"
+
+msgid "«Directions» cards"
+msgstr "«Yoʻnalishlar» kartalari"
+
+msgid "«Free screening» panel"
+msgstr "«Bepul skrining» bloki"
+
+msgid "«Any questions?» panel"
+msgstr "«Savolingiz bormi?» bloki"
 
 msgid "home page"
 msgstr "bosh sahifa"
@@ -1352,9 +1432,6 @@ msgstr "Tayyor"
 msgid "Failed"
 msgstr "Xatolik"
 
-msgid "title"
-msgstr "sarlavha"
-
 msgid "Filter on the «Videos» page; empty = shown under «All» only."
 msgstr ""
 "«Videoroliklar» sahifasidagi filtr; boʻsh boʻlsa faqat «Barchasi»da chiqadi."
@@ -1431,6 +1508,9 @@ msgstr "%(label)s tarkib turi %(mime)s ruxsat etilmagan."
 
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr "Subtitr fayllari WebVTT boʻlishi kerak ('WEBVTT' bilan boshlanadi)."
+
+msgid "short description"
+msgstr "qisqa tavsif"
 
 msgid "videos list"
 msgstr "videoroliklar roʻyxati"
@@ -1878,6 +1958,13 @@ msgstr "Maʼlumot tekshirilgan"
 msgid "Language"
 msgstr "Til"
 
+msgid "Load more"
+msgstr "Yana yuklash"
+
+#, python-format
+msgid "Showing %(shown)s of %(total)s"
+msgstr "%(total)s tadan %(shown)s tasi koʻrsatildi"
+
 msgid "Main navigation"
 msgstr "Asosiy navigatsiya"
 
@@ -1897,12 +1984,11 @@ msgid "Sections"
 msgstr "Boʻlimlar"
 
 msgctxt "header menu"
-msgid "Doctors"
-msgstr "Shifokorlar"
-
-msgctxt "header menu"
 msgid "Q&A"
 msgstr "Savol-Javob"
+
+msgid "Find a screening place"
+msgstr "Skrining joyini toping"
 
 #, python-format
 msgid "%(minutes)s min read"
@@ -2034,11 +2120,8 @@ msgstr "Javob berish uchun CMSda oching:"
 msgid "Thank you, your question has been sent."
 msgstr "Rahmat, savolingiz yuborildi."
 
-msgid "Send"
-msgstr "Yuborish"
-
-msgid "Want a private reply? (optional)"
-msgstr "Shaxsiy javob kerakmi? (ixtiyoriy)"
+msgid "Send the question"
+msgstr "Savolni yuborish"
 
 msgid ""
 "We never publish names or contacts. Contacts are deleted 90 days after the "
@@ -2047,8 +2130,39 @@ msgstr ""
 "Ism va aloqa maʼlumotlari hech qachon eʼlon qilinmaydi. Aloqa maʼlumotlari "
 "javobdan 90 kun oʻtgach oʻchiriladi."
 
+#, python-format
+msgid "About %(topic)s"
+msgstr "%(topic)s haqida"
+
+msgctxt "faq title"
+msgid "learn more"
+msgstr "bilib oling"
+
 msgid "Search the questions"
 msgstr "Savollardan qidirish"
+
+msgid "Type your question, e.g. «signs»"
+msgstr "Savolingizni yozing, masalan: «belgilari»"
+
+msgctxt "faq categories"
+msgid "Topics"
+msgstr "Mavzular"
+
+msgid "All questions"
+msgstr "Barcha savollar"
+
+msgid "Questions & answers"
+msgstr "Savol-javob"
+
+msgctxt "faq list"
+msgid "Most asked questions"
+msgstr "Eng koʻp berilgan savollar"
+
+msgid "Answered by:"
+msgstr "Javob berdi:"
+
+msgid "Full article"
+msgstr "Toʻliq maqola"
 
 msgid "No questions match your search."
 msgstr "Qidiruvingizga mos savol topilmadi."
@@ -2056,24 +2170,41 @@ msgstr "Qidiruvingizga mos savol topilmadi."
 msgid "Answered questions will appear here."
 msgstr "Javob berilgan savollar shu yerda paydo boʻladi."
 
-#, python-format
-msgid "Learn about %(topic)s"
-msgstr "%(topic)s haqida bilib oling"
+msgid "Directions"
+msgstr "Yoʻnalishlar"
 
-msgid "Most asked questions"
-msgstr "Eng koʻp beriladigan savollar"
+msgid "Choose the section you need"
+msgstr "Kerakli boʻlimni tanlang"
 
-msgid "Read the answer"
-msgstr "Javobini oʻqish"
+msgid "Each direction covers signs, screening, treatment and support."
+msgstr ""
+"Har bir yoʻnalishda — belgilar, skrining, davolash va qoʻllab-quvvatlash "
+"haqida."
 
-msgid "Information you should know"
-msgstr "Siz bilishingiz lozim boʻlgan maʼlumotlar"
+msgctxt "faq panel"
+msgid "Ask a question"
+msgstr "Savol berish"
+
+msgid "Didn't find the answer?"
+msgstr "Javob topmadingizmi?"
+
+msgid "Ask a specialist"
+msgstr "Mutaxassisdan soʻrang"
+
+msgid ""
+"A doctor answers your question. Your name and contacts are never published."
+msgstr ""
+"Savolingizga shifokor javob beradi. Ismingiz va kontaktlaringiz oshkor "
+"qilinmaydi."
 
 msgid "Thank you, your message has been sent."
 msgstr "Rahmat, xabaringiz yuborildi."
 
 msgid "Messages are deleted after 180 days."
 msgstr "Xabarlar 180 kundan keyin oʻchiriladi."
+
+msgid "Send"
+msgstr "Yuborish"
 
 msgid "Find a term"
 msgstr "Atamani topish"
@@ -2084,21 +2215,42 @@ msgstr "Harflar"
 msgid "No terms found."
 msgstr "Atamalar topilmadi."
 
-msgid "Read more"
-msgstr "Batafsil"
+msgid "Cancer early detection portal"
+msgstr "Saraton kasalliklarini erta aniqlash portali"
 
-msgctxt "hero button"
-msgid "Get help"
-msgstr "Murojaat qilish"
+msgid "Explore the directions"
+msgstr "Yoʻnalishlar bilan tanishing"
+
+msgid "Most asked questions"
+msgstr "Eng koʻp beriladigan savollar"
+
+msgid "Free screening"
+msgstr "Bepul skrining"
+
+msgid "Where can I get screened?"
+msgstr "Skriningdan qayerda oʻtish mumkin?"
+
+msgid "Show institutions"
+msgstr "Muassasalarni koʻrsatish"
+
+msgid "All news"
+msgstr "Barcha yangiliklar"
 
 msgid "News will appear here soon."
 msgstr "Yangiliklar tez orada shu yerda chiqadi."
 
-msgid "Videos will appear here soon."
-msgstr "Videoroliklar tez orada shu yerda chiqadi."
+msgid "Any questions?"
+msgstr "Savolingiz bormi?"
 
-msgid "Articles will appear here soon."
-msgstr "Maqolalar tez orada shu yerda chiqadi."
+msgid ""
+"Send a question to the specialists or call the hotline. You are not alone."
+msgstr ""
+"Mutaxassislarga murojaat yuboring yoki ishonch telefoniga qoʻngʻiroq qiling. "
+"Siz yolgʻiz emassiz."
+
+msgctxt "home cta"
+msgid "Ask a question"
+msgstr "Murojaat qilish"
 
 msgid "Filter by audience"
 msgstr "Auditoriya boʻyicha filtrlash"
@@ -2121,12 +2273,67 @@ msgstr "Xeshteglarni nusxalash"
 msgid "Materials will appear here."
 msgstr "Materiallar shu yerda paydo boʻladi."
 
+msgid "Doctors explain"
+msgstr "Shifokorlar tushuntiradi"
+
+#, python-format
+msgid "%(counter)s video"
+msgid_plural "%(counter)s videos"
+msgstr[0] "%(counter)s ta video"
+
+msgid "Other videos"
+msgstr "Boshqa videolar"
+
+msgid "Videos will appear here soon."
+msgstr "Videoroliklar tez orada shu yerda chiqadi."
+
 msgid "More videos"
 msgstr "Boshqa videoroliklar"
 
+#, python-format
+msgid "Reading time: %(minutes)s min"
+msgid_plural "Reading time: %(minutes)s min"
+msgstr[0] "Oʻqish vaqti: %(minutes)s daqiqa"
+
+#, python-format
+msgid "%(minutes)s min"
+msgid_plural "%(minutes)s min"
+msgstr[0] "%(minutes)s daq"
+
+msgid "Read the article"
+msgstr "Maqolani oʻqish"
+
 msgctxt "article card"
+msgid "Read"
+msgstr "Oʻqish"
+
 msgid "Read more"
-msgstr "Koʻproq oʻqish"
+msgstr "Batafsil"
+
+msgid "Important to know"
+msgstr "Bilish muhim"
+
+msgid "Search the articles"
+msgstr "Maqolalardan qidirish"
+
+#, python-format
+msgid "%(counter)s article"
+msgid_plural "%(counter)s articles"
+msgstr[0] "%(counter)s ta maqola"
+
+msgid "Latest news"
+msgstr "Soʻnggi xabarlar"
+
+#, python-format
+msgid "%(counter)s news item"
+msgid_plural "%(counter)s news items"
+msgstr[0] "%(counter)s ta yangilik"
+
+msgid "Nothing found. Try another word."
+msgstr "Hech narsa topilmadi. Boshqa soʻz bilan urinib koʻring."
+
+msgid "Articles will appear here soon."
+msgstr "Maqolalar tez orada shu yerda chiqadi."
 
 #, python-format
 msgid "%(counter)s result"
@@ -2216,6 +2423,24 @@ msgstr "Natijani koʻrsatish"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
+
+#~ msgctxt "header menu"
+#~ msgid "Doctors"
+#~ msgstr "Shifokorlar"
+
+#~ msgid "Want a private reply? (optional)"
+#~ msgstr "Shaxsiy javob kerakmi? (ixtiyoriy)"
+
+#~ msgid "Information you should know"
+#~ msgstr "Siz bilishingiz lozim boʻlgan maʼlumotlar"
+
+#~ msgctxt "hero button"
+#~ msgid "Get help"
+#~ msgstr "Murojaat qilish"
+
+#~ msgctxt "article card"
+#~ msgid "Read more"
+#~ msgstr "Koʻproq oʻqish"
 
 #~ msgid "Featured articles"
 #~ msgstr "Tanlangan maqolalar"

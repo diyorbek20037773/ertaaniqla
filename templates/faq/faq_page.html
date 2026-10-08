@@ -1,32 +1,62 @@
 {% extends "base.html" %}
 {% load i18n wagtailcore_tags core_tags %}
-{% comment %} faq/faq_page.html — «Savollaringizga javob oling» (design 2026-10, «Bosh sahifa»
-   frame 2). Left (pink): search + every published question of the topic as an accordion.
-   Right (white sheet): «<topic> haqida bilib oling», the one-line question form (HTMX island
-   #question-form), «Eng ko'p berilgan savollar» cards (questions marked «most asked») and
-   «Siz bilishingiz lozim bo'lgan ma'lumotlar» cards (CMS links).
-   Context: page, form, submitted, questions, featured_questions, info_cards, topic,
-   topic_label, topics, query. {% endcomment %}
+{% comment %} faq/faq_page.html — questions & answers (final design, D-081: docs/oxirigi_variant
+   Frame-1). Pink band: breadcrumbs, topic pills, «<topic> haqida bilib oling», search.
+   Below: «Mavzular» side list (categories with counts) and the published questions as an
+   accordion (category, question, answer, who answered, «To'liq maqola»); the landing's
+   direction cards; the dark «Javob topmadingizmi?» panel with the question form (HTMX island
+   #question-form). Context: page, form, submitted, questions, categories, category, all_count,
+   topic, topic_label, topics, query, direction_cards, home_page, faq_page. {% endcomment %}
 {% block body_class %}page-faq-hub{% endblock %}
-{% block breadcrumbs %}{% endblock %}{# the design shows none; JSON-LD keeps the trail #}
+{% block breadcrumbs %}{% endblock %}{# rendered inside the band #}
 {% block content %}
-<div class="faq-hub">
-  <aside class="faq-hub__side">
-    <form class="faq-search" method="get" action="{{ page.url }}" role="search">
+<section class="faq-band">
+  <div class="container container--narrow">
+    {% breadcrumbs %}
+    <nav class="faq-band__topics" aria-label="{% trans 'Filter by topic' %}">
+      {% for value, label in topics %}
+        <a class="topic-filter__pill{% if topic == value %} is-active{% endif %}" href="{{ page.url }}?topic={{ value }}"{% if topic == value %} aria-current="true"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <h1 class="faq-band__title">{% if topic_label %}{% blocktrans with topic=topic_label %}About {{ topic }}{% endblocktrans %} <em>{% trans "learn more" context "faq title" %}</em>{% else %}{{ page.title }}{% endif %}</h1>
+    <form class="pill-search pill-search--lg" method="get" action="{{ page.url }}" role="search">
       {% if topic %}<input type="hidden" name="topic" value="{{ topic }}">{% endif %}
       <label class="sr-only" for="faq-q">{% trans "Search the questions" %}</label>
-      <input class="faq-search__input" id="faq-q" type="search" name="q" value="{{ query }}" maxlength="100" placeholder="{% trans 'Search' %}">
-      <button class="faq-search__button" type="submit"><span class="sr-only">{% trans "Search" %}</span>
-        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      {% include "components/icons/search.svg" %}
+      <input class="pill-search__input" id="faq-q" type="search" name="q" value="{{ query }}" maxlength="100" placeholder="{% trans 'Type your question, e.g. «signs»' %}">
+      <button class="btn btn--primary btn--sm" type="submit">{% trans "Search" %}</button>
     </form>
+  </div>
+</section>
+
+<div class="container container--narrow faq-layout">
+  <aside class="faq-topics" aria-labelledby="faq-topics-title">
+    <h2 class="faq-topics__title" id="faq-topics-title">{% trans "Topics" context "faq categories" %}</h2>
+    <ul class="faq-topics__list">
+      <li><a class="faq-topics__link{% if not category %} is-active{% endif %}" href="{{ page.url }}{% if topic %}?topic={{ topic }}{% endif %}"{% if not category %} aria-current="true"{% endif %}><span>{% trans "All questions" %}</span><span class="faq-topics__count">{{ all_count }}</span></a></li>
+      {% for value, label, count in categories %}
+        <li><a class="faq-topics__link{% if category == value %} is-active{% endif %}" href="{{ page.url }}?{% if topic %}topic={{ topic }}&amp;{% endif %}category={{ value }}"{% if category == value %} aria-current="true"{% endif %}><span>{{ label }}</span><span class="faq-topics__count">{{ count }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </aside>
+  <section class="faq-main" aria-labelledby="faq-list-title">
+    <p class="eyebrow">{% trans "Questions & answers" %}</p>
+    <h2 class="display-title" id="faq-list-title">{% trans "Most asked questions" context "faq list" %}</h2>
+    {% for block in page.intro %}{% include_block block %}{% endfor %}
     {% if questions %}
-      <div class="faq-list">
+      <div class="qa-list">
         {% for q in questions %}
-          <details class="faq-list__item" id="q-{{ q.pk }}">
-            <summary class="faq-list__question">{{ q.display_question }}</summary>
-            <div class="faq-list__answer prose">
+          <details class="qa-item" id="q-{{ q.pk }}"{% if forloop.first and not query %} open{% endif %}>
+            <summary class="qa-item__summary">
+              <span class="qa-item__head">{% if q.category %}<span class="qa-item__category">{{ q.get_category_display }}</span>{% endif %}<span class="qa-item__question">{{ q.display_question }}</span></span>
+              <span class="qa-item__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="qa-item__answer prose">
               {{ q.answer|richtext }}
-              {% if q.answered_by %}<p class="faq__meta">{{ q.answered_by.display_name }}{% if q.answered_by.organisation %}, {{ q.answered_by.organisation }}{% endif %}{% if q.published_at %} · {{ q.published_at|date:"d.m.Y" }}{% endif %}</p>{% endif %}
+              <p class="qa-item__meta">
+                {% if q.answered_by %}<span>{% trans "Answered by:" %} {{ q.answered_by.display_name }}{% if q.answered_by.organisation %}, {{ q.answered_by.organisation }}{% endif %}</span>{% endif %}
+                {% if q.article and q.article.live %}<a class="text-link" href="{{ q.article.localized.url }}">{% trans "Full article" %} {% include "components/icons/arrow-right.svg" %}</a>{% endif %}
+              </p>
             </div>
           </details>
         {% endfor %}
@@ -36,44 +66,32 @@
     {% else %}
       <p class="empty-state">{% trans "Answered questions will appear here." %}</p>
     {% endif %}
-  </aside>
-
-  <div class="faq-hub__main">
-    <h1 class="faq-hub__title">{% if topic_label %}{% blocktrans with topic=topic_label %}Learn about {{ topic }}{% endblocktrans %}{% else %}{{ page.title }}{% endif %}</h1>
-    {% include "components/topic_filter.html" with base_url=page.url %}
-    {% for block in page.intro %}{% include_block block %}{% endfor %}
-
-    <section id="question-form" class="question-form">
-      {% include "faq/_form.html" %}
-    </section>
-
-    {% if featured_questions %}
-      <section class="faq-cards" aria-labelledby="faq-most">
-        <h2 class="faq-cards__title" id="faq-most">{% trans "Most asked questions" %}</h2>
-        <div class="faq-cards__grid">
-          {% for q in featured_questions %}
-            <article class="faq-card">
-              <h3 class="faq-card__title"><a class="faq-card__link" href="#q-{{ q.pk }}">{{ q.display_question }}</a></h3>
-              <span class="faq-card__chip" aria-hidden="true">{% trans "Read the answer" %}</span>
-            </article>
-          {% endfor %}
-        </div>
-      </section>
-    {% endif %}
-
-    {% if info_cards %}
-      <section class="faq-cards" aria-labelledby="faq-info">
-        <h2 class="faq-cards__title" id="faq-info">{% trans "Information you should know" %}</h2>
-        <div class="faq-cards__grid">
-          {% for card in info_cards %}
-            <article class="faq-card">
-              <h3 class="faq-card__title"><a class="faq-card__link" href="{{ card|link_href }}">{{ card.title }}</a></h3>
-              <span class="faq-card__chip" aria-hidden="true">{% trans "Read the answer" %}</span>
-            </article>
-          {% endfor %}
-        </div>
-      </section>
-    {% endif %}
-  </div>
+  </section>
 </div>
+
+{% if direction_cards %}
+  <section class="container home-block" aria-labelledby="faq-directions">
+    <header class="home-block__head">
+      <div>
+        <p class="eyebrow">{% firstof home_page.directions_eyebrow _("Directions") %}</p>
+        <h2 class="display-title" id="faq-directions">{% trans "Choose the section you need" %}</h2>
+      </div>
+      <p class="home-block__aside">{% firstof home_page.directions_text _("Each direction covers signs, screening, treatment and support.") %}</p>
+    </header>
+    {% include "home/_direction_cards.html" with cards=direction_cards %}
+  </section>
+{% endif %}
+
+<section class="container container--narrow home-block">
+  <div class="ask-panel">
+    <div class="ask-panel__intro">
+      <p class="eyebrow eyebrow--light">{% trans "Ask a question" context "faq panel" %}</p>
+      <h2 class="display-title">{% trans "Didn't find the answer?" %}<br>{% trans "Ask a specialist" %}</h2>
+      <p class="ask-panel__text">{% trans "A doctor answers your question. Your name and contacts are never published." %}</p>
+    </div>
+    <div id="question-form" class="ask-panel__form">
+      {% include "faq/_form.html" %}
+    </div>
+  </div>
+</section>
 {% endblock %}

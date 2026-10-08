@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-08 00:57+0500\n"
+"POT-Creation-Date: 2026-10-08 12:08+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -998,6 +998,18 @@ msgstr "Опишите ваш вопрос в нескольких словах.
 msgid "Other"
 msgstr "Другое"
 
+msgid "General information"
+msgstr "Общая информация"
+
+msgid "Signs and causes"
+msgstr "Признаки и причины"
+
+msgid "Screening"
+msgstr "Скрининг"
+
+msgid "Treatment"
+msgstr "Лечение"
+
 msgid "New"
 msgstr "Новый"
 
@@ -1029,6 +1041,19 @@ msgstr "тема"
 
 msgid "Which disease page shows the published question."
 msgstr "На странице какой болезни показывается опубликованный вопрос."
+
+msgid "category"
+msgstr "категория"
+
+msgid "Groups published questions in the side list of the question page."
+msgstr ""
+"Группирует опубликованные вопросы в боковом списке «Темы» страницы вопросов."
+
+msgid "full article"
+msgstr "полная статья"
+
+msgid "Optional «Full article» link under the answer."
+msgstr "Ссылка «Полная статья» под ответом (необязательно)."
 
 msgid "most asked"
 msgstr "часто задаваемый"
@@ -1195,6 +1220,27 @@ msgstr "страница словаря"
 msgid "Home"
 msgstr "Главная"
 
+msgid "Topic (card colour)"
+msgstr "Тема (цвет карточки)"
+
+msgid "Short description"
+msgstr "Краткое описание"
+
+msgid "Page opened by the arrow"
+msgstr "Страница, которую открывает стрелка"
+
+msgid "Direction card"
+msgstr "Карточка направления"
+
+msgid "Link label"
+msgstr "Текст ссылки"
+
+msgid "Link page"
+msgstr "Страница ссылки"
+
+msgid "Step"
+msgstr "Шаг"
+
 msgid "hero title"
 msgstr "главный заголовок"
 
@@ -1203,6 +1249,30 @@ msgstr "Ключевая идея портала — раннее выявлен
 
 msgid "hero subtitle"
 msgstr "подзаголовок"
+
+msgid "hero eyebrow"
+msgstr "строка над заголовком"
+
+msgid "Small line above the title (empty = the design's wording)."
+msgstr "Небольшая строка над заголовком (пусто — текст из дизайна)."
+
+msgid "eyebrow"
+msgstr "строка над заголовком"
+
+msgid "title"
+msgstr "заголовок"
+
+msgid "text on the right"
+msgstr "текст справа"
+
+msgid "direction cards"
+msgstr "карточки направлений"
+
+msgid "text"
+msgstr "текст"
+
+msgid "steps"
+msgstr "шаги"
 
 msgid "home emergency banner"
 msgstr "экстренный баннер главной"
@@ -1222,6 +1292,15 @@ msgstr "дополнительное содержимое"
 
 msgid "Hero"
 msgstr "Главный блок (hero)"
+
+msgid "«Directions» cards"
+msgstr "Карточки «Направления»"
+
+msgid "«Free screening» panel"
+msgstr "Блок «Бесплатный скрининг»"
+
+msgid "«Any questions?» panel"
+msgstr "Блок «Остались вопросы?»"
 
 msgid "home page"
 msgstr "главная страница"
@@ -1340,9 +1419,6 @@ msgstr "Готово"
 msgid "Failed"
 msgstr "Ошибка"
 
-msgid "title"
-msgstr "заголовок"
-
 msgid "Filter on the «Videos» page; empty = shown under «All» only."
 msgstr "Фильтр на странице «Видеоролики»; пусто — только во «Все»."
 
@@ -1416,6 +1492,9 @@ msgstr "%(label)s: тип содержимого %(mime)s не разрешён.
 
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr "Файлы субтитров должны быть WebVTT (начинаться с 'WEBVTT')."
+
+msgid "short description"
+msgstr "краткое описание"
 
 msgid "videos list"
 msgstr "список видео"
@@ -1857,6 +1936,13 @@ msgstr "Данные проверены"
 msgid "Language"
 msgstr "Язык"
 
+msgid "Load more"
+msgstr "Показать ещё"
+
+#, python-format
+msgid "Showing %(shown)s of %(total)s"
+msgstr "Показано %(shown)s из %(total)s"
+
 msgid "Main navigation"
 msgstr "Основная навигация"
 
@@ -1876,12 +1962,11 @@ msgid "Sections"
 msgstr "Разделы"
 
 msgctxt "header menu"
-msgid "Doctors"
-msgstr "Врачи"
-
-msgctxt "header menu"
 msgid "Q&A"
 msgstr "Вопрос-ответ"
+
+msgid "Find a screening place"
+msgstr "Найти место скрининга"
 
 #, python-format
 msgid "%(minutes)s min read"
@@ -2018,11 +2103,8 @@ msgstr "Открыть в CMS, чтобы ответить:"
 msgid "Thank you, your question has been sent."
 msgstr "Спасибо, ваш вопрос отправлен."
 
-msgid "Send"
-msgstr "Отправить"
-
-msgid "Want a private reply? (optional)"
-msgstr "Нужен личный ответ? (необязательно)"
+msgid "Send the question"
+msgstr "Отправить вопрос"
 
 msgid ""
 "We never publish names or contacts. Contacts are deleted 90 days after the "
@@ -2031,8 +2113,39 @@ msgstr ""
 "Мы никогда не публикуем имена и контакты. Контакты удаляются через 90 дней "
 "после ответа."
 
+#, python-format
+msgid "About %(topic)s"
+msgstr "%(topic)s:"
+
+msgctxt "faq title"
+msgid "learn more"
+msgstr "что важно знать"
+
 msgid "Search the questions"
 msgstr "Поиск по вопросам"
+
+msgid "Type your question, e.g. «signs»"
+msgstr "Введите вопрос, например: «признаки»"
+
+msgctxt "faq categories"
+msgid "Topics"
+msgstr "Темы"
+
+msgid "All questions"
+msgstr "Все вопросы"
+
+msgid "Questions & answers"
+msgstr "Вопросы и ответы"
+
+msgctxt "faq list"
+msgid "Most asked questions"
+msgstr "Часто задаваемые вопросы"
+
+msgid "Answered by:"
+msgstr "Ответил(а):"
+
+msgid "Full article"
+msgstr "Полная статья"
 
 msgid "No questions match your search."
 msgstr "По вашему запросу вопросов не найдено."
@@ -2040,24 +2153,37 @@ msgstr "По вашему запросу вопросов не найдено."
 msgid "Answered questions will appear here."
 msgstr "Здесь появятся отвеченные вопросы."
 
-#, python-format
-msgid "Learn about %(topic)s"
-msgstr "Узнайте о теме: %(topic)s"
+msgid "Directions"
+msgstr "Направления"
 
-msgid "Most asked questions"
-msgstr "Часто задаваемые вопросы"
+msgid "Choose the section you need"
+msgstr "Выберите нужный раздел"
 
-msgid "Read the answer"
-msgstr "Читать ответ"
+msgid "Each direction covers signs, screening, treatment and support."
+msgstr "В каждом направлении — о признаках, скрининге, лечении и поддержке."
 
-msgid "Information you should know"
-msgstr "Информация, которую нужно знать"
+msgctxt "faq panel"
+msgid "Ask a question"
+msgstr "Задать вопрос"
+
+msgid "Didn't find the answer?"
+msgstr "Не нашли ответ?"
+
+msgid "Ask a specialist"
+msgstr "Спросите специалиста"
+
+msgid ""
+"A doctor answers your question. Your name and contacts are never published."
+msgstr "На ваш вопрос ответит врач. Имя и контакты не публикуются."
 
 msgid "Thank you, your message has been sent."
 msgstr "Спасибо, ваше сообщение отправлено."
 
 msgid "Messages are deleted after 180 days."
 msgstr "Сообщения удаляются через 180 дней."
+
+msgid "Send"
+msgstr "Отправить"
 
 msgid "Find a term"
 msgstr "Найти термин"
@@ -2068,21 +2194,41 @@ msgstr "Буквы"
 msgid "No terms found."
 msgstr "Термины не найдены."
 
-msgid "Read more"
-msgstr "Подробнее"
+msgid "Cancer early detection portal"
+msgstr "Портал раннего выявления онкологических заболеваний"
 
-msgctxt "hero button"
-msgid "Get help"
-msgstr "Обратиться"
+msgid "Explore the directions"
+msgstr "Познакомиться с направлениями"
+
+msgid "Most asked questions"
+msgstr "Часто задаваемые вопросы"
+
+msgid "Free screening"
+msgstr "Бесплатный скрининг"
+
+msgid "Where can I get screened?"
+msgstr "Где пройти скрининг?"
+
+msgid "Show institutions"
+msgstr "Показать учреждения"
+
+msgid "All news"
+msgstr "Все новости"
 
 msgid "News will appear here soon."
 msgstr "Новости скоро появятся здесь."
 
-msgid "Videos will appear here soon."
-msgstr "Видео скоро появятся здесь."
+msgid "Any questions?"
+msgstr "Остались вопросы?"
 
-msgid "Articles will appear here soon."
-msgstr "Статьи скоро появятся здесь."
+msgid ""
+"Send a question to the specialists or call the hotline. You are not alone."
+msgstr ""
+"Отправьте обращение специалистам или позвоните на горячую линию. Вы не одни."
+
+msgctxt "home cta"
+msgid "Ask a question"
+msgstr "Обратиться"
 
 msgid "Filter by audience"
 msgstr "Фильтр по аудитории"
@@ -2105,12 +2251,77 @@ msgstr "Скопировать хэштеги"
 msgid "Materials will appear here."
 msgstr "Здесь появятся материалы."
 
+msgid "Doctors explain"
+msgstr "Врачи объясняют"
+
+#, python-format
+msgid "%(counter)s video"
+msgid_plural "%(counter)s videos"
+msgstr[0] "%(counter)s видео"
+msgstr[1] "%(counter)s видео"
+msgstr[2] "%(counter)s видео"
+
+msgid "Other videos"
+msgstr "Другие видео"
+
+msgid "Videos will appear here soon."
+msgstr "Видео скоро появятся здесь."
+
 msgid "More videos"
 msgstr "Другие видео"
 
+#, python-format
+msgid "Reading time: %(minutes)s min"
+msgid_plural "Reading time: %(minutes)s min"
+msgstr[0] "Время чтения: %(minutes)s мин"
+msgstr[1] "Время чтения: %(minutes)s мин"
+msgstr[2] "Время чтения: %(minutes)s мин"
+
+#, python-format
+msgid "%(minutes)s min"
+msgid_plural "%(minutes)s min"
+msgstr[0] "%(minutes)s мин"
+msgstr[1] "%(minutes)s мин"
+msgstr[2] "%(minutes)s мин"
+
+msgid "Read the article"
+msgstr "Читать статью"
+
 msgctxt "article card"
+msgid "Read"
+msgstr "Читать"
+
 msgid "Read more"
-msgstr "Читать дальше"
+msgstr "Подробнее"
+
+msgid "Important to know"
+msgstr "Важно знать"
+
+msgid "Search the articles"
+msgstr "Поиск по статьям"
+
+#, python-format
+msgid "%(counter)s article"
+msgid_plural "%(counter)s articles"
+msgstr[0] "%(counter)s статья"
+msgstr[1] "%(counter)s статьи"
+msgstr[2] "%(counter)s статей"
+
+msgid "Latest news"
+msgstr "Последние новости"
+
+#, python-format
+msgid "%(counter)s news item"
+msgid_plural "%(counter)s news items"
+msgstr[0] "%(counter)s новость"
+msgstr[1] "%(counter)s новости"
+msgstr[2] "%(counter)s новостей"
+
+msgid "Nothing found. Try another word."
+msgstr "Ничего не найдено. Попробуйте другое слово."
+
+msgid "Articles will appear here soon."
+msgstr "Статьи скоро появятся здесь."
 
 #, python-format
 msgid "%(counter)s result"
@@ -2206,6 +2417,24 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgctxt "header menu"
+#~ msgid "Doctors"
+#~ msgstr "Врачи"
+
+#~ msgid "Want a private reply? (optional)"
+#~ msgstr "Нужен личный ответ? (необязательно)"
+
+#~ msgid "Information you should know"
+#~ msgstr "Информация, которую нужно знать"
+
+#~ msgctxt "hero button"
+#~ msgid "Get help"
+#~ msgstr "Обратиться"
+
+#~ msgctxt "article card"
+#~ msgid "Read more"
+#~ msgstr "Читать дальше"
 
 #~ msgid "Featured articles"
 #~ msgstr "Избранные статьи"

@@ -1,12 +1,15 @@
-{% comment %} posts/_news_feature.html — the large lead news card (design 2026-10: full picture,
-   frosted panel with topic chip, date and title, «Batafsil» chip). Context: post. {% endcomment %}
+{% comment %} posts/_news_feature.html — the lead news item (final design, D-081): big picture,
+   topic chip + date, serif title, summary. `layout="side"` (news list) puts the text beside the
+   picture with a «Batafsil» button. Context: post, layout (optional). {% endcomment %}
 {% load i18n wagtailimages_tags %}
-<article class="news-feature" data-topic="{{ post.topic }}">
-  {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{560x620,1120x1240} sizes="(max-width: 56rem) 100vw, 36rem" alt="" class="news-feature__img" %}{% endif %}
-  <span class="topic-chip news-feature__more" aria-hidden="true">{% trans "Read more" %}</span>
-  <div class="news-feature__panel">
-    <p class="news-feature__meta"><span class="topic-chip">{{ post.get_topic_display }}</span>
-      <span class="news-feature__date">{% include "components/icons/calendar.svg" %}<time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"F j, Y" }}</time></span></p>
+<article class="news-feature{% if layout == 'side' %} news-feature--side{% endif %}" data-topic="{{ post.topic }}">
+  <div class="news-feature__media">
+    {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{640x400,1280x800} sizes="(max-width: 56rem) 100vw, 36rem" alt="" class="news-feature__img" %}{% endif %}
+  </div>
+  <div class="news-feature__body">
+    <p class="card-meta"><span class="topic-chip">{{ post.get_topic_display }}</span> <time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time></p>
     <h3 class="news-feature__title"><a class="news-feature__link" href="{{ post.url }}">{{ post.title }}</a></h3>
+    {% if post.summary %}<p class="news-feature__text">{{ post.summary }}</p>{% endif %}
+    {% if layout == "side" %}<span class="btn btn--outline btn--sm news-feature__more" aria-hidden="true">{% trans "Read more" %} {% include "components/icons/arrow-right.svg" %}</span>{% endif %}
   </div>
 </article>
