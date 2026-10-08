@@ -71,7 +71,8 @@ and `EMAIL_URL=consolemail://`. Add a Railway **volume mounted at `/srv/media`**
 `MEDIA_ROOT`; `RAILWAY_RUN_UID=0` lets the process write to the root-owned volume) or uploads and
 OG images vanish on redeploy (`regenerate_social_images` re-renders the OG ones on start). The
 start-up seed only fills an empty database — to push new seed text into a seeded demo, run
-`railway run python manage.py seed_content` by hand (it overwrites page bodies: never after
+`python manage.py seed_home_design` fills only EMPTY landing blocks (final design, D-081) and is
+safe on a live site; the Railway start-up runs it. `railway run python manage.py seed_content` by hand (it overwrites page bodies: never after
 editors started working).
 
 ## 2. Rollback
