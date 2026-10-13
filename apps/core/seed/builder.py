@@ -77,6 +77,60 @@ class Seeder:
         self.ensure_footer()
         return {"created": self.created, "updated": self.updated, "unchanged": self.unchanged}
 
+    @transaction.atomic
+    def add_missing(self, keys: tuple[str, ...]) -> list[str]:
+        """Create the pages of `keys` (and their children) that do not exist yet, under their
+        existing parents — for a live site, where a full re-seed would overwrite editors' work.
+        Pages that exist are left untouched. Returns the keys that were created."""
+        from apps.home.models import HomePage
+
+        for code in self.languages:
+            self.locales[code] = Locale.objects.get_or_create(language_code=code)[0]
+        homes = {h.locale.language_code: h for h in HomePage.objects.select_related("locale")}
+        if self.languages[0] not in homes:
+            return []
+        for node in tree.TREE:
+            self.resolve_node(node, homes)
+        parents_of = {child.key: node.key for node in tree.iter_nodes() for child in node.children}
+        created = []
+        for key in keys:
+            node = next(n for n in tree.iter_nodes() if n.key == key)
+            if self.ctx.page_id(key, self.languages[0]) is not None:
+                continue
+            parent_key = parents_of[key]
+            parents = {
+                lang: Page.objects.get(pk=self.ctx.page_id(parent_key, lang)).specific
+                for lang in self.languages
+                if self.ctx.page_id(parent_key, lang) is not None
+            }
+            if set(parents) != set(self.languages):
+                continue
+            self.build_node(node, parents)
+            for sub in tree.iter_nodes([node]):
+                for lang in self.languages:
+                    page_id = self.ctx.page_id(sub.key, lang)
+                    if page_id is not None:
+                        self.apply_body(Page.objects.get(pk=page_id).specific, sub, lang, True)
+            created.append(key)
+        return created
+
+    def rename(self, key: str, old: dict[str, str], new: dict[str, str]) -> int:
+        """Retitle a seeded page only where it still carries the seeded title (an editor's own
+        title is kept). Returns the number of pages renamed."""
+        renamed = 0
+        for lang in self.languages:
+            page_id = self.ctx.page_id(key, lang)
+            if page_id is None or lang not in new:
+                continue
+            page = Page.objects.get(pk=page_id).specific
+            if page.title != old.get(lang):
+                continue
+            page.title = new[lang]
+            page.draft_title = new[lang]
+            page.save_revision().publish()
+            renamed += 1
+        return renamed
+
     # --- home / site -----------------------------------------------------------------------
     def ensure_home(self) -> dict[str, Any]:
         from apps.home.models import HomePage

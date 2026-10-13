@@ -118,6 +118,14 @@ function markOverflow() {
 markOverflow();
 window.addEventListener("resize", markOverflow);
 
+// Section banner (D-084): the button pauses / resumes the scrolling (WCAG 2.2.2).
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-marquee-toggle]");
+  if (!button) return;
+  const paused = button.closest("[data-marquee]")?.classList.toggle("is-paused") ?? false;
+  button.setAttribute("aria-pressed", String(paused));
+});
+
 // A link to #q-12 / #bosqichlari opens that <details> (question cards, footer site map).
 function openTarget() {
   const id = decodeURIComponent(location.hash.slice(1));

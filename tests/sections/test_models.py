@@ -121,8 +121,8 @@ def test_navigation_structure_and_cache(seeded) -> None:
     nav = get_navigation("ru")
     assert [s.key for s in nav] == ["women", "children"]
     women = nav[0]
-    assert len(women.items) == 5
-    assert women.items[0].title == "Осведомленность"
+    assert len(women.items) == 6  # + «Вопросы и ответы» (client 2026-10-13, D-084)
+    assert women.items[0].title == "Общая информация"
     assert [c.title for c in women.items[0].children] == [
         "Рак молочной железы",
         "Рак шейки матки",
@@ -174,12 +174,10 @@ def test_figma_header_menu_links(seeded, client: Client) -> None:
     }
     assert get_header_links("ru")["about"] == "/ru/o-portale/"
     html = client.get("/uz/bolalar/").content.decode()
-    for label, url in [
-        ("Asosiy", "/uz/"),
-        ("Haqimizda", "/uz/haqimizda/"),
-        ("Savol-Javob", "/uz/savol-javob/"),
-    ]:
+    for label, url in [("Asosiy", "/uz/"), ("Biz haqimizda", "/uz/haqimizda/")]:
         assert f'href="{url}">{label}</a>' in html or f'href="{url}" aria-current' in html
+    # client 2026-10-13 (D-084): the questions moved into the sections — no header item
+    assert 'class="site-nav__link" href="/uz/savol-javob/"' not in html
     assert 'class="site-search"' in html and 'name="q"' in html
     assert 'class="lang-seg"' in html
     # final design (D-081): no «Shifokorlar» item; «Skrining joyini toping» opens the directory

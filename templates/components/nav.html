@@ -1,6 +1,7 @@
 {% comment %} ---------------------------------------------------------------------------
-   components/nav.html — primary navigation (final design, D-081): Asosiy · Haqimizda ·
-   Bo'limlar ▾ (both sections, 5 TZ items each + sub-items) · Savol-Javob on the left; the
+   components/nav.html — primary navigation (final design, D-081): Asosiy · Biz haqimizda ·
+   Bo'limlar ▾ (both sections, their TZ items + sub-items) on the left — the questions live
+   inside each section since the client's change of 2026-10-13 (D-084); the
    hotline, the UZ / ЎЗ / RU switch, «Aa» (accessibility, spec A8), the search button and the
    «Skrining joyini toping» CTA on the right. Rendered by {% main_nav %}.
    Context: sections (list[NavSection]), links (dict: home, about, faq, directory → URL; an
@@ -56,9 +57,6 @@
             </ul>
           </details>
         </li>
-        {% if links.faq %}
-          <li><a class="site-nav__link" href="{{ links.faq }}"{% if request.path == links.faq %} aria-current="page"{% endif %}>{% trans "Q&A" context "header menu" %}</a></li>
-        {% endif %}
       </ul>
       <div class="site-nav__utils">
         {% with hotline=settings.core.SiteSettings.hotline_phone %}{% if hotline %}

@@ -9,9 +9,17 @@
 {% load i18n static %}
 {% if section_key == "women" %}
   {# Figma «Group 67»: illustration mosaic across the full width, decorative only #}
-  {# final design banner (mauve and lilac, D-081), cropped from docs/oxirigi_variant/Frame-3.png #}
-  <div class="section-banner" aria-hidden="true">
-    <img class="section-banner__img" src="{% static 'img/figma/women/banner-final.webp' %}" srcset="{% static 'img/figma/women/banner-final-780.webp' %} 780w, {% static 'img/figma/women/banner-final-1456.webp' %} 1456w, {% static 'img/figma/women/banner-final.webp' %} 1920w" sizes="(max-width: 56.25rem) 900px, 100vw" alt="" width="1920" height="356" decoding="async" fetchpriority="high"></div>
+  {% comment %} final design banner (mauve and lilac, D-081), scrolling slowly sideways (client
+     2026-10-13, D-084): one seamless 1060 px tile of docs/oxirigi_variant/Frame-3.png, repeated;
+     paused on hover, by the button (WCAG 2.2.2) and by «reduce motion» (OS or «Aa»). {% endcomment %}
+  <div class="section-banner" data-marquee>
+    <div class="section-banner__viewport" aria-hidden="true">
+      <div class="section-banner__track">
+        {% for _ in "1234" %}<img class="section-banner__tile" src="{% static 'img/figma/women/banner-tile.webp' %}" srcset="{% static 'img/figma/women/banner-tile-530.webp' %} 530w, {% static 'img/figma/women/banner-tile.webp' %} 1060w" sizes="(max-width: 40rem) 450px, 1060px" alt="" width="1060" height="356" decoding="async"{% if forloop.first %} fetchpriority="high"{% endif %}>{% endfor %}
+      </div>
+    </div>
+    <button class="section-banner__toggle" type="button" data-marquee-toggle aria-pressed="false"><span class="sr-only">{% trans "Pause the animation" %}</span><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path class="section-banner__pause" d="M8 5h3v14H8zM13 5h3v14h-3z" fill="currentColor"/><path class="section-banner__play" d="M8 5v14l11-7z" fill="currentColor"/></svg></button>
+  </div>
 {% endif %}
 {% if items %}
   <div class="container"><nav class="section-tabs" aria-label="{% trans 'Section topics' %}">

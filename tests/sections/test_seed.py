@@ -74,11 +74,12 @@ def test_women_menu_has_the_five_figma_tabs(seeded) -> None:
     titles = [p.title for p in section.get_menu_items()]
     # D-064: the Figma tabs replace the TZ menu; «Куда обратиться» stays as a CTA target
     assert titles == [
-        "Осведомленность",
+        "Общая информация",
         "Скрининг",
         "Организация лечения",
         "Поддержка",
         "Жизнь после рака",
+        "Вопросы и ответы",  # client 2026-10-13 (D-084)
     ]
     all_titles = [p.title for p in section.get_subsections()]
     assert "Куда обратиться" in all_titles
@@ -516,7 +517,7 @@ def test_section_tabs_keep_the_disease(seeded, client, url: str, slug: str) -> N
     """EA-09: every tab on a cervical page opens the cervical page of that topic."""
     html = client.get(url).content.decode()
     tabs = re.findall(r'class="section-tabs__link[^"]*"\s+href="([^"]+)"', html)
-    assert len(tabs) == 5
+    assert len(tabs) == 6
     assert all(tab.endswith(f"/{slug}/") for tab in tabs), tabs
     assert re.search(r'section-tabs__link is-active"\s+href="' + re.escape(url), html)
     for tab in tabs:

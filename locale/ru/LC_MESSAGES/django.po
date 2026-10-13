@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 15:56+0500\n"
+"POT-Creation-Date: 2026-10-13 16:46+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1971,10 +1971,6 @@ msgctxt "header menu"
 msgid "Sections"
 msgstr "Разделы"
 
-msgctxt "header menu"
-msgid "Q&A"
-msgstr "Вопрос-ответ"
-
 msgid "Find a screening place"
 msgstr "Найти место скрининга"
 
@@ -2005,6 +2001,9 @@ msgstr "Поиск по сайту"
 
 msgid "e.g. mammography"
 msgstr "например, маммография"
+
+msgid "Pause the animation"
+msgstr "Остановить анимацию"
 
 msgid "Section topics"
 msgstr "Темы раздела"
@@ -2440,6 +2439,10 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgctxt "header menu"
+#~ msgid "Q&A"
+#~ msgstr "Вопрос-ответ"
 
 #~ msgctxt "header menu"
 #~ msgid "Doctors"

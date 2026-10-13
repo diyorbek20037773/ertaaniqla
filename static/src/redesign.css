@@ -390,12 +390,32 @@
   html[data-contrast="high"] .faq-band { border-bottom: 2px solid #000; }
 
   /* ---- topic pages (women's section) ------------------------------------------------------- */
-  .section-banner { margin-block: 0 clamp(1.5rem, 2.6vw, 3rem); }
-  .section-banner__img { aspect-ratio: 1920 / 356; }
+  /* scrolling banner (D-084): the tile is exactly one period of the pattern, so a shift by one
+     tile width is seamless; 4 tiles cover screens up to ~3 tiles + the shift */
+  .section-banner { position: relative; --banner-h: clamp(150px, 18.54vw, 400px); --tile-w: calc(var(--banner-h) * 2.9775); margin-block: 0 clamp(1.5rem, 2.6vw, 3rem); overflow: visible; }
+  .section-banner__viewport { height: var(--banner-h); overflow: hidden; }
+  .section-banner__track { display: flex; width: max-content; height: 100%; animation: banner-scroll 40s linear infinite; will-change: transform; }
+  .section-banner__tile { display: block; flex: none; width: var(--tile-w); max-width: none; height: 100%; }
+  @keyframes banner-scroll { to { transform: translateX(calc(-1 * var(--tile-w))); } }
+  .section-banner:hover .section-banner__track, .section-banner.is-paused .section-banner__track { animation-play-state: paused; }
+  .section-banner__toggle {
+    position: absolute; right: clamp(0.75rem, 2vw, 1.5rem); bottom: 0.75rem; display: inline-flex; align-items: center; justify-content: center;
+    width: var(--tap-target); height: var(--tap-target); border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.88); color: var(--c-ink); cursor: pointer;
+    box-shadow: 0 4px 12px rgba(43, 26, 46, 0.16);
+  }
+  .section-banner__play { display: none; }
+  .section-banner.is-paused .section-banner__play { display: inline; }
+  .section-banner.is-paused .section-banner__pause { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .section-banner__track { animation: none; }
+    .section-banner__toggle { display: none; }
+  }
+  html[data-reduce-motion="true"] .section-banner__toggle { display: none; }
   .section-tabs, .article--designed, body[data-section] .article { max-width: calc(var(--container-narrow) + 2 * var(--gutter)); margin-inline: auto; }
-  .section-tabs { max-width: var(--container-narrow); margin-block: 0 var(--space-4); }
+  /* six tabs since the «Savol-javob» tab (D-084): the bar may be wider than the text column */
+  .section-tabs { max-width: min(100%, calc(var(--container-narrow) + 9rem)); margin-block: 0 var(--space-4); }
   .section-tabs__list { justify-content: space-between; gap: 0.25rem; min-height: 0; padding: 5px; border: 1px solid var(--c-line); background: #ffffff; }
-  .section-tabs__link { min-height: 40px; padding-inline: clamp(0.8rem, 1.2vw, 1.25rem); color: var(--c-ink); font-size: 0.86rem; font-weight: 500; }
+  .section-tabs__link { min-height: 40px; padding-inline: clamp(0.7rem, 1vw, 1.1rem); color: var(--c-ink); font-size: 0.86rem; font-weight: 500; }
   .section-tabs__link.is-active { background: var(--c-rasp); background-image: none; color: #ffffff; }
   .variant-switch { gap: var(--space-3); margin-block: 0 clamp(1.5rem, 2.6vw, 2.5rem); }
   .variant-switch__link { min-height: 52px; border: 1px solid var(--c-line); background: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; }

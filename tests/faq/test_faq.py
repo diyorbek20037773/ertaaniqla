@@ -194,16 +194,33 @@ def test_privacy_policy_is_linked_from_the_form_and_footer(page, client: Client)
         assert client.get(policy_url).status_code == 200
 
 
-def test_design_questions_seeded_once_per_language(seeded, client: Client) -> None:
-    """Final design (D-081): the question page opens with the most asked questions — editorial
-    entries with placeholder answers, one set per language, added once."""
+def test_client_questions_on_the_question_page(seeded, client: Client) -> None:
+    """D-084: the question page carries the client's questions and answers (docs/FAQ.docx);
+    the placeholder entries of the first version are dropped; re-running adds nothing."""
     from django.core.management import call_command
 
+    from apps.faq.design import ANSWER_PLACEHOLDER
+
+    Question.objects.create(
+        text="Eski savol",
+        section="women",
+        topic="breast",
+        language="uz",
+        consent_to_publish=True,
+        status=QuestionStatus.PUBLISHED,
+        answer=ANSWER_PLACEHOLDER,
+    )
     call_command("seed_faq_questions")
     call_command("seed_faq_questions")
-    assert Question.objects.filter(language="uz", topic="breast").count() == 7
+    assert not Question.objects.filter(text="Eski savol").exists()
+    assert Question.objects.filter(language="uz", topic="breast").count() == 6
+    assert Question.objects.filter(language="uz", topic="cervical").count() == 7
     html = client.get("/uz/savol-javob/?topic=breast").content.decode()
-    assert "Skrining oʻzi nima?" in html and "Что такое скрининг?" not in html
-    assert html.index("Koʻkrak bezi saratoni nima?") < html.index("Davolash qanday tashkil")
-    ru = client.get("/ru/voprosy-otvety/?topic=breast").content.decode()
-    assert "Что такое скрининг?" in ru and "Skrining oʻzi nima?" not in ru
+    assert "Skriningni qaysi yoshda oʻtish kerak?" in html
+    main = html.split("<main", 1)[1].split("</main>", 1)[0]
+    assert "<b>BU MUHIM:</b>" in main and "[[TODO" not in main
+    assert html.index("Koʻkrak bezi saratoni nima?") < html.index(
+        "Koʻkrak bezi saratonini davolash"
+    )
+    signs = client.get("/uz/savol-javob/?topic=cervical&category=general").content.decode()
+    assert "Emlash orqali" in signs and "skriningi nima uchun kerak" not in signs

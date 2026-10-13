@@ -717,6 +717,19 @@ def _wf(name: str) -> BodyBuilder:
     return build
 
 
+def _wfaq(name: str) -> BodyBuilder:
+    """Body builder from `women_faq` (the client's questions and answers, D-084)."""
+
+    def build(lang: Lang, ctx: SeedContext) -> Body:
+        from apps.core.seed import women_faq
+
+        body: Body = getattr(women_faq, name)(lang, ctx)
+        return body
+
+    build.__name__ = name
+    return build
+
+
 def _variants(key: str, breast: BodyBuilder, cervical: BodyBuilder) -> list[Node]:
     """Breast / cervical pages of one women's topic (Figma switch, D-066)."""
     return [
@@ -781,7 +794,7 @@ WOMEN = Node(
     children=[
         _women_topic(
             "women.awareness",
-            {"uz": "Xabardorlik", "ru": "Осведомленность"},
+            {"uz": "Umumiy maʼlumot", "ru": "Общая информация"},
             {"uz": "ogohlik", "ru": "osvedomlennost"},
             {
                 "uz": "Kasallik nima, bosqichlari, sabablari, belgilari va oʻz-oʻzini tekshirish",
@@ -833,6 +846,18 @@ WOMEN = Node(
             },
             _wf("body_after"),
             _wf("body_after"),
+        ),
+        # client 2026-10-13: questions & answers inside the section, one tab per disease (D-084)
+        _women_topic(
+            "women.faq",
+            {"uz": "Savol-javob", "ru": "Вопросы и ответы"},
+            {"uz": "savol-javob", "ru": "voprosy-otvety"},
+            {
+                "uz": "Koʻkrak bezi va bachadon boʻyni saratoni boʻyicha koʻp beriladigan savollar.",
+                "ru": "Частые вопросы о раке молочной железы и раке шейки матки.",
+            },
+            _wfaq("body_breast_faq"),
+            _wfaq("body_cervical_faq"),
         ),
         Node(
             key="women.directory",
@@ -1274,7 +1299,7 @@ MATERIALS = Node(
 ABOUT = Node(
     key="about",
     kind="article",
-    title={"uz": "Haqimizda", "ru": "О портале"},
+    title={"uz": "Biz haqimizda", "ru": "О портале"},
     slug={"uz": "haqimizda", "ru": "o-portale"},
     summary={
         "uz": "«Erta aniqla» onkologik hushyorlik portali — maqsad va tashkilotchilar",

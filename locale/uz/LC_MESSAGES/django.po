@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 15:56+0500\n"
+"POT-Creation-Date: 2026-10-13 16:46+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1985,15 +1985,11 @@ msgstr "Asosiy"
 
 msgctxt "header menu"
 msgid "About us"
-msgstr "Haqimizda"
+msgstr "Biz haqimizda"
 
 msgctxt "header menu"
 msgid "Sections"
 msgstr "Boʻlimlar"
-
-msgctxt "header menu"
-msgid "Q&A"
-msgstr "Savol-Javob"
 
 msgid "Find a screening place"
 msgstr "Skrining joyini toping"
@@ -2023,6 +2019,9 @@ msgstr "Sayt boʻylab qidirish"
 
 msgid "e.g. mammography"
 msgstr "masalan, mammografiya"
+
+msgid "Pause the animation"
+msgstr "Animatsiyani toʻxtatish"
 
 msgid "Section topics"
 msgstr "Boʻlim mavzulari"
@@ -2444,6 +2443,10 @@ msgstr "Natijani koʻrsatish"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
+
+#~ msgctxt "header menu"
+#~ msgid "Q&A"
+#~ msgstr "Savol-Javob"
 
 #~ msgctxt "header menu"
 #~ msgid "Doctors"

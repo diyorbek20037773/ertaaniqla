@@ -1,5 +1,5 @@
-"""Add the final design's most asked questions (D-081) with placeholder answers for the doctors.
-Safe to re-run: existing wording is never duplicated or changed (apps.faq.design)."""
+"""Put the client's questions and answers (D-084, docs/FAQ.docx) on the question page. Safe to
+re-run: existing wording is never duplicated or changed (apps.faq.design)."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = "Add the design's most asked questions (answers are placeholders for the doctors)."
+    help = "Add the client's questions and answers to the question page (only missing ones)."
 
     def handle(self, *args: Any, **options: Any) -> None:
         from apps.faq.design import seed_questions
