@@ -21,7 +21,7 @@ case "$ROLE" in
       # a re-seed would overwrite what editors changed in the CMS (EA-27)
       if [[ "${SEED_DEMO_ON_START:-0}" == "1" ]]; then
         python manage.py seed_content --if-empty
-        python manage.py import_institutions data/institutions.sample.csv --if-empty
+        python manage.py import_institutions data/institutions.ssv.csv --source ssv --if-empty
         python manage.py regenerate_social_images
       fi
       # final design (D-081): fills only EMPTY landing blocks, editors' text is kept

@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 
 from apps.directory.models import Institution, InstitutionKind, InstitutionSections, Region
 
@@ -27,9 +27,20 @@ def filter_institutions(
     kind: str = "",
     section: str = "",
     free_only: bool = False,
+    query: str = "",
 ) -> QuerySet[Institution]:
-    """Apply the public filters. Unknown codes are ignored (never an error)."""
+    """Apply the public filters. Unknown codes are ignored (never an error). `query` matches the
+    name, district or address in either language (the visitor types a village or a number)."""
     qs = published_institutions() if queryset is None else queryset
+    if query:
+        qs = qs.filter(
+            Q(name_uz__icontains=query)
+            | Q(name_ru__icontains=query)
+            | Q(district_uz__icontains=query)
+            | Q(district_ru__icontains=query)
+            | Q(address_uz__icontains=query)
+            | Q(address_ru__icontains=query)
+        )
     if region:
         qs = qs.filter(region__code=region)
     if kind in KIND_CODES:

@@ -12,7 +12,11 @@
   {% for block in page.intro %}{% include_block block %}{% endfor %}
 
   <form class="filter-form" method="get" action="{{ page.url }}" aria-label="{% trans 'Filter institutions' %}"
-        hx-get="{{ page.url }}" hx-target="#directory-results" hx-trigger="change, submit" hx-push-url="true" hx-indicator="#directory-loading">
+        hx-get="{{ page.url }}" hx-target="#directory-results" hx-trigger="change, submit, search" hx-push-url="true" hx-indicator="#directory-loading">
+    <div class="filter-form__field">
+      <label for="filter-q">{% trans "District, village or name" %}</label>
+      <input class="search-form__input" id="filter-q" type="search" name="q" value="{{ filter.q }}" maxlength="100" placeholder="{% trans 'e.g. Chilonzor or 12-OP' %}">
+    </div>
     <div class="filter-form__field">
       <label for="filter-region">{% trans "Region" %}</label>
       <select id="filter-region" name="region">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-08 12:08+0500\n"
+"POT-Creation-Date: 2026-10-13 14:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -865,6 +865,9 @@ msgstr "Центр здоровья матери и ребёнка / филиа�
 
 msgid "Oncology centre (RONC / regional)"
 msgstr "Онкологический центр (РОНЦ / региональный)"
+
+msgid "Hospital / multi-profile medical centre"
+msgstr "Больница / многопрофильный медицинский центр"
 
 msgid "Paediatric onco-haematology"
 msgstr "Детская онкогематология"
@@ -2064,6 +2067,12 @@ msgstr[2] "%(counter)s учреждений"
 
 msgid "Filter institutions"
 msgstr "Фильтр учреждений"
+
+msgid "District, village or name"
+msgstr "Район, село или название"
+
+msgid "e.g. Chilonzor or 12-OP"
+msgstr "например: Чиланзар или 12-ОП"
 
 msgid "Show"
 msgstr "Показать"

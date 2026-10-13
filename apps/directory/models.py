@@ -8,6 +8,7 @@ import json
 from decimal import Decimal
 from typing import Any
 
+from django.core.paginator import Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -66,6 +67,7 @@ class InstitutionKind(models.TextChoices):
     ONCO_ROOM = "onco_room", _("Onco-alertness room")
     MOTHER_CHILD_CENTRE = "mother_child_centre", _("Mother & Child Health Centre / branch")
     ONCOLOGY_CENTRE = "oncology_centre", _("Oncology centre (RONC / regional)")
+    HOSPITAL = "hospital", _("Hospital / multi-profile medical centre")
     PAEDIATRIC_ONCOHAEMATOLOGY = "paediatric_oncohaematology", _("Paediatric onco-haematology")
     PSYCH_SUPPORT = "psych_support", _("Psychological support")
     NGO = "ngo", _("NGO / support group")
@@ -209,6 +211,9 @@ class Institution(index.Indexed, TimeStampedModel):
         return self.lat is not None and self.lng is not None
 
 
+DIRECTORY_PAGE_SIZE = 30
+
+
 class DirectoryPage(BasePage):
     """«Куда обратиться» — list of institutions with region/type filters (map + HTMX in M4).
 
@@ -261,9 +266,12 @@ class DirectoryPage(BasePage):
             "" if self.default_section == InstitutionSections.BOTH else self.default_section
         )
         free_only = request.GET.get("free") == "1"
-        institutions = list(
-            filter_institutions(region=region, kind=kind, section=section, free_only=free_only)
-        )
+        query = " ".join(request.GET.get("q", "").split())[:100]
+        matches = filter_institutions(
+            region=region, kind=kind, section=section, free_only=free_only, query=query
+        ).order_by("region__sort_order", "district_uz", "name_uz")
+        page = Paginator(matches, DIRECTORY_PAGE_SIZE).get_page(request.GET.get("page"))
+        institutions = list(page.object_list)
         # JSON-LD MedicalClinic entries mirror the visible (filtered) list — spec §10
         from apps.core import seo
 
@@ -275,6 +283,7 @@ class DirectoryPage(BasePage):
         context.update(
             {
                 "institutions": institutions,
+                "page_obj": page,
                 "map_data": json.dumps(
                     map_payload(institutions, get_language() or "uz"), ensure_ascii=False
                 ).replace("</", r"<\/"),
@@ -285,6 +294,7 @@ class DirectoryPage(BasePage):
                     "kind": kind,
                     "section": section,
                     "free": free_only,
+                    "q": query,
                 },
             }
         )

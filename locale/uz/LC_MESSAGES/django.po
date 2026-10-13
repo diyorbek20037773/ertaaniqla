@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-08 12:08+0500\n"
+"POT-Creation-Date: 2026-10-13 14:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -873,6 +873,9 @@ msgstr "Ona va bola salomatligi markazi / filiali"
 
 msgid "Oncology centre (RONC / regional)"
 msgstr "Onkologiya markazi (RONM / viloyat)"
+
+msgid "Hospital / multi-profile medical centre"
+msgstr "Shifoxona / koʻp tarmoqli tibbiyot markazi"
 
 msgid "Paediatric onco-haematology"
 msgstr "Bolalar onkogematologiyasi"
@@ -2081,6 +2084,12 @@ msgstr[0] "%(counter)s ta muassasa"
 
 msgid "Filter institutions"
 msgstr "Muassasalarni filtrlash"
+
+msgid "District, village or name"
+msgstr "Tuman, qishloq yoki nomi"
+
+msgid "e.g. Chilonzor or 12-OP"
+msgstr "masalan: Chilonzor yoki 12-OP"
 
 msgid "Show"
 msgstr "Koʻrsatish"
