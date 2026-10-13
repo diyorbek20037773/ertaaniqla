@@ -71,6 +71,10 @@ def test_directory_htmx_partial_and_map_data(seeded, client: Client) -> None:
     assert "<html" not in text
     assert "Fargʻona tumani oilaviy shifokorlik punkti" in text
     data = json.loads(text.split('id="map-data">')[1].split("</script>")[0])
-    assert len(data) == 1 and data[0]["lat"] == 40.38 and data[0]["sections"] == "women"
+    # the map counts every region for the other filters; exact pins for rows with coordinates
+    assert data["selected"]["region"] == "fergana"
+    assert data["regions"]["fergana"]["count"] == 1
+    fergana = [p for p in data["points"] if p["lat"] == 40.38]
+    assert len(fergana) == 1 and fergana[0]["sections"] == "women"
     ru = client.get("/ru/zhenskiy/kuda-obratitsya/", {"kind": "ngo"}, HTTP_HX_REQUEST="true")
     assert "Умид" in ru.content.decode()

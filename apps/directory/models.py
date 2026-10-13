@@ -257,7 +257,7 @@ class DirectoryPage(BasePage):
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         from django.utils.translation import get_language
 
-        from apps.directory.services import filter_institutions, map_payload, region_list
+        from apps.directory.services import filter_institutions, map_overview, region_list
 
         context = super().get_context(request, *args, **kwargs)
         region = request.GET.get("region", "")
@@ -267,9 +267,12 @@ class DirectoryPage(BasePage):
         )
         free_only = request.GET.get("free") == "1"
         query = " ".join(request.GET.get("q", "").split())[:100]
-        matches = filter_institutions(
-            region=region, kind=kind, section=section, free_only=free_only, query=query
-        ).order_by("region__sort_order", "district_uz", "name_uz")
+        district = request.GET.get("district", "")[:120]
+        # the map counts every place for the other filters; the list narrows to the place
+        others = filter_institutions(kind=kind, section=section, free_only=free_only, query=query)
+        matches = filter_institutions(others, region=region, district=district).order_by(
+            "region__sort_order", "district_uz", "name_uz"
+        )
         page = Paginator(matches, DIRECTORY_PAGE_SIZE).get_page(request.GET.get("page"))
         institutions = list(page.object_list)
         # JSON-LD MedicalClinic entries mirror the visible (filtered) list — spec §10
@@ -285,7 +288,8 @@ class DirectoryPage(BasePage):
                 "institutions": institutions,
                 "page_obj": page,
                 "map_data": json.dumps(
-                    map_payload(institutions, get_language() or "uz"), ensure_ascii=False
+                    map_overview(others, language, region=region, district=district),
+                    ensure_ascii=False,
                 ).replace("</", r"<\/"),
                 "regions": region_list(),
                 "kinds": InstitutionKind.choices,
@@ -295,6 +299,7 @@ class DirectoryPage(BasePage):
                     "section": section,
                     "free": free_only,
                     "q": query,
+                    "district": district,
                 },
             }
         )

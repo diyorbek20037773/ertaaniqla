@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 14:56+0500\n"
+"POT-Creation-Date: 2026-10-13 15:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -972,6 +972,11 @@ msgstr "katalog sahifasi (qayerga murojaat qilish)"
 
 msgid "Free under the state programme"
 msgstr "Davlat dasturi boʻyicha bepul"
+
+#, python-format
+msgid "%(count)s institution"
+msgid_plural "%(count)s institutions"
+msgstr[0] "%(count)s ta muassasa"
 
 msgid "Questions & FAQ"
 msgstr "Savollar va javoblar"
@@ -2102,6 +2107,13 @@ msgstr "Bu yerda xarita koʻrsatiladi."
 
 msgid "Map of institutions"
 msgstr "Muassasalar xaritasi"
+
+msgid ""
+"Click a region to see its districts; a number is the institutions in the "
+"district, shown at its centre. The exact address is on each card."
+msgstr ""
+"Tumanlarni koʻrish uchun viloyatni bosing; raqam — tumandagi muassasalar soni"
+" (tuman markazida koʻrsatilgan). Aniq manzil har bir kartochkada."
 
 #, python-format
 msgid "New feedback #%(id)s"

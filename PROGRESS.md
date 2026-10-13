@@ -168,6 +168,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] Final design (D-081, `docs/oxirigi_variant/`): tokens + serif fonts, header / footer, landing (CMS-editable blocks, `seed_home_design`), news / articles / videos lists, question page with categories and the dark form panel, topic pages restyled with the new banner; mobile checked at 390 px (no horizontal scroll); unit 561 passed (coverage 92.75 %), e2e 58 passed (axe incl. high contrast)
   - [x] FAQ (developer 2026-10-08): the question page lists the design's most asked questions per topic and language (`seed_faq_questions`, editorial, answers = [[TODO]]/[[VERIFY]] for the doctors, reported by `find_placeholders`); the list is filtered by page language; landing «Barcha savollar» button
   - [x] Directory filled from the Ministry list (D-082): 2 929 institutions in 14 regions, samples hidden, 30 per page + search; no phones / hours / coordinates in the file — the map stays empty until coordinates come
+  - [x] Directory map (D-083): region shapes coloured by count, district numbers at district centres, click → filter; per-institution pins need coordinates from the client
   - Open with the client: two landing files differ — «lending new (1).png» (no video / article rows, cards titled «Eng koʻp beriladigan savollar») was implemented; the titles are CMS fields
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in

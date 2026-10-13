@@ -228,6 +228,7 @@ JSON_SKIP_KEYS = {
     "code",
     "kind",
     "region",
+    "district",
     "section",
     "services",
     "inLanguage",

@@ -108,3 +108,43 @@ def test_directory_search_and_pages(seeded, client: Client) -> None:
     assert second.count('class="institution"') == 10
     found = client.get(url + "&q=quva").content.decode()
     assert "1 ta muassasa" in found and "7-sonli OP" in found
+
+
+def test_district_key_and_centres() -> None:
+    from apps.directory.geo import district_centre, district_key
+
+    assert district_key("Andijon sh.") == "andijon#city"
+    assert district_key("Chilonzor tumani") == "chilonzor"
+    assert district_key("Tuproqqalʼa_tumani") == "tuproqqala"
+    lat, lng = district_centre("tashkent-city", "Chilonzor tumani")
+    assert 41.1 < lat < 41.4 and 69.0 < lng < 69.4
+    assert district_centre("samarkand", "Samarqand") is not None
+    assert district_centre("samarkand", "Yoʻq tuman") is None
+
+
+@pytest.mark.django_db
+def test_map_overview_regions_districts_and_district_filter(seeded, client: Client) -> None:
+    import json
+    import re
+
+    region = Region.objects.get(code="samarkand")
+    for n, district in enumerate(["Urgut", "Urgut", "Samarqand"]):
+        Institution.objects.create(
+            name_uz=f"{n} OP",
+            name_ru=f"{n} ОП",
+            kind=InstitutionKind.POLYCLINIC,
+            region=region,
+            district_uz=district,
+        )
+    html = client.get("/uz/ayollar/qayerga-murojaat/?region=samarkand").content.decode()
+    data = json.loads(re.search(r'id="map-data">(.*?)</script>', html, re.S).group(1))
+    assert data["regions"]["samarkand"]["count"] == 3
+    assert data["regions"]["samarkand"]["label"] == "3 ta muassasa"
+    assert data["regions"]["fergana"]["count"] == 0  # every region is drawn
+    urgut = next(d for d in data["districts"] if d["district"] == "Urgut")
+    assert urgut["count"] == 2 and urgut["lat"] > 39
+    assert data["selected"] == {"region": "samarkand", "district": ""}
+    narrowed = client.get("/uz/ayollar/qayerga-murojaat/?region=samarkand&district=Urgut")
+    assert "2 ta muassasa" in narrowed.content.decode()
+    oz = client.get("/oz/ayollar/qayerga-murojaat/?region=samarkand").content.decode()
+    assert '"district": "Urgut"' in oz  # the filter value stays Latin on the Cyrillic site

@@ -1,6 +1,32 @@
-/* Directory map styles — Leaflet CSS + the .map container (loaded only on the directory page). */
+/* Directory map styles (D-083) — Leaflet CSS + the map figure (loaded only on the directory page).
+   The base map is greyed so the brand-coloured regions and district numbers stand out. */
 @import "leaflet/dist/leaflet.css";
 
-.map { height: 24rem; width: 100%; border: var(--glass-border-width) solid var(--glass-border); border-radius: var(--radius-glass); overflow: hidden; margin-block: var(--space-6); background: var(--neutral-50); }
+.map-figure { margin: var(--space-6) 0; }
+.map {
+  height: clamp(22rem, 46vw, 34rem); width: 100%; overflow: hidden;
+  border: 1px solid var(--c-line, #e8dde2); border-radius: var(--radius-card, 24px); background: #faf7f5;
+}
 .map:empty::after { content: attr(data-empty); display: flex; height: 100%; align-items: center; justify-content: center; color: var(--neutral-600); }
-@media print { .map { display: none; } }
+.map-figure__note { margin-top: var(--space-3); color: var(--c-muted, #6b5a6d); font-size: 0.82rem; line-height: 1.45; }
+.map .map-tiles { filter: grayscale(1) contrast(0.9) brightness(1.08); opacity: 0.55; }
+.map .leaflet-control-zoom a { color: var(--c-ink, #2b1a2e); }
+.map .leaflet-control-attribution { font-size: 0.65rem; background: rgba(255, 255, 255, 0.7); }
+
+/* district number: white disc, mauve ring; the chosen district is filled raspberry */
+.map-count { display: flex; align-items: center; justify-content: center; }
+.map-count span {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+  border: 2px solid #a34f72; border-radius: 50%; background: #ffffff; color: #2b1a2e;
+  font: 600 0.75rem/1 var(--font-sans, sans-serif); box-shadow: 0 4px 12px rgba(43, 26, 46, 0.18);
+  transition: transform 0.15s ease;
+}
+.map-count:hover span, .map-count:focus span { transform: scale(1.12); background: #f7e4ea; }
+.map-count.is-active span { border-color: #b8336a; background: #b8336a; color: #ffffff; }
+@media (max-width: 37.5rem) { .map-count span { font-size: 0.66rem; border-width: 1.5px; } }
+.map-tip { border: 0; border-radius: 10px; box-shadow: 0 8px 24px rgba(43, 26, 46, 0.18); color: #2b1a2e; font: 0.82rem/1.35 var(--font-sans, sans-serif); }
+
+html[data-contrast="high"] .map .map-tiles { display: none; }
+html[data-contrast="high"] .map-count span { border-color: #000; color: #000; }
+html[data-reduce-motion="true"] .map-count span { transition: none; }
+@media print { .map-figure { display: none; } }

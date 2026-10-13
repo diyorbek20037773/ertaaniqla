@@ -47,11 +47,15 @@
       <input type="checkbox" id="filter-free" name="free" value="1" {% if filter.free %}checked{% endif %}>
       <label for="filter-free">{% trans "Only free under the state programme" %}</label>
     </div>
+    <input type="hidden" name="district" value="{{ filter.district }}" data-map-district>
     <button type="submit" class="button button--primary">{% trans "Show" %}</button>
     <span id="directory-loading" class="htmx-indicator" aria-live="polite">{% trans "Loading…" %}</span>
   </form>
 
-  <div id="map" class="map" data-component="map" data-empty="{% trans 'Map will be shown here.' %}" role="region" aria-label="{% trans 'Map of institutions' %}"></div>
+  <figure class="map-figure">
+    <div id="map" class="map" data-component="map" data-geo="{% static 'geo/uz-regions.json' %}" data-empty="{% trans 'Map will be shown here.' %}" role="region" aria-label="{% trans 'Map of institutions' %}"></div>
+    <figcaption class="map-figure__note">{% trans "Click a region to see its districts; a number is the institutions in the district, shown at its centre. The exact address is on each card." %}</figcaption>
+  </figure>
 
   <div id="directory-results">
     {% include "directory/_results.html" %}

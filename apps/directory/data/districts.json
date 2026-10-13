@@ -1,0 +1,786 @@
+{
+"andijan|andijon": [
+40.8204,
+72.4109
+],
+"andijan|andijon#city": [
+40.8028,
+72.3233
+],
+"andijan|asaka": [
+40.678,
+72.2147
+],
+"andijan|baliqchi": [
+40.8676,
+71.9188
+],
+"andijan|boz": [
+40.7084,
+71.9009
+],
+"andijan|buloqboshi": [
+40.6391,
+72.4679
+],
+"andijan|izbosgan": [
+40.9277,
+72.2341
+],
+"andijan|jalaquduq": [
+40.7645,
+72.6381
+],
+"andijan|marhamat": [
+40.5301,
+72.3187
+],
+"andijan|oltinkol": [
+40.8115,
+72.1522
+],
+"andijan|paxtaobod": [
+40.9843,
+72.4117
+],
+"andijan|qorgontepa": [
+40.7869,
+72.8574
+],
+"andijan|ulugnor": [
+40.7808,
+71.6733
+],
+"andijan|xojaobod": [
+40.6345,
+72.5932
+],
+"andijan|xonobod#city": [
+40.8238,
+72.9846
+],
+"bukhara|buxoro": [
+39.5785,
+64.4586
+],
+"bukhara|gijduvon": [
+40.4616,
+64.8218
+],
+"bukhara|jondor": [
+39.9312,
+63.6217
+],
+"bukhara|kogon": [
+39.6746,
+64.5453
+],
+"bukhara|kogon#city": [
+39.6856,
+64.55
+],
+"bukhara|olot": [
+39.2148,
+64.1311
+],
+"bukhara|peshku": [
+40.6663,
+63.2149
+],
+"bukhara|qorakol": [
+39.8847,
+63.0489
+],
+"bukhara|qorovulbozor": [
+39.3669,
+64.7804
+],
+"bukhara|romitan": [
+40.6711,
+62.4979
+],
+"bukhara|shofirkon": [
+40.453,
+64.2196
+],
+"bukhara|vobkent": [
+39.9309,
+64.5075
+],
+"fergana|beshariq": [
+40.3982,
+70.5746
+],
+"fergana|bogdod": [
+40.4975,
+71.2018
+],
+"fergana|buvayda": [
+40.6405,
+71.1054
+],
+"fergana|dangara": [
+40.633,
+70.8411
+],
+"fergana|fargona": [
+40.3245,
+71.7696
+],
+"fergana|fargona#city": [
+40.3959,
+71.7958
+],
+"fergana|furqat": [
+40.5085,
+70.7372
+],
+"fergana|margilon#city": [
+40.4835,
+71.7227
+],
+"fergana|oltiariq": [
+40.4728,
+71.4371
+],
+"fergana|ozbekiston": [
+40.3281,
+70.8566
+],
+"fergana|qoqon#city": [
+40.5302,
+70.9267
+],
+"fergana|qoshtepa": [
+40.5337,
+71.6198
+],
+"fergana|quva": [
+40.5336,
+72.0351
+],
+"fergana|quvasoy#city": [
+40.3295,
+71.9431
+],
+"fergana|rishton": [
+40.387,
+71.2381
+],
+"fergana|sux": [
+40.019,
+71.0965
+],
+"fergana|toshloq": [
+40.5535,
+71.8315
+],
+"fergana|uchkoprik": [
+40.5098,
+71.0205
+],
+"fergana|yozyovon": [
+40.6599,
+71.6145
+],
+"jizzakh|arnasoy": [
+40.5213,
+67.8155
+],
+"jizzakh|baxmal": [
+39.6899,
+67.8496
+],
+"jizzakh|dostlik": [
+40.4921,
+68.0369
+],
+"jizzakh|forish": [
+40.7315,
+67.2857
+],
+"jizzakh|gallaorol": [
+39.9875,
+67.3921
+],
+"jizzakh|jizzax": [
+40.0366,
+67.8454
+],
+"jizzakh|mirzachol": [
+40.6826,
+68.062
+],
+"jizzakh|paxtakor": [
+40.309,
+68.018
+],
+"jizzakh|yangiobod": [
+40.0089,
+68.7638
+],
+"jizzakh|zafarobod": [
+40.323,
+67.7754
+],
+"jizzakh|zarbdor": [
+40.1166,
+68.1766
+],
+"jizzakh|zomin": [
+39.8678,
+68.3753
+],
+"karakalpakstan|amudaryo": [
+42.0873,
+60.0775
+],
+"karakalpakstan|beruniy": [
+42.0342,
+60.9174
+],
+"karakalpakstan|bozatau": [
+43.4931,
+57.1733
+],
+"karakalpakstan|chimboy": [
+43.0748,
+59.5741
+],
+"karakalpakstan|ellikqala": [
+42.3042,
+61.5505
+],
+"karakalpakstan|kegeyli": [
+42.817,
+59.483
+],
+"karakalpakstan|muynak": [
+44.2264,
+59.5021
+],
+"karakalpakstan|nukus": [
+42.5284,
+59.5052
+],
+"karakalpakstan|qongirot": [
+43.4931,
+57.1733
+],
+"karakalpakstan|qonlikol": [
+42.749,
+59.0699
+],
+"karakalpakstan|qoraozak": [
+42.6024,
+60.1407
+],
+"karakalpakstan|shumanay": [
+42.6661,
+58.8747
+],
+"karakalpakstan|taxiatosh#city": [
+42.5284,
+59.5052
+],
+"karakalpakstan|taxtakupir": [
+43.0712,
+61.1556
+],
+"karakalpakstan|tortkol": [
+41.506,
+61.5716
+],
+"karakalpakstan|xojayli": [
+42.4411,
+59.332
+],
+"kashkadarya|chiroqchi": [
+39.1364,
+66.3221
+],
+"kashkadarya|dehqonobod": [
+38.3424,
+66.6765
+],
+"kashkadarya|guzor": [
+38.5254,
+66.1354
+],
+"kashkadarya|kasbi": [
+38.8704,
+65.4544
+],
+"kashkadarya|kitob": [
+39.1712,
+67.1024
+],
+"kashkadarya|koson": [
+39.1224,
+65.7611
+],
+"kashkadarya|mirishkor": [
+38.8142,
+64.9905
+],
+"kashkadarya|muborak": [
+39.2133,
+65.2644
+],
+"kashkadarya|nishon": [
+38.4776,
+65.5764
+],
+"kashkadarya|qamashi": [
+38.7475,
+66.7846
+],
+"kashkadarya|qarshi": [
+38.7661,
+65.778
+],
+"kashkadarya|shahrisabz": [
+38.9722,
+67.2566
+],
+"kashkadarya|shaxrisabz": [
+38.9722,
+67.2566
+],
+"kashkadarya|yakkabog": [
+38.8693,
+66.8144
+],
+"khorezm|bogot": [
+41.2951,
+60.8169
+],
+"khorezm|gurlan": [
+41.8437,
+60.2939
+],
+"khorezm|qoshkopir": [
+41.4836,
+60.2479
+],
+"khorezm|shovot": [
+41.6747,
+60.2248
+],
+"khorezm|tuproqqala": [
+40.9856,
+61.8503
+],
+"khorezm|urganch": [
+41.55,
+60.5368
+],
+"khorezm|urganch#city": [
+41.5129,
+60.5821
+],
+"khorezm|xiva": [
+41.3767,
+60.3535
+],
+"khorezm|xonqa": [
+41.422,
+60.7535
+],
+"khorezm|xozarasp": [
+40.9856,
+61.8503
+],
+"khorezm|yangiariq": [
+41.3039,
+60.5349
+],
+"khorezm|yangibozor": [
+41.6832,
+60.4336
+],
+"namangan|chortoq": [
+41.2276,
+71.8153
+],
+"namangan|chust": [
+41.0476,
+71.1692
+],
+"namangan|davlatobod": [
+41.0071,
+71.6596
+],
+"namangan|kosonsoy": [
+41.1616,
+71.5322
+],
+"namangan|mingbuloq": [
+40.7782,
+71.3261
+],
+"namangan|namangan": [
+40.9535,
+71.6231
+],
+"namangan|namangan#city": [
+41.0071,
+71.6596
+],
+"namangan|norin": [
+40.9513,
+71.9785
+],
+"namangan|pop": [
+41.0649,
+70.7487
+],
+"namangan|toraqorgon": [
+40.9655,
+71.4371
+],
+"namangan|uchqorgon": [
+41.0598,
+72.0858
+],
+"namangan|uychi": [
+41.0608,
+71.8853
+],
+"namangan|yangi namangan": [
+41.0071,
+71.6596
+],
+"namangan|yangiqorgon": [
+41.278,
+71.6897
+],
+"navoi|gozgon#city": [
+40.601,
+65.9731
+],
+"navoi|karmana": [
+40.006,
+65.2268
+],
+"navoi|konimex": [
+40.9552,
+64.5099
+],
+"navoi|navbahor": [
+40.1608,
+65.3313
+],
+"navoi|navoiy#city": [
+40.0415,
+65.3593
+],
+"navoi|nurota": [
+40.601,
+65.9731
+],
+"navoi|qiziltepa": [
+39.7979,
+64.952
+],
+"navoi|tomdi": [
+42.0936,
+65.1974
+],
+"navoi|uchquduq": [
+42.4665,
+63.157
+],
+"navoi|xatirchi": [
+40.137,
+65.9111
+],
+"navoi|zarafshon#city": [
+41.5065,
+64.1877
+],
+"samarkand|bulungur": [
+39.7036,
+67.3459
+],
+"samarkand|ishtixon": [
+39.9797,
+66.5471
+],
+"samarkand|jomboy": [
+39.7475,
+67.1207
+],
+"samarkand|kattaqorgon": [
+39.9648,
+66.2685
+],
+"samarkand|kattaqorgon#city": [
+39.8577,
+66.2753
+],
+"samarkand|narpay": [
+39.8742,
+65.9735
+],
+"samarkand|nurobod": [
+39.5561,
+65.9932
+],
+"samarkand|oqdaryo": [
+39.7971,
+66.7833
+],
+"samarkand|pastdorgom": [
+39.6619,
+66.6589
+],
+"samarkand|paxtachi": [
+39.847,
+65.5284
+],
+"samarkand|payariq": [
+40.0377,
+66.8783
+],
+"samarkand|qushrabot": [
+40.3495,
+66.5143
+],
+"samarkand|samarqand": [
+39.5481,
+66.9271
+],
+"samarkand|toyloq": [
+39.5308,
+67.1825
+],
+"samarkand|urgut": [
+39.3759,
+67.1839
+],
+"surkhandarya|angor": [
+37.4346,
+67.2623
+],
+"surkhandarya|bandixon": [
+37.709,
+67.3316
+],
+"surkhandarya|boysun": [
+38.1454,
+67.2035
+],
+"surkhandarya|denov": [
+38.3243,
+67.8217
+],
+"surkhandarya|jarqorgon": [
+37.5224,
+67.5344
+],
+"surkhandarya|muzrabod": [
+37.4212,
+66.9383
+],
+"surkhandarya|oltinsoy": [
+38.1862,
+67.7142
+],
+"surkhandarya|qiziriq": [
+37.709,
+67.3316
+],
+"surkhandarya|qumqorgon": [
+37.8384,
+67.6834
+],
+"surkhandarya|sariosiyo": [
+38.711,
+67.8073
+],
+"surkhandarya|sherobod": [
+37.703,
+66.8558
+],
+"surkhandarya|shurchi": [
+37.9449,
+67.8879
+],
+"surkhandarya|termiz": [
+37.2907,
+67.4615
+],
+"surkhandarya|uzun": [
+38.1263,
+68.1632
+],
+"syrdarya|bayaut": [
+40.3611,
+68.9494
+],
+"syrdarya|guliston": [
+40.4979,
+68.925
+],
+"syrdarya|mirzaobod": [
+40.4646,
+68.6139
+],
+"syrdarya|oqoltin": [
+40.5337,
+68.3233
+],
+"syrdarya|sardoba": [
+40.3125,
+68.2938
+],
+"syrdarya|sayxunobod": [
+40.6358,
+68.8451
+],
+"syrdarya|shirin": [
+40.2167,
+69.1164
+],
+"syrdarya|sirdaryo": [
+40.8236,
+68.6144
+],
+"syrdarya|xavost": [
+40.2579,
+68.7136
+],
+"syrdarya|yangiyer": [
+40.251,
+68.8185
+],
+"tashkent-city|bektemir": [
+41.195,
+69.3057
+],
+"tashkent-city|chilonzor": [
+41.2347,
+69.1707
+],
+"tashkent-city|mirobod": [
+41.241,
+69.2652
+],
+"tashkent-city|mirzo ulugbek": [
+41.3009,
+69.3186
+],
+"tashkent-city|olmazor": [
+41.3247,
+69.1922
+],
+"tashkent-city|sergeli": [
+41.1897,
+69.2121
+],
+"tashkent-city|shayxontohur": [
+41.2913,
+69.1854
+],
+"tashkent-city|uchtepa": [
+41.2609,
+69.1358
+],
+"tashkent-city|yakkasaroy": [
+41.2463,
+69.2195
+],
+"tashkent-city|yangixayot": [
+41.1897,
+69.2121
+],
+"tashkent-city|yashnobod": [
+41.2471,
+69.3051
+],
+"tashkent-city|yunusobod": [
+41.3275,
+69.2564
+],
+"tashkent|angren": [
+40.9938,
+70.0485
+],
+"tashkent|bekobod": [
+40.4141,
+69.1932
+],
+"tashkent|bekobod#city": [
+40.2249,
+69.2517
+],
+"tashkent|boka": [
+40.7046,
+69.1575
+],
+"tashkent|bostonliq": [
+41.7166,
+70.3084
+],
+"tashkent|chinoz": [
+40.9648,
+68.7984
+],
+"tashkent|chirchik#city": [
+41.4432,
+69.5297
+],
+"tashkent|nurafshon": [
+41.0457,
+69.3549
+],
+"tashkent|ohangaron": [
+40.9836,
+69.9699
+],
+"tashkent|olmalik#city": [
+40.8262,
+69.5776
+],
+"tashkent|oqqorgon": [
+40.8096,
+69.0326
+],
+"tashkent|ortachirchiq": [
+41.0297,
+69.3067
+],
+"tashkent|parkent": [
+41.2578,
+69.7536
+],
+"tashkent|piskent": [
+40.8022,
+69.4784
+],
+"tashkent|qibray": [
+41.4604,
+69.4864
+],
+"tashkent|quyichirchiq": [
+40.9212,
+68.9696
+],
+"tashkent|toshkent": [
+41.3862,
+69.1983
+],
+"tashkent|yangiyol": [
+41.0956,
+68.9771
+],
+"tashkent|yuqorichirchiq": [
+41.1926,
+69.4751
+],
+"tashkent|zangiota": [
+41.2126,
+69.0751
+]
+}
