@@ -1,0 +1,82 @@
+# Small server (D-086): one VPS with 2 vCPU / 2–4 GB RAM / 40–60 GB SSD runs the whole portal.
+# Videos stay on YouTube (D-085), so no transcoding; the monitoring stack and ClamAV are not
+# started (do not pass --profile monitoring / clamav). Layered over the production file:
+#   docker compose -f compose.yml -f compose.prod.yml -f compose.small.yml up -d
+# Peak memory of everything below ≈ 1.3 GB; the limits leave room for the OS on a 2 GB VPS.
+x-small-logging: &small-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  db:
+    command:
+      - postgres
+      - -c
+      - shared_buffers=128MB
+      - -c
+      - effective_cache_size=512MB
+      - -c
+      - work_mem=8MB
+      - -c
+      - maintenance_work_mem=64MB
+      - -c
+      - max_connections=40
+      - -c
+      - max_wal_size=512MB
+      - -c
+      - log_min_duration_statement=500
+    shm_size: 128m
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+    logging: *small-logging
+
+  redis:
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+    logging: *small-logging
+
+  web:
+    environment:
+      GUNICORN_WORKERS: "2"  # fixed: .env may say 5 for the big server
+    deploy:
+      resources:
+        limits:
+          memory: 640m
+    logging: *small-logging
+
+  worker:
+    environment:
+      CELERY_CONCURRENCY: "1"
+    deploy:
+      resources:
+        limits:
+          memory: 320m
+    logging: *small-logging
+
+  beat:
+    deploy:
+      resources:
+        limits:
+          memory: 160m
+    logging: *small-logging
+
+  nginx:
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+    logging: *small-logging
+
+  backup:
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    logging: *small-logging

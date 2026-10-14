@@ -317,3 +317,19 @@ healthcheck, and the Celery queue metric never being exported.
    Grafana `http://127.0.0.1:3000`, Jaeger `http://127.0.0.1:16686`.
    Differences from a server: node-exporter sees the Docker VM (no disk panel), blackbox skips
    certificate verification. `make local-prod-down` stops it; volumes are kept.
+
+## Small server (D-086)
+
+For a budget VPS (2 vCPU / 2–4 GB RAM / 40–60 GB SSD) add the third compose file and leave the
+monitoring and ClamAV profiles off:
+
+```
+docker compose -f compose.yml -f compose.prod.yml -f compose.small.yml up -d
+```
+
+It lowers Postgres to 128 MB shared buffers, Redis to 64 MB, gunicorn to 2 workers and Celery to
+one process, and keeps logs to 3 × 10 MB per service. Videos are YouTube embeds (no transcoding).
+Watch `docker stats` the first weeks: if memory stays above 80 %, raise the VPS to 4 GB RAM (no
+reinstall). Backups must leave the server: restic to another host, or copy the nightly archive to
+the client's own disk.
+
