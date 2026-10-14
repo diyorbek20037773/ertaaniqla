@@ -57,6 +57,12 @@ class VideoIndexPage(RoutablePageMixin, BasePage):
         return stream_plain_text(self.intro)
 
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
+        from django.conf import settings
+
+        if settings.CELERY_TASK_ALWAYS_EAGER:  # no worker / beat (Railway demo): sync from here
+            from apps.media_library.youtube import sync_soon
+
+            sync_soon()
         context = super().get_context(request, *args, **kwargs)
         topic = topic_from_request(request)
         context["topic"] = topic

@@ -170,6 +170,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] Directory filled from the Ministry list (D-082): 2 929 institutions in 14 regions, samples hidden, 30 per page + search; no phones / hours / coordinates in the file — the map stays empty until coordinates come
   - [x] Directory map (D-083): region shapes coloured by count, district numbers at district centres, click → filter; per-institution pins need coordinates from the client
   - [x] Client changes 2026-10-13 (D-084): «Savol-javob» tab per disease with the client's 13 Q&A, header item removed, «Umumiy maʼlumot» / «Biz haqimizda», scrolling banner with pause; Russian Q&A — translator
+  - [x] YouTube channel sync (D-085): new channel videos appear in «Videoroliklar» automatically (2 imported)
   - Open with the client: two landing files differ — «lending new (1).png» (no video / article rows, cards titled «Eng koʻp beriladigan savollar») was implemented; the titles are CMS fields
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in

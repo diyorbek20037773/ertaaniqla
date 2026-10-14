@@ -28,6 +28,7 @@ case "$ROLE" in
       python manage.py seed_home_design
       python manage.py seed_faq_questions
       python manage.py seed_client_changes
+      python manage.py sync_youtube  # YouTube channel → videos (no beat on demo hosts, D-085)
       python manage.py sync_site
     fi
     exec gunicorn config.wsgi:application \

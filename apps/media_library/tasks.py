@@ -19,3 +19,11 @@ def transcode_video(video_id: int) -> None:
         logger.info("transcode_video(%s): nothing to do", video_id)
         return
     run(video)
+
+
+@shared_task(name="media_library.sync_youtube", ignore_result=True)
+def sync_youtube() -> int:
+    """New videos of the portal's YouTube channel → «Videoroliklar» (D-085, every 30 minutes)."""
+    from apps.media_library.youtube import sync_from_settings
+
+    return len(sync_from_settings())

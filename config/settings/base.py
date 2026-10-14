@@ -429,6 +429,8 @@ CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
         "task": "feedback.purge_old_submissions",
         "schedule": crontab(hour=3, minute=15),
     },
+    # new videos of the portal's YouTube channel (D-085)
+    "youtube-sync": {"task": "media_library.sync_youtube", "schedule": crontab(minute="*/30")},
 }
 
 # ---------------------------------------------------------------------------
