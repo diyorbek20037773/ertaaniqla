@@ -90,3 +90,15 @@ def test_sync_never_raises(monkeypatch) -> None:
         lambda: "https://www.youtube.com/channel/UChtzDub2Q1cTIC3Nl_Uk9Cg",
     )
     assert youtube.sync_from_settings() == []
+
+
+@pytest.mark.django_db
+def test_sync_restores_a_lost_cover(monkeypatch) -> None:
+    cover = _jpeg()
+    monkeypatch.setattr(youtube, "_get", lambda url: FEED if "feeds/videos.xml" in url else cover)
+    youtube.sync_channel("https://www.youtube.com/channel/UChtzDub2Q1cTIC3Nl_Uk9Cg")
+    video = Video.objects.get(external_url__contains="AAAAAAAAAAA")
+    video.poster.file.storage.delete(video.poster.file.name)  # the disk lost the file
+    youtube.sync_channel("https://www.youtube.com/channel/UChtzDub2Q1cTIC3Nl_Uk9Cg")
+    video.refresh_from_db()
+    assert video.poster.file.storage.exists(video.poster.file.name)

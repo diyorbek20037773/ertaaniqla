@@ -135,6 +135,10 @@ def _poster(video_id: str, title: str) -> Any:
     return None
 
 
+def _has_file(image: Any) -> bool:
+    return image is not None and bool(image.file) and image.file.storage.exists(image.file.name)
+
+
 def sync_channel(channel_url: str) -> list[str]:
     """Add the channel's videos that are not on the site yet. Returns their ids."""
     from apps.media_library.models import Video, VideoKind, VideoSource, VideoStatus
@@ -143,8 +147,15 @@ def sync_channel(channel_url: str) -> list[str]:
     if not cid:
         return []
     added = []
+    repaired = 0
     for item in parse_feed(_get(FEED_URL.format(cid))):
-        if Video.objects.filter(external_url__contains=item.video_id).exists():
+        existing = Video.objects.filter(external_url__contains=item.video_id).first()
+        if existing is not None:
+            # a cover whose file is gone (lost disk, restored database) is fetched again
+            if existing.source == VideoSource.YOUTUBE and not _has_file(existing.poster):
+                existing.poster = _poster(item.video_id, existing.title)
+                existing.save(update_fields=["poster"])
+                repaired += 1
             continue
         Video.objects.create(
             title=item.title[:200],
@@ -156,7 +167,7 @@ def sync_channel(channel_url: str) -> list[str]:
             status=VideoStatus.READY,
         )
         added.append(item.video_id)
-    if added:
+    if added or repaired:
         from apps.core.cache import bump_page_cache
 
         bump_page_cache()
