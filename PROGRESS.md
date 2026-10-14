@@ -172,6 +172,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] Client changes 2026-10-13 (D-084): «Savol-javob» tab per disease with the client's 13 Q&A, header item removed, «Umumiy maʼlumot» / «Biz haqimizda», scrolling banner with pause; Russian Q&A — translator
   - [x] YouTube channel sync (D-085): new channel videos appear in «Videoroliklar» automatically (2 imported)
   - [x] Small server option (D-086): `compose.small.yml` for a 2 vCPU / 2–4 GB / 40–60 GB VPS (client budget ≈ 1 mln so'm a year)
+  - [x] Hosting chosen (2026-10-14, D-086): KVM VPS 2 vCPU / 4 GB RAM / 60 GB SSD, Ubuntu 24.04, root SSH, static IPv4, unlimited traffic, TAS-IX 100 Mbit/s, external 10 Mbit/s, data centre in Zangiota (Uzbekistan), daily provider snapshot kept 3 days; 182 000 so'm/month. Run with `compose.small.yml`; our own nightly backup still leaves the server. Waiting for: IP + SSH access, DNS of ertaaniqla.uz, Turnstile keys, SMTP
   - Open with the client: two landing files differ — «lending new (1).png» (no video / article rows, cards titled «Eng koʻp beriladigan savollar») was implemented; the titles are CMS fields
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in
