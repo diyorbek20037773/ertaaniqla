@@ -31,11 +31,11 @@ def _post(index: PostIndexPage, title: str, topic: str, day: int) -> PostPage:
 def test_lists_exist_in_both_languages_with_empty_states(seeded, client: Client) -> None:
     for url, empty in (
         ("/uz/yangiliklar/", "Yangiliklar tez orada"),
-        ("/ru/novosti/", "Новости скоро"),
+        ("/ru/novosti/", "скоро появятся новости"),
         ("/uz/maqolalar/", "Maqolalar tez orada"),
-        ("/ru/stati/", "Статьи скоро"),
+        ("/ru/stati/", "скоро появятся статьи"),
         ("/uz/videoroliklar/", "Videoroliklar tez orada"),
-        ("/ru/video/", "Видео скоро"),
+        ("/ru/video/", "скоро появятся видео"),
     ):
         response = client.get(url)
         assert response.status_code == 200, url

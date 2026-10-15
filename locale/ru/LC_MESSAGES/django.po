@@ -34,7 +34,7 @@ msgid "Link"
 msgstr "Ссылка"
 
 msgid "Choose either a page or a URL, not both."
-msgstr "Выберите либо страницу, либо ссылку, но не обе."
+msgstr "Укажите либо страницу, либо ссылку, но не то и другое одновременно."
 
 msgid "Text"
 msgstr "Текст"
@@ -46,16 +46,16 @@ msgid "Warning"
 msgstr "Предупреждение"
 
 msgid "Danger — do not delay"
-msgstr "Опасно — не откладывайте"
+msgstr "Опасность — не откладывайте"
 
 msgid "Success / good news"
 msgstr "Хорошая новость"
 
 msgid "Reassurance (this sign is not always cancer)"
-msgstr "Успокоение (этот признак не всегда рак)"
+msgstr "Ободрение (этот признак не всегда означает рак)"
 
 msgid "Alert strip with “!” (do not panic, do not delay)"
-msgstr "Полоса-предупреждение с «!» (не паникуйте, не откладывайте)"
+msgstr "Предупреждающая полоса со знаком «!» (не паникуйте, не откладывайте)"
 
 msgid "Kind"
 msgstr "Тип"
@@ -88,10 +88,11 @@ msgid "Leave empty to number automatically (01, 02, …)."
 msgstr "Оставьте пустым для автоматической нумерации (01, 02, …)."
 
 msgid "Deadline / timing"
-msgstr "Срок / сроки"
+msgstr "Сроки"
 
 msgid "E.g. referral deadline per PP-402. Shown as a separate line."
-msgstr "Например, срок направления по ПП-402. Показывается отдельной строкой."
+msgstr ""
+"Например, срок направления согласно ПП-402. Отображается отдельной строкой."
 
 msgid "Heading"
 msgstr "Заголовок"
@@ -100,7 +101,7 @@ msgid "Numbered list"
 msgstr "Нумерованный список"
 
 msgid "Capsules joined by arrows (stages, patient route)"
-msgstr "Капсулы со стрелками (стадии, маршрут пациента)"
+msgstr "Капсулы, соединённые стрелками (стадии, маршрут пациента)"
 
 msgid "Capsules without arrows (rights)"
 msgstr "Капсулы без стрелок (права)"
@@ -118,19 +119,21 @@ msgid "Image"
 msgstr "Изображение"
 
 msgid "Icon"
-msgstr "Иконка"
+msgstr "Значок"
 
 msgid "Designer icon shown on the pink tile (used when no image is uploaded)."
-msgstr "Иконка дизайнера на розовой плитке (если изображение не загружено)."
+msgstr ""
+"Значок из дизайн-макета на розовой плитке (используется, если изображение не"
+" загружено)."
 
 msgid "Cards"
 msgstr "Карточки"
 
 msgid "Icon tiles (risk factors)"
-msgstr "Плитки с иконками (факторы риска)"
+msgstr "Плитки со значками (факторы риска)"
 
 msgid "Icon tiles, bright pink (cervical cancer)"
-msgstr "Плитки с иконками, ярко-розовые (рак шейки матки)"
+msgstr "Плитки со значками, ярко-розовые (рак шейки матки)"
 
 msgid "Cards grid"
 msgstr "Сетка карточек"
@@ -142,10 +145,10 @@ msgid "Label"
 msgstr "Подпись"
 
 msgid "Lime chip, e.g. MAMMOGRAFIYA."
-msgstr "Лаймовый ярлык, например МАММОГРАФИЯ."
+msgstr "Ярлык цвета лайма, например «МАММОГРАФИЯ»."
 
 msgid "Designer illustration"
-msgstr "Иллюстрация дизайнера"
+msgstr "Иллюстрация из дизайн-макета"
 
 msgid "Used when no image is uploaded."
 msgstr "Используется, если изображение не загружено."
@@ -172,13 +175,13 @@ msgid "Text cards grid"
 msgstr "Сетка текстовых карточек"
 
 msgid "Routine — mention at the next visit"
-msgstr "Планово — скажите на следующем приёме"
+msgstr "Планово — сообщите на следующем приёме"
 
 msgid "Soon — see a doctor within days"
 msgstr "Скоро — обратитесь к врачу в ближайшие дни"
 
 msgid "Urgent — see a doctor now"
-msgstr "Срочно — обратитесь к врачу сейчас"
+msgstr "Срочно — немедленно обратитесь к врачу"
 
 msgid "Symptom"
 msgstr "Симптом"
@@ -208,7 +211,7 @@ msgid "Year"
 msgstr "Год"
 
 msgid "Statistic"
-msgstr "Статистика"
+msgstr "Статистический показатель"
 
 msgid "Video from library"
 msgstr "Видео из библиотеки"
@@ -216,8 +219,8 @@ msgstr "Видео из библиотеки"
 msgid ""
 "YouTube, Telegram, Instagram or TikTok link (used when no library video)."
 msgstr ""
-"Ссылка YouTube, Telegram, Instagram или TikTok (если нет видео из "
-"библиотеки)."
+"Ссылка на YouTube, Telegram, Instagram или TikTok (если видео из библиотеки "
+"не выбрано)."
 
 msgid "Caption"
 msgstr "Подпись"
@@ -250,7 +253,7 @@ msgid "Description"
 msgstr "Описание"
 
 msgid "Document download"
-msgstr "Скачивание документа"
+msgstr "Документ для скачивания"
 
 msgid "Question"
 msgstr "Вопрос"
@@ -262,13 +265,13 @@ msgid "Questions"
 msgstr "Вопросы"
 
 msgid "FAQ accordion / questions to ask the doctor"
-msgstr "Аккордеон вопросов / вопросы врачу"
+msgstr "Аккордеон с вопросами / вопросы к врачу"
 
 msgid "Terms"
 msgstr "Термины"
 
 msgid "Glossary terms"
-msgstr "Термины глоссария"
+msgstr "Термины словаря"
 
 msgid "All regions"
 msgstr "Все регионы"
@@ -283,10 +286,10 @@ msgid "Type"
 msgstr "Тип"
 
 msgid "Only free under the state programme"
-msgstr "Только бесплатно по госпрограмме"
+msgstr "Только бесплатные по госпрограмме"
 
 msgid "Max items"
-msgstr "Макс. количество"
+msgstr "Максимальное количество"
 
 msgid "Institution list"
 msgstr "Список учреждений"
@@ -298,7 +301,7 @@ msgid "Primary (section colour)"
 msgstr "Основная (цвет раздела)"
 
 msgid "Secondary"
-msgstr "Вторичная"
+msgstr "Дополнительная"
 
 msgid "Style"
 msgstr "Стиль"
@@ -307,7 +310,7 @@ msgid "Call to action"
 msgstr "Призыв к действию"
 
 msgid "A page or a URL is required."
-msgstr "Нужна страница или ссылка."
+msgstr "Укажите страницу или ссылку."
 
 msgid "Quote"
 msgstr "Цитата"
@@ -316,7 +319,7 @@ msgid "Author"
 msgstr "Автор"
 
 msgid "Role / organisation"
-msgstr "Роль / организация"
+msgstr "Должность / организация"
 
 msgid "Rich text"
 msgstr "Форматированный текст"
@@ -328,19 +331,21 @@ msgid "URL"
 msgstr "Ссылка (URL)"
 
 msgid "YouTube, Telegram post, Instagram post/reel or TikTok video."
-msgstr "YouTube, пост Telegram, пост/reel Instagram или видео TikTok."
+msgstr ""
+"Видео YouTube, публикация в Telegram, публикация или Reels в Instagram, "
+"видео TikTok."
 
 msgid "Embed (YouTube / Telegram / Instagram / TikTok)"
-msgstr "Встраивание (YouTube / Telegram / Instagram / TikTok)"
+msgstr "Встроенный контент (YouTube / Telegram / Instagram / TikTok)"
 
 msgid "Title bar"
 msgstr "Полоса заголовка"
 
 msgid "Highlight box"
-msgstr "Выделенный блок"
+msgstr "Акцентный блок"
 
 msgid "Intro"
-msgstr "Вступление"
+msgstr "Вводный текст"
 
 msgid "Items"
 msgstr "Пункты"
@@ -358,7 +363,7 @@ msgid "List with pictograms"
 msgstr "Список с пиктограммами"
 
 msgid "Text next to the picture"
-msgstr "Текст рядом с картинкой"
+msgstr "Текст рядом с изображением"
 
 msgid "Note box"
 msgstr "Блок примечания"
@@ -380,16 +385,17 @@ msgstr "Якорь"
 
 msgid "Latin letters and dashes, e.g. bosqichlari — links can open this item."
 msgstr ""
-"Латинские буквы и дефисы, например bosqichlari — ссылки смогут открыть этот "
-"пункт."
+"Латинские буквы и дефисы, например bosqichlari. По этому якорю ссылки смогут"
+" открывать данный пункт."
 
 msgid "Frame the content"
-msgstr "Обвести содержимое рамкой"
+msgstr "Заключить содержимое в рамку"
 
 msgid ""
 "One rounded frame around everything inside (diagnostics in the design)."
 msgstr ""
-"Одна скруглённая рамка вокруг всего содержимого (диагностика в дизайне)."
+"Общая скруглённая рамка вокруг всего вложенного содержимого (как в разделе "
+"«Диагностика» в дизайне)."
 
 msgid "Content"
 msgstr "Содержимое"
@@ -404,7 +410,7 @@ msgid "Age"
 msgstr "Возраст"
 
 msgid "Flower (breast disease)"
-msgstr "Цветок (заболевания груди)"
+msgstr "Цветок (заболевания молочной железы)"
 
 msgid "Medical cross (white)"
 msgstr "Медицинский крест (белый)"
@@ -416,7 +422,7 @@ msgid "Radiation"
 msgstr "Облучение"
 
 msgid "Medical cross (lime)"
-msgstr "Медицинский крест (лайм)"
+msgstr "Медицинский крест (цвет лайма)"
 
 msgid "Heart with baby"
 msgstr "Сердце с малышом"
@@ -437,7 +443,7 @@ msgid "Vitamins"
 msgstr "Витамины"
 
 msgid "Radiation (dark)"
-msgstr "Радиация (тёмная)"
+msgstr "Облучение (тёмный вариант)"
 
 msgid "Medical cross (white square)"
 msgstr "Медицинский крест (белый квадрат)"
@@ -464,7 +470,7 @@ msgid "Self-exam 3: lying down"
 msgstr "Самообследование 3: лёжа"
 
 msgid "Self-exam 4: nipple and armpit"
-msgstr "Самообследование 4: сосок и подмышка"
+msgstr "Самообследование 4: сосок и подмышечная область"
 
 msgid "Woman at the mammograph"
 msgstr "Женщина у маммографа"
@@ -497,7 +503,7 @@ msgid "summary"
 msgstr "краткое описание"
 
 msgid "Shown in listings, the mega-menu and search results."
-msgstr "Показывается в списках, мега-меню и результатах поиска."
+msgstr "Отображается в списках, мега-меню и результатах поиска."
 
 msgid "hero image"
 msgstr "главное изображение"
@@ -512,19 +518,19 @@ msgid "articles"
 msgstr "статьи"
 
 msgid "Core"
-msgstr "Ядро"
+msgstr "Основной модуль"
 
 msgid "Login"
 msgstr "Вход"
 
 msgid "Logged in"
-msgstr "Вошёл в систему"
+msgstr "Выполнен вход в систему"
 
 msgid "Logout"
 msgstr "Выход"
 
 msgid "Logged out"
-msgstr "Вышел из системы"
+msgstr "Выполнен выход из системы"
 
 msgid "Failed login"
 msgstr "Неудачный вход"
@@ -536,7 +542,7 @@ msgid "Account lockout"
 msgstr "Блокировка учётной записи"
 
 msgid "Locked out after repeated failed logins"
-msgstr "Заблокирован после повторных неудачных попыток входа"
+msgstr "Учётная запись заблокирована после нескольких неудачных попыток входа"
 
 msgid "Password change"
 msgstr "Смена пароля"
@@ -557,19 +563,19 @@ msgid "User account deleted"
 msgstr "Учётная запись удалена"
 
 msgid "Superuser flag"
-msgstr "Признак суперпользователя"
+msgstr "Статус суперпользователя"
 
 msgid "Superuser status changed"
 msgstr "Статус суперпользователя изменён"
 
 msgid "Staff flag"
-msgstr "Признак сотрудника"
+msgstr "Статус персонала"
 
 msgid "Staff status changed"
-msgstr "Статус сотрудника изменён"
+msgstr "Статус персонала изменён"
 
 msgid "Active flag"
-msgstr "Признак активности"
+msgstr "Статус активности"
 
 msgid "Account activated or deactivated"
 msgstr "Учётная запись активирована или деактивирована"
@@ -578,7 +584,7 @@ msgid "Roles"
 msgstr "Роли"
 
 msgid "Role (group) membership changed"
-msgstr "Изменено членство в роли (группе)"
+msgstr "Изменена принадлежность к роли (группе)"
 
 msgid "Role permissions"
 msgstr "Права роли"
@@ -608,13 +614,13 @@ msgid "Spam check failed."
 msgstr "Проверка на спам не пройдена."
 
 msgid "Please confirm you are not a robot and try again."
-msgstr "Подтвердите, что вы не робот, и попробуйте снова."
+msgstr "Подтвердите, что вы не робот, и повторите попытку."
 
 msgid "created at"
-msgstr "создано"
+msgstr "дата создания"
 
 msgid "updated at"
-msgstr "обновлено"
+msgstr "дата обновления"
 
 msgid "Women's cancer"
 msgstr "Женский рак"
@@ -629,34 +635,36 @@ msgid "Cervical cancer"
 msgstr "Рак шейки матки"
 
 msgid "social sharing image"
-msgstr "изображение для соцсетей"
+msgstr "изображение для социальных сетей"
 
 msgid ""
 "Shown when the page is shared in Telegram/Facebook. Generated automatically "
 "if empty."
 msgstr ""
-"Показывается при публикации ссылки в Telegram/Facebook. Если пусто — "
-"создаётся автоматически."
+"Отображается, когда ссылкой на страницу делятся в Telegram/Facebook. Если "
+"поле не заполнено, изображение создаётся автоматически."
 
 msgid "generated sharing image"
-msgstr "сгенерированное изображение для соцсетей"
+msgstr "автоматически созданное изображение для социальных сетей"
 
 msgid "Rendered automatically on publish when no sharing image is chosen."
 msgstr "Создаётся автоматически при публикации, если изображение не выбрано."
 
 msgid "generated story image (1080×1920)"
-msgstr "сгенерированное изображение для сторис (1080×1920)"
+msgstr "автоматически созданное изображение для сторис (1080×1920)"
 
 msgid "Vertical image for Instagram/TikTok stories, rendered on publish."
 msgstr ""
-"Вертикальное изображение для сторис Instagram/TikTok, создаётся при "
+"Вертикальное изображение для сторис в Instagram/TikTok; создаётся при "
 "публикации."
 
 msgid "hide from search engines"
 msgstr "скрыть от поисковых систем"
 
 msgid "Adds a noindex meta tag. Use for drafts-in-public and utility pages."
-msgstr "Добавляет мета-тег noindex. Для черновиков и служебных страниц."
+msgstr ""
+"Добавляет метатег noindex. Используйте для общедоступных черновиков и "
+"служебных страниц."
 
 msgid "medically reviewed by"
 msgstr "медицинский рецензент"
@@ -670,8 +678,8 @@ msgstr "проверено врачом"
 msgid ""
 "Shows the 'Verified by a doctor' badge. Set by the medical review workflow."
 msgstr ""
-"Показывает отметку «Проверено врачом». Устанавливается процессом медицинской"
-" проверки."
+"Показывает отметку «Проверено врачом». Устанавливается рабочим процессом "
+"медицинской проверки."
 
 msgid "Medical review"
 msgstr "Медицинская проверка"
@@ -680,7 +688,9 @@ msgid "Anchor on the page"
 msgstr "Якорь на странице"
 
 msgid "Optional, without # — e.g. a section of a long page."
-msgstr "Необязательно, без # — например, раздел длинной страницы."
+msgstr ""
+"Необязательно; указывается без #, например для перехода к разделу длинной "
+"страницы."
 
 msgid "or external URL"
 msgstr "или внешняя ссылка"
@@ -694,7 +704,8 @@ msgstr "Колонка подвала"
 msgid ""
 "The footer site map (design 2026-10): one block per column, links in order."
 msgstr ""
-"Карта сайта в подвале: каждая колонка — отдельный блок, ссылки по порядку."
+"Карта сайта в подвале (дизайн 2026-10): одна колонка — один блок, ссылки "
+"выводятся по порядку."
 
 msgid "hotline phone"
 msgstr "телефон горячей линии"
@@ -709,7 +720,9 @@ msgid "address (uz)"
 msgstr "адрес (uz)"
 
 msgid "Footer location icon; opens Yandex Maps when no map link is set."
-msgstr "Значок адреса в футере; без ссылки на карту открывает Яндекс Карты."
+msgstr ""
+"Значок адреса в подвале; если ссылка на карту не указана, открываются Яндекс"
+" Карты."
 
 msgid "address (ru)"
 msgstr "адрес (ru)"
@@ -733,7 +746,7 @@ msgid "location on the map"
 msgstr "место на карте"
 
 msgid "Footer location icon (e.g. Yandex Maps)."
-msgstr "Значок адреса в подвале (например, ссылка на Яндекс Карты)."
+msgstr "Ссылка для значка адреса в подвале (например, на Яндекс Карты)."
 
 msgid "footer columns (uz)"
 msgstr "колонки подвала (uz)"
@@ -748,10 +761,10 @@ msgid "footer text (ru)"
 msgstr "текст подвала (ru)"
 
 msgid "medical disclaimer (uz)"
-msgstr "медицинский дисклеймер (uz)"
+msgstr "медицинская оговорка (uz)"
 
 msgid "medical disclaimer (ru)"
-msgstr "медицинский дисклеймер (ru)"
+msgstr "медицинская оговорка (ru)"
 
 msgid "show emergency banner"
 msgstr "показывать экстренный баннер"
@@ -763,7 +776,7 @@ msgid "emergency banner (ru)"
 msgstr "экстренный баннер (ru)"
 
 msgid "emergency banner link"
-msgstr "ссылка баннера"
+msgstr "ссылка экстренного баннера"
 
 msgid "Yandex.Metrika counter id"
 msgstr "ID счётчика Яндекс.Метрики"
@@ -772,19 +785,22 @@ msgid "privacy policy page"
 msgstr "страница политики конфиденциальности"
 
 msgid "Linked from the consent banner and every form."
-msgstr "Ссылка из баннера согласия и каждой формы."
+msgstr "На неё ссылаются баннер согласия и все формы."
 
 msgid "«About us» page"
 msgstr "Страница «О портале»"
 
 msgid "Header menu item «Haqimizda» — its translation per language."
-msgstr "Пункт «Haqimizda» в меню шапки — на каждом языке его перевод."
+msgstr ""
+"Пункт меню шапки «Haqimizda» (на каждом языке — в соответствующем переводе)."
 
 msgid "«Doctors» page"
 msgstr "Страница «Врачи»"
 
 msgid "Header menu item «Shifokorlar» — its translation per language."
-msgstr "Пункт «Shifokorlar» в меню шапки — на каждом языке его перевод."
+msgstr ""
+"Пункт меню шапки «Shifokorlar» (на каждом языке — в соответствующем "
+"переводе)."
 
 msgid "show the childhood cancer section"
 msgstr "показывать раздел «Детский рак»"
@@ -794,15 +810,15 @@ msgid ""
 "footer, filters, search). The pages stay in the CMS and come back when this "
 "is ticked."
 msgstr ""
-"Если выключено, раздел, его страницы и тема скрыты от посетителей (меню, "
-"футер, фильтры, поиск). Страницы остаются в CMS и возвращаются, когда "
-"отмечено."
+"Если флажок снят, раздел, его страницы и тема скрыты от посетителей (меню, "
+"подвал, фильтры, поиск). Страницы остаются в CMS и снова становятся "
+"доступны, когда флажок установлен."
 
 msgid "legal / privacy text (uz)"
-msgstr "правовой текст / политика (uz)"
+msgstr "правовая информация / политика конфиденциальности (uz)"
 
 msgid "legal / privacy text (ru)"
-msgstr "правовой текст / политика (ru)"
+msgstr "правовая информация / политика конфиденциальности (ru)"
 
 msgid "Agency logo"
 msgstr "Логотип Агентства"
@@ -823,10 +839,10 @@ msgid "Footer site map"
 msgstr "Карта сайта в подвале"
 
 msgid "Footer & legal"
-msgstr "Подвал и правовые тексты"
+msgstr "Подвал и правовая информация"
 
 msgid "Emergency banner (e.g. screening month)"
-msgstr "Экстренный баннер (например, месяц скрининга)"
+msgstr "Экстренный баннер (например, месячник скрининга)"
 
 msgid "Partner logos"
 msgstr "Логотипы партнёров"
@@ -841,7 +857,7 @@ msgid "site settings"
 msgstr "настройки сайта"
 
 msgid "Directory"
-msgstr "Каталог учреждений"
+msgstr "Справочник учреждений"
 
 msgid "code"
 msgstr "код"
@@ -892,10 +908,10 @@ msgid "Psychological support"
 msgstr "Психологическая поддержка"
 
 msgid "NGO / support group"
-msgstr "НКО / группа поддержки"
+msgstr "ННО / группа поддержки"
 
 msgid "Both"
-msgstr "Оба"
+msgstr "Оба раздела"
 
 msgid "kind"
 msgstr "тип"
@@ -925,7 +941,7 @@ msgid "longitude"
 msgstr "долгота"
 
 msgid "free under the state programme"
-msgstr "бесплатно по госпрограмме"
+msgstr "бесплатно по государственной программе"
 
 msgid "sections"
 msgstr "разделы"
@@ -937,7 +953,7 @@ msgid "published"
 msgstr "опубликовано"
 
 msgid "external id"
-msgstr "внешний ID"
+msgstr "внешний идентификатор"
 
 msgid ""
 "Identifier in an external registry (e.g. DMED) for future synchronisation."
@@ -966,13 +982,14 @@ msgid "institutions"
 msgstr "учреждения"
 
 msgid "intro"
-msgstr "вступление"
+msgstr "вводный текст"
 
 msgid "default section filter"
-msgstr "фильтр раздела по умолчанию"
+msgstr "раздел в фильтре по умолчанию"
 
 msgid "Pre-selects the section filter; visitors can change it."
-msgstr "Предварительно выбирает фильтр раздела; посетители могут изменить."
+msgstr ""
+"Раздел, выбранный в фильтре изначально; посетители могут его изменить."
 
 msgid "directory page (where to go)"
 msgstr "страница справочника (куда обратиться)"
@@ -1002,7 +1019,8 @@ msgstr "Другое / не знаю"
 msgid ""
 "I agree to the processing of my data as described in the privacy policy"
 msgstr ""
-"Я согласен(на) на обработку моих данных согласно политике конфиденциальности"
+"Я даю согласие на обработку моих данных в соответствии с политикой "
+"конфиденциальности"
 
 msgid "Your name (optional)"
 msgstr "Ваше имя (необязательно)"
@@ -1017,10 +1035,10 @@ msgid "My question may be published anonymously with the answer"
 msgstr "Мой вопрос можно опубликовать анонимно вместе с ответом"
 
 msgid "Leave your question too"
-msgstr "Оставьте и ваш вопрос"
+msgstr "Оставьте и свой вопрос"
 
 msgid "Please describe your question in a few words."
-msgstr "Опишите ваш вопрос в нескольких словах."
+msgstr "Пожалуйста, опишите свой вопрос в нескольких словах."
 
 msgid "Other"
 msgstr "Другое"
@@ -1041,7 +1059,7 @@ msgid "New"
 msgstr "Новый"
 
 msgid "Answered (private)"
-msgstr "Отвечен (приватно)"
+msgstr "Отвечен (без публикации)"
 
 msgid "Published"
 msgstr "Опубликован"
@@ -1053,12 +1071,12 @@ msgid "name (optional)"
 msgstr "имя (необязательно)"
 
 msgid "contact (optional, encrypted)"
-msgstr "контакт (необязательно, зашифрован)"
+msgstr "контактные данные (необязательно, шифруются)"
 
 msgid "Phone or e-mail. Encrypted at rest, deleted 90 days after the answer."
 msgstr ""
-"Телефон или e-mail. Хранится зашифрованным, удаляется через 90 дней после "
-"ответа."
+"Телефон или e-mail. Хранится в зашифрованном виде и удаляется через 90 дней "
+"после ответа."
 
 msgid "section"
 msgstr "раздел"
@@ -1067,7 +1085,9 @@ msgid "topic"
 msgstr "тема"
 
 msgid "Which disease page shows the published question."
-msgstr "На странице какой болезни показывается опубликованный вопрос."
+msgstr ""
+"Определяет, на странице какого заболевания отображается опубликованный "
+"вопрос."
 
 msgid "category"
 msgstr "категория"
@@ -1088,8 +1108,8 @@ msgstr "часто задаваемый"
 msgid ""
 "Shown as a card under «Most asked questions» (published questions only)."
 msgstr ""
-"Показывается карточкой в «Часто задаваемых вопросах» (только "
-"опубликованные)."
+"Отображается карточкой в блоке «Часто задаваемые вопросы» (только "
+"опубликованные вопросы)."
 
 msgid "question"
 msgstr "вопрос"
@@ -1108,28 +1128,29 @@ msgstr "вопрос в опубликованном виде"
 
 msgid "Edited/anonymised wording shown on the site (empty = original text)."
 msgstr ""
-"Отредактированная/анонимная формулировка для сайта (пусто = исходный текст)."
+"Отредактированная или обезличенная формулировка для сайта (если поле пустое,"
+" используется исходный текст)."
 
 msgid "answer"
 msgstr "ответ"
 
 msgid "answered by"
-msgstr "ответил(а)"
+msgstr "автор ответа"
 
 msgid "answered at"
-msgstr "время ответа"
+msgstr "дата ответа"
 
 msgid "published at"
-msgstr "время публикации"
+msgstr "дата публикации"
 
 msgid "contact purged at"
-msgstr "контакт удалён"
+msgstr "дата удаления контактных данных"
 
 msgid "Moderation"
 msgstr "Модерация"
 
 msgid "Submitted"
-msgstr "Отправлено"
+msgstr "Отправленные данные"
 
 msgid "question to a doctor"
 msgstr "вопрос врачу"
@@ -1156,10 +1177,12 @@ msgid "«Information you should know» cards"
 msgstr "Карточки «Информация, которую нужно знать»"
 
 msgid "Short links to pages, shown next to the most asked questions."
-msgstr "Короткие ссылки на страницы рядом с частыми вопросами."
+msgstr ""
+"Краткие ссылки на страницы, отображаемые рядом с часто задаваемыми "
+"вопросами."
 
 msgid "questions & answers page"
-msgstr "страница вопросов и ответов"
+msgstr "страница «Вопросы и ответы»"
 
 #, python-format
 msgid "[Erta aniqla] New question #%(id)s (%(section)s)"
@@ -1169,16 +1192,16 @@ msgid "Feedback"
 msgstr "Обратная связь"
 
 msgid "What is it about?"
-msgstr "О чём сообщение?"
+msgstr "Тема обращения"
 
 msgid "Your message"
 msgstr "Ваше сообщение"
 
 msgid "Phone or e-mail (optional, if you want a reply)"
-msgstr "Телефон или e-mail (необязательно, если хотите ответ)"
+msgstr "Телефон или e-mail (необязательно, если хотите получить ответ)"
 
 msgid "Please write a few words."
-msgstr "Напишите несколько слов."
+msgstr "Пожалуйста, напишите хотя бы несколько слов."
 
 msgid "Feedback about the site"
 msgstr "Отзыв о сайте"
@@ -1205,10 +1228,10 @@ msgid "Submission"
 msgstr "Обращение"
 
 msgid "feedback submission"
-msgstr "сообщение обратной связи"
+msgstr "обращение"
 
 msgid "feedback submissions"
-msgstr "сообщения обратной связи"
+msgstr "обращения"
 
 msgid "feedback page"
 msgstr "страница обратной связи"
@@ -1234,13 +1257,13 @@ msgstr "синонимы"
 
 msgid "Comma-separated alternative spellings (e.g. Cyrillic, abbreviations)."
 msgstr ""
-"Альтернативные написания через запятую (например, кириллица, сокращения)."
+"Варианты написания через запятую (например, на кириллице, сокращения)."
 
 msgid "glossary term"
-msgstr "термин глоссария"
+msgstr "термин словаря"
 
 msgid "glossary terms"
-msgstr "термины глоссария"
+msgstr "термины словаря"
 
 msgid "glossary page"
 msgstr "страница словаря"
@@ -1264,25 +1287,27 @@ msgid "Link label"
 msgstr "Текст ссылки"
 
 msgid "Link page"
-msgstr "Страница ссылки"
+msgstr "Страница, на которую ведёт ссылка"
 
 msgid "Step"
 msgstr "Шаг"
 
 msgid "hero title"
-msgstr "главный заголовок"
+msgstr "заголовок главного блока"
 
 msgid "Key idea of the portal — early detection. Filled by the copywriter."
 msgstr "Ключевая идея портала — раннее выявление. Заполняет копирайтер."
 
 msgid "hero subtitle"
-msgstr "подзаголовок"
+msgstr "подзаголовок главного блока"
 
 msgid "hero eyebrow"
-msgstr "строка над заголовком"
+msgstr "строка над заголовком главного блока"
 
 msgid "Small line above the title (empty = the design's wording)."
-msgstr "Небольшая строка над заголовком (пусто — текст из дизайна)."
+msgstr ""
+"Короткая строка над заголовком (если поле пустое, используется текст из "
+"дизайна)."
 
 msgid "eyebrow"
 msgstr "строка над заголовком"
@@ -1301,7 +1326,8 @@ msgstr "примечание под карточками"
 
 msgid "E.g. which sections are coming soon. Empty = nothing is shown."
 msgstr ""
-"Например, какие разделы скоро появятся. Пусто — ничего не показывается."
+"Например, о разделах, которые появятся в ближайшее время. Если поле пустое, "
+"примечание не отображается."
 
 msgid "text"
 msgstr "текст"
@@ -1310,14 +1336,15 @@ msgid "steps"
 msgstr "шаги"
 
 msgid "home emergency banner"
-msgstr "экстренный баннер главной"
+msgstr "экстренный баннер главной страницы"
 
 msgid ""
 "Optional home-only banner (e.g. screening campaign month). The site-wide "
 "banner lives in Settings → Site settings."
 msgstr ""
-"Необязательный баннер только для главной (например, месяц скрининга). Баннер"
-" для всего сайта: Настройки → Настройки сайта."
+"Необязательный баннер, который отображается только на главной странице "
+"(например, во время месячника скрининга). Баннер для всего сайта "
+"настраивается в разделе «Настройки → Настройки сайта»."
 
 msgid "statistics strip (3 stats)"
 msgstr "полоса статистики (3 показателя)"
@@ -1341,13 +1368,13 @@ msgid "home page"
 msgstr "главная страница"
 
 msgid "featured article"
-msgstr "избранная статья"
+msgstr "рекомендуемая статья"
 
 msgid "video"
 msgstr "видео"
 
 msgid "featured video"
-msgstr "избранное видео"
+msgstr "рекомендуемое видео"
 
 msgid "Media library"
 msgstr "Медиатека"
@@ -1362,7 +1389,7 @@ msgid "Parents"
 msgstr "Родители"
 
 msgid "Clinics (print)"
-msgstr "Клиники (печать)"
+msgstr "Клиники (печатные материалы)"
 
 msgid "Audience"
 msgstr "Аудитория"
@@ -1380,10 +1407,10 @@ msgid "Ready caption"
 msgstr "Готовая подпись"
 
 msgid "Text bloggers can paste as is."
-msgstr "Текст, который блогеры могут вставить как есть."
+msgstr "Текст, который блогеры могут вставить без изменений."
 
 msgid "Hashtags"
-msgstr "Хэштеги"
+msgstr "Хештеги"
 
 msgid "#ertaaniqla #skrining …"
 msgstr "#ertaaniqla #скрининг …"
@@ -1401,13 +1428,13 @@ msgid "credit / source"
 msgstr "автор / источник"
 
 msgid "decorative (no alt text needed)"
-msgstr "декоративное (alt-текст не нужен)"
+msgstr "декоративное (альтернативный текст не требуется)"
 
 msgid ""
 "Only for purely decorative images. Content images must describe themselves."
 msgstr ""
-"Только для чисто декоративных изображений. Содержательные изображения должны"
-" иметь описание."
+"Только для чисто декоративных изображений. Для содержательных изображений "
+"описание обязательно."
 
 msgid "image"
 msgstr "изображение"
@@ -1431,10 +1458,10 @@ msgid "documents"
 msgstr "документы"
 
 msgid "Long video (doctor interview, lecture)"
-msgstr "Длинное видео (интервью врача, лекция)"
+msgstr "Длинное видео (интервью с врачом, лекция)"
 
 msgid "Short vertical video (mobilograph, social media)"
-msgstr "Короткое вертикальное видео (мобилограф, соцсети)"
+msgstr "Короткое вертикальное видео (мобильная съёмка, социальные сети)"
 
 msgid "Uploaded file"
 msgstr "Загруженный файл"
@@ -1455,7 +1482,9 @@ msgid "Failed"
 msgstr "Ошибка"
 
 msgid "Filter on the «Videos» page; empty = shown under «All» only."
-msgstr "Фильтр на странице «Видеоролики»; пусто — только во «Все»."
+msgstr ""
+"Фильтр на странице «Видеоролики»; если не выбрано, видео отображается только"
+" во вкладке «Все»."
 
 msgid "source"
 msgstr "источник"
@@ -1464,16 +1493,18 @@ msgid "video file"
 msgstr "видеофайл"
 
 msgid "Original upload. Never served directly — transcoded renditions are."
-msgstr "Исходный файл. Не отдаётся напрямую — только перекодированные версии."
+msgstr ""
+"Исходный файл. Посетителям напрямую не отдаётся — используются только "
+"перекодированные версии."
 
 msgid "external URL"
 msgstr "внешняя ссылка"
 
 msgid "poster image"
-msgstr "постер"
+msgstr "обложка"
 
 msgid "duration (seconds)"
-msgstr "длительность (секунды)"
+msgstr "длительность (в секундах)"
 
 msgid "doctor's name"
 msgstr "имя врача"
@@ -1491,7 +1522,7 @@ msgid "subtitles (ru, VTT)"
 msgstr "субтитры (ru, VTT)"
 
 msgid "renditions"
-msgstr "версии"
+msgstr "перекодированные версии"
 
 msgid "processing error"
 msgstr "ошибка обработки"
@@ -1500,7 +1531,7 @@ msgid "Media"
 msgstr "Медиа"
 
 msgid "Speaker"
-msgstr "Спикер"
+msgstr "Выступающий"
 
 msgid "Accessibility"
 msgstr "Доступность"
@@ -1512,21 +1543,23 @@ msgid "Upload a video file or choose an external source."
 msgstr "Загрузите видеофайл или выберите внешний источник."
 
 msgid "An external URL is required."
-msgstr "Нужна внешняя ссылка."
+msgstr "Укажите внешнюю ссылку."
 
 msgid "The URL does not belong to the selected provider."
-msgstr "Ссылка не относится к выбранному провайдеру."
+msgstr "Ссылка не соответствует выбранной платформе."
 
 #, python-format
 msgid "%(label)s is too large (max %(mb)d MB)."
-msgstr "%(label)s слишком большой (макс. %(mb)d МБ)."
+msgstr "%(label)s: размер файла превышает допустимый (не более %(mb)d МБ)."
 
 #, python-format
 msgid "%(label)s content type %(mime)s is not allowed."
-msgstr "%(label)s: тип содержимого %(mime)s не разрешён."
+msgstr "%(label)s: недопустимый тип содержимого %(mime)s."
 
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
-msgstr "Файлы субтитров должны быть WebVTT (начинаться с 'WEBVTT')."
+msgstr ""
+"Файлы субтитров должны быть в формате WebVTT (начинаться со строки "
+"'WEBVTT')."
 
 msgid "short description"
 msgstr "краткое описание"
@@ -1553,7 +1586,7 @@ msgid "picture"
 msgstr "изображение"
 
 msgid "Two lines shown on the card (articles) and in search results."
-msgstr "Две строки на карточке (статьи) и в результатах поиска."
+msgstr "Две строки, отображаемые на карточке статьи и в результатах поиска."
 
 msgid "Card"
 msgstr "Карточка"
@@ -1580,21 +1613,23 @@ msgid "tagline"
 msgstr "слоган"
 
 msgid "One sentence shown on the home page card and under the section title."
-msgstr "Одно предложение на карточке главной и под заголовком раздела."
+msgstr ""
+"Одно предложение, которое отображается на карточке главной страницы и под "
+"заголовком раздела."
 
 msgid "primary colour"
 msgstr "основной цвет"
 
 msgid "Overrides the token default (--brand). Leave empty to use tokens.css."
 msgstr ""
-"Переопределяет токен по умолчанию (--brand). Оставьте пустым, чтобы "
-"использовать tokens.css."
+"Переопределяет значение токена по умолчанию (--brand). Оставьте поле пустым,"
+" чтобы использовать значение из tokens.css."
 
 msgid "accent colour"
 msgstr "акцентный цвет"
 
 msgid "icon"
-msgstr "иконка"
+msgstr "значок"
 
 msgid "open the first topic"
 msgstr "открывать первую тему"
@@ -1603,17 +1638,18 @@ msgid ""
 "The design has no section overview: visitors go straight to the first menu "
 "topic (302). The overview stays visible in preview."
 msgstr ""
-"В дизайне нет обзора раздела: посетитель сразу попадает в первую тему меню "
-"(302). Обзор остаётся виден в предпросмотре."
+"В дизайне нет обзорной страницы раздела: посетитель сразу переходит к первой"
+" теме меню (перенаправление 302). Обзорная страница остаётся доступной в "
+"предпросмотре."
 
 msgid "Section identity"
-msgstr "Идентичность раздела"
+msgstr "Оформление раздела"
 
 msgid "section index page"
 msgstr "главная страница раздела"
 
 msgid "Shown on the section index card and in the mega-menu."
-msgstr "Показывается на карточке раздела и в мега-меню."
+msgstr "Отображается на карточке раздела и в мега-меню."
 
 msgid "children are variants of one topic"
 msgstr "дочерние страницы — варианты одной темы"
@@ -1622,9 +1658,9 @@ msgid ""
 "E.g. breast / cervical cancer: the topic opens its first child page (302) "
 "and every child shows a switch between the variants (Figma design)."
 msgstr ""
-"Например, рак молочной железы / шейки матки: тема открывает первую дочернюю "
-"страницу (302), а на каждой дочерней странице есть переключатель вариантов "
-"(дизайн Figma)."
+"Например, рак молочной железы / рак шейки матки: тема открывает первую "
+"дочернюю страницу (302), а на каждой дочерней странице отображается "
+"переключатель между вариантами (дизайн в Figma)."
 
 msgid "topic index page"
 msgstr "страница темы"
@@ -1639,25 +1675,27 @@ msgid "displayed name"
 msgstr "отображаемое имя"
 
 msgid "May be a pseudonym. Never a full name without written consent."
-msgstr "Может быть псевдонимом. Полное имя — только с письменного согласия."
+msgstr ""
+"Можно указать псевдоним. Полное имя — только при наличии письменного "
+"согласия."
 
 msgid "diagnosis (short, plain words)"
 msgstr "диагноз (кратко, простыми словами)"
 
 msgid "Written by the editor, e.g. 'breast cancer, stage 1'."
-msgstr "Пишет редактор, например: «рак молочной железы, 1 стадия»."
+msgstr "Заполняется редактором, например: «рак молочной железы, 1 стадия»."
 
 msgid "photo"
-msgstr "фото"
+msgstr "фотография"
 
 msgid "story"
 msgstr "история"
 
 msgid "anonymised"
-msgstr "анонимизировано"
+msgstr "обезличено"
 
 msgid "Name changed and identifying details removed."
-msgstr "Имя изменено, идентифицирующие детали удалены."
+msgstr "Имя изменено, сведения, позволяющие установить личность, удалены."
 
 msgid "written consent obtained"
 msgstr "письменное согласие получено"
@@ -1666,21 +1704,21 @@ msgid "Required before publishing."
 msgstr "Требуется перед публикацией."
 
 msgid "consent of the legal guardian (minors)"
-msgstr "согласие законного представителя (несовершеннолетние)"
+msgstr "согласие законного представителя (для несовершеннолетних)"
 
 msgid "Required for stories in the children's section."
-msgstr "Требуется для историй в детском разделе."
+msgstr "Требуется для историй в разделе «Детский рак»."
 
 msgid "consent document (private)"
-msgstr "документ согласия (приватный)"
+msgstr "документ о согласии (приватный)"
 
 msgid "Scanned consent form. Stored as a private document, never public."
 msgstr ""
-"Скан формы согласия. Хранится как приватный документ, никогда не "
+"Скан формы согласия. Хранится как приватный документ и никогда не "
 "публикуется."
 
 msgid "Person"
-msgstr "Человек"
+msgstr "Сведения о человеке"
 
 msgid "Consent (required to publish)"
 msgstr "Согласие (обязательно для публикации)"
@@ -1705,7 +1743,7 @@ msgid "Never"
 msgstr "Никогда"
 
 msgid "Less than a year ago"
-msgstr "Меньше года назад"
+msgstr "Менее года назад"
 
 msgid "About a year ago"
 msgstr "Около года назад"
@@ -1727,40 +1765,40 @@ msgstr "Ваш возраст"
 
 #, python-format
 msgid "Last %(test)s"
-msgstr "Последняя %(test)s"
+msgstr "%(test)s: последний раз"
 
 msgid "Tick everything you have noticed"
 msgstr "Отметьте всё, что вы заметили"
 
 msgid "disclaimer"
-msgstr "дисклеймер"
+msgstr "оговорка"
 
 msgid "Empty = site setting."
-msgstr "Пусто = настройка сайта."
+msgstr "Если поле пустое, используется значение из настроек сайта."
 
 msgid "tools index page"
 msgstr "страница инструментов"
 
 msgid "text when a test is due"
-msgstr "текст, когда обследование пора пройти"
+msgstr "текст, если обследование пора пройти"
 
 msgid "text when tests are up to date"
-msgstr "текст, когда обследования актуальны"
+msgstr "текст, если обследования пройдены своевременно"
 
 msgid "text when no test applies at this age"
-msgstr "текст, когда в этом возрасте обследование не показано"
+msgstr "текст, если в этом возрасте обследование не показано"
 
 msgid "HPV test interval note"
 msgstr "примечание об интервале ВПЧ-теста"
 
 msgid "The TZ gives no interval for the HPV test — the doctor decides."
-msgstr "В ТЗ интервал ВПЧ-теста не указан — решает врач."
+msgstr "Интервал для ВПЧ-теста в ТЗ не указан — его определяет врач."
 
 msgid "'where to go' page"
 msgstr "страница «куда обратиться»"
 
 msgid "Result texts"
-msgstr "Тексты результата"
+msgstr "Тексты результатов"
 
 msgid "screening helper page"
 msgstr "страница помощника по скринингу"
@@ -1807,7 +1845,7 @@ msgstr "организация"
 msgid ""
 "e.g. RONC, Mother & Child Health Centre — shown on the 'verified by' badge"
 msgstr ""
-"например, РОНЦ, Центр здоровья матери и ребёнка — показывается на бейдже "
+"Например, РОНЦ, Центр здоровья матери и ребёнка — отображается в отметке "
 "«Проверено врачом»"
 
 msgid "job title"
@@ -1832,14 +1870,14 @@ msgid ""
 "Members of the chosen groups (doctors) approve the page; approval marks it "
 "as medically verified with the reviewer's name and date."
 msgstr ""
-"Участники выбранных групп (врачи) одобряют страницу; одобрение отмечает её "
-"как проверенную врачом с именем проверяющего и датой."
+"Страницу одобряют участники выбранных групп (врачи); после одобрения она "
+"получает отметку «Проверено врачом» с указанием имени проверяющего и даты."
 
 msgid "medical review task"
-msgstr "этап медицинской проверки"
+msgstr "задача медицинской проверки"
 
 msgid "medical review tasks"
-msgstr "этапы медицинской проверки"
+msgstr "задачи медицинской проверки"
 
 msgid "Erta aniqla"
 msgstr "Эрта аниқла"
@@ -1866,7 +1904,7 @@ msgid "Too many requests"
 msgstr "Слишком много запросов"
 
 msgid "Please wait a minute and try again."
-msgstr "Пожалуйста, подождите минуту и попробуйте снова."
+msgstr "Пожалуйста, подождите минуту и повторите попытку."
 
 msgid "Server error"
 msgstr "Ошибка сервера"
@@ -1875,11 +1913,11 @@ msgid ""
 "Something went wrong on our side. We have been notified. Please try again "
 "later."
 msgstr ""
-"На нашей стороне произошла ошибка. Мы уже получили уведомление. Пожалуйста, "
-"попробуйте позже."
+"На сервере произошла ошибка. Мы уже получили уведомление о ней. Пожалуйста, "
+"повторите попытку позже."
 
 msgid "Something went wrong. Please try again later."
-msgstr "Произошла ошибка. Попробуйте ещё раз немного позже."
+msgstr "Произошла ошибка. Пожалуйста, повторите попытку позже."
 
 msgid "Skip to main content"
 msgstr "Перейти к основному содержимому"
@@ -1888,16 +1926,16 @@ msgid "Download"
 msgstr "Скачать"
 
 msgid "No institutions match the selected filters yet."
-msgstr "Учреждений по выбранным фильтрам пока нет."
+msgstr "По выбранным фильтрам учреждения пока не найдены."
 
 msgid "High contrast"
 msgstr "Высокий контраст"
 
 msgid "Reduce motion"
-msgstr "Меньше анимации"
+msgstr "Уменьшить анимацию"
 
 msgid "Breadcrumbs"
-msgstr "Хлебные крошки"
+msgstr "Навигационная цепочка"
 
 msgid "Important"
 msgstr "Важно"
@@ -1906,7 +1944,7 @@ msgid "Good to know"
 msgstr "Полезно знать"
 
 msgid "Reassurance"
-msgstr "Успокоение"
+msgstr "Для вашего спокойствия"
 
 msgid "Note"
 msgstr "Примечание"
@@ -1918,14 +1956,14 @@ msgid ""
 "We use Yandex.Metrika to count visits (with IP anonymisation) only if you "
 "agree. No advertising trackers."
 msgstr ""
-"Мы используем Яндекс.Метрику для подсчёта посещений (с анонимизацией IP) "
-"только с вашего согласия. Рекламных трекеров нет."
+"С вашего согласия мы используем Яндекс.Метрику для подсчёта посещений (с "
+"анонимизацией IP-адресов). Рекламные трекеры не применяются."
 
 msgid "Privacy policy"
 msgstr "Политика конфиденциальности"
 
 msgid "Agree"
-msgstr "Согласен(на)"
+msgstr "Принять"
 
 msgid "Decline"
 msgstr "Отклонить"
@@ -1952,10 +1990,10 @@ msgid "Location on the map"
 msgstr "Место на карте"
 
 msgid "Built under Presidential Resolutions PP-402 and PP-186."
-msgstr "Создан в соответствии с Постановлениями Президента ПП-402 и ПП-186."
+msgstr "Создан в соответствии с постановлениями Президента ПП-402 и ПП-186."
 
 msgid "Please correct the errors below."
-msgstr "Исправьте ошибки ниже."
+msgstr "Пожалуйста, исправьте ошибки ниже."
 
 msgid "Erta aniqla — home"
 msgstr "Эрта аниқла — главная"
@@ -2018,10 +2056,10 @@ msgid "Pages"
 msgstr "Страницы"
 
 msgid "Previous"
-msgstr "Предыдущая"
+msgstr "Назад"
 
 msgid "Next"
-msgstr "Следующая"
+msgstr "Вперёд"
 
 msgid "Search the site"
 msgstr "Поиск по сайту"
@@ -2030,7 +2068,7 @@ msgid "e.g. mammography"
 msgstr "например, маммография"
 
 msgid "Pause the animation"
-msgstr "Остановить анимацию"
+msgstr "Приостановить анимацию"
 
 msgid "Section topics"
 msgstr "Темы раздела"
@@ -2045,7 +2083,7 @@ msgid "Link copied"
 msgstr "Ссылка скопирована"
 
 msgid "Story image (Instagram / TikTok)"
-msgstr "Картинка для сторис (Instagram / TikTok)"
+msgstr "Изображение для сторис (Instagram / TikTok)"
 
 msgid "Timing"
 msgstr "Сроки"
@@ -2060,17 +2098,17 @@ msgid "All"
 msgstr "Все"
 
 msgid "The video is being processed. Please check back later."
-msgstr "Видео обрабатывается. Загляните позже."
+msgstr "Видео обрабатывается. Пожалуйста, зайдите позже."
 
 msgid "Account temporarily locked"
-msgstr "Аккаунт временно заблокирован"
+msgstr "Учётная запись временно заблокирована"
 
 msgid ""
 "Too many failed sign-in attempts. Please try again in one hour or contact "
 "the administrator."
 msgstr ""
-"Слишком много неудачных попыток входа. Попробуйте через час или обратитесь к"
-" администратору."
+"Слишком много неудачных попыток входа. Повторите попытку через час или "
+"обратитесь к администратору."
 
 #, python-format
 msgid "Verified by a doctor: %(name)s, %(date)s."
@@ -2084,9 +2122,9 @@ msgid ""
 "the “Medical review” workflow. Submit the page for moderation to request a "
 "review."
 msgstr ""
-"Отметка ставится автоматически, когда медицинский эксперт одобряет страницу "
-"в процессе «Медицинская проверка». Чтобы запросить проверку, отправьте "
-"страницу на модерацию."
+"Отметка устанавливается автоматически, когда медицинский рецензент одобряет "
+"страницу в рабочем процессе «Медицинская проверка». Чтобы запросить "
+"проверку, отправьте страницу на модерацию."
 
 msgid "Results"
 msgstr "Результаты"
@@ -2123,8 +2161,8 @@ msgid ""
 "Click a region to see its districts; a number is the institutions in the "
 "district, shown at its centre. The exact address is on each card."
 msgstr ""
-"Нажмите на область, чтобы увидеть районы; число — количество учреждений в "
-"районе (показано в центре района). Точный адрес — в карточке."
+"Нажмите на область, чтобы увидеть её районы. Число в центре района — "
+"количество учреждений в нём. Точный адрес указан в карточке учреждения."
 
 #, python-format
 msgid "New feedback #%(id)s"
@@ -2159,8 +2197,8 @@ msgid ""
 "We never publish names or contacts. Contacts are deleted 90 days after the "
 "answer."
 msgstr ""
-"Мы никогда не публикуем имена и контакты. Контакты удаляются через 90 дней "
-"после ответа."
+"Мы никогда не публикуем имена и контактные данные. Контакты удаляются через "
+"90 дней после ответа."
 
 #, python-format
 msgid "About %(topic)s"
@@ -2191,7 +2229,7 @@ msgid "Most asked questions"
 msgstr "Часто задаваемые вопросы"
 
 msgid "Answered by:"
-msgstr "Ответил(а):"
+msgstr "Автор ответа:"
 
 msgid "Full article"
 msgstr "Полная статья"
@@ -2200,7 +2238,7 @@ msgid "No questions match your search."
 msgstr "По вашему запросу вопросов не найдено."
 
 msgid "Answered questions will appear here."
-msgstr "Здесь появятся отвеченные вопросы."
+msgstr "Здесь появятся вопросы с ответами."
 
 msgid "Directions"
 msgstr "Направления"
@@ -2209,7 +2247,9 @@ msgid "Choose the section you need"
 msgstr "Выберите нужный раздел"
 
 msgid "Each direction covers signs, screening, treatment and support."
-msgstr "В каждом направлении — о признаках, скрининге, лечении и поддержке."
+msgstr ""
+"В каждом направлении — информация о признаках, скрининге, лечении и "
+"поддержке."
 
 msgctxt "faq panel"
 msgid "Ask a question"
@@ -2223,7 +2263,7 @@ msgstr "Спросите специалиста"
 
 msgid ""
 "A doctor answers your question. Your name and contacts are never published."
-msgstr "На ваш вопрос ответит врач. Имя и контакты не публикуются."
+msgstr "На ваш вопрос ответит врач. Ваше имя и контакты не публикуются."
 
 msgid "Thank you, your message has been sent."
 msgstr "Спасибо, ваше сообщение отправлено."
@@ -2247,7 +2287,7 @@ msgid "Cancer early detection portal"
 msgstr "Портал раннего выявления онкологических заболеваний"
 
 msgid "Explore the directions"
-msgstr "Познакомиться с направлениями"
+msgstr "Ознакомиться с направлениями"
 
 msgid "Most asked questions"
 msgstr "Часто задаваемые вопросы"
@@ -2266,7 +2306,7 @@ msgid "See all"
 msgstr "Смотреть все"
 
 msgid "News will appear here soon."
-msgstr "Новости скоро появятся здесь."
+msgstr "Здесь скоро появятся новости."
 
 msgid "Any questions?"
 msgstr "Остались вопросы?"
@@ -2274,7 +2314,7 @@ msgstr "Остались вопросы?"
 msgid ""
 "Send a question to the specialists or call the hotline. You are not alone."
 msgstr ""
-"Отправьте обращение специалистам или позвоните на горячую линию. Вы не одни."
+"Задайте вопрос специалистам или позвоните на горячую линию. Вы не одиноки."
 
 msgctxt "home cta"
 msgid "Ask a question"
@@ -2296,7 +2336,7 @@ msgid "Copied"
 msgstr "Скопировано"
 
 msgid "Copy hashtags"
-msgstr "Скопировать хэштеги"
+msgstr "Скопировать хештеги"
 
 msgid "Materials will appear here."
 msgstr "Здесь появятся материалы."
@@ -2315,10 +2355,10 @@ msgid "Other videos"
 msgstr "Другие видео"
 
 msgid "Videos will appear here soon."
-msgstr "Видео скоро появятся здесь."
+msgstr "Здесь скоро появятся видео."
 
 msgid "More videos"
-msgstr "Другие видео"
+msgstr "Ещё видео"
 
 #, python-format
 msgid "Reading time: %(minutes)s min"
@@ -2371,7 +2411,7 @@ msgid "Nothing found. Try another word."
 msgstr "Ничего не найдено. Попробуйте другое слово."
 
 msgid "Articles will appear here soon."
-msgstr "Статьи скоро появятся здесь."
+msgstr "Здесь скоро появятся статьи."
 
 #, python-format
 msgid "%(counter)s result"
@@ -2413,7 +2453,7 @@ msgid "Published with the person's consent."
 msgstr "Опубликовано с согласия человека."
 
 msgid "Name and details changed."
-msgstr "Имя и детали изменены."
+msgstr "Имя и некоторые подробности изменены."
 
 msgid "Filter by section"
 msgstr "Фильтр по разделу"
@@ -2431,7 +2471,7 @@ msgid "Due now"
 msgstr "Пора пройти"
 
 msgid "Done — ask your doctor when to repeat"
-msgstr "Пройдено — когда повторить, уточните у врача"
+msgstr "Пройдено — срок повтора уточните у врача"
 
 #, python-format
 msgid "Next in about %(years)s year"
