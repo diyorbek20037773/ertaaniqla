@@ -46,9 +46,11 @@ class Topic(models.TextChoices):
 
 
 def topic_from_request(request: Any) -> str:
-    """`?topic=` when it names a known topic, else "" (= all)."""
+    """`?topic=` when it names a known, visible topic, else "" (= all)."""
+    from apps.core.visibility import hidden_topics
+
     value = getattr(request, "GET", {}).get("topic", "")
-    return value if value in Topic.values else ""
+    return value if value in Topic.values and value not in hidden_topics() else ""
 
 
 class BasePage(Page):
@@ -337,6 +339,14 @@ class SiteSettings(BaseSiteSetting):
         related_name="+",
         help_text=_("Header menu item «Shifokorlar» — its translation per language."),
     )
+    show_children_section = models.BooleanField(
+        _("show the childhood cancer section"),
+        default=False,
+        help_text=_(
+            "Off: the section, its pages and its topic are hidden from visitors (menu, footer, "
+            "filters, search). The pages stay in the CMS and come back when this is ticked."
+        ),
+    )
     legal_text_uz = RichTextField(_("legal / privacy text (uz)"), blank=True, editor="default")
     legal_text_ru = RichTextField(_("legal / privacy text (ru)"), blank=True, editor="default")
     partner_agency_logo = models.ForeignKey(
@@ -421,6 +431,7 @@ class SiteSettings(BaseSiteSetting):
             [FieldPanel("about_page"), FieldPanel("doctors_page")],
             heading=_("Header menu"),
         ),
+        MultiFieldPanel([FieldPanel("show_children_section")], heading=_("Sections")),
         FieldPanel("metrika_id"),
         FieldPanel("privacy_page"),
     ]

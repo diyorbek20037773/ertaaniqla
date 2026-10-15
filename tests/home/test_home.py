@@ -13,7 +13,7 @@ from apps.media_library.models import Video, VideoSource
 pytestmark = pytest.mark.django_db
 
 
-def test_home_final_design_blocks(seeded, client: Client) -> None:
+def test_home_final_design_blocks(children_visible, seeded, client: Client) -> None:
     """Final design (D-081): direction cards, «Bepul skrining» panel and «Savolingiz bormi?»,
     every text from the CMS; seed_home_design fills only empty fields."""
     html = client.get("/uz/").content.decode()

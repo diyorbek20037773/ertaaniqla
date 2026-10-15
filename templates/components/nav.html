@@ -57,6 +57,9 @@
             </ul>
           </details>
         </li>
+        {% if links.news %}
+          <li><a class="site-nav__link" href="{{ links.news }}"{% if request.path == links.news %} aria-current="page"{% endif %}>{% trans "Useful information" context "header menu" %}</a></li>
+        {% endif %}
       </ul>
       <div class="site-nav__utils">
         {% with hotline=settings.core.SiteSettings.hotline_phone %}{% if hotline %}

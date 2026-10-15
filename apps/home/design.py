@@ -19,6 +19,12 @@ UZ: dict[str, Any] = {
     "directions_text": (
         "Har bir yoʻnalishda — belgilar, skrining, davolash va qoʻllab-quvvatlash haqida."
     ),
+    # client's wording, 2026-10-15 (docs/new_task_15.10.26/Маълумот.docx), in Latin script
+    "directions_note": (
+        "Ushbu platformada yaqin vaqt ichida bolalar saratoni, oshqozon, yoʻgʻon ichak "
+        "(kolorektal), oʻpka va prostata bezi saratoniga bagʻishlangan boʻlimlarni joriy "
+        "etilishi rejalashtirilgan."
+    ),
     "screening_eyebrow": "Bepul skrining",
     "screening_title": "Skriningdan qayerda oʻtish mumkin?",
     "screening_text": (
@@ -100,6 +106,10 @@ RU: dict[str, Any] = {
     "directions_eyebrow": "Направления",
     "directions_title": "Часто задаваемые вопросы",
     "directions_text": "В каждом направлении — о признаках, скрининге, лечении и поддержке.",
+    "directions_note": (
+        "В ближайшее время на платформе планируется открыть разделы, посвящённые детскому раку, "
+        "раку желудка, толстой кишки (колоректальному раку), лёгких и предстательной железы."
+    ),
     "screening_eyebrow": "Бесплатный скрининг",
     "screening_title": "Где пройти скрининг?",
     "screening_text": (
@@ -145,6 +155,7 @@ TEXT_FIELDS = (
     "directions_eyebrow",
     "directions_title",
     "directions_text",
+    "directions_note",
     "screening_eyebrow",
     "screening_title",
     "screening_text",

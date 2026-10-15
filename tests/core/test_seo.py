@@ -54,7 +54,7 @@ def test_article_jsonld_with_reviewer(seeded, user, client: Client) -> None:
     assert crumbs["itemListElement"][-1]["name"] == "Koʻkrak bezi saratoni"
 
 
-def test_home_and_faq_and_directory_jsonld(seeded, client: Client) -> None:
+def test_home_and_faq_and_directory_jsonld(children_visible, seeded, client: Client) -> None:
     home = jsonld_of(client.get("/ru/").content.decode())
     assert "BreadcrumbList" not in types(home)
     org = next(i for i in home["@graph"] if i["@type"] == "Organization")
@@ -168,7 +168,7 @@ def test_site_verification_meta(seeded, client: Client) -> None:
     assert '<meta name="google-site-verification" content="g-token">' in html
 
 
-def test_picture_tag_serves_webp(seeded, client: Client, tmp_path) -> None:
+def test_picture_tag_serves_webp(children_visible, seeded, client: Client, tmp_path) -> None:
     import io
 
     from django.core.files.uploadedfile import SimpleUploadedFile

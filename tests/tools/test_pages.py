@@ -12,7 +12,7 @@ from apps.tools.models import FLAG_SCREENING, ScreeningToolPage, SelfCheckPage, 
 pytestmark = pytest.mark.django_db
 
 
-def test_seeded_tool_pages_in_both_languages(seeded, client: Client) -> None:
+def test_seeded_tool_pages_in_both_languages(children_visible, seeded, client: Client) -> None:
     for url in (
         "/uz/vositalar/",
         "/ru/instrumenty/",
@@ -28,7 +28,7 @@ def test_seeded_tool_pages_in_both_languages(seeded, client: Client) -> None:
         assert 'class="disclaimer"' in response.content.decode(), url
 
 
-def test_index_lists_three_tools(seeded, client: Client) -> None:
+def test_index_lists_three_tools(children_visible, seeded, client: Client) -> None:
     html = client.get("/uz/vositalar/").content.decode()
     assert html.count('<article class="card">') == 3
 
@@ -52,7 +52,7 @@ def test_screening_invalid_age_shows_errors(seeded, client: Client) -> None:
     assert 'aria-invalid="true"' in html or "field--error" in html
 
 
-def test_selfcheck_post(seeded, client: Client) -> None:
+def test_selfcheck_post(children_visible, seeded, client: Client) -> None:
     page = SelfCheckPage.objects.get(locale__language_code="uz", kind="women")
     ids = [choice for choice, _ in page.item_choices()]
     assert len(ids) == 3

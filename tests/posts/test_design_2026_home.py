@@ -44,7 +44,9 @@ def test_lists_exist_in_both_languages_with_empty_states(seeded, client: Client)
         assert 'class="topic-filter"' in html
 
 
-def test_news_newest_first_lead_card_and_topic_filter(seeded, client: Client) -> None:
+def test_news_newest_first_lead_card_and_topic_filter(
+    children_visible, seeded, client: Client
+) -> None:
     index = _index(PostKind.NEWS)
     _post(index, "Eski yangilik", "breast", 1)
     _post(index, "Yangi yangilik", "cervical", 5)
@@ -95,7 +97,7 @@ def test_videos_list_watch_page_and_topic(seeded, client: Client) -> None:
     assert client.get("/uz/videoroliklar/999999/").status_code == 404
 
 
-def test_landing_blocks(seeded, client: Client) -> None:
+def test_landing_blocks(children_visible, seeded, client: Client) -> None:
     _post(_index(PostKind.NEWS), "Bosh sahifadagi yangilik", "breast", 4)
     html = client.get("/uz/").content.decode()
     assert "Eng koʻp beriladigan savollar" in html

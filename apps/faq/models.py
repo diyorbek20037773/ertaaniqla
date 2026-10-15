@@ -26,6 +26,7 @@ from apps.articles.blocks import IntroBlock, stream_plain_text
 from apps.core.antispam import form_is_ratelimited, retry_initial
 from apps.core.fields import EncryptedCharField
 from apps.core.models import BasePage, SectionKey, TimeStampedModel, Topic, topic_from_request
+from apps.core.visibility import hidden_sections, hidden_topics, visible_topics
 
 
 class QuestionSection(models.TextChoices):
@@ -250,6 +251,8 @@ class FAQPage(BasePage):
         qs = Question.objects.filter(
             status=QuestionStatus.PUBLISHED, language=self.locale.language_code
         ).select_related("answered_by", "article")
+        hidden = hidden_sections()  # D-087: a hidden section's questions are not listed
+        qs = qs.exclude(section__in=hidden).exclude(topic__in=hidden_topics())
         if section in QuestionSection.values:
             qs = qs.filter(section=section)
         if topic in Topic.values:
@@ -280,7 +283,7 @@ class FAQPage(BasePage):
         context["section_filter"] = section if section in QuestionSection.values else ""
         context["topic"] = topic
         context["topic_label"] = Topic(topic).label if topic else ""
-        context["topics"] = Topic.choices
+        context["topics"] = visible_topics()
         context["query"] = query
         questions = self.published_questions(context["section_filter"], topic, query)
         # «Mavzular» side list (final design, D-081): counts per category, ?category= filters
@@ -302,7 +305,7 @@ class FAQPage(BasePage):
         context["info_cards"] = self.info_cards_for(topic)
         # final design (D-081): the landing's «Yo'nalishlar» cards repeat under the questions
         home = self.get_parent().specific
-        context["direction_cards"] = getattr(home, "directions", None)
+        context["direction_cards"] = getattr(home, "visible_directions", None)
         context["home_page"] = home
         context["faq_page"] = self
         # FAQPage JSON-LD mirrors the visible (filtered) Q&A list — spec §10

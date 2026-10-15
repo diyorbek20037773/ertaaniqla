@@ -77,20 +77,27 @@ class Seeder:
         self.ensure_footer()
         return {"created": self.created, "updated": self.updated, "unchanged": self.unchanged}
 
-    @transaction.atomic
-    def add_missing(self, keys: tuple[str, ...]) -> list[str]:
-        """Create the pages of `keys` (and their children) that do not exist yet, under their
-        existing parents — for a live site, where a full re-seed would overwrite editors' work.
-        Pages that exist are left untouched. Returns the keys that were created."""
+    def resolve_existing(self) -> bool:
+        """Map every seed key to the page that exists (no writes); `ctx.page_id` then finds
+        them. False when there is no home page yet."""
         from apps.home.models import HomePage
 
         for code in self.languages:
             self.locales[code] = Locale.objects.get_or_create(language_code=code)[0]
         homes = {h.locale.language_code: h for h in HomePage.objects.select_related("locale")}
         if self.languages[0] not in homes:
-            return []
+            return False
         for node in tree.TREE:
             self.resolve_node(node, homes)
+        return True
+
+    @transaction.atomic
+    def add_missing(self, keys: tuple[str, ...]) -> list[str]:
+        """Create the pages of `keys` (and their children) that do not exist yet, under their
+        existing parents — for a live site, where a full re-seed would overwrite editors' work.
+        Pages that exist are left untouched. Returns the keys that were created."""
+        if not self.resolve_existing():
+            return []
         parents_of = {child.key: node.key for node in tree.iter_nodes() for child in node.children}
         created = []
         for key in keys:

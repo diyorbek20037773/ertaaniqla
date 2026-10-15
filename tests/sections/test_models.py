@@ -33,7 +33,7 @@ def test_home_has_no_section(seeded) -> None:
     assert home.section_key == ""
 
 
-def test_body_data_section_attribute_and_theme(seeded, client: Client) -> None:
+def test_body_data_section_attribute_and_theme(children_visible, seeded, client: Client) -> None:
     html = client.get("/uz/bolalar/").content.decode()
     assert 'data-section="children"' in html
     html = client.get("/uz/ayollar/ogohlik/kokrak-bezi-saratoni/").content.decode()
@@ -51,7 +51,7 @@ def test_section_colour_override_is_emitted_with_nonce(seeded, client: Client) -
     assert '<style nonce="' in html
 
 
-def test_section_index_query_count(seeded, django_assert_max_num_queries) -> None:
+def test_section_index_query_count(children_visible, seeded, django_assert_max_num_queries) -> None:
     client = Client()
     client.get("/uz/bolalar/")  # warm nav cache + settings
     with django_assert_max_num_queries(40):
@@ -69,7 +69,7 @@ def test_women_section_opens_its_first_topic(seeded, client: Client) -> None:
     assert response["Location"] == "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/"
 
 
-def test_topic_index_lists_child_articles(seeded, client: Client) -> None:
+def test_topic_index_lists_child_articles(children_visible, seeded, client: Client) -> None:
     topic = TopicIndexPage.objects.get(slug="diagnostika-va-davolash", locale__language_code="uz")
     articles = topic.get_articles()
     assert [a.slug for a in articles] == ["diagnostika", "davolash"]
@@ -116,7 +116,7 @@ def test_verified_badge(seeded, user, client: Client) -> None:
     assert "RONC" in html
 
 
-def test_navigation_structure_and_cache(seeded) -> None:
+def test_navigation_structure_and_cache(children_visible, seeded) -> None:
     invalidate_navigation()
     nav = get_navigation("ru")
     assert [s.key for s in nav] == ["women", "children"]
@@ -148,7 +148,7 @@ def test_navigation_unknown_language_is_empty(db) -> None:
     assert get_navigation("de") == []
 
 
-def test_mega_menu_rendered_on_every_page(seeded, client: Client) -> None:
+def test_mega_menu_rendered_on_every_page(children_visible, seeded, client: Client) -> None:
     html = client.get("/ru/detskiy/uhod-i-podderzhka/").content.decode()
     assert html.count('class="mega-menu"') == 2
     assert "Организация лечения" in html
@@ -171,6 +171,7 @@ def test_figma_header_menu_links(seeded, client: Client) -> None:
         "doctors": "/uz/shifokorlar/",
         "faq": "/uz/savol-javob/",
         "directory": "/uz/ayollar/qayerga-murojaat/",
+        "news": "/uz/yangiliklar/",  # «Foydali maʼlumotlar» (D-087)
     }
     assert get_header_links("ru")["about"] == "/ru/o-portale/"
     html = client.get("/uz/bolalar/").content.decode()

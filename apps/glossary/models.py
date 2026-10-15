@@ -16,6 +16,7 @@ from wagtail.snippets.models import register_snippet
 
 from apps.articles.blocks import IntroBlock, stream_plain_text
 from apps.core.models import BasePage, SectionKey, TimeStampedModel
+from apps.core.visibility import hidden_sections
 
 
 class TermSection(models.TextChoices):
@@ -84,7 +85,7 @@ class GlossaryPage(BasePage):
         return stream_plain_text(self.intro)
 
     def get_terms(self, section: str = "", query: str = "") -> list[Term]:
-        qs = Term.objects.filter(locale=self.locale)
+        qs = Term.objects.filter(locale=self.locale).exclude(section__in=hidden_sections())
         if section in {TermSection.WOMEN, TermSection.CHILDREN}:
             qs = qs.filter(section__in=[section, TermSection.BOTH])
         if query:

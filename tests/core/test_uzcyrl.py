@@ -138,7 +138,7 @@ def test_transliteration_is_fast_enough() -> None:
 
 
 @pytest.mark.django_db
-def test_every_live_uz_page_is_served_in_cyrillic(seeded, client: Client) -> None:
+def test_every_live_uz_page_is_served_in_cyrillic(children_visible, seeded, client: Client) -> None:
     from wagtail.models import Page
 
     pages = Page.objects.live().filter(locale__language_code="uz", depth__gte=2).specific()
@@ -249,7 +249,7 @@ def test_forms_post_under_oz(seeded, client: Client) -> None:
 
 @pytest.mark.django_db
 @override_settings(PAGE_CACHE_SECONDS=300)
-def test_page_cache_is_shared_and_nonce_survives(seeded) -> None:
+def test_page_cache_is_shared_and_nonce_survives(children_visible, seeded) -> None:
     client = Client()
     first = client.get("/oz/bolalar/")
     second = client.get("/oz/bolalar/")

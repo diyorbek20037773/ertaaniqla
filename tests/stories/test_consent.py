@@ -68,7 +68,7 @@ def test_consent_document_is_forced_private(index) -> None:
     assert doc.is_private
 
 
-def test_index_lists_and_filters(index, client: Client) -> None:
+def test_index_lists_and_filters(children_visible, index, client: Client) -> None:
     women = make_story(index, slug="w", title="Ayol hikoyasi", consent_obtained=True)
     women.save_revision().publish()
     child = make_story(

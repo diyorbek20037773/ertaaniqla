@@ -40,7 +40,7 @@
       <select id="filter-section" name="section">
         <option value="" {% if not filter.section %}selected{% endif %}>{% trans "All" %}</option>
         <option value="women" {% if filter.section == "women" %}selected{% endif %}>{% trans "Women's cancer" %}</option>
-        <option value="children" {% if filter.section == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>
+        {% if "children" not in hidden_sections %}<option value="children" {% if filter.section == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>{% endif %}
       </select>
     </div>
     <div class="filter-form__field filter-form__field--checkbox">

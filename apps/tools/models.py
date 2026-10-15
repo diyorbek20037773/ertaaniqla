@@ -22,6 +22,7 @@ from wagtail.models import Page
 
 from apps.articles.blocks import IntroBlock, UrgencyChoice, stream_plain_text
 from apps.core.models import BasePage, SectionKey
+from apps.core.visibility import page_is_hidden
 from apps.tools import screening, selfcheck
 from apps.tools.forms import TEST_LABELS, ScreeningForm, SelfCheckForm
 
@@ -64,7 +65,7 @@ class ToolsIndexPage(BasePage):
     def get_tools(self, request: Any) -> list[Page]:
         tools = []
         for child in self.get_children().live().specific():
-            if child.flag_enabled(request):
+            if child.flag_enabled(request) and not page_is_hidden(child):
                 tools.append(child)
         return tools
 

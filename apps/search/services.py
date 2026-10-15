@@ -13,6 +13,7 @@ from django.utils.html import strip_tags
 from wagtail.models import Page
 from wagtail.search.query import Or, PlainText, SearchQuery
 
+from apps.core.visibility import page_is_hidden
 from apps.search.synonyms import SYNONYM_GROUPS
 from apps.search.translit import normalise_apostrophes, script_variants
 
@@ -124,7 +125,7 @@ def search_pages(
             if hit.pk not in seen_ids:
                 seen_ids.add(hit.pk)
                 ordered.append(hit)
-    ordered = [page for page in ordered if _servable(page, request)]
+    ordered = [page for page in ordered if _servable(page, request) and not page_is_hidden(page)]
     # stable sort: visitor's language first, search rank otherwise preserved
     ordered.sort(key=lambda page: 0 if page.locale.language_code == language_code else 1)
     return [SearchResult.from_page(page) for page in ordered[:limit]]

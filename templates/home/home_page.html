@@ -37,8 +37,8 @@
         {% if faq_page %}<a class="btn btn--outline" href="{{ faq_page.url }}">{% trans "All questions" %} {% include "components/icons/arrow-right.svg" %}</a>{% endif %}
       </div>
     </header>
-    {% include "home/_direction_cards.html" with cards=page.directions %}
-    </div>
+    {% include "home/_direction_cards.html" with cards=page.visible_directions %}
+    {% if page.directions_note %}<p class="dir-note">{{ page.directions_note }}</p>{% endif %}
   </section>
 
   {% if directory_url %}
@@ -84,7 +84,7 @@
           <p class="eyebrow">{% firstof news_index.eyebrow _("News") %}</p>
           <h2 class="display-title" id="home-news">{{ news_index.title }}</h2>
         </div>
-        <a class="btn btn--outline" href="{{ news_index.url }}">{% trans "All news" %} {% include "components/icons/arrow-right.svg" %}</a>
+        <a class="btn btn--outline" href="{{ news_index.url }}">{% trans "See all" context "useful information" %} {% include "components/icons/arrow-right.svg" %}</a>
       </header>
       {% if news %}
         <div class="news-home">

@@ -54,6 +54,7 @@ def build_navigation(language_code: str) -> list[NavSection]:
     """Both sections with their 5 top-level menu items and one level of sub-items."""
     from wagtail.models import Locale
 
+    from apps.core.visibility import hidden_sections
     from apps.sections.models import SectionIndexPage
 
     try:
@@ -61,7 +62,8 @@ def build_navigation(language_code: str) -> list[NavSection]:
     except Locale.DoesNotExist:
         return []
     sections: list[NavSection] = []
-    for section in SectionIndexPage.objects.live().filter(locale=locale).order_by("path"):
+    pages = SectionIndexPage.objects.live().filter(locale=locale)
+    for section in pages.exclude(section_key__in=hidden_sections()).order_by("path"):
         sections.append(
             NavSection(
                 key=section.section_key,
@@ -133,7 +135,7 @@ def header_links_cache_key(language_code: str) -> str:
     return f"headerlinks:{language_code}"
 
 
-HEADER_LINK_KEYS = ("home", "about", "doctors", "faq")
+HEADER_LINK_KEYS = ("home", "about", "doctors", "faq", "news")
 
 
 def build_header_links(language_code: str) -> dict[str, str]:
@@ -171,6 +173,12 @@ def build_header_links(language_code: str) -> dict[str, str]:
     directory = DirectoryPage.objects.live().filter(locale=locale).first()
     if directory is not None and directory.url:
         urls["directory"] = str(directory.url)
+    # client request 2026-10-15 (D-087): «Foydali maʼlumotlar» (the news list) after «Boʻlimlar»
+    from apps.posts.models import PostIndexPage, PostKind
+
+    news = PostIndexPage.objects.live().filter(locale=locale, kind=PostKind.NEWS).first()
+    if news is not None and news.url:
+        urls["news"] = str(news.url)
     return urls
 
 

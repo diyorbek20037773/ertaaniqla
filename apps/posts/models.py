@@ -22,6 +22,7 @@ from wagtail.search import index
 
 from apps.articles.blocks import ArticleBodyBlock, IntroBlock, stream_plain_text
 from apps.core.models import BasePage, Topic, topic_from_request
+from apps.core.visibility import hidden_topics, visible_topics
 
 PAGE_SIZE = 12
 
@@ -64,7 +65,12 @@ class PostIndexPage(BasePage):
         return stream_plain_text(self.intro)
 
     def get_posts(self, topic: str = "", query: str = "") -> models.QuerySet[PostPage]:
-        posts = PostPage.objects.child_of(self).live().select_related("image")
+        posts = (
+            PostPage.objects.child_of(self)
+            .live()
+            .exclude(topic__in=hidden_topics())  # D-087: hidden sections
+            .select_related("image")
+        )
         if topic:
             posts = posts.filter(topic=topic)
         if query:  # the articles list has a search field (final design, D-081)
@@ -80,7 +86,7 @@ class PostIndexPage(BasePage):
         paginator = Paginator(self.get_posts(topic, query), PAGE_SIZE)
         context["topic"] = topic
         context["query"] = query
-        context["topics"] = Topic.choices
+        context["topics"] = visible_topics()
         context["posts"] = paginator.get_page(request.GET.get("page"))
         return context
 
@@ -100,7 +106,7 @@ class PostPage(BasePage):
     )
     summary = models.CharField(
         _("summary"),
-        max_length=300,
+        max_length=500,  # the client's «Qisqa mazmun» runs to ~320 characters (D-087)
         blank=True,
         help_text=_("Two lines shown on the card (articles) and in search results."),
     )

@@ -18,7 +18,8 @@ from wagtail.fields import StreamField
 from wagtail.models import Page
 
 from apps.articles.blocks import IntroBlock, stream_plain_text
-from apps.core.models import BasePage, Topic, topic_from_request
+from apps.core.models import BasePage, topic_from_request
+from apps.core.visibility import hidden_topics, visible_topics
 
 PAGE_SIZE = 12
 
@@ -26,7 +27,11 @@ PAGE_SIZE = 12
 def ready_videos(topic: str = "") -> models.QuerySet[Any]:
     from apps.media_library.models import Video, VideoStatus
 
-    videos = Video.objects.filter(status=VideoStatus.READY).select_related("poster")
+    videos = (
+        Video.objects.filter(status=VideoStatus.READY)
+        .exclude(topic__in=hidden_topics())  # D-087: hidden sections
+        .select_related("poster")
+    )
     return videos.filter(topic=topic) if topic else videos
 
 
@@ -66,7 +71,7 @@ class VideoIndexPage(RoutablePageMixin, BasePage):
         context = super().get_context(request, *args, **kwargs)
         topic = topic_from_request(request)
         context["topic"] = topic
-        context["topics"] = Topic.choices
+        context["topics"] = visible_topics()
         videos = Paginator(ready_videos(topic), PAGE_SIZE).get_page(request.GET.get("page"))
         self.add_watch_urls(videos)
         context["videos"] = videos

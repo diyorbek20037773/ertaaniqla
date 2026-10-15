@@ -1428,8 +1428,7 @@ def _tz_screening_rules(lang: str) -> dict[str, Any]:
                     "Призывы к самостоятельному обследованию.",
                 ),
             ]
-        )
-        + p(VERIFY),
+        ),  # verified by the client on 2026-10-15 (D-087)
         title=t(
             lang, "Davlat dasturi: kimga va qanchalik tez-tez", "Госпрограмма: кому и как часто"
         ),
@@ -1558,9 +1557,7 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
                         "tavsiyasiga qarab belgilanadi."
                     ),
                 ]
-            )
-            # The Figma ages differ from the TZ screening table (45–65 / under 45): doctor decides.
-            + p(f"{VERIFY} [[VERIFY: TZ — mammografiya 45–65, UTT 45 yoshgacha]]")
+            )  # verified by the client on 2026-10-15 (D-087)
         ),
         _tz_screening_rules(lang),
         alert(

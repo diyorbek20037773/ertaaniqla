@@ -20,6 +20,7 @@ from wagtail.search import index
 
 from apps.articles.blocks import ArticleBodyBlock, IntroBlock, stream_plain_text
 from apps.core.models import BasePage, SectionKey
+from apps.core.visibility import hidden_sections
 
 
 class StoryIndexPage(BasePage):
@@ -39,7 +40,12 @@ class StoryIndexPage(BasePage):
         return stream_plain_text(self.intro)
 
     def get_stories(self, section: str = "") -> list[PatientStoryPage]:
-        qs = PatientStoryPage.objects.child_of(self).live().select_related("hero_image")
+        qs = (
+            PatientStoryPage.objects.child_of(self)
+            .live()
+            .exclude(section__in=hidden_sections())  # D-087
+            .select_related("hero_image")
+        )
         if section in SectionKey.values:
             qs = qs.filter(section=section)
         return list(qs.order_by("-first_published_at"))

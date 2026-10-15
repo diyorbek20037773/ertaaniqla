@@ -91,3 +91,13 @@ def women_section(home) -> Any:
     home.add_child(instance=section)
     section.save_revision().publish()
     return section
+
+
+@pytest.fixture
+def children_visible(monkeypatch) -> None:
+    """Show «Bolalar saratoni» — hidden by default until its content is ready (D-087) — for
+    tests that use its pages as ordinary samples."""
+    from apps.core import visibility
+
+    monkeypatch.setattr(visibility, "_load", lambda: ([], []))
+    visibility.invalidate()

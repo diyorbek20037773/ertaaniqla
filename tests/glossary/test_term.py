@@ -19,7 +19,7 @@ def test_term_translation_and_synonyms(seeded) -> None:
     assert "[[TODO" in term.definition
 
 
-def test_glossary_block_renders_definitions_as_rich_text(seeded, client) -> None:
+def test_glossary_block_renders_definitions_as_rich_text(children_visible, seeded, client) -> None:
     """EA-12: the inline glossary block showed `<p>…</p>` as literal text."""
     for url in (
         "/uz/bolalar/diagnostika-va-davolash/diagnostika/",

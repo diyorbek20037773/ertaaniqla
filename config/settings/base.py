@@ -119,6 +119,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
     "apps.core.cache.PageCacheMiddleware",  # anonymous HTML cache (PAGE_CACHE_SECONDS)
+    "apps.core.placeholders.PlaceholderStripMiddleware",  # no [[TODO]] for visitors (D-087)
     "axes.middleware.AxesMiddleware",
     "waffle.middleware.WaffleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",

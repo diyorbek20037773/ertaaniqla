@@ -34,7 +34,7 @@ def test_apostrophe_variants_match_content(seeded) -> None:
     assert straight and straight == modifier
 
 
-def test_autocomplete_prefix(seeded) -> None:
+def test_autocomplete_prefix(children_visible, seeded) -> None:
     results = search_pages("Diagnos", "uz")  # title prefix (AutocompleteField on ArticlePage.title)
     assert any(r.title.startswith("Diagnostika") for r in results)
 

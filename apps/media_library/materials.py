@@ -17,6 +17,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from apps.articles.blocks import IntroBlock, stream_plain_text
 from apps.core.models import BasePage
+from apps.core.visibility import hidden_sections
 
 
 class MaterialBlock(blocks.StructBlock):
@@ -78,10 +79,12 @@ class MaterialsPage(BasePage):
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context(request, *args, **kwargs)
         audience = request.GET.get("audience", "")
+        hidden = hidden_sections()  # D-087
         items = [
             child
             for child in self.materials
-            if not audience or child.value.get("audience") == audience
+            if (not audience or child.value.get("audience") == audience)
+            and child.value.get("section") not in hidden
         ]
         context["items"] = items
         context["audience_filter"] = audience

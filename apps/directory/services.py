@@ -13,8 +13,11 @@ KIND_CODES = frozenset(InstitutionKind.values)
 
 
 def published_institutions() -> QuerySet[Institution]:
+    from apps.core.visibility import hidden_sections
+
     return (
         Institution.objects.filter(is_published=True)
+        .exclude(sections__in=hidden_sections())  # D-087: only a hidden section's places
         .select_related("region")
         .prefetch_related("services")
     )

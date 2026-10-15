@@ -18,7 +18,7 @@ pytestmark = pytest.mark.e2e
 PRINT_PAGES = [
     "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",  # self-exam steps
     "/uz/ayollar/davolash/",  # 4-step patient route
-    "/ru/detskiy/diagnostika-i-lechenie/diagnostika/",  # questions checklist
+    "/uz/ayollar/savol-javob/kokrak-bezi-saratoni/",  # question accordion
 ]
 
 

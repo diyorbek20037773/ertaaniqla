@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from wagtail.models import Page
 from wagtail.signals import page_published, page_unpublished, post_page_move
 
+from apps.core import visibility
 from apps.core.cache import bump_page_cache
 from apps.core.navigation import invalidate_navigation
 from apps.core.queue import enqueue_on_commit
@@ -19,12 +20,14 @@ from apps.core.queue import enqueue_on_commit
 @receiver(post_page_move)
 def _page_changed(sender: Any, **kwargs: Any) -> None:
     invalidate_navigation()
+    visibility.invalidate()  # section paths
     bump_page_cache()
 
 
 @receiver(post_delete, sender=Page)
 def _page_deleted(sender: Any, **kwargs: Any) -> None:
     invalidate_navigation()
+    visibility.invalidate()
     bump_page_cache()
 
 
@@ -42,6 +45,7 @@ def _settings_changed(sender: Any, **kwargs: Any) -> None:
         bump_page_cache()
     if label == "core.SiteSettings":
         invalidate_navigation()  # header menu pages (about / doctors) live in the settings
+        visibility.invalidate()  # «show the childhood cancer section»
 
 
 @receiver(page_published)

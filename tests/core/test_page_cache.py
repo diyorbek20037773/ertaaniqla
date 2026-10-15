@@ -40,7 +40,7 @@ def test_cache_hit_swaps_nonce_and_publish_invalidates(seeded, client: Client) -
 
 
 @override_settings(PAGE_CACHE_SECONDS=300)
-def test_cache_bypasses(seeded, client: Client, user) -> None:
+def test_cache_bypasses(children_visible, seeded, client: Client, user) -> None:
     url = "/uz/bolalar/"
     assert client.get(url)["X-Page-Cache"] == "MISS"
     assert client.get(url)["X-Page-Cache"] == "HIT"

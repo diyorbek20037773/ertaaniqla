@@ -17,6 +17,7 @@ from django.utils.safestring import SafeString
 from wagtail.models import Locale, Page, Site
 
 from apps.core.navigation import get_header_links, get_navigation, get_site_links
+from apps.core.visibility import path_is_hidden
 
 register = template.Library()
 
@@ -406,6 +407,8 @@ def footer_map(context: dict[str, Any], site_settings: Any) -> list[dict[str, An
             page = link.get("page")
             if page is not None:
                 target = translated.get(page.translation_key, page)
+                if path_is_hidden(str(target.path)):  # D-087: a hidden section's pages
+                    continue
                 href = str(target.get_url(request) or "")
             else:
                 href = str(link.get("url") or "")
@@ -413,7 +416,8 @@ def footer_map(context: dict[str, Any], site_settings: Any) -> list[dict[str, An
                 href = f"{href}#{link['anchor']}"
             if href:
                 links.append({"label": link["label"], "href": href})
-        result.append({"title": col.value["title"], "links": links})
+        if links or not col.value["links"]:  # a column left empty by hidden pages goes
+            result.append({"title": col.value["title"], "links": links})
     return result
 
 

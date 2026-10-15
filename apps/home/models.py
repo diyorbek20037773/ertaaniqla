@@ -16,6 +16,7 @@ from wagtail.search import index
 
 from apps.articles.blocks import IntroBlock, StatBlock, stream_plain_text
 from apps.core.models import BasePage, FooterLinkBlock, Topic
+from apps.core.visibility import hidden_sections, hidden_topics, page_is_hidden, visible_topics
 
 
 class DirectionCardBlock(blocks.StructBlock):
@@ -74,6 +75,12 @@ class HomePage(BasePage):
         max_num=3,
         verbose_name=_("direction cards"),
     )
+    directions_note = models.CharField(
+        _("note under the cards"),
+        max_length=400,
+        blank=True,
+        help_text=_("E.g. which sections are coming soon. Empty = nothing is shown."),
+    )
     screening_eyebrow = models.CharField(_("eyebrow"), max_length=80, blank=True)
     screening_title = models.CharField(_("title"), max_length=160, blank=True)
     screening_text = models.TextField(_("text"), max_length=500, blank=True)
@@ -114,6 +121,7 @@ class HomePage(BasePage):
                 FieldPanel("directions_title"),
                 FieldPanel("directions_text"),
                 FieldPanel("directions"),
+                FieldPanel("directions_note"),
             ],
             heading=_("«Directions» cards"),
         ),
@@ -174,10 +182,22 @@ class HomePage(BasePage):
         accent, _sep, tail = rest.partition(" ")
         return main, accent, tail
 
+    @property
+    def visible_directions(self) -> list[Any]:
+        """«Yo'nalishlar» cards without those of hidden sections (D-087)."""
+        hidden = hidden_topics()
+        return [
+            block
+            for block in self.directions
+            if block.value.get("topic") not in hidden
+            and not (block.value.get("page") and page_is_hidden(block.value["page"]))
+        ]
+
     def get_sections(self) -> list[Page]:
         from apps.sections.models import SectionIndexPage
 
-        return list(SectionIndexPage.objects.child_of(self).live().specific())
+        sections = SectionIndexPage.objects.child_of(self).live().specific()
+        return [section for section in sections if section.section_key not in hidden_sections()]
 
     @property
     def hero_title_parts(self) -> tuple[str, str]:
@@ -215,7 +235,6 @@ class HomePage(BasePage):
     def get_landing_feeds(self) -> dict[str, Any]:
         """Design 2026-10 landing blocks: «Eng ko'p beriladigan savollar» topic cards, the newest
         news (lead + three rows), videos and articles — each with its list page for the pills."""
-        from apps.core.models import Topic
         from apps.faq.models import FAQPage
         from apps.media_library.videos import VideoIndexPage, ready_videos
         from apps.posts.models import PostIndexPage, PostKind
@@ -231,7 +250,7 @@ class HomePage(BasePage):
             video_index.specific.add_watch_urls(videos)
         return {
             "faq_page": child(FAQPage),
-            "topics": Topic.choices,
+            "topics": visible_topics(),
             "news_index": news_index,
             "news": list(news_index.get_posts()[:4]) if news_index else [],
             "articles_index": articles_index,

@@ -156,7 +156,8 @@
   .dir-scroller { position: relative; }
   .dir-cards { display: grid; grid-auto-flow: column; grid-auto-columns: min(86%, 22rem); gap: clamp(0.9rem, 1.2vw, 1.25rem); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: clamp(1.4rem, 2vw, 2.2rem) 2px 0.5rem; }
   .dir-cards::-webkit-scrollbar { display: none; }
-  @media (min-width: 64rem) { .dir-cards { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; } }
+  /* desktop: one equal column per card — three, or two while a section is hidden (D-087) */
+  @media (min-width: 64rem) { .dir-cards { grid-auto-columns: minmax(0, 1fr); overflow: visible; } }
   .dir-card {
     position: relative; display: flex; flex-direction: column; min-height: clamp(20rem, 26vw, 28rem); scroll-snap-align: start;
     padding: clamp(1.3rem, 1.8vw, 2.1rem); border-radius: var(--radius-card); background: var(--c-blush); overflow: visible; isolation: isolate;
@@ -198,6 +199,22 @@
     .dir-scroller__nav--prev { right: calc(50% + 6px); }
     .dir-scroller__nav--next { left: calc(50% + 6px); }
   }
+  /* lists pasted into news and plain articles keep their markers (Tailwind's reset drops them) */
+  :is(.post__body, .article:not(.article--designed)) .prose :is(ul, ol) { margin: 0 0 1em; padding-left: 1.4em; }
+  :is(.post__body, .article:not(.article--designed)) .prose ul { list-style: disc; }
+  :is(.post__body, .article:not(.article--designed)) .prose ol { list-style: decimal; }
+  :is(.post__body, .article:not(.article--designed)) .prose li + li { margin-top: 0.4em; }
+  :is(.post__body, .article:not(.article--designed)) .prose li::marker { color: var(--c-rasp); }
+  /* news subheadings: the serif reads small, so they stay above the body size on phones too */
+  .post__body .prose h2 { margin: 1.6em 0 0.5em; font-size: clamp(1.6rem, 1.25rem + 1.3vw, 2.3rem); line-height: 1.1; }
+  .post__body .prose h3 { margin: 1.3em 0 0.4em; font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem); line-height: 1.15; }
+
+  /* «coming soon» note under the cards (D-087) */
+  .dir-note {
+    max-width: 52rem; margin: var(--space-6) 0 0; padding: var(--space-4) 1.25rem; border-left: 3px solid var(--c-rasp);
+    border-radius: 0 var(--radius-card) var(--radius-card) 0; background: var(--c-blush); color: var(--c-ink); font-size: 0.98rem; line-height: 1.5;
+  }
+  html[data-contrast="high"] .dir-note { border: 2px solid #000; background: #fff; }
   html[data-contrast="high"] .dir-card { border: 2px solid #000; }
   html[data-contrast="high"] .dir-card__ribbon { display: none; }
   html[data-contrast="high"] .dir-card__arrow { background: #000; }
@@ -430,6 +447,8 @@
   .page-header h1::before, .section-heading__title::before { background: var(--c-flower); -webkit-mask: url("../img/figma/icon-flower.svg") center / contain no-repeat; mask: url("../img/figma/icon-flower.svg") center / contain no-repeat; }
   .page-header h1 { font-family: var(--font-serif); font-weight: 400; background: none; color: var(--c-ink); -webkit-background-clip: border-box; background-clip: border-box; }
   .text-card { padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid var(--c-line); border-radius: var(--radius-card); background: #ffffff; font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem); line-height: 1.55; }
+  /* a card whose only text was an editor placeholder (stripped for visitors, D-087) */
+  .text-card:has(.text-card__text:empty):not(:has(.text-card__media)) { display: none; }
   .text-card__title, body[data-section="women"] .columns__title, .article--designed .prose > h3:only-child, .steps .steps__title.steps__title--caps {
     font-family: var(--font-sans); background: none; color: var(--c-mauve-ink); -webkit-background-clip: border-box; background-clip: border-box; font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.1rem); font-weight: 700; letter-spacing: 0.02em;
   }

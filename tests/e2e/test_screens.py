@@ -22,15 +22,15 @@ PAGES = [
     ("home-uz", "/uz/"),
     ("home-ru", "/ru/"),
     ("section-women-uz", "/uz/ayollar/"),
-    ("section-children-uz", "/uz/bolalar/"),
-    ("section-children-ru", "/ru/detskiy/"),
+    ("about-uz", "/uz/haqimizda/"),
+    ("useful-info-uz", "/uz/yangiliklar/"),
     ("article-patient-route-uz", "/uz/ayollar/davolash/"),
     ("article-symptoms-ru", "/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/"),
-    ("article-care-children-uz", "/uz/bolalar/parvarish/"),
+    ("faq-tab-uz", "/uz/ayollar/savol-javob/kokrak-bezi-saratoni/"),
     ("directory-uz", "/uz/ayollar/qayerga-murojaat/"),
     ("stories-ru", "/ru/istorii/"),
     ("tools-screening-uz", "/uz/vositalar/skrining/"),
-    ("tools-selfcheck-children-ru", "/ru/instrumenty/priznaki-u-detey/"),
+    ("tools-selfcheck-ru", "/ru/instrumenty/samoproverka/"),
     ("faq-uz", "/uz/savol-javob/"),
     ("glossary-ru", "/ru/slovar/"),
     ("materials-uz", "/uz/materiallar/"),
@@ -96,7 +96,8 @@ def test_mobile_menu_opens_without_hover(mobile_page) -> None:
     mobile_page.goto(BASE_URL + "/uz/", wait_until="networkidle")
     mobile_page.locator("summary.site-nav__toggle-button").click()
     mobile_page.locator("summary.nav-dropdown__toggle").click()
-    assert mobile_page.locator(".mega-menu").count() == 2
+    # one section while «Bolalar saratoni» is hidden (D-087)
+    assert mobile_page.locator(".mega-menu").count() >= 1
     mobile_page.locator(".mega-menu__title").first.click()
     assert mobile_page.locator(".mega-menu__item").first.is_visible()
     mobile_page.screenshot(path=str(SCREENSHOTS / "menu-open-uz.png"), full_page=True)

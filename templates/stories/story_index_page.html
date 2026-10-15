@@ -11,7 +11,7 @@
   <nav class="filter-tabs" aria-label="{% trans 'Filter by section' %}">
     <a href="{{ page.url }}" {% if not section_filter %}aria-current="true"{% endif %}>{% trans "All" %}</a>
     <a href="{{ page.url }}?section=women" {% if section_filter == "women" %}aria-current="true"{% endif %}>{% trans "Women's cancer" %}</a>
-    <a href="{{ page.url }}?section=children" {% if section_filter == "children" %}aria-current="true"{% endif %}>{% trans "Childhood cancer" %}</a>
+    {% if "children" not in hidden_sections %}<a href="{{ page.url }}?section=children" {% if section_filter == "children" %}aria-current="true"{% endif %}>{% trans "Childhood cancer" %}</a>{% endif %}
   </nav>
   <section class="cards-grid" aria-label="{% trans 'Stories' %}">
     <div class="cards-grid__items">

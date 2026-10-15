@@ -76,7 +76,7 @@ def test_model_helpers(institutions) -> None:
     assert Service.objects.get(code="hpv_test").name_for("ru") == "ВПЧ-тест"
 
 
-def test_filters(institutions) -> None:
+def test_filters(children_visible, institutions) -> None:
     a, b, _ = institutions
     assert set(filter_institutions()) == {a, b}  # unpublished hidden
     assert list(filter_institutions(region="fergana")) == [b]
@@ -88,7 +88,9 @@ def test_filters(institutions) -> None:
     assert institutions_for_block({"region": "", "kind": "", "free_only": False, "limit": 1}) == [a]
 
 
-def test_directory_page_renders_filters_and_results(seeded, institutions, client: Client) -> None:
+def test_directory_page_renders_filters_and_results(
+    children_visible, seeded, institutions, client: Client
+) -> None:
     page = DirectoryPage.objects.get(locale__language_code="uz")
     html = client.get(page.url).content.decode()
     assert "A poliklinika" in html

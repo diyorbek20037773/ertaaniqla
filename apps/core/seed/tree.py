@@ -1296,6 +1296,46 @@ MATERIALS = Node(
     ],
 )
 
+# Client request 2026-10-15 (D-087): the three resolutions behind the portal, named as on lex.uz
+# (the documents are published in Uzbek; the Russian page names them by number and date).
+LAWS: list[tuple[str, str, str, str]] = [
+    (
+        "https://www.lex.uz/uz/docs/8287513",
+        "Saraton kasalliklarining oldini olish, erta aniqlash va davolash chora-tadbirlarini "
+        "takomillashtirish toʻgʻrisida",
+        "Oʻzbekiston Respublikasi Prezidentining qarori, 24.06.2026 yildagi PQ-238-son",
+        "Постановление Президента Республики Узбекистан от 24.06.2026 № ПП-238",
+    ),
+    (
+        "https://lex.uz/docs/7232845",
+        "Ayollar orasida onkologik kasalliklarni nazorat qilish tizimini takomillashtirish "
+        "chora-tadbirlari toʻgʻrisida",
+        "Oʻzbekiston Respublikasi Prezidentining qarori, 22.11.2024 yildagi PQ-402-son",
+        "Постановление Президента Республики Узбекистан от 22.11.2024 № ПП-402",
+    ),
+    (
+        "https://lex.uz/docs/7533952",
+        "2025–2030-yillarda bolalar saratoniga qarshi kurashish boʻyicha Oʻzbekiston "
+        "Respublikasi milliy dasturini amalga oshirish chora-tadbirlari toʻgʻrisida",
+        "Oʻzbekiston Respublikasi Prezidentining qarori, 19.05.2025 yildagi PQ-186-son",
+        "Постановление Президента Республики Узбекистан от 19.05.2025 № ПП-186",
+    ),
+]
+LAWS_HEADING = {"uz": "Normativ-huquqiy hujjatlar", "ru": "Нормативные правовые акты"}
+
+
+def about_laws(lang: str) -> list[dict[str, Any]]:
+    """«Biz haqimizda»: heading + one paragraph per resolution — the lex.uz title as the link,
+    the kind, date and number on the next line."""
+    items = []
+    for url, title, line_uz, line_ru in LAWS:
+        if lang == "ru":
+            items.append(f'<a href="{url}">{line_ru}</a>')
+        else:
+            items.append(f'<a href="{url}">«{title}»</a><br/>{line_uz}')
+    return [{"type": "heading", "value": LAWS_HEADING[lang]}, rich(p(*items))]
+
+
 ABOUT = Node(
     key="about",
     kind="article",
@@ -1354,9 +1394,9 @@ ABOUT = Node(
                     "инноваций и Устранение бюрократии – 2030» Агентства стратегического развития "
                     "и реформ при финансовой поддержке компании «Яндекс» и «Hamroh».",
                 )
-            )
-            + p(TODO),
-        }
+            ),
+        },
+        *about_laws(lang),
     ],
 )
 
@@ -1439,7 +1479,8 @@ PRIVACY = Node(
 NEWS = Node(
     key="news",
     kind="posts",
-    title={"uz": "Yangiliklar", "ru": "Новости"},
+    # client request 2026-10-15 (D-087); the URL keeps the first slug
+    title={"uz": "Foydali maʼlumotlar", "ru": "Полезная информация"},
     slug={"uz": "yangiliklar", "ru": "novosti"},
     summary={
         "uz": "Skrining, davlat dasturlari va loyiha yangiliklari",
@@ -1612,7 +1653,7 @@ FOOTER: list[tuple[dict[str, str], list[FooterLink]]] = [
             ("Loyiha haqida", "О проекте", "about", ""),
             ("Hamkorlar", "Партнёры", "about", "hamkorlar"),
             ("Eng koʻp beriladigan savollar", "Часто задаваемые вопросы", "faq", ""),
-            ("Yangiliklar", "Новости", "news", ""),
+            ("Foydali maʼlumotlar", "Полезная информация", "news", ""),
             ("Videoroliklar", "Видеоролики", "videos", ""),
             ("Maqolalar", "Статьи", "articles", ""),
             ("Biz bilan bogʻlanish", "Связаться с нами", "feedback", ""),

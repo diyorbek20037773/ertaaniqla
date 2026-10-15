@@ -61,7 +61,7 @@ def test_language_switcher_links_to_counterpart(seeded, client: Client) -> None:
     assert 'aria-current="true" lang="uz"' in html
 
 
-def test_hreflang_and_canonical_in_head(seeded, client: Client) -> None:
+def test_hreflang_and_canonical_in_head(children_visible, seeded, client: Client) -> None:
     html = client.get("/ru/detskiy/").content.decode()
     # origin = Wagtail Site hostname (canonical domain), not the request host
     assert (

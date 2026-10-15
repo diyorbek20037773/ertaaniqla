@@ -487,12 +487,18 @@ def test_management_command_rejects_unknown_language(seeded) -> None:
 
 
 def test_every_live_page_returns_200_in_both_languages(seeded, client: Client) -> None:
+    from apps.core.visibility import page_is_hidden
+
     pages = Page.objects.live().filter(depth__gte=2).exclude(url_path="/").specific()
-    seen = 0
+    seen = hidden = 0
     for page in pages:
         url = page.url
         assert url, page
         response = client.get(url)
+        if page_is_hidden(page):  # «Bolalar saratoni» is switched off by default (D-087)
+            assert response.status_code == 404, url
+            hidden += 1
+            continue
         if getattr(page, "is_variant_group", False) or getattr(page, "open_first_topic", False):
             # D-066: a variant group / the women's section opens its first child (≤ 2 hops)
             for _hop in range(2):
@@ -502,7 +508,8 @@ def test_every_live_page_returns_200_in_both_languages(seeded, client: Client) -
         assert response.status_code == 200, (url, response.status_code)
         assert f'lang="{page.locale.language_code}"' in response.content.decode()
         seen += 1
-    assert seen >= 2 * len(tree.iter_nodes()) + 2
+    assert seen + hidden >= 2 * len(tree.iter_nodes()) + 2
+    assert hidden > 0
 
 
 @pytest.mark.parametrize(

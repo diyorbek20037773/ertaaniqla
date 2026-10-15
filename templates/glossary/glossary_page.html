@@ -16,7 +16,7 @@
       <select id="glossary-section" name="section">
         <option value="" {% if not section_filter %}selected{% endif %}>{% trans "All" %}</option>
         <option value="women" {% if section_filter == "women" %}selected{% endif %}>{% trans "Women's cancer" %}</option>
-        <option value="children" {% if section_filter == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>
+        {% if "children" not in hidden_sections %}<option value="children" {% if section_filter == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>{% endif %}
       </select>
     </div>
     <button type="submit" class="button button--primary">{% trans "Show" %}</button>
