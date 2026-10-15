@@ -1,15 +1,53 @@
-# Staging overrides (spec §11.3): same VPS, separate compose project + DB + media, no public
-# ports — the production nginx proxies https://staging.<DOMAIN> to this stack behind basic auth.
-#   docker compose -p ertaaniqla-staging --env-file .env -f compose.yml -f compose.prod.yml -f compose.staging.yml up -d
-# Services that only make sense once per host are parked in an unused profile.
+# Pre-production stacks (spec §11.3, D-088): **dev** (every push to main) and **staging** (QA, every
+# push to `stage`) run on the production VPS as separate compose projects, each with its own DB,
+# Redis and media, and no public ports — the production nginx proxies https://dev.<DOMAIN> and
+# https://staging.<DOMAIN> to them behind basic auth. Deployed by docker/scripts/deploy.sh:
+#   docker compose -p ertaaniqla-staging -f compose.yml -f compose.prod.yml -f compose.staging.yml up -d
+#   docker compose -p ertaaniqla-dev     -f compose.yml -f compose.prod.yml -f compose.staging.yml up -d
+# ENVIRONMENT (dev | staging) comes from the environment's own .env. Services that only make
+# sense once per host are parked in an unused profile. Memory is kept small: both stacks together
+# use ≈ 1 GB next to production on the 4 GB server (D-086).
 services:
   web:
     networks:
       - default
-      - prod   # so ertaaniqla-prod-nginx-1 can reach ertaaniqla-staging-web-1:8000
+      - prod   # so ertaaniqla-prod-nginx-1 can reach ertaaniqla-<env>-web-1:8000
     environment:
-      ENVIRONMENT: staging
+      ENVIRONMENT: ${ENVIRONMENT:-staging}
+      ROBOTS_NOINDEX: "true"
       PAGE_CACHE_SECONDS: ${PAGE_CACHE_SECONDS:-60}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-1}
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+
+  worker:
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-staging}
+      CELERY_CONCURRENCY: "1"
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  beat:
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-staging}
+
+  db:
+    command: ["postgres", "-c", "shared_buffers=64MB", "-c", "max_connections=30"]
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  redis:
+    command: ["redis-server", "--maxmemory", "32mb", "--maxmemory-policy", "allkeys-lru"]
+    deploy:
+      resources:
+        limits:
+          memory: 64m
 
   nginx:
     profiles: ["unused-on-staging"]
@@ -19,7 +57,7 @@ services:
     profiles: ["unused-on-staging"]
   backup:
     environment:
-      RESTIC_REPOSITORY: ""     # staging is never backed up off-site; local dumps only
+      RESTIC_REPOSITORY: ""     # pre-production is never backed up off-site; local dumps only
       BACKUP_AT: "04:00"
 
 networks:

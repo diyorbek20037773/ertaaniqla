@@ -14,7 +14,7 @@ SERVICE      ?= web
         lint fmt type test check translations e2e lighthouse pa11y build deploy backup restore logs \
         install frontend frontend-watch superuser nginx-test compose-check restore-test ops-check \
         prod-up prod-down tls-init maintenance-on maintenance-off ci-local sonar sonar-up \
-        local-prod-up local-prod-down
+        local-prod-up local-prod-down promote release
 
 help: ## list targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -97,8 +97,14 @@ frontend-watch: ## watch tailwind + js
 build: ## docker build (multi-stage, includes tailwind)
 	docker build -f docker/web/Dockerfile -t ertaaniqla/web:local --build-arg APP_RELEASE=$$(git rev-parse --short HEAD) .
 
-deploy: ## deploy ENV=staging|prod over ssh (DEPLOY_HOST, IMAGE_BASE, TAG; see docs/RUNBOOK.md)
+deploy: ## deploy ENV=dev|staging|prod over ssh by hand (DEPLOY_HOST, IMAGE_BASE, TAG; CI does it normally)
 	bash docker/scripts/deploy.sh $(ENV) $(TAG)
+
+promote: ## main → stage (fast-forward): QA gets on staging exactly what ran on dev (D-088)
+	bash scripts/release.sh promote
+
+release: ## release VERSION=v1.2.3: GitHub Release of the stage commit → prod after approval (D-088)
+	bash scripts/release.sh release $(VERSION)
 
 backup: ## run a backup now (prod compose)
 	$(COMPOSE_PROD) run --rm backup /scripts/backup.sh

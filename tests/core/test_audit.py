@@ -51,8 +51,14 @@ def one(records: pytest.LogCaptureFixture, event: str) -> Any:
 
 
 def cms_actions(obj: Any) -> list[str]:
+    # by content type too: on a fresh database a group and the user can share a primary key
+    from django.contrib.contenttypes.models import ContentType
+
     return list(
-        ModelLogEntry.objects.filter(object_id=str(obj.pk))
+        ModelLogEntry.objects.filter(
+            content_type=ContentType.objects.get_for_model(obj, for_concrete_model=False),
+            object_id=str(obj.pk),
+        )
         .order_by("timestamp")
         .values_list("action", flat=True)
     )

@@ -95,6 +95,8 @@ services:
       DOMAIN_ALT: ${DOMAIN_ALT:-www.ertaaniqla.uz oncoportal.uz www.oncoportal.uz}
       STAGING_DOMAIN: ${STAGING_DOMAIN:-staging.ertaaniqla.uz}
       STAGING_UPSTREAM: ${STAGING_UPSTREAM:-ertaaniqla-staging-web-1:8000}
+      DEV_DOMAIN: ${DEV_DOMAIN:-dev.ertaaniqla.uz}
+      DEV_UPSTREAM: ${DEV_UPSTREAM:-ertaaniqla-dev-web-1:8000}
       SONAR_DOMAIN: ${SONAR_DOMAIN:-sonar.ertaaniqla.uz}
       SONAR_UPSTREAM: ${SONAR_UPSTREAM:-ertaaniqla-sonarqube-sonarqube-1:9000}
       NGINX_ENVSUBST_TEMPLATE_DIR: /etc/nginx/templates

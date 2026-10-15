@@ -144,7 +144,10 @@ def test_grafana_dashboard_is_provisioned() -> None:
         "docker/scripts/smoke.sh",
         "docker/scripts/init_letsencrypt.sh",
         "docker/scripts/nginx_test.sh",
+        "docker/scripts/monitor_probe.sh",
         "scripts/bootstrap_vps.sh",
+        "scripts/release.sh",
+        "scripts/github_setup.sh",
     ],
 )
 def test_scripts_are_strict_bash(script: str) -> None:
@@ -155,7 +158,9 @@ def test_scripts_are_strict_bash(script: str) -> None:
 
 
 def test_ci_pipeline_shape() -> None:
+    """D-088: main → dev, stage → staging, GitHub Release → prod, monitor → incident issues."""
     ci = _yaml(".github/workflows/ci.yml")
+    assert ci[True]["push"]["branches"] == ["main", "master", "stage"]
     jobs = ci["jobs"]
     assert list(jobs) == [
         "quality",
@@ -163,15 +168,57 @@ def test_ci_pipeline_shape() -> None:
         "frontend",
         "a11y-perf",
         "build",
+        "deploy-dev",
         "deploy-staging",
-        "deploy-prod",
     ]
-    assert jobs["deploy-prod"]["environment"]["name"] == "prod"
-    assert jobs["deploy-prod"]["needs"] == ["deploy-staging"]
     build_steps = " ".join(str(s) for s in jobs["build"]["steps"])
     assert "trivy" in build_steps and "sbom" in build_steps and "nginx_test.sh" in build_steps
+    assert "imagetools create" in build_steps  # build once: stage reuses the dev image
+    assert jobs["build"]["outputs"]["tag"]
+    for job, env, branch in (
+        ("deploy-dev", "dev", "refs/heads/master"),
+        ("deploy-staging", "staging", "refs/heads/stage"),
+    ):
+        deploy = jobs[job]
+        assert deploy["uses"] == "./.github/workflows/deploy.yml", job
+        assert deploy["with"]["environment"] == env and deploy["secrets"] == "inherit", job
+        assert branch in deploy["if"] and f"',{env},'" in deploy["if"], job
+    assert jobs["deploy-staging"]["with"]["auto_rollback"] is True
+
+    deploy = _yaml(".github/workflows/deploy.yml")
+    job = deploy["jobs"]["deploy"]
+    assert job["environment"]["name"] == "${{ inputs.environment }}"
+    assert job["concurrency"]["cancel-in-progress"] is False
+    assert "deploy.sh" in " ".join(str(s) for s in job["steps"])
+
+    release = _yaml(".github/workflows/release.yml")
+    assert release[True]["release"]["types"] == ["published"]
+    verify = " ".join(str(s) for s in release["jobs"]["verify"]["steps"])
+    assert "origin/stage" in verify and "environment=staging" in verify  # tested on staging
+    assert "imagetools create" in verify  # promoted, not rebuilt
+    prod = release["jobs"]["deploy"]
+    assert prod["with"]["environment"] == "prod" and prod["with"]["auto_rollback"] is True
+
     rollback = _yaml(".github/workflows/rollback.yml")
     assert rollback[True]["workflow_dispatch"]["inputs"]["tag"]["required"] is True
+    assert rollback["jobs"]["rollback"]["uses"] == "./.github/workflows/deploy.yml"
+
+    monitor = _yaml(".github/workflows/monitor.yml")
+    assert monitor[True]["schedule"] == [{"cron": "*/10 * * * *"}]
+    assert monitor["permissions"]["issues"] == "write"
+    steps = " ".join(str(s) for s in monitor["jobs"]["probe"]["steps"])
+    assert "monitor_probe.sh" in steps and "gh issue create" in steps and "gh issue close" in steps
+
+
+def test_deploy_and_smoke_scripts() -> None:
+    deploy = (ROOT / "docker/scripts/deploy.sh").read_text(encoding="utf-8")
+    assert "dev | staging)" in deploy and "compose.staging.yml" in deploy
+    assert ".deploy.prev.env" in deploy and "AUTO_ROLLBACK" in deploy
+    smoke = (ROOT / "docker/scripts/smoke.sh").read_text(encoding="utf-8")
+    assert "SMOKE_AUTH" in smoke
+    assert "/bolalar/" not in smoke  # a section switched off in the CMS answers 404 (D-087)
+    site = (ROOT / "docker/nginx/templates/ertaaniqla.conf.template").read_text(encoding="utf-8")
+    assert "server_name ${DEV_DOMAIN};" in site and "set $dev http://${DEV_UPSTREAM};" in site
 
 
 # --- CI/CD + observability additions (ADR-0005) ---------------------------------------------------
@@ -189,7 +236,7 @@ def test_sonarqube_gate_in_ci_and_self_hosted_server() -> None:
     # a red gate blocks the image; a skipped (unconfigured) gate does not
     assert "sonarqube" in jobs["build"]["needs"]
     assert "failure" in jobs["build"]["if"]
-    for deploy in ("deploy-staging", "deploy-prod"):
+    for deploy in ("deploy-dev", "deploy-staging"):
         assert ".result == 'success'" in jobs[deploy]["if"], deploy
 
     props = (ROOT / "sonar-project.properties").read_text(encoding="utf-8")

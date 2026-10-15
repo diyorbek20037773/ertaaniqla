@@ -1,0 +1,77 @@
+# Monitoring → developers (D-088, «mon» in the CI/CD diagram). Every 10 minutes production is
+# probed from outside (docker/scripts/monitor_probe.sh). A failure opens one GitHub issue labelled
+# `incident` (assigned to vars.ONCALL) and sends a Telegram alert; the next green probe comments,
+# closes the issue and reports the recovery. The fix then goes the normal way:
+# main → dev → stage → staging → release → prod.
+# Inside the server, Prometheus/Alertmanager (compose --profile monitoring) and Sentry/GlitchTip
+# (SENTRY_DSN) report errors to the same Telegram chat.
+# Needs: repository variable MONITOR_URL (e.g. https://ertaaniqla.uz); optional ONCALL
+# (comma-separated GitHub logins); repository secrets TELEGRAM_BOT_TOKEN, TELEGRAM_ALERT_CHAT_ID.
+name: Monitor
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    name: probe production
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: vars.MONITOR_URL != ''
+    env:
+      GH_TOKEN: ${{ github.token }}
+      URL: ${{ vars.MONITOR_URL }}
+      ONCALL: ${{ vars.ONCALL }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_ALERT_CHAT_ID: ${{ secrets.TELEGRAM_ALERT_CHAT_ID }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe
+        id: probe
+        run: |
+          set +e
+          bash docker/scripts/monitor_probe.sh "${URL}" > report.md
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          tee -a "$GITHUB_STEP_SUMMARY" < report.md
+      - name: Open or update the incident
+        if: steps.probe.outputs.status != '0'
+        run: |
+          source docker/scripts/notify.sh
+          gh label create incident --color B60205 --description "Production is failing (monitor.yml)" --force >/dev/null
+          open="$(gh issue list --label incident --state open --json number --jq '.[0].number // empty')"
+          # shellcheck disable=SC2016  # the backticks are Markdown, not command substitution
+          body="$(printf 'Production probe of %s failed at %s UTC.\n\n%s\n\nRun: %s\n\nFix on `main` → dev → `stage` → staging → release → prod (docs/RUNBOOK.md, CI/CD). This issue closes itself when the site is healthy again.' \
+            "${URL}" "$(date -u '+%Y-%m-%d %H:%M')" "$(cat report.md)" "${RUN_URL}")"
+          if [[ -z "${open}" ]]; then
+            args=(--title "🔴 Production incident: ${URL} is failing" --label incident --body "${body}")
+            [[ -n "${ONCALL}" ]] && args+=(--assignee "${ONCALL}")
+            issue="$(gh issue create "${args[@]}")"
+            notify_telegram "🔴 ${URL} is failing — ${issue}"
+          else
+            # one comment per hour at most, so a long outage does not flood the issue
+            last="$(gh issue view "${open}" --json comments --jq '.comments[-1].createdAt // empty')"
+            if [[ -z "${last}" || $(( $(date +%s) - $(date -d "${last}" +%s) )) -ge 3600 ]]; then
+              gh issue comment "${open}" --body "${body}" >/dev/null
+            fi
+          fi
+          exit 1
+      - name: Close a recovered incident
+        if: steps.probe.outputs.status == '0'
+        run: |
+          source docker/scripts/notify.sh
+          open="$(gh issue list --label incident --state open --json number --jq '.[0].number // empty')"
+          if [[ -n "${open}" ]]; then
+            gh issue close "${open}" --comment "✅ Recovered at $(date -u '+%Y-%m-%d %H:%M') UTC — ${RUN_URL}" >/dev/null
+            notify_telegram "✅ ${URL} is healthy again (incident #${open} closed)"
+          fi

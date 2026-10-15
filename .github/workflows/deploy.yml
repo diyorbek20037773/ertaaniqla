@@ -1,0 +1,88 @@
+# Reusable deploy job (D-088): one environment, one image tag, over SSH with docker/scripts/deploy.sh.
+# Called by ci.yml (dev on every push to main, staging on every push to `stage`), release.yml
+# (prod, from a GitHub Release) and rollback.yml. Everything environment-specific lives in the
+# GitHub Environment (Settings → Environments → dev | staging | prod):
+#   vars:    DEPLOY_HOST, DEPLOY_USER (default deploy), DEPLOY_PATH (default /srv/ertaaniqla/<env>),
+#            DOMAIN (dev.ertaaniqla.uz | staging.ertaaniqla.uz | ertaaniqla.uz)
+#   secrets: DEPLOY_SSH_KEY, SMOKE_AUTH (user:password of the basic-auth dev / staging hosts),
+#            TELEGRAM_BOT_TOKEN, TELEGRAM_ALERT_CHAT_ID
+# `prod` additionally has "Required reviewers" — the manual approval before production.
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: dev | staging | prod
+        type: string
+        required: true
+      image_tag:
+        description: Image tag to run (12-char git SHA prefix, or a version tag)
+        type: string
+        required: true
+      git_sha:
+        description: Commit the server checkout moves to (compose files, nginx config)
+        type: string
+        default: ""
+      auto_rollback:
+        description: Redeploy the previous image when the smoke test fails
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: deploy → ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: ${{ inputs.environment }}
+      url: https://${{ vars.DOMAIN }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false   # never stop a deploy half-way
+    steps:
+      - uses: actions/checkout@v4
+      - name: Environment configured?
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          HAS_KEY: ${{ secrets.DEPLOY_SSH_KEY != '' }}
+        run: |
+          missing=""
+          [[ -n "${DEPLOY_HOST}" ]] || missing+=" vars.DEPLOY_HOST"
+          [[ -n "${DOMAIN}" ]] || missing+=" vars.DOMAIN"
+          [[ "${HAS_KEY}" == "true" ]] || missing+=" secrets.DEPLOY_SSH_KEY"
+          if [[ -n "${missing}" ]]; then
+            echo "::error::environment '${{ inputs.environment }}' is missing:${missing} (see docs/RUNBOOK.md, CI/CD)"
+            exit 1
+          fi
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Deploy and smoke-test
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER || 'deploy' }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH || format('/srv/ertaaniqla/{0}', inputs.environment) }}
+          IMAGE_BASE: ghcr.io/${{ github.repository }}/web
+          GIT_SHA: ${{ inputs.git_sha }}
+          SMOKE_URL: https://${{ vars.DOMAIN }}
+          SMOKE_AUTH: ${{ secrets.SMOKE_AUTH }}
+          AUTO_ROLLBACK: ${{ inputs.auto_rollback && '1' || '0' }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ALERT_CHAT_ID: ${{ secrets.TELEGRAM_ALERT_CHAT_ID }}
+          APP_RELEASE: ${{ inputs.image_tag }}
+        run: |
+          IMAGE_BASE="${IMAGE_BASE,,}" bash docker/scripts/deploy.sh "${{ inputs.environment }}" "${{ inputs.image_tag }}"
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### ${{ inputs.environment }} — ${{ job.status }}"
+            echo "- image: \`ghcr.io/${{ github.repository }}/web:${{ inputs.image_tag }}\`"
+            echo "- url: https://${{ vars.DOMAIN }}"
+            echo "- auto-rollback: ${{ inputs.auto_rollback }}"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -2,7 +2,7 @@
 # Rebuild the VPS from scratch in ≤ 1 h (spec §11.4, RUNBOOK §rebuild). Ubuntu 22.04/24.04,
 # run as root once:
 #   curl -fsSL https://raw.githubusercontent.com/<org>/ertaaniqla/main/scripts/bootstrap_vps.sh | \
-#     REPO=https://github.com/<org>/ertaaniqla.git ENV_NAME=prod bash
+#     REPO=https://github.com/<org>/ertaaniqla.git ENV_NAME=prod bash   (then staging, dev — D-088)
 # What it does: docker + compose, `deploy` user, ufw (22 restricted, 80, 443), fail2ban,
 # unattended-upgrades, 4 GB swap, sysctl, clone repo into /srv/ertaaniqla/<env>, and prints
 # the remaining manual steps (.env, TLS bootstrap, restore).

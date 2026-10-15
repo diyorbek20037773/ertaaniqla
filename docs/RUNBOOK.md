@@ -22,16 +22,69 @@ alias dc='docker compose -p ertaaniqla-prod -f compose.yml -f compose.prod.yml'
 
 ## 1. Deploy
 
-### 1.1 Normal (CI/CD)
+### 1.1 Normal (CI/CD) — environments and promotion (D-088)
 
-1. Merge to `main` → CI: quality → frontend → a11y-perf → build (trivy, SBOM, `nginx -t`, compose config) → **deploy-staging** (automatic) → **deploy-prod** (waits for approval on the GitHub `prod` environment).
-2. Deploy = `docker/scripts/deploy.sh <env> <tag>` over SSH: `pull` → `run --rm migrate` (migrations + `check --deploy`) → `up -d --no-deps --wait web` (new container must pass `/healthz/` before nginx routes to it) → `up -d worker beat backup nginx` → smoke test (`/readyz/` + 5 pages) → Telegram message.
-3. Migrations must be **expand/contract** (spec §11.3): the previous image must still work with the new schema, so a rollback never needs a DB restore.
+```mermaid
+flowchart LR
+  dev1[Developers] -->|push / PR| main[(main / master)]
+  main -->|CI green| DEV[Dev
+dev.ertaaniqla.uz]
+  main -->|make promote
+fast-forward| stage[(stage)]
+  stage -->|CI green| STG[Staging · QA
+staging.ertaaniqla.uz]
+  stage -->|make release VERSION=vX.Y.Z
+GitHub Release| REL{release.yml
+passed staging?
+approval}
+  REL -->|same image, no rebuild| PROD[Prod
+ertaaniqla.uz]
+  PROD --> MON[monitor.yml · Alertmanager · Sentry]
+  MON -->|incident issue + Telegram| dev1
+```
 
-GitHub configuration (Settings → Environments `staging`, `prod`):
-`vars.DEPLOY_HOST`, `vars.DEPLOY_USER` (=`deploy`), `vars.STAGING_DOMAIN`, `vars.PROD_DOMAIN`;
-secrets `DEPLOY_SSH_KEY` (private key of the deploy user), `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALERT_CHAT_ID`.
-`prod` environment: required reviewers = you.
+| Step | Branch / trigger | What runs | Where |
+|---|---|---|---|
+| 1. Code | push or pull request to any branch | `ci.yml`: ruff · mypy · pytest (≥ 85 %) · translations · pip-audit · `check --deploy` · tailwind budgets · pa11y · Lighthouse (best of 3) · SonarQube (when configured) | GitHub |
+| 2. Dev | push to `main` / `master` | + image `ghcr.io/<repo>/web:<12-char sha>` (trivy, SBOM, `nginx -t`, compose config) → **deploy-dev** | `dev.<DOMAIN>` (basic auth) |
+| 3. Staging | `make promote` (fast-forward `main` → `stage`) | the same image (no rebuild) → **deploy-staging**, auto-rollback on a failed smoke test; QA tests here | `staging.<DOMAIN>` (basic auth) |
+| 4. Prod | `make release VERSION=v1.4.0` (GitHub Release of the `stage` commit) | `release.yml`: semver tag · commit on `stage` · staging ran exactly this commit successfully · image exists → tags `v1.4.0` + `prod` → waits for the `prod` reviewers → deploy, auto-rollback | `<DOMAIN>` |
+| 5. Monitoring | every 10 min | `monitor.yml` probes prod from outside (health, pages, response time, TLS); a failure opens one `incident` issue (assigned to `ONCALL`) + Telegram, recovery closes it. Inside the server: Prometheus / Alertmanager → Telegram (`--profile monitoring`), Sentry / GlitchTip | GitHub issues, Telegram |
+
+A fix for an incident takes the same road: branch → `main` (dev) → `stage` (QA) → release.
+Urgent hotfix: fix on `main`, `make promote`, QA checks staging, `make release` — the gates stay;
+only the time between the steps is short. `rollback.yml` (§2) restores the previous image at once.
+
+Deploy = `docker/scripts/deploy.sh <env> <tag>` over SSH (`deploy.yml`, reusable): remember the
+running image → move the server checkout to the deployed commit (compose files, nginx config) →
+`pull` → `run --rm migrate` (migrations + `check --deploy`) → `up -d --no-deps --wait web` (the new
+container must pass `/healthz/` before nginx routes to it) → `up -d worker beat backup` (+ nginx on
+prod) → `smoke.sh` (`/readyz/` + 7 pages, basic auth on dev / staging) → Telegram. With
+`AUTO_ROLLBACK=1` (staging, prod) a failed smoke test redeploys the previous image and the job
+fails. Migrations must be **expand/contract** (spec §11.3): the previous image must still work
+with the new schema, so a rollback never needs a DB restore.
+
+**GitHub configuration** (`REVIEWERS="you" bash scripts/github_setup.sh` creates the environments,
+branch policies, the `stage` branch and its protection, the `incident` label):
+
+| Where | Name | Value |
+|---|---|---|
+| Environment `dev` / `staging` / `prod` → variables | `DEPLOY_HOST` | VPS address |
+| | `DEPLOY_USER` | `deploy` (default) |
+| | `DEPLOY_PATH` | `/srv/ertaaniqla/<env>` (default) |
+| | `DOMAIN` | `dev.ertaaniqla.uz` / `staging.ertaaniqla.uz` / `ertaaniqla.uz` |
+| Environment → secrets | `DEPLOY_SSH_KEY` | private key of the `deploy` user |
+| | `SMOKE_AUTH` | `user:password` of the basic auth (dev, staging only) |
+| | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALERT_CHAT_ID` | alert bot |
+| Environment `prod` → protection | Required reviewers | who approves production; deployment tags `v*` |
+| Repository variables | `DEPLOY_ENVIRONMENTS` | `dev,staging,prod` — the environments that exist (`none` until the VPS is ready: the pipeline stays green and deploys nothing) |
+| | `MONITOR_URL` | `https://ertaaniqla.uz` (empty = monitor off) |
+| | `ONCALL` | GitHub logins for incident issues, comma-separated |
+| Repository secrets | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALERT_CHAT_ID` | for `monitor.yml` |
+
+The server pulls the image from GHCR: if the package is private, `docker login ghcr.io` once as
+`deploy` with a read-only token. Until the VPS exists the Railway demo (builds `master`, §1.4)
+plays the dev role; switch its auto-deploy off once `dev.<DOMAIN>` runs.
 
 ### 1.2 Manual deploy from a laptop
 
@@ -77,7 +130,8 @@ editors started working).
 
 ## 2. Rollback
 
-* GitHub → Actions → **Rollback** → environment + previous image tag (12-char sha from the CI run or `dc images web`). Same zero-downtime path, then smoke test.
+* Automatic: staging and prod deploys roll back by themselves when the smoke test fails (`AUTO_ROLLBACK=1`; the previous image is kept in `/srv/ertaaniqla/<env>/.deploy.prev.env`).
+* GitHub → Actions → **Rollback** → environment + image tag (12-char sha from the CI run, a release `v1.2.3`, or `dc images web`). Same zero-downtime path, then smoke test; prod still waits for its reviewers.
 * Manual: `make deploy ENV=prod TAG=<previous sha>`.
 * Rollback never reverts migrations. If a migration itself is the problem, restore the DB (§3) **and** roll back the image, then fix forward.
 
@@ -112,6 +166,7 @@ Media lives in the `media` volume (`/srv/media` in containers) and in every rest
 
 | Symptom | First look | Action |
 |---|---|---|
+| GitHub issue `🔴 Production incident` (monitor.yml) | the issue's probe table, the linked run | same as `SiteDown` below; the issue closes itself on the next green probe — write the cause and the fix commit in it before that |
 | Telegram: `SiteDown` / smoke failed | `dc ps`, `dc logs --tail 200 nginx web`, `curl -sI https://ertaaniqla.uz/healthz/` | `dc up -d --wait web`; if the image is bad → Rollback (§2) |
 | `High5xxRate` | Sentry (release = git sha), `dc logs web` (JSON, `request_id`) | roll back if it started with a deploy; otherwise fix forward |
 | `HighLatencyP95` | Grafana overview (DB connections, cache hit ratio, CPU) | check slow queries (`log_min_duration_statement=500` → `dc logs db`), Redis up?, page cache enabled (`PAGE_CACHE_SECONDS`) |
@@ -184,7 +239,12 @@ dc run --rm web python manage.py axes_reset_username NAME           # unlock aft
 | Deploy SSH key | new key pair → `authorized_keys` of `deploy` → GitHub secret `DEPLOY_SSH_KEY` → remove the old line |
 | CMS user compromise | Wagtail → Users → disable; `dc run --rm web python manage.py changepassword <user>`; check revisions; rotate `DJANGO_SECRET_KEY` |
 
-## 7. Staging
+## 7. Staging and dev
+
+Both are set up the same way (dev: `/srv/ertaaniqla/dev`, project `ertaaniqla-dev`,
+`dev.<DOMAIN>`, `DEV_DOMAIN` / `DEV_UPSTREAM` in the prod `.env`, same htpasswd file; together
+they use ≈ 1 GB next to production — `compose.staging.yml` keeps them small). Never load a raw
+production dump into them: it holds personal data (spec §8) — seed them with `seed_content`.
 
 Same VPS, second compose project, no public ports. The **production nginx** serves
 `https://staging.<DOMAIN>` (certificate includes it — `STAGING_DOMAIN` in `.env`, added by
@@ -206,8 +266,8 @@ cd /srv/ertaaniqla/staging
 docker compose -p ertaaniqla-staging -f compose.yml -f compose.prod.yml -f compose.staging.yml up -d
 ```
 `compose.staging.yml` parks nginx/certbot/nginx-reloader in an unused profile, joins the web
-container to `ertaaniqla-prod_default`, and keeps backups local. Seed it with
-`seed_content` or a copy of prod (`make restore` inside the staging project with a prod dump).
+container to `ertaaniqla-prod_default`, and keeps backups local. Seed it with `seed_content`
+(+ `import_institutions`); a copy of prod only after removing personal data.
 
 ## 8. Scaling notes
 

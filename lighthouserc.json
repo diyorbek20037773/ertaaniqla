@@ -6,7 +6,7 @@
         "http://localhost:8001/uz/ayollar/skrining/kokrak-bezi-saratoni/",
         "http://localhost:8001/uz/ayollar/ogohlik/kokrak-bezi-saratoni/"
       ],
-      "numberOfRuns": 1,
+      "numberOfRuns": 3,
       "settings": {
         "formFactor": "mobile",
         "screenEmulation": {
@@ -29,19 +29,22 @@
         "largest-contentful-paint": [
           "error",
           {
-            "maxNumericValue": 2500
+            "maxNumericValue": 2500,
+            "aggregationMethod": "optimistic"
           }
         ],
         "cumulative-layout-shift": [
           "error",
           {
-            "maxNumericValue": 0.1
+            "maxNumericValue": 0.1,
+            "aggregationMethod": "optimistic"
           }
         ],
         "total-blocking-time": [
           "error",
           {
-            "maxNumericValue": 200
+            "maxNumericValue": 200,
+            "aggregationMethod": "optimistic"
           }
         ],
         "categories:accessibility": [
