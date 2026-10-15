@@ -192,9 +192,12 @@ jobs:
           uv run python manage.py import_institutions data/institutions.sample.csv
           STATIC_COMPRESSED=1 uv run python manage.py collectstatic --noinput --ignore=src
       - name: Start preview server on :8001
+        # the venv's python, not `uv run`: a uv process left running holds the uv cache lock and
+        # setup-uv's post step (`uv cache prune`) then waits for it until the job times out
         run: |
-          STATIC_COMPRESSED=1 nohup uv run python manage.py runserver 0.0.0.0:8001 --noreload > /tmp/preview.log 2>&1 &
-          for i in $(seq 1 30); do curl -fsS http://localhost:8001/healthz/ && break; sleep 1; done
+          STATIC_COMPRESSED=1 nohup .venv/bin/python manage.py runserver 0.0.0.0:8001 --noreload > /tmp/preview.log 2>&1 &
+          echo $! > /tmp/preview.pid
+          for _ in $(seq 1 30); do curl -fsS http://localhost:8001/healthz/ && break; sleep 1; done
       - name: pa11y-ci (WCAG 2.1 AA, 0 errors on key pages — spec §9)
         run: npx pa11y-ci
       - name: Lighthouse CI (LCP < 2.5 s, CLS < 0.1, TBT < 200 ms on 3 pages — spec §4.6)
@@ -207,6 +210,9 @@ jobs:
       - name: Preview log on failure
         if: failure()
         run: cat /tmp/preview.log
+      - name: Stop the preview server
+        if: always()
+        run: kill "$(cat /tmp/preview.pid)" 2>/dev/null || true
 
   build:
     name: docker build · trivy
