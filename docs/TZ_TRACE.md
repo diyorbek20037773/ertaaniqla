@@ -37,6 +37,10 @@ Legend for milestone column: M0…M7 per spec §13; M5b = design integration (DE
 
 ## C. Section 2 — childhood cancer pages (TZ §2.2, spec §2.3)
 
+> **2026-10-15 (D-087, client):** every page below exists in the CMS and is tested, but the section is
+> hidden from visitors until its content is ready (Site settings → «Show the childhood cancer
+> section»). The landing note announces it among the coming sections.
+
 | ID | Page / content (TZ verbatim) | Impl (seed path) | Test | M | Status |
 |---|---|---|---|---|---|
 | C-01 | Об онкозаболеваниях у детей (topic index) | `/uz/bolalar/bolalar-onkologiyasi-haqida/` `/ru/detskiy/ob-onkozabolevaniyah-u-detey/` | `tests/sections/test_seed.py::test_tz_bullets_verbatim_ru` | M1 | done |

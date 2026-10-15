@@ -212,6 +212,28 @@ Jarayonlar holati: *Hisobotlar → Jarayonlar* (workflows) — kim va qachon yub
 tibbiy ogohlantirish (uz/ru), **favqulodda banner** (masalan, skrining oyi), hamkorlar logotiplari,
 Yandex.Metrika ID, maxfiylik siyosati sahifasi, Yandex.Webmaster / Google tasdiqlash kodlari.
 
+**Boʻlimlar → «Bolalar saratoni» boʻlimini koʻrsatish.** Belgi qoʻyilmagan boʻlsa (hozir shunday),
+bolalar boʻlimi tashrif buyuruvchilarga koʻrinmaydi: menyu, pastki qism, bosh sahifa kartalari, mavzu
+filtrlari, qidiruv va sayt xaritasida yoʻq, sahifalari 404 qaytaradi. Sahifalar CMSda qoladi va
+oldindan koʻrish ishlaydi; belgi qoʻyilishi bilan hammasi qaytadi.
+
+**`[[TODO …]]` / `[[VERIFY …]]` belgilari** saytda koʻrsatilmaydi (faqat CMS va oldindan koʻrishda
+qoladi). Qaysi matn hali toʻldirilmaganini bilish uchun ular CMSda turaveradi.
+
+### 12.1 «Foydali maʼlumotlar» (yangiliklar)
+
+*Sahifalar → Foydali maʼlumotlar → Quyi sahifa qoʻshish → yangilik / maqola*:
+
+- **Sarlavha**; **Mavzu** (koʻkrak bezi / bachadon boʻyni); **Sana**; **Rasm** — muqova, kamida
+  1200 px eni, gorizontal (3:2), matnsiz; muqobil matn yozing.
+- **Qisqacha mazmun** (≤ 500 belgi) — sahifada sarlavha ostida va kartochkada chiqadi, shuning uchun
+  asosiy matnda uni takrorlamang.
+- **Asosiy matn** — «Matn» blokiga Word'dan nusxa olib qoʻying: kichik sarlavhalar uchun H2 (ichki
+  band uchun H3), roʻyxatlar uchun roʻyxat tugmasi.
+- Ruscha versiya: sahifa menyusi → **Tarjima qilish** → rus tili; tarjimon har bir xatboshini
+  toʻldiradi, shifokor tekshiradi, keyin nashr qilinadi (5.2-band).
+- Videolar YouTube kanalidan oʻzi keladi (*Snippetlar → Videolar*).
+
 Foydali vositalar (skrining tekshiruvi, oʻz-oʻzini tekshirish) matnlari tibbiy kelishilgandan keyingina
 dasturchi tomonidan yoqiladi (`tools_screening`, `tools_selfcheck` bayroqlari).
 
