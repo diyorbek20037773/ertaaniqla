@@ -268,7 +268,7 @@ jobs:
             -t "${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.channel }}" \
             "${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha }}"
       - name: Trivy scan (fail on HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25  # v0.36.0, pinned by SHA (tags were re-published in 2026-03)
         with:
           image-ref: ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha }}
           severity: HIGH,CRITICAL
