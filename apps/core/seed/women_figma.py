@@ -4,8 +4,9 @@ The Uzbek copy is the client's text as laid out in Figma «Erta aniqla» (frames
 2408:2489); breast-cancer «Xabardorlik» was read from the Figma layers, the other pages from the
 PNG exports. It is medical content the developer did not write, so every page carries
 `[[VERIFY: doctor]]` and stays unverified until the Medical review workflow approves it (D-041).
-Figma has no Russian copy: Russian pages get translated headings and a translation placeholder
-(D-068) instead of an unreviewed machine translation of medical text.
+Figma has no Russian copy. Since D-088/D-089 the Russian pages are these Uzbek bodies translated
+segment by segment (`apps.core.seed.ru_translate`, `ru_women.json`); the `lang != "uz"` branches
+below are the earlier skeletons (D-068), kept for reference and no longer used by the seed.
 Where a Figma frame repeats another page's text by mistake (cervical «Sabablari» cards copied
 from the breast page) the cards keep their design but get a copywriter placeholder.
 """

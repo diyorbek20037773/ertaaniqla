@@ -176,3 +176,34 @@ def create_first_news(index: Any) -> Any:
     index.add_child(instance=page)
     page.save_revision().publish()
     return page
+
+
+RU_SLUG = "geneticheskie-issledovaniya-pri-rake-molochnoy-zhelezy"
+
+
+def create_russian_news(uz_page: Any) -> Any:
+    """The Russian version of the item (translation dictionary, D-088) under the Russian list.
+    Returns the new page, or None when it exists, a translation is missing or the Russian list
+    is not there."""
+    from wagtail.models import Locale
+
+    from apps.core.seed.ru_translate import dictionary, translate
+
+    locale = Locale.objects.filter(language_code="ru").first()
+    if locale is None or uz_page.get_translation_or_none(locale) is not None:
+        return None
+    if uz_page.get_parent().get_translation_or_none(locale) is None:
+        return None
+    words = dictionary()
+    missing: list[str] = []
+    body = translate([{"type": "rich_text", "value": BODY_HTML}], words, missing)
+    title, summary = words.get(TITLE), words.get(SUMMARY)
+    if missing or not title or not summary:
+        return None
+    page = uz_page.copy_for_translation(locale)
+    page.title = page.draft_title = title
+    page.slug = RU_SLUG
+    page.summary = summary
+    page.body = body
+    page.save_revision().publish()
+    return page

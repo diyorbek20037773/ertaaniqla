@@ -117,25 +117,15 @@ def test_section_urls_match_spec(seeded) -> None:
 
 
 # ---------------------------------------------------------------------------
-# TZ content verbatim (ru) — every table cell and bullet
+# TZ content verbatim (ru) — every table cell and bullet. The women's pages follow the approved
+# design (D-079) and their Russian version is its translation (D-088): TZ items the design dropped
+# (awareness checklist and statistics, the cervical 4-step route) are on neither language; TZ
+# items the design kept are written in the TZ's own Russian (ru_women.json).
 # ---------------------------------------------------------------------------
 @pytest.mark.parametrize(
     ("key", "snippets"),
     [
-        (
-            "women.awareness.breast",
-            [
-                "что происходит в организме",
-                "стадии",
-                "статистика по Узбекистану",
-                "Возраст",
-                "Наследственность",
-                "Образ жизни",
-                "ВПЧ-инфекция",
-                "Самообследование груди",
-                "не всегда означает рак",
-            ],
-        ),
+        ("women.awareness.breast", ["Наследственность"]),
         (
             "women.screening.breast",
             [
@@ -204,20 +194,7 @@ def test_section_urls_match_spec(seeded) -> None:
                 "психологическое благополучие в долгосрочной перспективе",
             ],
         ),
-        (
-            "women.awareness.cervical",
-            [
-                "что происходит в организме",
-                "стадии",
-                "статистика по Узбекистану",
-                "Возраст",
-                "Наследственность",
-                "Образ жизни",
-                "ВПЧ-инфекция",
-                "Самообследование груди",
-                "не всегда означает рак",
-            ],
-        ),
+        ("women.awareness.cervical", ["стадии", "Возраст", "Образ жизни"]),
         (
             "women.screening.cervical",
             [
@@ -232,20 +209,7 @@ def test_section_urls_match_spec(seeded) -> None:
                 "Бесплатно – в рамках государственной программы",
             ],
         ),
-        (
-            "women.treatment.cervical",
-            [
-                "Первичный прием",
-                "Обратитесь к терапевту или гинекологу при первых признаках или при плановом визите.",
-                "Направление на диагностику",
-                "УЗИ, маммография, тесты, прием у кабинета «Онконастороженности» и др.",
-                "Онколог / онкогинеколог",
-                "направление в онкологический центр (в соответствии с датами в ПП-402)",
-                "[[VERIFY: PP-402 referral deadlines]]",
-                "Лечение",
-                "Информация об этапах лечения.",
-            ],
-        ),
+        ("women.treatment.cervical", ["Лечение"]),
         (
             "women.support.cervical",
             [
@@ -399,7 +363,9 @@ def test_uz_bodies_are_real_uzbek_with_placeholders(seeded) -> None:
     assert "Jismoniy salomatlik" in text
     assert "Hissiy qoʻllab-quvvatlash" in text
     assert "[[VERIFY: doctor]]" in text  # Figma copy (D-065) waits for the doctor
-    assert "[[TODO: content — copywriter]]" in body_text(page_for("women.after.breast", "ru"))
+    assert "[[TODO: content — copywriter]]" in body_text(page_for("children.after", "ru"))
+    # the Russian women's pages are the Uzbek design pages translated (D-088)
+    assert "Наблюдение после лечения" in body_text(page_for("women.after.breast", "ru"))
     types = body_text(page_for("children.about.types", "uz"))
     assert "Leykozlar" in types
     assert "Neyroblastoma" in types
@@ -429,7 +395,9 @@ def test_block_types_match_spec_for_key_pages(seeded) -> None:
     assert "cards_grid" in page_for("children.about.types", "uz").block_types
     assert "glossary_terms" in page_for("children.diagnosis.diagnostics", "ru").block_types
     assert "faq_accordion" in page_for("children.diagnosis.diagnostics", "ru").block_types
-    assert "cta" in page_for("women.awareness.breast", "ru").block_types
+    # the Russian page mirrors the Uzbek design page block for block (D-088)
+    ru_breast = page_for("women.awareness.breast", "ru")
+    assert ru_breast.block_types == breast.block_types
 
 
 def test_six_childhood_cancer_cards(seeded) -> None:

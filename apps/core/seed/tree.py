@@ -705,12 +705,16 @@ def intro_children(lang: str, ctx: SeedContext) -> Body:
 # THE TREE
 # ---------------------------------------------------------------------------
 def _wf(name: str) -> BodyBuilder:
-    """Body builder from `women_figma` resolved at call time (that module imports this one)."""
+    """Body builder from `women_figma` resolved at call time (that module imports this one).
+    The Russian page is the Uzbek body translated segment by segment (D-088)."""
 
     def build(lang: Lang, ctx: SeedContext) -> Body:
-        from apps.core.seed import women_figma
+        from apps.core.seed import ru_translate, women_figma
 
-        body: Body = getattr(women_figma, name)(lang, ctx)
+        builder = getattr(women_figma, name)
+        if lang == "ru":
+            return ru_translate.russian_body(builder, ctx)
+        body: Body = builder(lang, ctx)
         return body
 
     build.__name__ = name
@@ -721,9 +725,12 @@ def _wfaq(name: str) -> BodyBuilder:
     """Body builder from `women_faq` (the client's questions and answers, D-084)."""
 
     def build(lang: Lang, ctx: SeedContext) -> Body:
-        from apps.core.seed import women_faq
+        from apps.core.seed import ru_translate, women_faq
 
-        body: Body = getattr(women_faq, name)(lang, ctx)
+        builder = getattr(women_faq, name)
+        if lang == "ru":
+            return ru_translate.russian_body(builder, ctx)
+        body: Body = builder(lang, ctx)
         return body
 
     build.__name__ = name

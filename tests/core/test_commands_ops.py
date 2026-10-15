@@ -101,7 +101,7 @@ def test_find_placeholders_lists_seeded_pages_and_fails(seeded) -> None:
     out = StringIO()
     call_command("find_placeholders", stdout=out)
     text = out.getvalue()
-    assert "/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/" in text
+    assert "/ru/detskiy/" in text  # Russian women's pages are translated since D-088
     assert "VERIFY=" in text
     with pytest.raises(CommandError, match="still contain placeholders"):
         call_command("find_placeholders", "--fail", stdout=StringIO())
