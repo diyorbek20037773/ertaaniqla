@@ -207,3 +207,103 @@ def create_russian_news(uz_page: Any) -> Any:
     page.body = body
     page.save_revision().publish()
     return page
+
+
+# --- the client's Word news (scripts/news_docx.py → apps/posts/news/*.json), 2026-10-16 -------
+NEWS_DIR = Path(__file__).resolve().parent / "news"
+
+
+def news_batches() -> list[list[dict[str, Any]]]:
+    import json
+
+    return [
+        json.loads(path.read_text(encoding="utf-8")) for path in sorted(NEWS_DIR.glob("*.json"))
+    ]
+
+
+def _image(file_name: str, title: str) -> Any:
+    from django.core.files.images import ImageFile
+    from PIL import Image as PILImage
+
+    from apps.media_library.models import PortalImage
+
+    existing = PortalImage.objects.filter(file__endswith=file_name).first()
+    if existing is not None:
+        return existing
+    path = COVER.parent / file_name
+    image = PortalImage(title=title[:255], description=title[:255])
+    with path.open("rb") as handle:
+        image.file.save(file_name, ImageFile(handle), save=False)
+    with PILImage.open(path) as picture:
+        image.width, image.height = picture.size
+    image.file_size = path.stat().st_size
+    image.save()
+    return image
+
+
+def _fill(page: Any, text: dict[str, str]) -> None:
+    page.title = page.draft_title = text["title"]
+    page.summary = text["summary"][:500]
+    page.body = [{"type": "rich_text", "value": text["body"]}]
+
+
+def publish_item(index: Any, item: dict[str, Any]) -> tuple[bool, bool]:
+    """Create the item under the uz list (and its Russian version) when it is missing. A Russian
+    version nobody edited (seeded, no revision by a person) takes the client's own Russian.
+    Returns (uz created, ru created or updated)."""
+    import datetime as dt
+
+    from wagtail.models import Locale
+
+    from apps.posts.models import PostPage
+
+    uz_page = PostPage.objects.child_of(index).filter(slug=item["slug"]).first()
+    created = uz_page is None
+    if uz_page is None:
+        uz_page = PostPage(
+            slug=item["slug"],
+            locale=index.locale,
+            topic=item["topic"],
+            date=dt.date.fromisoformat(item["date"]),
+            image=_image(item["cover"], item["uz"]["title"]) if item["cover"] else None,
+        )
+        _fill(uz_page, item["uz"])
+        index.add_child(instance=uz_page)
+        uz_page.save_revision().publish()
+    ru_text = item.get("ru") or {}
+    locale = Locale.objects.filter(language_code="ru").first()
+    if not ru_text.get("body") or locale is None:
+        return created, False
+    if index.get_translation_or_none(locale) is None:
+        return created, False
+    ru_page = uz_page.get_translation_or_none(locale)
+    if ru_page is None:
+        ru_page = uz_page.copy_for_translation(locale)
+        ru_page.slug = item["slug_ru"] or ru_page.slug
+    else:
+        revision = ru_page.latest_revision
+        if revision is not None and revision.user_id is not None:
+            return created, False  # an editor's text is kept
+        if ru_page.title == ru_text["title"] and ru_page.summary == ru_text["summary"][:500]:
+            return created, False  # already the client's text
+    ru_page = ru_page.specific
+    _fill(ru_page, ru_text)
+    ru_page.save_revision().publish()
+    return created, True
+
+
+def publish_client_news() -> tuple[int, int]:
+    """Every item of every batch, oldest batch first; inside a batch the last item first, so the
+    list (newest first) shows them in the file's order."""
+    from apps.posts.models import PostIndexPage, PostKind
+
+    index = PostIndexPage.objects.filter(locale__language_code="uz", kind=PostKind.NEWS).first()
+    if index is None:
+        return 0, 0
+    uz_count = ru_count = 0
+    for batch in reversed(news_batches()):
+        for item in reversed(batch):
+            made, translated = publish_item(index, item)
+            uz_count += made
+            ru_count += translated
+    return uz_count, ru_count
