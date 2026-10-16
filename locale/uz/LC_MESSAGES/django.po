@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 14:51+0500\n"
+"POT-Creation-Date: 2026-10-16 08:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -747,6 +747,18 @@ msgstr "footer ustunlari (uz)"
 
 msgid "footer columns (ru)"
 msgstr "footer ustunlari (ru)"
+
+msgid "notice above the footer (uz)"
+msgstr "pastki qism ustidagi lenta (uz)"
+
+msgid ""
+"Shown on every page; an e-mail address becomes a link. Empty = no strip."
+msgstr ""
+"Har bir sahifada koʻrsatiladi; elektron pochta manzili havolaga aylanadi. "
+"Boʻsh boʻlsa, lenta chiqmaydi."
+
+msgid "notice above the footer (ru)"
+msgstr "pastki qism ustidagi lenta (ru)"
 
 msgid "footer text (uz)"
 msgstr "pastki matn (uz)"
@@ -2384,6 +2396,13 @@ msgstr "Hech narsa topilmadi. Boshqa soʻz bilan urinib koʻring."
 
 msgid "Articles will appear here soon."
 msgstr "Maqolalar tez orada shu yerda chiqadi."
+
+msgctxt "useful information"
+msgid "Videos"
+msgstr "Videoroliklar"
+
+msgid "All videos"
+msgstr "Barcha videolar"
 
 #, python-format
 msgid "%(counter)s result"

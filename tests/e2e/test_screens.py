@@ -127,3 +127,34 @@ def test_language_switch_to_uzbek_cyrillic_and_back(mobile_page) -> None:
     mobile_page.locator('a.lang-seg__item[hreflang="uz"]').click()
     mobile_page.wait_for_load_state("networkidle")
     assert mobile_page.url.endswith("/uz/ayollar/skrining/kokrak-bezi-saratoni/")
+
+
+# the header panels opened under the page on desktop (header and main shared one z-index) —
+# client report 2026-10-16; checked on every page type the menu opens over
+COVERED_JS = """() => {
+  const panel = document.querySelector('.nav-dropdown[open] .nav-dropdown__panel');
+  if (!panel) return ['no panel'];
+  const r = panel.getBoundingClientRect();
+  return [[.2, .3], [.5, .5], [.8, .7], [.5, .9]]
+    .map(([fx, fy]) => document.elementFromPoint(r.left + r.width * fx, r.top + r.height * fy))
+    .filter((el) => el && !panel.contains(el) && !el.closest('[id^=djDebug]'))
+    .map((el) => el.className || el.tagName);
+}"""
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/uz/",
+        "/uz/yangiliklar/",
+        "/uz/videoroliklar/",
+        "/uz/savol-javob/",
+        "/uz/haqimizda/",
+        "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",
+        "/uz/qidiruv/?q=skrining",
+    ],
+)
+def test_sections_menu_opens_over_the_page(desktop_page, path: str) -> None:
+    desktop_page.goto(BASE_URL + path, wait_until="networkidle")
+    desktop_page.locator("summary.nav-dropdown__toggle").click()
+    assert desktop_page.evaluate(COVERED_JS) == [], path

@@ -18,6 +18,8 @@
     -webkit-mask: url("../img/ribbon-shape.svg") left top / 125% auto no-repeat; mask: url("../img/ribbon-shape.svg") left top / 125% auto no-repeat;
   }
   .site-header, main, .site-footer { position: relative; z-index: 1; }
+  /* above main: the «Boʻlimlar», search and «Aa» panels open over the page, never under it */
+  .site-header { z-index: 20; }
   html[data-contrast="high"] body::before { display: none; }
 
   h1, h2, h3, .display-title { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.005em; color: var(--c-ink); }
@@ -299,6 +301,23 @@
   .card-grid { display: grid; gap: clamp(1rem, 1.6vw, 1.5rem); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
   @media (min-width: 56rem) { .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .list-subtitle { margin: clamp(2rem, 3vw, 3rem) 0 var(--space-6); font-family: var(--font-sans); font-size: 1.15rem; font-weight: 600; }
+  /* the small strip above the footer on every page (2026-10-16) */
+  .site-notice { position: relative; z-index: 1; padding-block: clamp(1.5rem, 3vw, 2.5rem); }
+  .site-notice .container { max-width: calc(1120px + 2 * var(--gutter)); }
+  .site-notice__text {
+    margin: 0; padding: 0.55rem 1.25rem; border: 1px solid var(--c-line); border-radius: 999px; background: var(--c-blush);
+    color: var(--c-ink); font-size: 0.85rem; line-height: 1.45; text-align: center; text-wrap: balance;
+  }
+  .site-notice__text .icon { display: inline-block; width: 1.05em; height: 1.05em; margin-right: 0.45em; vertical-align: -0.18em; color: var(--c-rasp); }
+  .site-notice__text a { color: var(--c-rasp); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+  @media (max-width: 40rem) { .site-notice__text { border-radius: var(--radius-card); text-align: left; } }
+  html[data-contrast="high"] .site-notice__text { background: #fff; border: 2px solid #000; }
+  html[data-contrast="high"] .site-notice__text a, html[data-contrast="high"] .site-notice__text .icon { color: #000; }
+
+  /* «Foydali maʼlumotlar»: the topic's YouTube videos under the news (2026-10-16) */
+  .list-videos { margin-top: clamp(3rem, 5vw, 5rem); padding-top: clamp(1.5rem, 2.5vw, 2.5rem); border-top: 1px solid var(--c-line); }
+  .list-videos__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
+  .list-videos__head .list-subtitle { margin: 0; }
 
   .news-card { position: relative; display: flex; flex-direction: column; gap: var(--space-3); min-height: 0; border-radius: 0; background: none; }
   .news-card[data-topic="children"] { background: none; }

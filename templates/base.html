@@ -41,7 +41,7 @@
     {% block breadcrumbs %}{% breadcrumbs %}{% endblock %}
     {% block content %}{% endblock %}
   </main>
-  {% block footer %}{% include "components/footer.html" %}{% endblock %}
+  {% block footer %}{% include "components/site_notice.html" %}{% include "components/footer.html" %}{% endblock %}
   {% include "components/consent_banner.html" with metrika_id=settings.core.SiteSettings.metrika_id|default:YANDEX_METRIKA_ID privacy_url=settings.core.SiteSettings.privacy_page.url %}
   <script src="{% static 'dist/main.js' %}" defer nonce="{{ request.csp_nonce }}"></script>
   {% block extra_js %}{% endblock %}

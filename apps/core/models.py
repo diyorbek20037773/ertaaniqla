@@ -295,6 +295,25 @@ class SiteSettings(BaseSiteSetting):
         verbose_name=_("footer columns (ru)"),
         help_text=FOOTER_COLUMNS_HELP,
     )
+    # client request 2026-10-16: one small strip above the footer on every page
+    notice_uz = models.CharField(
+        _("notice above the footer (uz)"),
+        max_length=400,
+        blank=True,
+        default=(
+            "Portal kontentini takomillashtirish boʻyicha taklif va mulohazalaringiz boʻlsa, "
+            "ularni n.akhatov@asr.gov.uz elektron pochta manziliga yuborishingizni soʻraymiz."
+        ),
+        help_text=_("Shown on every page; an e-mail address becomes a link. Empty = no strip."),
+    )
+    notice_ru = models.CharField(
+        _("notice above the footer (ru)"),
+        max_length=400,
+        blank=True,
+        default=(
+            "Если имеются предложения по улучшению контента портала, пишите n.akhatov@asr.gov.uz"
+        ),
+    )
     footer_text_uz = models.TextField(_("footer text (uz)"), blank=True)
     footer_text_ru = models.TextField(_("footer text (ru)"), blank=True)
     disclaimer_uz = models.TextField(
@@ -401,6 +420,8 @@ class SiteSettings(BaseSiteSetting):
         ),
         MultiFieldPanel(
             [
+                FieldPanel("notice_uz"),
+                FieldPanel("notice_ru"),
                 FieldPanel("disclaimer_uz"),
                 FieldPanel("disclaimer_ru"),
                 FieldPanel("footer_text_uz"),

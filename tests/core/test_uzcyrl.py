@@ -188,6 +188,7 @@ def test_cyrillic_page_links_titles_and_alternates(seeded, client: Client) -> No
     assert "%2Foz%2Fayollar%2Fogohlik%2Fkokrak-bezi-saratoni%2F" in html  # share links
     visible = re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", html, flags=re.S)
     visible = re.sub(r"\[\[[^\]]*\]\]", " ", visible)
+    visible = re.sub(r"[\w.+-]+@[\w-]+\.[\w.-]+", " ", visible)  # e-mail addresses stay Latin
     latin_words = set(re.findall(r"[A-Za-z]{3,}", visible)) - {"Oʻzbekcha", "zbekcha"}
     brands = {"Telegram", "WhatsApp", "Facebook", "Instagram", "TikTok", "YouTube"}
     brands |= {"logo", "Agency", "Yandex", "Hamroh"}  # translate="no" design placeholders

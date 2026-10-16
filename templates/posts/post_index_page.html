@@ -2,7 +2,8 @@
 {% load i18n wagtailcore_tags %}
 {% comment %} posts/post_index_page.html — «Yangiliklar» / «Maqolalar» (final design, D-081:
    docs/oxirigi_variant Frame-4, Frame-2). Context: page (PostIndexPage: kind, eyebrow, lead),
-   posts (Page of PostPage), topic, topics, query.
+   posts (Page of PostPage), topic, topics, query; news only: videos (same topic, with
+   watch_url) and video_index.
    News: the newest item beside its text, then a three-column grid and numbered pages.
    Articles: description + search, a large first card, three columns, «Yana yuklash». {% endcomment %}
 {% block breadcrumbs %}{% endblock %}{# rendered inside the list head #}
@@ -34,6 +35,18 @@
     {% endif %}
   {% else %}
     <p class="empty-state">{% if query %}{% trans "Nothing found. Try another word." %}{% elif page.kind == "articles" %}{% trans "Articles will appear here soon." %}{% else %}{% trans "News will appear here soon." %}{% endif %}</p>
+  {% endif %}
+
+  {% if videos %}
+    <section class="list-videos" id="videolar" aria-labelledby="list-videos-title">
+      <header class="list-videos__head">
+        <h2 class="list-subtitle" id="list-videos-title">{% trans "Videos" context "useful information" %}</h2>
+        <a class="btn btn--outline" href="{{ video_index.url }}{% if topic %}?topic={{ topic }}{% endif %}">{% trans "All videos" %} {% include "components/icons/arrow-right.svg" %}</a>
+      </header>
+      <div class="card-grid">
+        {% for video in videos %}{% include "media_library/_video_card.html" with url=video.watch_url %}{% endfor %}
+      </div>
+    </section>
   {% endif %}
 </div>
 {% endblock %}

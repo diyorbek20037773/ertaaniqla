@@ -25,6 +25,7 @@ from apps.core.models import BasePage, Topic, topic_from_request
 from apps.core.visibility import hidden_topics, visible_topics
 
 PAGE_SIZE = 12
+VIDEOS_UNDER_NEWS = 6
 
 
 class PostKind(models.TextChoices):
@@ -88,7 +89,21 @@ class PostIndexPage(BasePage):
         context["query"] = query
         context["topics"] = visible_topics()
         context["posts"] = paginator.get_page(request.GET.get("page"))
+        if self.kind == PostKind.NEWS:
+            context.update(self.get_videos(topic))
         return context
+
+    def get_videos(self, topic: str = "") -> dict[str, Any]:
+        """«Foydali maʼlumotlar» shows the YouTube videos of the same topic under the news
+        (client request 2026-10-16, design Frame «Boshqa videolar» cards)."""
+        from apps.media_library.videos import VideoIndexPage, ready_videos
+
+        index = VideoIndexPage.objects.child_of(self.get_parent()).live().first()
+        if index is None:
+            return {}
+        videos = list(ready_videos(topic)[:VIDEOS_UNDER_NEWS])
+        index.add_watch_urls(videos)
+        return {"videos": videos, "video_index": index}
 
 
 class PostPage(BasePage):

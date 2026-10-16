@@ -5,7 +5,7 @@
 <article class="container post" data-topic="{{ page.topic }}">
   <header class="post__head">
     <p class="post__meta"><span class="topic-chip">{{ page.get_topic_display }}</span>
-      <span class="news-card__date">{% include "components/icons/calendar.svg" %}<time datetime="{{ page.date|date:'Y-m-d' }}">{{ page.date|date:"F j, Y" }}</time></span></p>
+      <span class="news-card__date">{% include "components/icons/calendar.svg" %}<time datetime="{{ page.date|date:'Y-m-d' }}">{{ page.date|date:"j E Y"|lower }}</time></span></p>
     <h1 class="post__title">{{ page.title }}</h1>
     {% if page.summary %}<p class="post__lead">{{ page.summary }}</p>{% endif %}
   </header>

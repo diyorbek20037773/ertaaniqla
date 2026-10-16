@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 14:51+0500\n"
+"POT-Creation-Date: 2026-10-16 08:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -753,6 +753,18 @@ msgstr "колонки подвала (uz)"
 
 msgid "footer columns (ru)"
 msgstr "колонки подвала (ru)"
+
+msgid "notice above the footer (uz)"
+msgstr "полоса над подвалом (uz)"
+
+msgid ""
+"Shown on every page; an e-mail address becomes a link. Empty = no strip."
+msgstr ""
+"Показывается на каждой странице; адрес электронной почты становится ссылкой."
+" Если поле пустое, полоса не показывается."
+
+msgid "notice above the footer (ru)"
+msgstr "полоса над подвалом (ru)"
 
 msgid "footer text (uz)"
 msgstr "текст подвала (uz)"
@@ -2412,6 +2424,13 @@ msgstr "Ничего не найдено. Попробуйте другое сл
 
 msgid "Articles will appear here soon."
 msgstr "Здесь скоро появятся статьи."
+
+msgctxt "useful information"
+msgid "Videos"
+msgstr "Видеоролики"
+
+msgid "All videos"
+msgstr "Все видео"
 
 #, python-format
 msgid "%(counter)s result"

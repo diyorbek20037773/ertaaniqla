@@ -1,0 +1,11 @@
+{% comment %} components/site_notice.html — the small strip above the footer on every page (client
+   request 2026-10-16): Settings → Site settings → «Notice above the footer» (uz / ru; the /oz/
+   view converts uz). An address in the text becomes a mailto link. Empty = no strip. {% endcomment %}
+{% load core_tags %}
+{% with text=settings.core.SiteSettings|localized:"notice" %}{% if text %}
+<div class="site-notice" role="note">
+  <div class="container">
+    <p class="site-notice__text">{% include "components/icons/mail.svg" %}<span>{{ text|urlize }}</span></p>
+  </div>
+</div>
+{% endif %}{% endwith %}
