@@ -232,7 +232,13 @@ qoladi). Qaysi matn hali toʻldirilmaganini bilish uchun ular CMSda turaveradi.
   band uchun H3), roʻyxatlar uchun roʻyxat tugmasi.
 - Ruscha versiya: sahifa menyusi → **Tarjima qilish** → rus tili; tarjimon har bir xatboshini
   toʻldiradi, shifokor tekshiradi, keyin nashr qilinadi (5.2-band).
-- Videolar YouTube kanalidan oʻzi keladi (*Snippetlar → Videolar*).
+- Videolar YouTube kanalidan oʻzi keladi (*Snippetlar → Videolar*); «Foydali maʼlumotlar»
+  sahifasida yangiliklar ostida shu mavzudagi videolar koʻrsatiladi.
+- Word shablonidagi (Сарлавҳа, Қисқа мазмун, Асосий матн, Мавзу, Сана, Муқова) yangiliklarni
+  dasturchi bir buyruq bilan saytga chiqaradi: oʻzbekcha va ruscha versiya bogʻlangan holda.
+
+**Pastki qism ustidagi lenta** — *Sozlamalar → Sayt sozlamalari → «Footer & legal»*: uz/ru
+matni; elektron pochta manzili oʻzi havolaga aylanadi; boʻsh qoldirilsa lenta chiqmaydi.
 
 Foydali vositalar (skrining tekshiruvi, oʻz-oʻzini tekshirish) matnlari tibbiy kelishilgandan keyingina
 dasturchi tomonidan yoqiladi (`tools_screening`, `tools_selfcheck` bayroqlari).
