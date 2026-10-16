@@ -1,0 +1,46 @@
+; ertaaniqla.uz — DNS zone for Cloudflare (D-091).
+; Import: Cloudflare → DNS → Records → Import and Export → Import DNS records (BIND file).
+; `cf_tags=cf-proxied:...` sets the orange/grey cloud on import.
+;
+; Web goes to Railway: Railway has no static IP, so the apex is a CNAME that Cloudflare
+; flattens. It stays DNS only (grey): a proxied apex adds a hop to X-Forwarded-For and
+; ClientIPMiddleware (TRUSTED_PROXY_COUNT=1) would see Cloudflare's address as the client.
+; www is proxied only so a Cloudflare Redirect Rule can send it to the apex (301).
+;
+; Mail and cPanel stay on the previous hosting (205.251.138.125, copied from the
+; ns1.spincrus.ru zone on 2026-10-16). There `mail`, MX and the *DAV SRV records pointed at
+; the apex; they now name mail.ertaaniqla.uz, because the apex is no longer that server.
+
+$ORIGIN ertaaniqla.uz.
+$TTL 3600
+
+; --- Web (Railway service `ertaaniqla`) ---
+ertaaniqla.uz.                    300  IN  CNAME  ulpg8tmb.up.railway.app. ; cf_tags=cf-proxied:false
+_railway-verify.ertaaniqla.uz.    300  IN  TXT    "railway-verify=d09844cd3de4dc1a279dbe5bdc8b406ea971383af050340a540c24676443af03"
+www.ertaaniqla.uz.                300  IN  CNAME  ertaaniqla.uz. ; cf_tags=cf-proxied:true
+
+; --- Mail and cPanel (previous hosting) ---
+mail.ertaaniqla.uz.               3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+webmail.ertaaniqla.uz.            3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+autodiscover.ertaaniqla.uz.       3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+cpanel.ertaaniqla.uz.             3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+whm.ertaaniqla.uz.                3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+webdisk.ertaaniqla.uz.            3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+cpcalendars.ertaaniqla.uz.        3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+cpcontacts.ertaaniqla.uz.         3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+ftp.ertaaniqla.uz.                3600 IN  A      205.251.138.125 ; cf_tags=cf-proxied:false
+
+ertaaniqla.uz.                    3600 IN  MX     0 mail.ertaaniqla.uz.
+ertaaniqla.uz.                    3600 IN  TXT    "v=spf1 ip4:205.251.138.125 +mx ~all"
+_dmarc.ertaaniqla.uz.             3600 IN  TXT    "v=DMARC1; p=none;"
+default._domainkey.ertaaniqla.uz. 3600 IN  TXT    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxmeaCxg9iRGRqo0zNrdTQsZhdVpR69Q1TWxeD4CU5yzhaH+ffp8+q8mUzeXk5oXLsBNwSTpPimUorOlJpiL6bQzVj/pg0fnK/fwxZkTNqbOqU0GuLagNfjp9h2fysoy9ooJEnvlZqFlDAADtg6w95/RyTUpJrOsNGosUZ6o+hObEegNBt4ojleyDmpFDgTA+Z" "o3tonCZm+ttrIKuVrkloU/fZfYZF8B6HuC9NPgl++i4avywPs5SnCTWJkpeiVV/g2eM2m/yNy1+l0zEr4LGsF6dkahC/rDB38AMW1sl9NBVQ4S6W3UGNc7JHj0cSyIm2xSCtHaikrwH7oBKM1OlKQIDAQAB;"
+
+_autodiscover._tcp.ertaaniqla.uz. 3600 IN  SRV    0 0 443 cpanelemaildiscovery.cpanel.net.
+_caldav._tcp.ertaaniqla.uz.       3600 IN  SRV    0 0 2079 mail.ertaaniqla.uz.
+_caldavs._tcp.ertaaniqla.uz.      3600 IN  SRV    0 0 2080 mail.ertaaniqla.uz.
+_carddav._tcp.ertaaniqla.uz.      3600 IN  SRV    0 0 2079 mail.ertaaniqla.uz.
+_carddavs._tcp.ertaaniqla.uz.     3600 IN  SRV    0 0 2080 mail.ertaaniqla.uz.
+_caldav._tcp.ertaaniqla.uz.       3600 IN  TXT    "path=/"
+_caldavs._tcp.ertaaniqla.uz.      3600 IN  TXT    "path=/"
+_carddav._tcp.ertaaniqla.uz.      3600 IN  TXT    "path=/"
+_carddavs._tcp.ertaaniqla.uz.     3600 IN  TXT    "path=/"

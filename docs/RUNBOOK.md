@@ -128,6 +128,27 @@ start-up seed only fills an empty database — to push new seed text into a seed
 safe on a live site; the Railway start-up runs it. `railway run python manage.py seed_content` by hand (it overwrites page bodies: never after
 editors started working).
 
+**Custom domain `ertaaniqla.uz` (D-091).** Railway has no static IP, so the apex is a CNAME to
+the target Railway shows (`ulpg8tmb.up.railway.app`) plus the `_railway-verify` TXT — both are
+required, with only the CNAME Railway answers 404. An apex CNAME needs CNAME flattening, hence
+DNS at Cloudflare:
+
+1. Cloudflare → Add site `ertaaniqla.uz` (Free) → *Upload DNS zone file* →
+   `docs/dns/ertaaniqla.uz.zone` (or, after a quick scan, delete the scanned records and use
+   DNS → Records → Import). Check the apex CNAME is **DNS only** (grey).
+2. Rules → Redirect Rules → template «Redirect from WWW to root» → 301, keep query string.
+3. At the registrar replace `ns1/ns2.spincrus.ru` with the two Cloudflare nameservers.
+4. When `https://ertaaniqla.uz/healthz/` answers 200 with an `x-railway-edge` header, set
+   `SITE_BASE_URL=https://ertaaniqla.uz` (the redeploy runs `sync_site`) and smoke-test.
+
+`DJANGO_ALLOWED_HOSTS` / `DJANGO_CSRF_TRUSTED_ORIGINS` list the apex, www and
+`ertaaniqla-production.up.railway.app`: once a custom domain exists `RAILWAY_PUBLIC_DOMAIN` is the
+custom domain, so the railway.app name is no longer added by `prod.py`. Keep the apex grey: a
+proxied apex adds Cloudflare to `X-Forwarded-For`, and with `TRUSTED_PROXY_COUNT=1` every
+visitor would share Cloudflare's address for rate limits (set it to `2` if the proxy is ever
+turned on, with SSL/TLS mode **Full**, not Full (strict) — Railway's instruction). Mail stays on
+the previous cPanel host (205.251.138.125); its records are in the zone file.
+
 ## 2. Rollback
 
 * Automatic: staging and prod deploys roll back by themselves when the smoke test fails (`AUTO_ROLLBACK=1`; the previous image is kept in `/srv/ertaaniqla/<env>/.deploy.prev.env`).

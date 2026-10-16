@@ -8,7 +8,9 @@ param(
     [string]$Service = "ertaaniqla",
     [string]$PostgresService = "Postgres",
     [string]$RedisService = "Redis",
-    [string]$Domain = "ertaaniqla-production.up.railway.app"
+    [string]$Domain = "ertaaniqla-production.up.railway.app",
+    # every host the service answers (D-091): the custom domain, www and the railway.app name
+    [string]$Hosts = "ertaaniqla.uz,www.ertaaniqla.uz,ertaaniqla-production.up.railway.app"
 )
 # Not "Stop": in Windows PowerShell 5.1 any stderr line of a native command (railway prints
 # "No linked project" there) becomes a terminating error. Exit codes are checked explicitly.
@@ -50,6 +52,8 @@ if ($parsed -is [array]) {
     $parsed.PSObject.Properties | ForEach-Object { $existing[$_.Name] = $true }
 }
 
+$allHosts = @($Domain) + ($Hosts -split ",") | ForEach-Object { $_.Trim() } | Where-Object { $_ } | Select-Object -Unique
+
 $vars = [ordered]@{
     # ${{...}} are Railway references, resolved on Railway (single quotes: no PowerShell expansion)
     "DATABASE_URL"                = '${{' + $PostgresService + '.DATABASE_URL}}'
@@ -59,6 +63,9 @@ $vars = [ordered]@{
     # no worker service on the demo host: tasks run inline in the web process
     "CELERY_TASK_ALWAYS_EAGER"    = "True"
     "SITE_BASE_URL"               = "https://$Domain"
+    # RAILWAY_PUBLIC_DOMAIN becomes the custom domain once one exists, so list the hosts here
+    "DJANGO_ALLOWED_HOSTS"        = $allHosts -join ","
+    "DJANGO_CSRF_TRUSTED_ORIGINS" = ($allHosts | ForEach-Object { "https://$_" }) -join ","
     "ENVIRONMENT"                 = "railway-demo"
     "GUNICORN_WORKERS"            = "2"
     # pre-deploy hook does not run on Railway (D-073): the web role migrates on start
