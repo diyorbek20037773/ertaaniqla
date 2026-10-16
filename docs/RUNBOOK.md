@@ -128,10 +128,23 @@ start-up seed only fills an empty database — to push new seed text into a seed
 safe on a live site; the Railway start-up runs it. `railway run python manage.py seed_content` by hand (it overwrites page bodies: never after
 editors started working).
 
-**Custom domain `ertaaniqla.uz` (D-091).** Railway has no static IP, so the apex is a CNAME to
-the target Railway shows (`ulpg8tmb.up.railway.app`) plus the `_railway-verify` TXT — both are
-required, with only the CNAME Railway answers 404. An apex CNAME needs CNAME flattening, hence
-DNS at Cloudflare:
+**Custom domain `www.ertaaniqla.uz` (D-092, current).** Railway has no static IP and only takes a
+CNAME plus a `_railway-verify` TXT (both required; with only the CNAME Railway answers 404). A
+subdomain can hold a CNAME in any DNS, so the zone stays where it is (`ns1/ns2.spincrus.ru`, the
+old cPanel → Zone Editor):
+
+| Type | Name | Value |
+|---|---|---|
+| CNAME | `www` | `sdz2j1tf.up.railway.app` (replaces `www` → `ertaaniqla.uz`) |
+| TXT | `_railway-verify.www` | `railway-verify=2473ee7fa264df73cc29f71ff5276ff0a8fb9fb9e2a77342109faa183edd615e` |
+
+The bare `ertaaniqla.uz` stays on the old cPanel host (mail lives there too) and 301-redirects
+to `https://www.ertaaniqla.uz/` (cPanel → Redirects, or `public_html/.htaccess`). When
+`https://www.ertaaniqla.uz/healthz/` answers 200 with an `x-railway-edge` header, set
+`SITE_BASE_URL=https://www.ertaaniqla.uz` (the redeploy runs `sync_site`).
+
+**Alternative: the bare apex on Railway (D-091).** The apex cannot hold a CNAME next to MX/TXT;
+it needs CNAME flattening, hence DNS at Cloudflare:
 
 1. Cloudflare → Add site `ertaaniqla.uz` (Free) → *Upload DNS zone file* →
    `docs/dns/ertaaniqla.uz.zone` (or, after a quick scan, delete the scanned records and use
