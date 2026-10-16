@@ -279,7 +279,8 @@ def main() -> None:
     items = convert(path, topic)
     target = ROOT / "apps" / "posts" / "news" / f"{name}.json"
     target.parent.mkdir(exist_ok=True)
-    target.write_text(json.dumps(items, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    text = json.dumps(items, ensure_ascii=False, indent=1) + "\n"
+    target.write_text(text, encoding="utf-8", newline="\n")  # LF on Windows too
     for item in items:
         print(
             item["date"],
