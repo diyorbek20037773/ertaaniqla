@@ -44,7 +44,7 @@ jobs:
       group: deploy-${{ inputs.environment }}
       cancel-in-progress: false   # never stop a deploy half-way
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Environment configured?
         env:
           DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
