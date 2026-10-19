@@ -28,7 +28,9 @@ case "$ROLE" in
       python manage.py seed_home_design
       python manage.py seed_faq_questions
       python manage.py seed_client_changes
-      python manage.py sync_youtube  # YouTube channel → videos (no beat on demo hosts, D-085)
+      # YouTube channel → videos (no beat on demo hosts, D-085). The sync keeps its own 45 s
+      # budget; `timeout` is the hard stop, so a hanging YouTube never fails the health check
+      timeout 60 python manage.py sync_youtube || echo "sync_youtube: stopped, the site retries" >&2
       python manage.py sync_site
     fi
     exec gunicorn config.wsgi:application \

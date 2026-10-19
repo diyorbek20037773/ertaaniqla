@@ -96,8 +96,14 @@ class PostIndexPage(BasePage):
     def get_videos(self, topic: str = "") -> dict[str, Any]:
         """«Foydali maʼlumotlar» shows the YouTube videos of the same topic under the news
         (client request 2026-10-16, design Frame «Boshqa videolar» cards)."""
+        from django.conf import settings
+
         from apps.media_library.videos import VideoIndexPage, ready_videos
 
+        if settings.CELERY_TASK_ALWAYS_EAGER:  # no worker / beat (Railway demo): sync from here too
+            from apps.media_library.youtube import sync_soon
+
+            sync_soon()
         index = VideoIndexPage.objects.child_of(self.get_parent()).live().first()
         if index is None:
             return {}

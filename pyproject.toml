@@ -37,6 +37,7 @@ dependencies = [
     "opentelemetry-instrumentation-django>=0.51b0",
     "opentelemetry-instrumentation-celery>=0.51b0",
     "opentelemetry-instrumentation-psycopg>=0.51b0",
+    "defusedxml>=0.7,<1",
 ]
 
 [dependency-groups]

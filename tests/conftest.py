@@ -23,6 +23,18 @@ def _clear_cache() -> Any:
     cache.clear()
 
 
+@pytest.fixture(autouse=True)
+def _no_background_youtube_sync(request, monkeypatch) -> None:
+    """Without Celery (tests are eager) the news pages start a YouTube sync in a thread; in tests
+    that thread would reach the network and the test database after the test ends. The tests of
+    the sync itself (tests/media_library/test_youtube.py) keep the real function."""
+    if request.module.__name__.endswith("test_youtube"):
+        return
+    from apps.media_library import youtube
+
+    monkeypatch.setattr(youtube, "sync_soon", lambda: None)
+
+
 @pytest.fixture
 def user(db, django_user_model):
     return django_user_model.objects.create_user(
