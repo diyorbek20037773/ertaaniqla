@@ -8,7 +8,7 @@ param(
     [string]$Service = "ertaaniqla",
     [string]$PostgresService = "Postgres",
     [string]$RedisService = "Redis",
-    [string]$Domain = "ertaaniqla-production.up.railway.app",
+    [string]$Domain = "www.ertaaniqla.uz",
     # every host the service answers (D-091): the custom domain, www and the railway.app name
     [string]$Hosts = "ertaaniqla.uz,www.ertaaniqla.uz,ertaaniqla-production.up.railway.app"
 )

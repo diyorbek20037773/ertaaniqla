@@ -137,20 +137,22 @@ start-up seed only fills an empty database — to push new seed text into a seed
 safe on a live site; the Railway start-up runs it. `railway run python manage.py seed_content` by hand (it overwrites page bodies: never after
 editors started working).
 
-**Custom domain `www.ertaaniqla.uz` (D-092, current).** Railway has no static IP and only takes a
-CNAME plus a `_railway-verify` TXT (both required; with only the CNAME Railway answers 404). A
-subdomain can hold a CNAME in any DNS, so the zone stays where it is (`ns1/ns2.spincrus.ru`, the
-old cPanel → Zone Editor):
+**Custom domain `www.ertaaniqla.uz` (D-092, live since 2026-10-19).** Railway has no static IP and
+only takes a CNAME plus a `_railway-verify` TXT (both required; with only the CNAME Railway answers
+404). A subdomain can hold a CNAME in any DNS. The domain is the developer's (Eskiz account): on
+2026-10-16 its nameservers moved from the old host's `ns1/ns2.spincrus.ru` to `ns1/ns2.eskiz.uz`
+(the .uz registry published it days later), and the zone is edited in Eskiz → DNS hosting:
 
 | Type | Name | Value |
 |---|---|---|
-| CNAME | `www` | `sdz2j1tf.up.railway.app` (replaces `www` → `ertaaniqla.uz`) |
+| CNAME | `www` | `sdz2j1tf.up.railway.app` |
 | TXT | `_railway-verify.www` | `railway-verify=2473ee7fa264df73cc29f71ff5276ff0a8fb9fb9e2a77342109faa183edd615e` |
+| A | `@`, `mail`, `webmail` | `205.251.138.125` (the old cPanel host: mailboxes, and the bare domain) |
+| MX / TXT | `@` | `10 mail.ertaaniqla.uz` / `v=spf1 +mx +ip4:205.251.138.125 ~all` |
 
-The bare `ertaaniqla.uz` stays on the old cPanel host (mail lives there too) and 301-redirects
-to `https://www.ertaaniqla.uz/` (cPanel → Redirects, or `public_html/.htaccess`). When
-`https://www.ertaaniqla.uz/healthz/` answers 200 with an `x-railway-edge` header, set
-`SITE_BASE_URL=https://www.ertaaniqla.uz` (the redeploy runs `sync_site`).
+`SITE_BASE_URL=https://www.ertaaniqla.uz` (the start-up runs `sync_site`). The bare
+`ertaaniqla.uz` still opens the old site until the old host 301-redirects it to
+`https://www.ertaaniqla.uz/` (cPanel → Redirects, or `public_html/.htaccess`).
 
 **Alternative: the bare apex on Railway (D-091).** The apex cannot hold a CNAME next to MX/TXT;
 it needs CNAME flattening, hence DNS at Cloudflare:
