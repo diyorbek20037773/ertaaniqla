@@ -1,12 +1,19 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
 {% comment %} media_library/video_watch.html — one video of the «Videoroliklar» list.
-   Context: page (VideoIndexPage), video, more (up to 3 videos of the same topic). {% endcomment %}
-{% block title %}{{ video.title }}{% endblock %}
+   Context: page (VideoIndexPage), video, video_description (plain text), more (up to 3 videos
+   of the same topic), route_suffix ("<id>/": canonical, hreflang, language switch). A cover
+   whose file is missing renders as a 0×0 «not found» rendition → the list's own og:image. {% endcomment %}
+{% block title %}{{ video.display_title }}{% endblock %}
+{% block og_type %}video.other{% endblock %}
+{% block og_title %}{{ video.display_title }}{% endblock %}
+{% block meta_description %}{% if video_description %}<meta name="description" content="{{ video_description }}">{% endif %}{% endblock %}
+{% block og_description %}{% if video_description %}<meta property="og:description" content="{{ video_description }}">{% endif %}{% endblock %}
+{% block og_image %}{% if video.poster %}{% image video.poster fill-1200x630 as og %}{% endif %}{% if og.width %}<meta property="og:image" content="{{ og.full_url }}"><meta property="og:image:width" content="{{ og.width }}"><meta property="og:image:height" content="{{ og.height }}">{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block content %}
 <div class="container list-page">
   <p><a class="pill-outline" href="{{ page.url }}">← {{ page.title }}</a></p>
-  <h1 class="post__title">{{ video.title }}</h1>
+  <h1 class="post__title">{{ video.display_title }}</h1>
   {% include "components/video.html" with video=video embed=video.embed %}
   {% if more %}
     {% trans "More videos" as more_title %}{% include "components/bar_title.html" with title=more_title %}

@@ -22,7 +22,7 @@
       <p class="video__placeholder">{% trans "The video is being processed. Please check back later." %}</p>
     {% endif %}
   {% elif embed %}
-    {% firstof video.title caption as embed_title %}
+    {% firstof video.display_title caption as embed_title %}
     {% include "components/embed_frame.html" with embed=embed title=embed_title %}
   {% endif %}
   {% if video.doctor_name %}<p class="video__speaker">{{ video.doctor_name }}{% if video.doctor_org %}, {{ video.doctor_org }}{% endif %}</p>{% endif %}

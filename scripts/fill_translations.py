@@ -483,6 +483,13 @@ T: dict[str, tuple[str, str]] = {
     "transcript": ("transkript", "расшифровка"),
     "subtitles (uz, VTT)": ("subtitrlar (uz, VTT)", "субтитры (uz, VTT)"),
     "subtitles (ru, VTT)": ("subtitrlar (ru, VTT)", "субтитры (ru, VTT)"),
+    "title (Russian)": ("sarlavha (ruscha)", "заголовок (на русском)"),
+    "Shown on the Russian site. Empty = the title above. The YouTube sync never changes it.": (
+        "Rus tilidagi saytda koʻrinadi. Boʻsh boʻlsa — yuqoridagi sarlavha. YouTube sinxronlash"
+        " uni hech qachon oʻzgartirmaydi.",
+        "Показывается на русской версии сайта. Пусто — заголовок выше. Синхронизация с YouTube"
+        " его никогда не меняет.",
+    ),
     "status": ("holat", "статус"),
     "processing error": ("qayta ishlash xatosi", "ошибка обработки"),
     "Media": ("Media", "Медиа"),

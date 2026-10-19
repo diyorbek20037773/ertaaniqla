@@ -9,5 +9,5 @@
     {% if video.duration %}<span class="video-card__time">{{ video.duration|duration }}</span>{% endif %}
   </div>
   <p class="video-card__topic">{{ video.get_topic_display }}</p>
-  <h3 class="video-card__title"><a class="video-card__link" href="{{ url }}">{{ video.title }}</a></h3>
+  <h3 class="video-card__title"><a class="video-card__link" href="{{ url }}">{{ video.display_title }}</a></h3>
 </article>

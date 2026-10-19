@@ -14,6 +14,7 @@ from typing import Any
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.documents.models import AbstractDocument, Document
@@ -131,6 +132,14 @@ class Video(index.Indexed, TimeStampedModel):
     """A doctor video or a short vertical social video (spec §4.3 `Video`)."""
 
     title = models.CharField(_("title"), max_length=200)
+    title_ru = models.CharField(
+        _("title (Russian)"),
+        max_length=200,
+        blank=True,
+        help_text=_(
+            "Shown on the Russian site. Empty = the title above. The YouTube sync never changes it."
+        ),
+    )
     topic = models.CharField(
         _("topic"),
         max_length=16,
@@ -182,6 +191,7 @@ class Video(index.Indexed, TimeStampedModel):
 
     panels = [
         FieldPanel("title"),
+        FieldPanel("title_ru"),
         MultiFieldPanel(
             [FieldPanel("topic"), FieldPanel("kind"), FieldPanel("source")], heading=_("Type")
         ),
@@ -205,6 +215,7 @@ class Video(index.Indexed, TimeStampedModel):
 
     search_fields = [
         index.SearchField("title", boost=2),
+        index.SearchField("title_ru", boost=2),
         index.SearchField("doctor_name"),
         index.SearchField("transcript"),
         index.FilterField("kind"),
@@ -218,6 +229,13 @@ class Video(index.Indexed, TimeStampedModel):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
+        return self.title
+
+    @property
+    def display_title(self) -> str:
+        """The title in the page's language: `title_ru` on /ru/ once an editor filled it (D-095)."""
+        if self.title_ru and (translation.get_language() or "").startswith("ru"):
+            return self.title_ru
         return self.title
 
     def clean(self) -> None:

@@ -47,8 +47,10 @@ def site_root_url(request: Any) -> str:
     return str(settings.SITE_BASE_URL).rstrip("/")
 
 
-def translated_url(page: Page | None, code: str) -> str:
-    """URL of `page` in language `code`: translated page → its section → language root."""
+def translated_url(page: Page | None, code: str, route_suffix: str = "") -> str:
+    """URL of `page` in language `code`: translated page → its section → language root. A
+    sub-route of a routable page (`route_suffix`, e.g. a video «12/» of the video list) is kept
+    only on the translated page itself."""
     fallback = f"/{code}/"
     if page is None or not getattr(page, "pk", None):
         return fallback
@@ -56,8 +58,8 @@ def translated_url(page: Page | None, code: str) -> str:
     if locale is None:
         return fallback
     translation_page = page.get_translation_or_none(locale)
-    if translation_page is not None and translation_page.live:
-        return str(translation_page.url or fallback)
+    if translation_page is not None and translation_page.live and translation_page.url:
+        return str(translation_page.url) + route_suffix
     section = page.specific.get_section() if hasattr(page.specific, "get_section") else None
     if section is not None:
         section_translation = section.get_translation_or_none(locale)
@@ -261,7 +263,7 @@ def language_versions(context: dict[str, Any]) -> list[dict[str, Any]]:
         if page is None and request is not None and getattr(request, "resolver_match", None):
             url = translate_url(request.path, code)  # app views: /uz/qidiruv/ ↔ /ru/poisk/
         else:
-            url = translated_url(page, code)
+            url = translated_url(page, code, str(context.get("route_suffix", "")))
         url += query
         versions.append(
             {
@@ -317,7 +319,7 @@ def canonical_url(context: dict[str, Any]) -> str:
     request = context.get("request")
     base = site_root_url(request)
     if page is not None and getattr(page, "pk", None):
-        return f"{base}{page.url}"
+        return f"{base}{page.url}{context.get('route_suffix', '')}"
     if request is not None:
         return f"{base}{request.path}"
     return base

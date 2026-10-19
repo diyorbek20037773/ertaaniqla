@@ -8,7 +8,9 @@ MedicalClinic (directory). Pure functions returning dicts; `jsonld_script` rende
 from __future__ import annotations
 
 import contextlib
+import html
 import json
+import re
 from typing import Any
 
 from django.conf import settings
@@ -22,8 +24,17 @@ ORGANIZATION_NAME = {
 }
 
 
-def _text(value: Any, limit: int = 500) -> str:
-    return " ".join(strip_tags(str(value or "")).split())[:limit]
+_BLOCK_END = re.compile(r"<(?:br\s*/?|/p|/li|/h[1-6]|/blockquote)\s*>", re.IGNORECASE)
+
+
+def plain_text(value: Any, limit: int = 500) -> str:
+    """Rich text as one line of plain text: block ends become spaces, entities are decoded
+    (Wagtail stores «&» as «&amp;»), so the template escapes it exactly once."""
+    text = html.unescape(strip_tags(_BLOCK_END.sub(" ", str(value or ""))))
+    return " ".join(text.split())[:limit]
+
+
+_text = plain_text
 
 
 def absolute(base: str, url: str) -> str:
@@ -136,8 +147,9 @@ def video_ld(video: Any, base: str, language: str) -> dict[str, Any] | None:
         return None
     data: dict[str, Any] = {
         "@type": "VideoObject",
-        "name": str(video.title),
-        "description": _text(video.transcript, 300) or str(video.title),
+        "name": str(getattr(video, "display_title", video.title)),
+        "description": _text(video.transcript, 300)
+        or str(getattr(video, "display_title", video.title)),
         "inLanguage": language,
         "uploadDate": video.created_at.isoformat() if getattr(video, "created_at", None) else None,
     }

@@ -90,8 +90,21 @@ class VideoIndexPage(RoutablePageMixin, BasePage):
         video = ready_videos().filter(pk=video_id).first()
         if video is None:
             raise Http404
+        from apps.core import seo
+        from apps.core.templatetags.core_tags import site_root_url
+
         context = self.get_context(request)
         context["video"] = video
         context["more"] = list(ready_videos(video.topic).exclude(pk=video.pk)[:3])
         self.add_watch_urls(context["more"])
+        # canonical, og:url, hreflang and the language switch name this video, not the list
+        context["route_suffix"] = f"{video.pk}/"
+        context["video_description"] = seo.plain_text(video.transcript, 200)
+        base = site_root_url(request)
+        video_item = seo.video_ld(video, base, str(self.locale.language_code))
+        jsonld = [i for i in context["jsonld"] if i.get("@type") != "MedicalWebPage"]
+        if video_item:
+            video_item["url"] = f"{base}{self.url}{video.pk}/"
+            jsonld.append(video_item)
+        context["jsonld"] = jsonld
         return TemplateResponse(request, "media_library/video_watch.html", context)
