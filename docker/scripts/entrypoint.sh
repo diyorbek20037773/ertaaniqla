@@ -56,6 +56,13 @@ case "$ROLE" in
     exec celery -A config beat --loglevel="${LOG_LEVEL:-INFO}" --schedule /tmp/celerybeat-schedule "$@"
     ;;
   migrate)
+    # Compose mounts the named `static` volume over /app/staticfiles; Docker fills a volume
+    # from the image only when it creates it, so without this every later release would serve
+    # the first release's CSS/JS. Copy this release's files in before web starts (web waits for
+    # migrate); older hashed files stay for pages still cached elsewhere (D-096).
+    if [[ -d /app/static-build ]]; then
+      cp -a /app/static-build/. /app/staticfiles/
+    fi
     wait_for_deps
     python manage.py migrate --noinput
     python manage.py createcachetable || true

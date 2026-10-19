@@ -67,7 +67,8 @@ RUN chmod +x /scripts/*.sh \
     && DJANGO_SECRET_KEY=build-only PII_ENCRYPTION_KEYS=build-only TURNSTILE_SECRET_KEY=build-only \
        DJANGO_SETTINGS_MODULE=config.settings.build \
        python manage.py collectstatic --noinput --ignore=src \
-    && chown -R app:app /app/staticfiles
+    && cp -a /app/staticfiles /app/static-build \
+    && chown -R app:app /app/staticfiles /app/static-build
 
 USER app
 EXPOSE 8000

@@ -352,3 +352,20 @@ def test_redis_exporter_watches_the_celery_queues() -> None:
     assert {"db1=default", "db1=media"} <= set(keys)
     alerts = (ROOT / "docker" / "monitoring" / "alert_rules.yml").read_text(encoding="utf-8")
     assert 'redis_key_size{db="db1", key=~"default|media"}' in alerts
+
+
+def test_each_release_refreshes_the_static_volume() -> None:
+    """D-096: the named `static` volume is filled from the image only once; the migrate role
+    (which web waits for) copies the release's collected files in, so a deploy never serves the
+    first release's CSS."""
+    dockerfile = (ROOT / "docker/web/Dockerfile").read_text(encoding="utf-8")
+    assert "cp -a /app/staticfiles /app/static-build" in dockerfile
+    entrypoint = (ROOT / "docker/scripts/entrypoint.sh").read_text(encoding="utf-8")
+    migrate = entrypoint.split("  migrate)", 1)[1].split(";;", 1)[0]
+    assert "cp -a /app/static-build/. /app/staticfiles/" in migrate
+    assert migrate.index("static-build") < migrate.index("manage.py migrate")
+    base = _yaml("compose.yml")
+    assert "static:/app/staticfiles" in base["x-app"]["volumes"]
+    assert base["services"]["web"]["depends_on"]["migrate"]["condition"] == (
+        "service_completed_successfully"
+    )
