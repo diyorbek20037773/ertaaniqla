@@ -284,7 +284,12 @@ def publish_item(index: Any, item: dict[str, Any]) -> tuple[bool, bool]:
         revision = ru_page.latest_revision
         if revision is not None and revision.user_id is not None:
             return created, False  # an editor's text is kept
-        if ru_page.title == ru_text["title"] and ru_page.summary == ru_text["summary"][:500]:
+        body = [block.get("value") for block in ru_page.specific.body.get_prep_value()]
+        if (ru_page.title, ru_page.summary, body) == (
+            ru_text["title"],
+            ru_text["summary"][:500],
+            [ru_text["body"]],
+        ):
             return created, False  # already the client's text
     ru_page = ru_page.specific
     _fill(ru_page, ru_text)

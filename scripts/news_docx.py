@@ -16,6 +16,7 @@ the page's lead). Review the JSON before publishing: it is what the site will sh
 
 from __future__ import annotations
 
+import copy
 import html
 import io
 import json
@@ -53,21 +54,81 @@ def is_russian(text: str) -> bool:
     return len(CYRILLIC.findall(text)) > len(LATIN.findall(text))
 
 
+# Word wraps runs in these without changing the text: tracked insertions and moves, smart tags,
+# content controls, simple fields. Tracked deletions (`w:del`, `w:moveFrom`) are not the text.
+CONTAINERS = {W + tag for tag in ("ins", "moveTo", "smartTag", "sdt", "sdtContent", "fldSimple")}
+CONTAINERS |= {W + "customXml", W + "hyperlink"}
+REMOVED = {W + "del", W + "moveFrom"}
+MARK_ADDED = {W + "ins", W + "moveTo"}
+LINE_BREAK = "\n"  # a `w:br` / `w:cr` inside a paragraph (Shift+Enter)
+
+
 class Para:
     def __init__(self, node: ET.Element, rels: dict[str, str]) -> None:
         self.is_list = node.find(f"{W}pPr/{W}numPr") is not None
         self.runs: list[tuple[str, bool]] = []
         self.links: list[str] = []
+        self.revisions = 0  # tracked changes («Исправления») the file still holds
+        # a tracked change of the paragraph mark itself: joined (deleted) or split (inserted)
+        mark = node.find(f"{W}pPr/{W}rPr")
+        changed = [] if mark is None else [c.tag for c in mark if c.tag in REMOVED | MARK_ADDED]
+        self.revisions += len(changed)
+        self.mark_deleted = any(tag in REMOVED for tag in changed)
+        self._walk(node, rels)
+        self.text = self._joined()
+
+    def _joined(self) -> str:
+        return " ".join("".join(t for t, _b in self.runs).split())
+
+    def split_lines(self) -> list[Para]:
+        """A line break (Shift+Enter) ends a paragraph on the page: one Para per non-empty line.
+        Links and the revision count stay with the first line. A list item stays one bullet (its
+        lines join with a space, as `text` and `inline_html` normalise whitespace)."""
+        if self.is_list or not any(LINE_BREAK in text for text, _b in self.runs):
+            return [self]
+        groups: list[list[tuple[str, bool]]] = [[]]
+        for text, bold in self.runs:
+            for number, piece in enumerate(text.split(LINE_BREAK)):
+                if number:
+                    groups.append([])
+                if piece:
+                    groups[-1].append((piece, bold))
+        lines: list[Para] = []
+        for runs in groups:
+            line = copy.copy(self)
+            line.runs, line.links, line.revisions = runs, [], 0
+            line.text = line._joined()
+            if line.text:
+                lines.append(line)
+        if not lines:
+            return [self]
+        lines[0].links, lines[0].revisions = self.links, self.revisions
+        return lines
+
+    def absorb(self, before: Para) -> None:
+        """`before` lost its paragraph mark (tracked deletion): its text starts this paragraph,
+        as «Accept all changes» in Word would show it."""
+        self.runs = before.runs + self.runs
+        self.links = before.links + self.links
+        self.revisions += before.revisions
+        self.text = self._joined()
+
+    def _walk(self, node: ET.Element, rels: dict[str, str]) -> None:
         for child in node:
             if child.tag == W + "r":
                 self.runs.append(self._run(child))
-            elif child.tag == W + "hyperlink":
-                target = rels.get(child.get(R + "id", ""), "")
-                if target:
-                    self.links.append(target)
-                for run in child.iter(W + "r"):
-                    self.runs.append(self._run(run))
-        self.text = " ".join("".join(t for t, _b in self.runs).split())
+            elif child.tag in REMOVED:
+                self.revisions += 1
+            elif child.tag in CONTAINERS:
+                if child.tag in (W + "ins", W + "moveTo"):
+                    self.revisions += 1
+                runs_before = len(self.runs)
+                self._walk(child, rels)
+                kept = len(self.runs) > runs_before  # a run outside w:del (text or a picture)
+                if child.tag == W + "hyperlink" and kept:  # a deleted link is not the link
+                    target = rels.get(child.get(R + "id", ""), "")
+                    if target:
+                        self.links.append(target)
 
     @staticmethod
     def _run(run: ET.Element) -> tuple[str, bool]:
@@ -76,7 +137,15 @@ class Para:
         if bold:
             value = props.find(f"{W}b").get(W + "val", "true")  # type: ignore[union-attr]
             bold = value not in ("0", "false")
-        return "".join(t.text or "" for t in run.iter(W + "t")), bold
+        parts: list[str] = []
+        for child in run:  # in order: a break or a tab between two texts is not nothing
+            if child.tag == W + "t":
+                parts.append(child.text or "")
+            elif child.tag == W + "tab":
+                parts.append(" ")
+            elif child.tag in (W + "br", W + "cr"):
+                parts.append(LINE_BREAK)
+        return "".join(parts), bold
 
     @property
     def all_bold(self) -> bool:
@@ -113,7 +182,20 @@ def read_paragraphs(path: Path) -> list[Para]:
     rels = dict(re.findall(r'Id="([^"]+)"[^>]*Target="([^"]+)"', rels_xml))
     body = ET.fromstring(xml).find(f"{W}body")
     assert body is not None
-    return [Para(node, rels) for node in body.iter(W + "p")]
+    paras: list[Para] = []
+    joined: Para | None = None
+    for node in body.iter(W + "p"):
+        para = Para(node, rels)
+        if joined is not None:
+            para.absorb(joined)
+            joined = None
+        if para.mark_deleted:
+            joined = para  # its text belongs to the next paragraph
+        else:
+            paras.append(para)
+    if joined is not None:
+        paras.append(joined)
+    return paras
 
 
 def split_items(paras: list[Para]) -> list[dict[str, list[Para]]]:
@@ -239,7 +321,8 @@ def convert(path: Path, topic: str) -> list[dict[str, object]]:
         title_ru = next((t for t in titles if is_russian(t)), "")
         summary_uz = next(t for t in summaries if not is_russian(t))
         summary_ru = next((t for t in summaries if is_russian(t)), "")
-        body_uz, body_ru = by_language(raw.get("body", []))
+        # a soft line break ends a body paragraph; in a title or a summary it is a space
+        body_uz, body_ru = by_language([ln for p in raw.get("body", []) for ln in p.split_lines()])
         date = next(p.text for p in raw.get("date", []))
         day, month, year = re.findall(r"\d+", date)[:3]
         links = [link for p in raw.get("cover", []) for link in p.links] + [
@@ -277,6 +360,13 @@ def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
     path, topic, name = Path(sys.argv[1]), sys.argv[2], sys.argv[3]
     items = convert(path, topic)
+    revisions = sum(para.revisions for para in read_paragraphs(path))
+    if revisions:
+        print(
+            f"! {revisions} tracked changes in the file: inserted text is kept, deleted text is"
+            " dropped. Accept all changes in Word if that is not what the client meant.",
+            file=sys.stderr,
+        )
     target = ROOT / "apps" / "posts" / "news" / f"{name}.json"
     target.parent.mkdir(exist_ok=True)
     text = json.dumps(items, ensure_ascii=False, indent=1) + "\n"

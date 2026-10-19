@@ -162,3 +162,147 @@ def test_word_template_reader(tmp_path: Path) -> None:
     assert item["ru"]["body"] == "<h2>Изменения кожи</h2><ul><li>покраснение;</li></ul>"
     assert item["cover"] == ""
     json.dumps(item, ensure_ascii=False)  # the batch file format
+
+
+def test_word_reader_keeps_tracked_insertions(tmp_path: Path) -> None:
+    """A file sent with «Track changes» on: inserted words (`w:ins`) are the text, deleted ones
+    (`w:del`) are not, and both are counted so the script can warn."""
+    spec = importlib.util.spec_from_file_location("news_docx", ROOT / "scripts/news_docx.py")
+    assert spec and spec.loader
+    news_docx = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(news_docx)
+    w = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    paragraph = (
+        "<w:p><w:r><w:t xml:space='preserve'>Ko'krak </w:t></w:r>"
+        "<w:ins w:id='1'><w:r><w:t xml:space='preserve'>bezi </w:t></w:r></w:ins>"
+        "<w:del w:id='2'><w:r><w:delText>eski </w:delText></w:r></w:del>"
+        "<w:smartTag><w:r><w:t>belgilari</w:t></w:r></w:smartTag></w:p>"
+    )
+    document = f"<w:document xmlns:w='{w}'><w:body>{paragraph}</w:body></w:document>"
+    path = tmp_path / "news.docx"
+    with zipfile.ZipFile(path, "w") as docx:
+        docx.writestr("word/document.xml", document)
+        docx.writestr("word/_rels/document.xml.rels", "<Relationships/>")
+    [para] = news_docx.read_paragraphs(path)
+    assert para.text == "Ko'krak bezi belgilari"
+    assert para.revisions == 2
+
+
+def _reader() -> object:
+    spec = importlib.util.spec_from_file_location("news_docx", ROOT / "scripts/news_docx.py")
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _raw_docx(path: Path, paragraphs: str, rels: str = "") -> None:
+    w = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    r = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    document = f"<w:document xmlns:w='{w}' xmlns:r='{r}'><w:body>{paragraphs}</w:body></w:document>"
+    with zipfile.ZipFile(path, "w") as docx:
+        docx.writestr("word/document.xml", document)
+        docx.writestr("word/_rels/document.xml.rels", f"<Relationships>{rels}</Relationships>")
+
+
+def test_word_reader_drops_a_deleted_link(tmp_path: Path) -> None:
+    """The client replaced the cover link with «Track changes» on: the deleted link is not read
+    (its cover would be downloaded instead of the new one)."""
+    news_docx = _reader()
+    rels = (  # double quotes, as Word writes them
+        '<Relationship Id="rOld" Target="https://drive.google.com/file/d/OLD/view"/>'
+        '<Relationship Id="rNew" Target="https://drive.google.com/file/d/NEW/view"/>'
+    )
+    paragraph = (
+        "<w:p><w:hyperlink r:id='rOld'><w:del w:id='1'><w:r><w:delText>old</w:delText></w:r>"
+        "</w:del></w:hyperlink><w:ins w:id='2'><w:hyperlink r:id='rNew'><w:r><w:t>new</w:t>"
+        "</w:r></w:hyperlink></w:ins></w:p>"
+    )
+    path = tmp_path / "news.docx"
+    _raw_docx(path, paragraph, rels)
+    [para] = news_docx.read_paragraphs(path)  # type: ignore[attr-defined]
+    assert para.links == ["https://drive.google.com/file/d/NEW/view"]
+    assert para.text == "new" and para.revisions == 2
+
+
+def test_word_reader_joins_paragraphs_whose_mark_was_deleted(tmp_path: Path) -> None:
+    """Two paragraphs joined with «Track changes» on (Word marks only the first paragraph's
+    mark as deleted): one paragraph, as after «Accept all changes», not a false subheading."""
+    news_docx = _reader()
+    paragraphs = (
+        "<w:p><w:pPr><w:rPr><w:del w:id='1'/></w:rPr></w:pPr>"
+        "<w:r><w:t xml:space='preserve'>Mammografiya har ikki yilda </w:t></w:r></w:p>"
+        "<w:p><w:r><w:t>bir marta tavsiya etiladi.</w:t></w:r></w:p>"
+        "<w:p><w:pPr><w:rPr><w:ins w:id='2'/></w:rPr></w:pPr><w:r><w:t>Yangi.</w:t></w:r></w:p>"
+    )
+    path = tmp_path / "news.docx"
+    _raw_docx(path, paragraphs)
+    joined, split = news_docx.read_paragraphs(path)  # type: ignore[attr-defined]
+    assert joined.text == "Mammografiya har ikki yilda bir marta tavsiya etiladi."
+    assert joined.revisions == 1 and split.revisions == 1  # both counted for the warning
+
+
+@pytest.mark.django_db
+def test_a_corrected_russian_body_reaches_an_unedited_page(seeded) -> None:
+    """The Word reader used to glue the lines of a Shift+Enter break («…росту.HER2-статус…»): a
+    second run puts the corrected body on a Russian page nobody edited."""
+    call_command("publish_client_news")
+    page = PostPage.objects.get(locale__language_code="ru", body__icontains="HER2-статус")
+    old = page.body.get_prep_value()[0]["value"].replace(
+        "росту.</p><p>HER2-статус", "росту.HER2-статус"
+    )
+    page.body = [{"type": "rich_text", "value": old}]
+    page.save_revision().publish()  # no user: the import's own revision
+    call_command("publish_client_news")
+    page.refresh_from_db()
+    assert "росту.</p><p>HER2-статус оценивается" in page.body.get_prep_value()[0]["value"]
+
+
+def test_word_reader_ends_a_line_at_a_soft_break(tmp_path: Path) -> None:
+    news_docx = _reader()
+    paragraph = (
+        "<w:p><w:r><w:t>к опухолевому росту.</w:t><w:br/><w:t>HER2-статус оценивается"
+        "</w:t><w:tab/><w:t>двумя методами:</w:t><w:br/></w:r></w:p>"
+    )
+    path = tmp_path / "news.docx"
+    _raw_docx(path, paragraph)
+    [para] = news_docx.read_paragraphs(path)  # type: ignore[attr-defined]
+    lines = para.split_lines()
+    assert [line.text for line in lines] == [
+        "к опухолевому росту.",
+        "HER2-статус оценивается двумя методами:",
+    ]
+    listed = paragraph.replace(
+        "<w:p>", "<w:p><w:pPr><w:numPr><w:ilvl w:val='0'/></w:numPr></w:pPr>"
+    )
+    _raw_docx(path, listed)
+    [item] = news_docx.read_paragraphs(path)[0].split_lines()  # type: ignore[attr-defined]
+    assert item.is_list and "<br" not in item.inline_html(False)  # one bullet, lines joined
+    assert item.text == "к опухолевому росту. HER2-статус оценивается двумя методами:"
+
+
+def test_a_soft_break_in_the_title_is_a_space(tmp_path: Path) -> None:
+    """Only the body splits at a soft line break; a title typed on two lines stays whole."""
+    news_docx = _reader()
+
+    def p(text: str, bold: bool = False) -> str:
+        props = "<w:rPr><w:b/></w:rPr>" if bold else ""
+        return f"<w:p><w:r>{props}<w:t xml:space='preserve'>{text}</w:t></w:r></w:p>"
+
+    paragraphs = (
+        p("Сарлавҳа", True)
+        + "<w:p><w:r><w:t>Ko'krak bezi</w:t><w:br/><w:t>belgilari</w:t></w:r></w:p>"
+        + p("Қисқа мазмун", True)
+        + p("Qisqa matn.")
+        + p("Асосий матн", True)
+        + "<w:p><w:r><w:t>Birinchi gap.</w:t><w:br/><w:t>Ikkinchi gap.</w:t></w:r></w:p>"
+        + p("Мавзу", True)
+        + p("Кўкрак бези саратони")
+        + p("Сана", True)
+        + p("16/10/2026")
+    )
+    path = tmp_path / "news.docx"
+    _raw_docx(path, paragraphs)
+    [item] = news_docx.convert(path, "breast")  # type: ignore[attr-defined]
+    assert item["uz"]["title"] == "Koʻkrak bezi belgilari"
+    assert item["uz"]["body"] == "<p>Birinchi gap.</p><p>Ikkinchi gap.</p>"
