@@ -60,7 +60,8 @@
 
   /* ---- header ------------------------------------------------------------------------------ */
   .site-header { padding-block: clamp(0.75rem, 1.4vw, 2rem); }
-  .site-header .container { max-width: calc(1120px + 2 * var(--gutter)); }
+  /* the frame's header row (x 194–1726 at 1920 px) is wider than the 1120 px content column */
+  .site-header .container { max-width: calc(1532px + 2 * var(--gutter)); }
   .site-nav__link { font-style: normal; font-weight: 500; font-size: clamp(0.92rem, 0.86rem + 0.18vw, 1.05rem); color: var(--c-ink); }
   .site-nav__link:hover, .site-nav__link:focus-visible, .site-nav__link[aria-current="page"], .site-nav__dropdown.is-active > .site-nav__link { color: var(--c-rasp); }
   .site-nav__toggle-button { border-color: var(--c-line); border-radius: var(--radius-pill); background: #ffffff; font-weight: 600; }
@@ -90,6 +91,19 @@
     .site-nav__toggle > .site-nav__menu { justify-content: space-between; gap: var(--space-6); }
     .site-nav__primary { gap: clamp(1rem, 1.7vw, 2rem); margin-inline: 0; }
     .search-menu__panel, .a11y-menu__panel { position: absolute; right: 0; left: auto; z-index: 30; width: max-content; }
+    /* a row that does not fit (Cyrillic at 1024–1099 px, larger text in the «Aa» menu) breaks
+       into two rows instead of being cut off at the window edge, which hid the «Aa» button */
+    .site-nav__toggle > .site-nav__menu { flex-wrap: wrap; row-gap: var(--space-3); }
+    .site-nav__utils { position: relative; margin-inline-start: auto; }
+    /* search and «Aa» panels line up with the right end of the button group and never get wider
+       than the window, wherever their own button sits */
+    .search-menu, .a11y-menu { position: static; }
+    .search-menu__panel, .a11y-menu__panel { top: calc(100% + var(--space-2)); max-width: calc(100vw - 2 * var(--gutter)); }
+    .search-menu__panel .site-search { width: min(22rem, 100%); }
+  }
+  @media (max-width: 63.99rem) {
+    .site-nav__cta { white-space: normal; text-align: center; }  /* fits the menu at larger text */
+    .site-header:has(.site-nav__toggle[open]) { background: var(--c-bg); }  /* no ribbon behind the open menu */
   }
   /* one row on desktop: links never wrap; when the row gets tight the hotline label goes first
      (the number stays), then the whole hotline (it is still in the footer) */
