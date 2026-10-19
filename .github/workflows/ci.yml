@@ -283,6 +283,8 @@ jobs:
           upload-artifact: true
       - name: nginx -t (prod config in the nginx image)
         run: bash docker/scripts/nginx_test.sh
+      - name: nginx micro-cache (304 without CSP, language cookie key)
+        run: bash docker/scripts/nginx_cache_test.sh
       - name: compose config (prod + profiles)
         run: |
           cp .env.example .env

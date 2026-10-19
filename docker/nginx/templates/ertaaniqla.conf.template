@@ -158,6 +158,10 @@ server {
         proxy_cache_lock on;
         # responses with Set-Cookie (CSRF forms, sessions) are never stored (nginx default)
         proxy_hide_header X-Page-Cache;
+        # browsers revalidate (ETag); a 304 from nginx's cache must not carry a CSP (D-093)
+        proxy_hide_header Content-Security-Policy;
+        add_header Content-Security-Policy $html_csp always;
+        include /etc/nginx/snippets/security.conf;  # own add_header → re-include (nginx gotcha)
     }
 }
 

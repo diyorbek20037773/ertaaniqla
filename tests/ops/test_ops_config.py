@@ -144,6 +144,7 @@ def test_grafana_dashboard_is_provisioned() -> None:
         "docker/scripts/smoke.sh",
         "docker/scripts/init_letsencrypt.sh",
         "docker/scripts/nginx_test.sh",
+        "docker/scripts/nginx_cache_test.sh",
         "docker/scripts/monitor_probe.sh",
         "scripts/bootstrap_vps.sh",
         "scripts/release.sh",

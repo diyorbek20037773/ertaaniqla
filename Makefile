@@ -12,7 +12,7 @@ SERVICE      ?= web
 
 .PHONY: help dev down shell migrate makemigrations seed messages compilemessages \
         lint fmt type test check translations e2e lighthouse pa11y build deploy backup restore logs \
-        install frontend frontend-watch superuser nginx-test compose-check restore-test ops-check \
+        install frontend frontend-watch superuser nginx-test nginx-cache-test compose-check restore-test ops-check \
         prod-up prod-down tls-init maintenance-on maintenance-off ci-local sonar sonar-up \
         local-prod-up local-prod-down promote release
 
@@ -118,11 +118,14 @@ restore-test: ## restore the latest dump into a scratch DB, count pages, drop it
 nginx-test: ## nginx -t for docker/nginx inside the nginx image
 	bash docker/scripts/nginx_test.sh
 
+nginx-cache-test: ## the prod nginx config against a stub of Django's HTML cache policy (304s, CSP)
+	bash docker/scripts/nginx_cache_test.sh
+
 compose-check: ## validate compose.yml + compose.prod.yml (+ profiles) + compose.sonarqube.yml
 	$(COMPOSE_PROD) --profile monitoring --profile clamav config --quiet && echo "compose config OK"
 	docker compose -f compose.sonarqube.yml config --quiet && echo "sonarqube compose config OK"
 
-ops-check: nginx-test compose-check ## M6 gate: nginx -t, compose config, prometheus/alertmanager configs
+ops-check: nginx-test nginx-cache-test compose-check ## M6 gate: nginx -t, compose config, prometheus/alertmanager configs
 	docker run --rm -v "$$(pwd -W 2>/dev/null || pwd)/docker/monitoring:/m:ro" --entrypoint sh prom/prometheus:v2.55.1 -c 'sed "s|__METRICS_USER__|u|;s|__METRICS_PASS__|p|;s|__DOMAIN__|example.uz|g" /m/prometheus.yml > /tmp/p.yml && cp /m/alert_rules.yml /tmp/ && sed -i "s|/etc/prometheus/alert_rules.yml|/tmp/alert_rules.yml|" /tmp/p.yml && promtool check config /tmp/p.yml'
 	docker run --rm -v "$$(pwd -W 2>/dev/null || pwd)/docker/monitoring:/m:ro" --entrypoint sh prom/alertmanager:v0.27.0 -c 'sed "s|__TELEGRAM_BOT_TOKEN__|1:a|;s|__TELEGRAM_ALERT_CHAT_ID__|1|" /m/alertmanager.yml > /tmp/a.yml && amtool check-config /tmp/a.yml'
 
