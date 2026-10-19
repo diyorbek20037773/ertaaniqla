@@ -250,13 +250,15 @@ def test_forms_post_under_oz(seeded, client: Client) -> None:
 
 @pytest.mark.django_db
 @override_settings(PAGE_CACHE_SECONDS=300)
-def test_page_cache_is_shared_and_nonce_survives(children_visible, seeded) -> None:
+def test_page_cache_per_script_and_nonce_survives(children_visible, seeded) -> None:
     client = Client()
     first = client.get("/oz/bolalar/")
     second = client.get("/oz/bolalar/")
     latin = client.get("/uz/bolalar/")
     assert first["X-Page-Cache"] == "MISS" and second["X-Page-Cache"] == "HIT"
-    assert latin["X-Page-Cache"] == "HIT"  # one cached Latin page serves both scripts
+    # the Latin view has its own entry: its language switch differs (D-093)
+    assert latin["X-Page-Cache"] == "MISS"
+    assert client.get("/uz/bolalar/")["X-Page-Cache"] == "HIT"
     assert '<html lang="uz"' in latin.content.decode()
     nonce = re.search(r'nonce="([^"]+)"', second.content.decode())
     assert nonce is not None and f"'nonce-{nonce.group(1)}'" in second["Content-Security-Policy"]

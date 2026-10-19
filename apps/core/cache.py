@@ -1,12 +1,21 @@
-"""Per-view page cache for anonymous HTML (spec §4.5).
+"""Per-view page cache for anonymous HTML (spec §4.5, D-093).
 
-Key = (build, version, language, path, query, HX-Request). The version is bumped on every
-publish/unpublish/move/delete and on Site-settings save (`bump_page_cache`), so stale pages
-never survive an edit; the build id changes with every deploy, so cached HTML never points at
-hashed CSS/JS files the new release no longer has. The CSP nonce baked into the cached HTML
-is swapped for the current request's nonce on every hit. Only 200 text/html GET/HEAD responses
-without cookies are cached; nothing is cached for logged-in users or when `PAGE_CACHE_SECONDS`
-is 0.
+Key = (build, version, language, script, path, query, HX-Request). The version is bumped on
+every publish/unpublish/move/delete and on Site-settings save (`bump_page_cache`), so stale pages
+never survive an edit; the build id (static manifest + release) changes with every deploy, so
+cached HTML never points at hashed CSS/JS files the new release no longer has. /uz/ and its
+Cyrillic view /oz/ (rewritten to /uz/ before this middleware) are separate entries: their
+language switch differs. The CSP nonce baked into the cached HTML is swapped for the current
+request's nonce on every hit. Only 200 text/html GET/HEAD responses without cookies are cached;
+nothing is cached for logged-in users or when `PAGE_CACHE_SECONDS` is 0.
+
+Browsers (D-093): `public, max-age=0, must-revalidate, s-maxage=<shared>` with a weak ETag of
+the page without its nonce. Every navigation asks the server, an unchanged page answers
+304 Not Modified (a few hundred bytes, no body), and right after a deploy everyone gets the new
+release instead of a copy kept for up to an hour. A 304 carries no Content-Security-Policy: the
+browser re-renders its stored copy, whose inline nonce matches the policy stored with it, and a
+new policy on the 304 would replace that one. `s-maxage` lets the nginx micro-cache keep a page
+for `PAGE_CACHE_SHARED_SECONDS` (spec §4.5.1).
 """
 
 from __future__ import annotations
@@ -19,26 +28,44 @@ from typing import Any
 
 from django.conf import settings
 from django.core.cache import cache
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseNotModified
 from django.utils import translation
+from django.utils.http import parse_etags
 
 VERSION_KEY = "page-cache:version"
-STALE_WHILE_REVALIDATE = 3600
+REVALIDATED_HEADERS = ("Cache-Control", "ETag", "Vary", "Content-Language", "X-Page-Cache")
 
 
 def cache_seconds() -> int:
     return int(getattr(settings, "PAGE_CACHE_SECONDS", 0) or 0)
 
 
+def html_cache_control() -> str:
+    """Browsers revalidate every use (the ETag makes that a 304); shared caches (nginx) may
+    keep the page for `PAGE_CACHE_SHARED_SECONDS`."""
+    shared = int(getattr(settings, "PAGE_CACHE_SHARED_SECONDS", 10) or 0)
+    return f"public, max-age=0, must-revalidate, s-maxage={shared}"
+
+
 @memoize
 def build_id() -> str:
-    """Identity of the deployed static build: hash of the staticfiles manifest (falls back to
-    APP_RELEASE when collectstatic has not run, e.g. in dev and tests)."""
+    """Identity of the deployed release: hash of the staticfiles manifest plus APP_RELEASE (a
+    deploy that changes code or templates but no static file still gets new keys and ETags).
+    Without a manifest (dev, tests) it is APP_RELEASE."""
+    release = str(getattr(settings, "APP_RELEASE", "dev"))
     manifest = Path(settings.STATIC_ROOT or "") / "staticfiles.json"
     try:
-        return hashlib.sha256(manifest.read_bytes()).hexdigest()[:12]
+        data = manifest.read_bytes()
     except OSError:
-        return str(getattr(settings, "APP_RELEASE", "dev"))
+        return release
+    return hashlib.sha256(data + b"|" + release.encode()).hexdigest()[:12]
+
+
+def page_etag(body: bytes, nonce: str) -> str:
+    """Weak ETag of a page: its body without this response's CSP nonce, plus the release."""
+    masked = body.replace(nonce.encode(), b"") if nonce else body
+    digest = hashlib.sha256(build_id().encode() + b"|" + masked).hexdigest()[:20]
+    return f'W/"{digest}"'
 
 
 def page_cache_version() -> int:
@@ -61,6 +88,7 @@ def page_cache_key(request: HttpRequest) -> str:
             build_id(),
             str(page_cache_version()),
             translation.get_language() or "",
+            str(getattr(request, "uz_script", "")),  # /oz/ is served from the /uz/ view
             request.path,
             request.META.get("QUERY_STRING", ""),
             "hx" if request.headers.get("HX-Request") else "",
@@ -90,6 +118,23 @@ def _cacheable_response(response: HttpResponse) -> bool:
     return "private" not in response.get("Cache-Control", "")
 
 
+def _not_modified(request: HttpRequest, headers: dict[str, str]) -> HttpResponse | None:
+    """304 when the browser already holds this version (If-None-Match, weak comparison).
+    If-Match / If-Unmodified-Since are ignored on purpose: they would turn a weak ETag into 412s."""
+    etag = headers.get("ETag", "")
+    tags = parse_etags(request.headers.get("If-None-Match", ""))
+    if not etag or not tags:
+        return None
+    if tags != ["*"] and etag.removeprefix("W/") not in {t.removeprefix("W/") for t in tags}:
+        return None
+    response = HttpResponseNotModified()
+    for header in REVALIDATED_HEADERS:
+        if header in headers:
+            response[header] = headers[header]
+    response._csp_exempt = True  # type: ignore[attr-defined]  # django-csp: no policy on a 304
+    return response
+
+
 class PageCacheMiddleware:
     """Place after CSPMiddleware (so the nonce exists) — see settings MIDDLEWARE."""
 
@@ -104,13 +149,16 @@ class PageCacheMiddleware:
         # django-csp's lazy nonce is falsy until evaluated — never use `or ""` here
         nonce = str(getattr(request, "csp_nonce", ""))
         if entry is not None:
+            headers = {**entry["headers"], "X-Page-Cache": "HIT"}
+            not_modified = _not_modified(request, headers)
+            if not_modified is not None:
+                return not_modified  # before the nonce swap of a 36 KB body
             body: bytes = entry["body"]
             if entry["nonce"] and nonce:
                 body = body.replace(entry["nonce"].encode(), nonce.encode())
             response = HttpResponse(body, status=200, content_type=entry["content_type"])
-            for header, value in entry["headers"].items():
+            for header, value in headers.items():
                 response[header] = value
-            response["X-Page-Cache"] = "HIT"
             return response
         response = self.get_response(request)
         if request.META.get("CSRF_COOKIE_NEEDS_UPDATE"):
@@ -120,13 +168,13 @@ class PageCacheMiddleware:
             response["Cache-Control"] = "private, no-cache"
             return response
         if _cacheable_response(response):
-            seconds = cache_seconds()
-            response["Cache-Control"] = (
-                f"public, max-age={seconds}, stale-while-revalidate={STALE_WHILE_REVALIDATE}"
-            )
+            response["Cache-Control"] = html_cache_control()
+            # the ETag comes from the content, so a returning browser gets a 304 even after its
+            # server entry expired or was evicted
+            response["ETag"] = page_etag(response.content, nonce)
             headers = {
                 h: response[h]
-                for h in ("Content-Language", "Vary", "Cache-Control", "Content-Security-Policy")
+                for h in ("Content-Language", "Vary", "Cache-Control", "ETag")
                 if response.has_header(h)
             }
             cache.set(
@@ -137,7 +185,10 @@ class PageCacheMiddleware:
                     "content_type": response.get("Content-Type", "text/html; charset=utf-8"),
                     "headers": headers,
                 },
-                seconds + STALE_WHILE_REVALIDATE,
+                cache_seconds(),
             )
             response["X-Page-Cache"] = "MISS"
+            not_modified = _not_modified(request, {**headers, "X-Page-Cache": "MISS"})
+            if not_modified is not None:
+                return not_modified
         return response

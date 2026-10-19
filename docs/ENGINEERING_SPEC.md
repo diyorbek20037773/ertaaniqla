@@ -213,7 +213,7 @@ Content formats for this section (same CMS capabilities, different people): long
 
 Design principles:
 
-- **Read-heavy, write-rare.** 99.9% of traffic is anonymous reads. Cache aggressively: Wagtail page cache via `django-cache` per URL+language, nginx micro-cache, `Cache-Control: public, max-age=300, stale-while-revalidate=3600` for anonymous HTML; immutable static assets with 1-year TTL.
+- **Read-heavy, write-rare.** 99.9% of traffic is anonymous reads. Cache aggressively: Wagtail page cache via `django-cache` per URL+language, nginx micro-cache, `Cache-Control: public, max-age=0, must-revalidate, s-maxage=10` plus a weak ETag for anonymous HTML (browsers revalidate and get a 304, so a deploy reaches everyone at once — D-093); immutable static assets with 1-year TTL.
 - **Everything is a Wagtail Page or a Snippet.** No bespoke article models outside Wagtail. Editors never touch Django admin except for users.
 - **Sections are page-tree subtrees**, not separate apps: `HomePage → SectionIndexPage(women) / SectionIndexPage(children) → TopicIndexPage → ArticlePage`. Section colour and navigation derive from the nearest `SectionIndexPage` ancestor.
 - **Translation is a first-class tree.** `wagtail-localize` creates `/uz/...` and `/ru/...` trees; slugs are per-language; `hreflang` emitted automatically.

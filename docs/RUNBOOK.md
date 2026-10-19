@@ -61,7 +61,16 @@ running image → move the server checkout to the deployed commit (compose files
 container must pass `/healthz/` before nginx routes to it) → `up -d worker beat backup` (+ nginx on
 prod) → `smoke.sh` (`/readyz/` + 7 pages, basic auth on dev / staging) → Telegram. With
 `AUTO_ROLLBACK=1` (staging, prod) a failed smoke test redeploys the previous image and the job
-fails. Migrations must be **expand/contract** (spec §11.3): the previous image must still work
+fails. After a deploy, one manual check of the HTML cache (D-093): the first request below
+answers `X-Page-Cache: MISS` or `HIT` with an `ETag`, the second `304` with no
+`Content-Security-Policy` header.
+
+```bash
+etag=$(curl -sI https://www.ertaaniqla.uz/uz/ | tr -d '\r' | awk -F': ' 'tolower($1)=="etag"{print $2}')
+curl -sI -H "If-None-Match: $etag" https://www.ertaaniqla.uz/uz/ | head -12
+```
+
+Migrations must be **expand/contract** (spec §11.3): the previous image must still work
 with the new schema, so a rollback never needs a DB restore.
 
 **GitHub configuration** (`REVIEWERS="you" bash scripts/github_setup.sh` creates the environments,

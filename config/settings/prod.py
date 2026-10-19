@@ -60,7 +60,8 @@ LANGUAGE_COOKIE_SECURE = True
 WAGTAIL_2FA_REQUIRED = True  # never optional in prod (spec §8)
 WAFFLE_FLAG_DEFAULT = False  # tools go live only after medical sign-off (spec M4)
 
-# Anonymous HTML is cached per view (apps.core.cache) — 5 min, stale-while-revalidate 1 h
+# Anonymous HTML is cached per view (apps.core.cache) for 5 min; browsers revalidate every
+# navigation with an ETag (304), nginx keeps a page PAGE_CACHE_SHARED_SECONDS (D-093)
 PAGE_CACHE_SECONDS = env.int("PAGE_CACHE_SECONDS", default=300)
 
 # Sentry: errors + 10% performance, PII scrubbed

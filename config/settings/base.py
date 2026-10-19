@@ -31,7 +31,11 @@ SITE_BASE_URL = env("SITE_BASE_URL", default="http://localhost:8000")
 ENVIRONMENT = env("ENVIRONMENT", default="dev")
 # demo / staging hosts: X-Robots-Tag noindex on every response + robots.txt "Disallow: /" (EA-14)
 ROBOTS_NOINDEX = env.bool("ROBOTS_NOINDEX", default=False)
+# Railway builds without the Dockerfile build arg (the image keeps APP_RELEASE=dev) but sets the
+# commit at runtime; the page cache keys and ETags change with it on every deploy (D-093)
 APP_RELEASE = env("APP_RELEASE", default="dev")
+if APP_RELEASE == "dev":
+    APP_RELEASE = env("RAILWAY_GIT_COMMIT_SHA", default="") or "dev"
 CMS_URL_PREFIX = env("CMS_URL_PREFIX", default="cms").strip("/")
 
 ROOT_URLCONF = "config.urls"
@@ -468,6 +472,8 @@ GOOGLE_SITE_VERIFICATION = env("GOOGLE_SITE_VERIFICATION", default="")
 
 # Anonymous page cache (spec §4.5); 0 disables (dev/test), prod sets 300
 PAGE_CACHE_SECONDS = env.int("PAGE_CACHE_SECONDS", default=0)
+# shared caches (the nginx micro-cache) may keep anonymous HTML this long: s-maxage (D-093)
+PAGE_CACHE_SHARED_SECONDS = env.int("PAGE_CACHE_SHARED_SECONDS", default=10)
 
 # Data retention (days) — spec §8
 PII_RETENTION_QUESTION_CONTACT_DAYS = 90
