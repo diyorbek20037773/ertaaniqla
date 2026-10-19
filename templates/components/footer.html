@@ -38,8 +38,19 @@
         {% if s.youtube_url %}<li><a href="{{ s.youtube_url }}" rel="noopener" aria-label="YouTube">{% include "components/icons/youtube.svg" %}</a></li>{% endif %}
         {% if s.tiktok_url %}<li><a href="{{ s.tiktok_url }}" rel="noopener" aria-label="TikTok">{% include "components/icons/tiktok.svg" %}</a></li>{% endif %}
       </ul>
-      {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-150 class="site-footer__partner" alt="Yandex" %}
-      {% else %}<img class="site-footer__partner" src="{% static 'img/figma/yandex-uz.png' %}" alt="Yandex Uzbekistan" width="118" height="154" loading="lazy" decoding="async">{% endif %}
+      <div class="site-footer__partners">
+        {# the agency's white logo for dark backgrounds, in the page's language (D-098) #}
+        {% trans "Agency for Strategic Development and Reforms under the President of the Republic of Uzbekistan" as agency %}
+        {% if s.partner_agency_logo %}{% image s.partner_agency_logo height-150 class="site-footer__partner site-footer__partner--agency" alt=agency %}
+        {% elif LANGUAGE_CODE == "ru" %}<img class="site-footer__partner site-footer__partner--agency" src="{% static 'img/partners/asrr-ru-inverse.webp' %}" alt="{{ agency }}" width="622" height="144" loading="lazy" decoding="async">
+        {% else %}<img class="site-footer__partner site-footer__partner--agency" src="{% static 'img/partners/asrr-uz-inverse.webp' %}" alt="{{ agency }}" width="534" height="144" loading="lazy" decoding="async">{% endif %}
+        {# Hamroh's one-colour wordmark, made white for the dark footer #}
+        {% trans "Hamroh, the company supporting women's entrepreneurship" as hamroh %}
+        {% if s.partner_hamroh_logo %}{% image s.partner_hamroh_logo height-150 class="site-footer__partner site-footer__partner--wide" alt=hamroh %}
+        {% else %}<img class="site-footer__partner site-footer__partner--wide" src="{% static 'img/partners/hamroh-inverse.webp' %}" alt="{{ hamroh }}" width="1054" height="80" loading="lazy" decoding="async">{% endif %}
+        {% if s.partner_yandex_logo %}{% image s.partner_yandex_logo height-150 class="site-footer__partner" alt="Yandex" %}
+        {% else %}<img class="site-footer__partner" src="{% static 'img/figma/yandex-uz.png' %}" alt="Yandex Uzbekistan" width="118" height="154" loading="lazy" decoding="async">{% endif %}
+      </div>
     </div>
   </div>
   <div class="container site-footer__bottom">

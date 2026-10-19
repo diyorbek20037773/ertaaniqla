@@ -57,6 +57,21 @@ def test_footer_short_hotline_and_address(site_settings, client: Client) -> None
     assert 'href="https://yandex.uz/maps/-/CHpQ"' in client.get("/uz/").content.decode()
 
 
+def test_footer_shows_the_agency_logo_in_the_page_language(site_settings, client: Client) -> None:
+    """D-098: the white partner logos next to Yandex — the agency in the page's language."""
+    uz = client.get("/uz/").content.decode()
+    assert "img/partners/asrr-uz-inverse" in uz and "asrr-ru-inverse" not in uz
+    assert 'alt="Oʻzbekiston Respublikasi Prezidenti huzuridagi Strategik rivojlanish' in uz
+    assert uz.index("asrr-uz-inverse") < uz.index("yandex-uz")
+    ru = client.get("/ru/").content.decode()
+    assert "img/partners/asrr-ru-inverse" in ru and "asrr-uz-inverse" not in ru
+    assert 'alt="Агентство стратегического развития и реформ' in ru
+    # Hamroh: one white wordmark for every language, between the agency and Yandex
+    assert uz.index("asrr-uz-inverse") < uz.index("hamroh-inverse") < uz.index("yandex-uz")
+    assert 'alt="Hamroh — xotin-qizlar tadbirkorligini qoʻllab-quvvatlash kompaniyasi"' in uz
+    assert 'alt="Hamroh — компания поддержки женского предпринимательства"' in ru
+
+
 def test_emergency_banner(site_settings, client: Client) -> None:
     html = client.get("/uz/bolalar/").content.decode()
     assert "banner--emergency" in html

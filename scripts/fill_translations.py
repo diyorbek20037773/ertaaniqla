@@ -491,6 +491,16 @@ T: dict[str, tuple[str, str]] = {
         " его никогда не меняет.",
     ),
     "description (Russian)": ("tavsif (ruscha)", "описание (на русском)"),
+    "Agency for Strategic Development and Reforms under the President of the Republic of "
+    "Uzbekistan": (
+        "Oʻzbekiston Respublikasi Prezidenti huzuridagi Strategik rivojlanish va islohotlar "
+        "agentligi",
+        "Агентство стратегического развития и реформ при Президенте Республики Узбекистан",
+    ),
+    "Hamroh, the company supporting women's entrepreneurship": (
+        "Hamroh — xotin-qizlar tadbirkorligini qoʻllab-quvvatlash kompaniyasi",
+        "Hamroh — компания поддержки женского предпринимательства",
+    ),
     "Shown under the video on the watch page. A blank line starts a paragraph.": (
         "Video sahifasida video ostida koʻrinadi. Boʻsh qator yangi xatboshini boshlaydi.",
         "Показывается под видео на его странице. Пустая строка начинает новый абзац.",
