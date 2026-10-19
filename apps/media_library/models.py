@@ -140,6 +140,16 @@ class Video(index.Indexed, TimeStampedModel):
             "Shown on the Russian site. Empty = the title above. The YouTube sync never changes it."
         ),
     )
+    description = models.TextField(
+        _("description"),
+        blank=True,
+        help_text=_("Shown under the video on the watch page. A blank line starts a paragraph."),
+    )
+    description_ru = models.TextField(
+        _("description (Russian)"),
+        blank=True,
+        help_text=_("Shown on the Russian site. Empty = no description there."),
+    )
     topic = models.CharField(
         _("topic"),
         max_length=16,
@@ -192,6 +202,8 @@ class Video(index.Indexed, TimeStampedModel):
     panels = [
         FieldPanel("title"),
         FieldPanel("title_ru"),
+        FieldPanel("description"),
+        FieldPanel("description_ru"),
         MultiFieldPanel(
             [FieldPanel("topic"), FieldPanel("kind"), FieldPanel("source")], heading=_("Type")
         ),
@@ -216,6 +228,8 @@ class Video(index.Indexed, TimeStampedModel):
     search_fields = [
         index.SearchField("title", boost=2),
         index.SearchField("title_ru", boost=2),
+        index.SearchField("description"),
+        index.SearchField("description_ru"),
         index.SearchField("doctor_name"),
         index.SearchField("transcript"),
         index.FilterField("kind"),
@@ -237,6 +251,14 @@ class Video(index.Indexed, TimeStampedModel):
         if self.title_ru and (translation.get_language() or "").startswith("ru"):
             return self.title_ru
         return self.title
+
+    @property
+    def display_description(self) -> str:
+        """The description in the page's language. Unlike the title it has no fallback: an Uzbek
+        text under a Russian page is worse than none."""
+        if (translation.get_language() or "").startswith("ru"):
+            return self.description_ru
+        return self.description
 
     def clean(self) -> None:
         super().clean()

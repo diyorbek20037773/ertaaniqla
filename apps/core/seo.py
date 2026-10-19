@@ -148,7 +148,7 @@ def video_ld(video: Any, base: str, language: str) -> dict[str, Any] | None:
     data: dict[str, Any] = {
         "@type": "VideoObject",
         "name": str(getattr(video, "display_title", video.title)),
-        "description": _text(video.transcript, 300)
+        "description": _text(getattr(video, "display_description", "") or video.transcript, 300)
         or str(getattr(video, "display_title", video.title)),
         "inLanguage": language,
         "uploadDate": video.created_at.isoformat() if getattr(video, "created_at", None) else None,

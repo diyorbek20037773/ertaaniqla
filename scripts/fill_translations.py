@@ -490,6 +490,15 @@ T: dict[str, tuple[str, str]] = {
         "Показывается на русской версии сайта. Пусто — заголовок выше. Синхронизация с YouTube"
         " его никогда не меняет.",
     ),
+    "description (Russian)": ("tavsif (ruscha)", "описание (на русском)"),
+    "Shown under the video on the watch page. A blank line starts a paragraph.": (
+        "Video sahifasida video ostida koʻrinadi. Boʻsh qator yangi xatboshini boshlaydi.",
+        "Показывается под видео на его странице. Пустая строка начинает новый абзац.",
+    ),
+    "Shown on the Russian site. Empty = no description there.": (
+        "Rus tilidagi saytda koʻrinadi. Boʻsh boʻlsa — u yerda tavsif boʻlmaydi.",
+        "Показывается на русской версии сайта. Пусто — описания там не будет.",
+    ),
     "status": ("holat", "статус"),
     "processing error": ("qayta ishlash xatosi", "ошибка обработки"),
     "Media": ("Media", "Медиа"),

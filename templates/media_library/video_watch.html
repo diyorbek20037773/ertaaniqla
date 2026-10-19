@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load i18n wagtailcore_tags wagtailimages_tags %}
 {% comment %} media_library/video_watch.html — one video of the «Videoroliklar» list.
-   Context: page (VideoIndexPage), video, video_description (plain text), more (up to 3 videos
+   Context: page (VideoIndexPage), video, video_description (plain text for the meta tags: the
+   description in the page's language, else the transcript), more (up to 3 videos
    of the same topic), route_suffix ("<id>/": canonical, hreflang, language switch). A cover
    whose file is missing renders as a 0×0 «not found» rendition → the list's own og:image. {% endcomment %}
 {% block title %}{{ video.display_title }}{% endblock %}
@@ -15,6 +16,7 @@
   <p><a class="pill-outline" href="{{ page.url }}">← {{ page.title }}</a></p>
   <h1 class="post__title">{{ video.display_title }}</h1>
   {% include "components/video.html" with video=video embed=video.embed %}
+  {% with description=video.display_description %}{% if description %}<div class="prose video__description">{{ description|linebreaks }}</div>{% endif %}{% endwith %}
   {% if more %}
     {% trans "More videos" as more_title %}{% include "components/bar_title.html" with title=more_title %}
     <div class="video-grid">{% for item in more %}{% include "media_library/_video_card.html" with video=item url=item.watch_url %}{% endfor %}</div>

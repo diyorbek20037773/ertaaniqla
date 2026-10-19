@@ -416,6 +416,7 @@
   .embed__notice { font-size: 0.85em; color: var(--neutral-600); }
   .video__speaker { font-weight: 700; margin-block: var(--space-2) 0; }
   .video__caption { color: var(--neutral-600); }
+  .video__description { max-width: 70ch; margin-block: 0 var(--space-6); }
 
   /* blocks/image_gallery.html */
   .gallery__items { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: 1fr; }

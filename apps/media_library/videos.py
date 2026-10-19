@@ -99,7 +99,9 @@ class VideoIndexPage(RoutablePageMixin, BasePage):
         self.add_watch_urls(context["more"])
         # canonical, og:url, hreflang and the language switch name this video, not the list
         context["route_suffix"] = f"{video.pk}/"
-        context["video_description"] = seo.plain_text(video.transcript, 200)
+        context["video_description"] = seo.plain_text(
+            video.display_description or video.transcript, 200
+        )
         base = site_root_url(request)
         video_item = seo.video_ld(video, base, str(self.locale.language_code))
         jsonld = [i for i in context["jsonld"] if i.get("@type") != "MedicalWebPage"]
