@@ -406,6 +406,9 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 WAGTAIL_LOCALIZE_DEFAULT_TRANSLATION_MODE = "simple"
+# «Translate this page» makes a Russian DRAFT for the translator, never a live page that still
+# holds the Uzbek text (the package default copies the source's live status) — D-094
+WAGTAILLOCALIZE_SYNC_LIVE_STATUS_ON_TRANSLATE = False
 WAGTAIL_I18N_LANGUAGE_SWITCH_FALLBACK = True
 
 # ---------------------------------------------------------------------------

@@ -9,8 +9,10 @@ class CoreConfig(AppConfig):
 
     def ready(self) -> None:
         from apps.core import checks, signals  # noqa: F401  (registers checks, receivers)
+        from apps.core.localize_patches import patch_image_block_extraction
 
         self._connect_audit()
+        patch_image_block_extraction()
 
     @staticmethod
     def _connect_audit() -> None:
