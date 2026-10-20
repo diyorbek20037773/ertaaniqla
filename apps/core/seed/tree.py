@@ -1611,7 +1611,7 @@ HOME = {
     "title": {"uz": "Erta aniqla", "ru": "Эрта аниқла"},
     "slug": {"uz": "erta-aniqla", "ru": "erta-aniqla"},
     # Figma landing copy (D-065); ru = translation of it
-    "hero_title": {"uz": "Erta aniqla – hayotni saqla", "ru": "Эрта аниқла – сохрани жизнь"},
+    "hero_title": {"uz": "Erta aniqla – hayotni saqla", "ru": "Эрта аниқла – ҳаётни сақла"},
     "hero_subtitle": {
         "uz": "Saraton kasalliklari haqida ishonchli va tushunarli maʼlumot beruvchi axborot-taʼlim portali.",
         "ru": "Информационно-образовательный портал с достоверной и понятной информацией об онкологических заболеваниях.",
