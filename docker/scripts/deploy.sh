@@ -52,41 +52,58 @@ if ! grep -q '^COMPOSE_FILE=' .env 2>/dev/null; then export COMPOSE_FILE="${DEFA
 COMPOSE="docker compose -p ${PROJECT}"
 previous="\$(sed -n 's/^WEB_IMAGE=//p' .deploy.env 2>/dev/null || true)"
 export WEB_IMAGE="${image}"
-# keep .env in step (D-100): a later hand-run "docker compose up" must not bring the old image back
-if grep -q '^WEB_IMAGE=' .env 2>/dev/null; then sed -i "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" .env; fi
-if grep -q '^APP_RELEASE=' .env 2>/dev/null; then sed -i "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" .env; fi
-\${COMPOSE} pull --quiet web
-\${COMPOSE} run --rm --no-deps migrate
-\${COMPOSE} up -d --no-deps --wait --wait-timeout 120 web
-\${COMPOSE} up -d --no-deps worker beat backup
-if [[ "${TARGET}" == "prod" ]]; then \${COMPOSE} up -d nginx; fi
+# This script reaches the server on stdin (ssh … bash -s): every compose call reads /dev/null
+# instead, or the first one that reads stdin ("run") swallows the rest of the script (D-100).
+\${COMPOSE} pull --quiet web < /dev/null
+\${COMPOSE} run --rm --no-deps -T migrate < /dev/null
+\${COMPOSE} up -d --no-deps --wait --wait-timeout 120 web < /dev/null
+running="\$(docker inspect --format '{{.Config.Image}}' "\$(\${COMPOSE} ps -q web < /dev/null)")"
+if [[ "\${running}" != "\${WEB_IMAGE}" ]]; then
+  echo "web runs \${running}, not \${WEB_IMAGE}" >&2
+  exit 1
+fi
+# only now keep .env in step: a later hand-run "docker compose up" must neither bring the old
+# image back nor start one that never came up (D-100)
+if grep -q '^WEB_IMAGE=' .env; then sed -i "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" .env; fi
+if grep -q '^APP_RELEASE=' .env; then sed -i "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" .env; fi
+\${COMPOSE} up -d --no-deps worker beat backup < /dev/null
+if [[ "${TARGET}" == "prod" ]]; then \${COMPOSE} up -d nginx < /dev/null; fi
 if [[ "\${previous}" != "\${WEB_IMAGE}" ]]; then
   echo "WEB_IMAGE=\${previous:-none}" > .deploy.prev.env
 fi
 echo "WEB_IMAGE=\${WEB_IMAGE}" > .deploy.env
 docker image prune -f --filter "until=168h" >/dev/null || true
 echo "deployed \${WEB_IMAGE} (previous: \${previous:-none})"
-echo "\${previous:-none}"
 REMOTE
 }
 
 IMAGE="${IMAGE_BASE}:${TAG}"
 echo "== deploy ${IMAGE} → ${TARGET} (${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH})"
-PREVIOUS="$(remote_deploy "${IMAGE}" | tee /dev/stderr | tail -n 1)"
+# the image to roll back to, read before anything changes (a failed server step prints nothing)
+PREVIOUS="$(ssh -o StrictHostKeyChecking=accept-new "${DEPLOY_USER}@${DEPLOY_HOST}" \
+  "sed -n 's/^WEB_IMAGE=//p' '${DEPLOY_PATH}/.deploy.env' 2>/dev/null" < /dev/null || true)"
+PREVIOUS="${PREVIOUS:-none}"
 
-if [[ -z "${SMOKE_URL:-}" ]]; then
-  echo "no SMOKE_URL — smoke test skipped"
-  exit 0
-fi
-if DEPLOY_ENV="${TARGET}" bash "${SCRIPTS}/smoke.sh" "${SMOKE_URL}"; then
-  exit 0
+if remote_deploy "${IMAGE}"; then
+  if [[ -z "${SMOKE_URL:-}" ]]; then
+    echo "no SMOKE_URL — smoke test skipped"
+    exit 0
+  fi
+  if DEPLOY_ENV="${TARGET}" bash "${SCRIPTS}/smoke.sh" "${SMOKE_URL}"; then
+    exit 0
+  fi
+  REASON="smoke test failed"
+else
+  REASON="the server step failed"
 fi
 
 if [[ "${AUTO_ROLLBACK:-0}" == "1" && "${PREVIOUS}" != "none" && "${PREVIOUS}" != "${IMAGE}" ]]; then
-  echo "== smoke test failed: rolling ${TARGET} back to ${PREVIOUS}"
+  echo "== ${REASON}: rolling ${TARGET} back to ${PREVIOUS}"
   type notify_telegram >/dev/null 2>&1 &&
-    notify_telegram "↩️ ${TARGET}: smoke test failed for ${IMAGE}, rolling back to ${PREVIOUS}"
-  GIT_SHA="" remote_deploy "${PREVIOUS}" >/dev/null
-  DEPLOY_ENV="${TARGET}" bash "${SCRIPTS}/smoke.sh" "${SMOKE_URL}" || true
+    notify_telegram "↩️ ${TARGET}: ${REASON} for ${IMAGE}, rolling back to ${PREVIOUS}"
+  GIT_SHA="" remote_deploy "${PREVIOUS}" || true
+  if [[ -n "${SMOKE_URL:-}" ]]; then DEPLOY_ENV="${TARGET}" bash "${SCRIPTS}/smoke.sh" "${SMOKE_URL}" || true; fi
+else
+  echo "== ${REASON} (no automatic rollback)"
 fi
 exit 1

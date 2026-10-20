@@ -51,6 +51,12 @@ ertaaniqla.uz]
 | 4. Prod | `make release VERSION=v1.4.0` (GitHub Release of the `stage` commit) | `release.yml`: semver tag · commit on `stage` · staging ran exactly this commit successfully · image exists → tags `v1.4.0` + `prod` → waits for the `prod` reviewers → deploy, auto-rollback | `<DOMAIN>` |
 | 5. Monitoring | every 10 min | `monitor.yml` probes prod from outside (health, pages, response time, TLS); a failure opens one `incident` issue (assigned to `ONCALL`) + Telegram, recovery closes it. Inside the server: Prometheus / Alertmanager → Telegram (`--profile monitoring`), Sentry / GlitchTip | GitHub issues, Telegram |
 
+**Single-server mode (D-100, current):** only the prod VPS exists, so `DEPLOY_ENVIRONMENTS=prod-direct`
+and every green CI run on `master` deploys that image straight to prod (`deploy-prod-direct`:
+smoke test, automatic rollback to `.deploy.prev.env`). Stop it with `DEPLOY_ENVIRONMENTS=none`;
+roll back by hand with GitHub → Actions → Rollback. When dev and staging servers exist, switch to
+`dev,staging,prod` and the path below.
+
 A fix for an incident takes the same road: branch → `main` (dev) → `stage` (QA) → release.
 Urgent hotfix: fix on `main`, `make promote`, QA checks staging, `make release` — the gates stay;
 only the time between the steps is short. `rollback.yml` (§2) restores the previous image at once.

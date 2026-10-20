@@ -384,7 +384,17 @@ def test_deploy_keeps_the_server_env_on_the_deployed_image() -> None:
     remote = script.split("<<REMOTE", 1)[1].split("\nREMOTE\n", 1)[0]
     assert "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" in remote
     assert "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" in remote
-    assert remote.index("WEB_IMAGE=${image}|") < remote.index("pull --quiet web")
+    # .env changes only after the new web container is up and runs the new image
+    up_web = remote.index("--wait-timeout 120 web")
+    assert up_web < remote.index('running}" != "') < remote.index("WEB_IMAGE=${image}|")
+    # the script arrives on stdin: a compose call that reads stdin would swallow the rest
+    compose_calls = [line for line in remote.splitlines() if "${COMPOSE}" in line]
+    assert len(compose_calls) >= 6
+    assert all("< /dev/null" in line for line in compose_calls), compose_calls
+    assert any(" run --rm --no-deps -T migrate" in line for line in compose_calls)
+    local = script.split("\nREMOTE\n", 1)[1]
+    # the rollback target is read before deploying, not from the server script's output
+    assert local.index("PREVIOUS=") < local.index('if remote_deploy "${IMAGE}"')
     # the heredoc is unquoted: a backtick or an unescaped $( would run on the CI runner, not on
     # the server (a backticked comment once ran "docker compose up" locally)
     assert "`" not in remote
