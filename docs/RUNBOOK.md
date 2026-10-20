@@ -106,7 +106,7 @@ DEPLOY_HOST=vps.example.uz IMAGE_BASE=ghcr.io/<org>/ertaaniqla/web SMOKE_URL=htt
 
 ```bash
 # as root on the fresh VPS
-curl -fsSL https://raw.githubusercontent.com/<org>/ertaaniqla/main/scripts/bootstrap_vps.sh | \
+curl -fsSL https://raw.githubusercontent.com/<org>/ertaaniqla/master/scripts/bootstrap_vps.sh | \
   REPO=https://github.com/<org>/ertaaniqla.git ENV_NAME=prod SSH_PUBKEY="ssh-ed25519 AAAA… you" \
   SSH_ALLOW_FROM="<your ip>/32" bash
 ```
