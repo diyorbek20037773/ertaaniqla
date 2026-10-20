@@ -171,6 +171,7 @@ def test_ci_pipeline_shape() -> None:
         "build",
         "deploy-dev",
         "deploy-staging",
+        "deploy-prod-direct",
     ]
     build_steps = " ".join(str(s) for s in jobs["build"]["steps"])
     assert "trivy" in build_steps and "sbom" in build_steps and "nginx_test.sh" in build_steps
@@ -185,6 +186,11 @@ def test_ci_pipeline_shape() -> None:
         assert deploy["with"]["environment"] == env and deploy["secrets"] == "inherit", job
         assert branch in deploy["if"] and f"',{env},'" in deploy["if"], job
     assert jobs["deploy-staging"]["with"]["auto_rollback"] is True
+    # D-100 single-server mode: master → prod only with DEPLOY_ENVIRONMENTS=prod-direct
+    direct = jobs["deploy-prod-direct"]
+    assert direct["with"]["environment"] == "prod" and direct["with"]["auto_rollback"] is True
+    assert "refs/heads/master" in direct["if"] and "',prod-direct,'" in direct["if"]
+    assert "',prod,'" not in direct["if"]  # the release path keeps its own switch
 
     deploy = _yaml(".github/workflows/deploy.yml")
     job = deploy["jobs"]["deploy"]
@@ -369,3 +375,15 @@ def test_each_release_refreshes_the_static_volume() -> None:
     assert base["services"]["web"]["depends_on"]["migrate"]["condition"] == (
         "service_completed_successfully"
     )
+
+
+def test_deploy_keeps_the_server_env_on_the_deployed_image() -> None:
+    """D-100: deploy.sh writes the deployed image (and its tag as APP_RELEASE) into the server's
+    .env, so a later hand-run `docker compose up` cannot bring the previous image back."""
+    script = (ROOT / "docker/scripts/deploy.sh").read_text(encoding="utf-8")
+    remote = script.split("<<REMOTE", 1)[1].split("\nREMOTE\n", 1)[0]
+    assert "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" in remote
+    assert "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" in remote
+    assert remote.index("WEB_IMAGE=${image}|") < remote.index("pull --quiet web")
+    setup = (ROOT / "scripts/github_setup.sh").read_text(encoding="utf-8")
+    assert 'SINGLE_SERVER:-0}" == "1" ]]; then add_policy prod "${MAIN}" branch' in setup

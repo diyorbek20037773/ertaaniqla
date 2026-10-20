@@ -46,6 +46,8 @@ ensure_env staging "[]"
 add_policy staging stage branch
 ensure_env prod "${reviewer_json}"
 add_policy prod "v*" tag
+# single-server mode (D-100, DEPLOY_ENVIRONMENTS=prod-direct): pushes to the main branch deploy prod
+if [[ "${SINGLE_SERVER:-0}" == "1" ]]; then add_policy prod "${MAIN}" branch; fi
 [[ "${reviewer_json}" == "[]" ]] && echo "warning: prod has no required reviewers (set REVIEWERS)"
 
 if ! api "repos/${REPO}/branches/stage" >/dev/null 2>&1; then

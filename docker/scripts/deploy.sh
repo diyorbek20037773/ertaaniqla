@@ -52,6 +52,9 @@ if ! grep -q '^COMPOSE_FILE=' .env 2>/dev/null; then export COMPOSE_FILE="${DEFA
 COMPOSE="docker compose -p ${PROJECT}"
 previous="\$(sed -n 's/^WEB_IMAGE=//p' .deploy.env 2>/dev/null || true)"
 export WEB_IMAGE="${image}"
+# keep .env in step (D-100): a later hand-run `docker compose up` must not bring the old image back
+if grep -q '^WEB_IMAGE=' .env 2>/dev/null; then sed -i "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" .env; fi
+if grep -q '^APP_RELEASE=' .env 2>/dev/null; then sed -i "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" .env; fi
 \${COMPOSE} pull --quiet web
 \${COMPOSE} run --rm --no-deps migrate
 \${COMPOSE} up -d --no-deps --wait --wait-timeout 120 web

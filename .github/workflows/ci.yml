@@ -331,4 +331,22 @@ jobs:
       auto_rollback: true
     secrets: inherit
 
+  # --- single-server mode (D-100): only the prod VPS exists — master goes straight to prod -------
+  # Opt-in with DEPLOY_ENVIRONMENTS=prod-direct; never together with dev/staging (then the release
+  # path below is the only way to prod). Smoke test + automatic rollback guard every deploy.
+  deploy-prod-direct:
+    name: deploy → prod (single server)
+    needs: [build]
+    if: >-
+      ${{ !cancelled() && needs.build.result == 'success' && github.event_name == 'push'
+      && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+      && contains(format(',{0},', vars.DEPLOY_ENVIRONMENTS), ',prod-direct,') }}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: prod
+      image_tag: ${{ needs.build.outputs.tag }}
+      git_sha: ${{ github.sha }}
+      auto_rollback: true
+    secrets: inherit
+
   # --- prod: release.yml (GitHub Release of a commit that passed staging, manual approval) ------
