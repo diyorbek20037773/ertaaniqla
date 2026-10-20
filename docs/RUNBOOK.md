@@ -125,7 +125,13 @@ Absolute URLs (canonical, hreflang, OG, share links, sitemaps) come from the Wag
 the `migrate` role runs `manage.py sync_site`, which copies `SITE_BASE_URL` into it (D-075). After
 changing the domain, set `SITE_BASE_URL` and redeploy (or run `sync_site` once).
 
-### 1.4 Railway demo host (temporary, D-070)
+### 1.4 Railway demo host (retired 2026-10-20, D-099)
+
+> Production runs on the VPS since 2026-10-20 (D-099): `ssh root@217.29.115.144` (key only),
+> `cd /srv/ertaaniqla/prod && docker compose ps` (COMPOSE_FILE / project name come from `.env`).
+> On Railway the GitHub source is disconnected and every deployment removed; the Postgres and
+> media volumes still exist. The notes below are kept for history.
+
 
 No nginx, no worker. `scripts/railway_set_vars.ps1` sets everything, including the demo flags
 `ROBOTS_NOINDEX=true`, `SERVE_MEDIA=true`, `DJANGO_ADMIN_ENABLED=false`, `SEED_DEMO_ON_START=1`
