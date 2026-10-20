@@ -385,5 +385,9 @@ def test_deploy_keeps_the_server_env_on_the_deployed_image() -> None:
     assert "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" in remote
     assert "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" in remote
     assert remote.index("WEB_IMAGE=${image}|") < remote.index("pull --quiet web")
+    # the heredoc is unquoted: a backtick or an unescaped $( would run on the CI runner, not on
+    # the server (a backticked comment once ran "docker compose up" locally)
+    assert "`" not in remote
+    assert not re.search(r"(?<!\\)\$\(", remote)
     setup = (ROOT / "scripts/github_setup.sh").read_text(encoding="utf-8")
     assert 'SINGLE_SERVER:-0}" == "1" ]]; then add_policy prod "${MAIN}" branch' in setup
