@@ -1,11 +1,12 @@
-"""Videos the client sent on 2026-10-19 (D-097): interviews on the Anhor.uz channel, not on the
-portal's own channel, so the YouTube sync (D-085) never brings them.
+"""Videos the client sent on 2026-10-19 (D-097) and 2026-10-20 (D-101): programmes on the Anhor.uz
+channel, not on the portal's own channel, so the YouTube sync (D-085) never brings them.
 
-`add_client_videos()` creates the missing ones with their YouTube cover (a cover YouTube does not
-give now comes with a later sync run, like a synced video's) and on a video that already exists
-fills only empty fields: an editor's change stays. Titles are YouTube's; the Russian titles of the
-first and fourth video and all descriptions are the client's text (typing slips fixed), the other
-Russian titles are ours. Run by `manage.py client_update_20261019`; a second run changes nothing.
+`add_client_videos(batch)` creates the missing ones with their YouTube cover (a cover YouTube does
+not give now comes with a later sync run, like a synced video's) and on a video that already
+exists fills only empty fields: an editor's change stays. 2026-10-19: titles are YouTube's; the
+Russian titles of the first and fourth video and all descriptions are the client's text (typing
+slips fixed), the other Russian titles are ours. 2026-10-20: titles in both languages are the
+client's, no descriptions. Run by `manage.py client_update_<date>`; a second run changes nothing.
 """
 
 from __future__ import annotations
@@ -99,17 +100,53 @@ VIDEOS = (
         "глазами пациентки, прошедшей через диагноз и лечение.",
     ),
 )
+VIDEOS_20261020 = (
+    ClientVideo(
+        "OYHtF9ynSgI",
+        "KOʻKRAK BEZI SARATONI QAY DARAJADA XAVFLI / SHIFOKOR BILAN SUHBAT",
+        "Насколько опасен рак молочной железы?",
+        "",
+        "",
+        "breast",
+    ),
+    ClientVideo(
+        "qPr-bFB_U30",
+        "KOʻKRAK BEZI SARATONI: UTT TEKSHIRUVI ZARAR YOKI NAJOT?",
+        "Рак молочной железы: УЗИ — вред или спасение?",
+        "",
+        "",
+        "breast",
+    ),
+    ClientVideo(
+        "XAeJ1-1K6hQ",
+        "BACHADON BOʻYNI SARATONI JINSIY YOʻL ORQALI YUQADIMI?",
+        "Передается ли рак шейки матки половым путём?",
+        "",
+        "",
+        "cervical",
+    ),
+    ClientVideo(
+        "O3eTl1QNNhk",
+        "QOʻRQUVNI YENGISH HAQIDAGI HIKOYA",
+        "История о преодолении страха",
+        "",
+        "",
+    ),
+)
 FILLED = ("title_ru", "description", "description_ru", "topic")
 
 
-def add_client_videos() -> tuple[list[str], list[str]]:
-    """Returns the ids of the videos created and of those whose empty fields were filled."""
+def add_client_videos(
+    batch: tuple[ClientVideo, ...] = VIDEOS,
+) -> tuple[list[str], list[str]]:
+    """Returns the ids of the videos created and of those whose empty fields were filled. A later
+    batch is created later, so it lands above the earlier ones on the list."""
     from apps.media_library import youtube
     from apps.media_library.models import Video, VideoKind, VideoSource, VideoStatus
 
     created: list[str] = []
     filled: list[str] = []
-    for item in reversed(VIDEOS):  # the list is newest first: the client's first video last
+    for item in reversed(batch):  # the list is newest first: the client's first video last
         video = Video.objects.filter(external_url__contains=item.video_id).first()
         if video is None:
             poster = youtube._poster(item.video_id, item.title)

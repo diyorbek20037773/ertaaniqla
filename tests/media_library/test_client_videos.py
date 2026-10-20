@@ -1,4 +1,4 @@
-"""D-097: the video description (uz / ru) and the client's videos of 2026-10-19."""
+"""D-097, D-101: the video description (uz / ru) and the client's videos of 2026-10-19/20."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import pytest
 from django.core.management import call_command
 
 from apps.media_library import youtube
-from apps.media_library.client_videos import VIDEOS
+from apps.media_library.client_videos import VIDEOS, VIDEOS_20261020
 from apps.media_library.models import Video, VideoSource, VideoStatus
 
 
@@ -56,9 +56,23 @@ def test_client_videos_are_added_once_and_editors_keep_their_changes(covers) -> 
     assert len(covers) == len(VIDEOS)  # no second download
 
 
+@pytest.mark.django_db
+def test_the_second_batch_lands_above_the_first(covers) -> None:
+    call_command("client_update_20261019")
+    call_command("client_update_20261020")
+    videos = list(Video.objects.order_by("-created_at", "-pk"))
+    order = [item.video_id for item in (*VIDEOS_20261020, *VIDEOS)]
+    assert [_video_id(v) for v in videos] == order
+    cervical = Video.objects.get(external_url__contains="XAeJ1-1K6hQ")
+    assert cervical.topic == "cervical" and cervical.description == ""
+    assert cervical.title_ru == "Передается ли рак шейки матки половым путём?"
+    call_command("client_update_20261020")
+    assert Video.objects.count() == len(order)
+
+
 def test_client_texts_use_the_uzbek_apostrophes() -> None:
     """ʻ (U+02BB) and ʼ (U+02BC) only, never ‘ ’ or ' (project rule)."""
-    for item in VIDEOS:
+    for item in (*VIDEOS, *VIDEOS_20261020):
         for text in (item.title, item.description):
             assert not set(text) & {"‘", "’", "'"}, (item.video_id, text)
 
