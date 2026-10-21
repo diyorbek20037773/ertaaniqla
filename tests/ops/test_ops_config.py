@@ -401,3 +401,23 @@ def test_deploy_keeps_the_server_env_on_the_deployed_image() -> None:
     assert not re.search(r"(?<!\\)\$\(", remote)
     setup = (ROOT / "scripts/github_setup.sh").read_text(encoding="utf-8")
     assert 'SINGLE_SERVER:-0}" == "1" ]]; then add_policy prod "${MAIN}" branch' in setup
+
+
+def test_deploy_survives_a_slow_pull_and_images_reuse_their_layers() -> None:
+    """D-103: on the 10 Mbit/s VPS a silent `pull` outlived the runner's idle limit (SSH broke,
+    the deploy rolled back); every ssh call now sends keepalives. APP_RELEASE (new on every
+    commit) sits at the end of the Dockerfile, so the system packages and the venv layers are
+    reused and a release is a small download."""
+    script = (ROOT / "docker/scripts/deploy.sh").read_text(encoding="utf-8")
+    assert "ServerAliveInterval=20" in script
+    ssh_calls = [
+        line
+        for line in script.splitlines()
+        if line.lstrip().startswith(("ssh ", 'PREVIOUS="$(ssh'))
+    ]
+    assert ssh_calls and all('"${SSH_OPTS[@]}"' in line for line in ssh_calls), ssh_calls
+    dockerfile = (ROOT / "docker/web/Dockerfile").read_text(encoding="utf-8")
+    runtime = dockerfile.split("AS runtime", 1)[1]
+    assert runtime.index("ARG APP_RELEASE") > runtime.index("apt-get install")
+    assert runtime.index("ARG APP_RELEASE") > runtime.index("collectstatic")
+    assert runtime.index("APP_RELEASE") > runtime.index("COPY --chown=app:app . .")  # none earlier

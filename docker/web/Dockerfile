@@ -32,12 +32,10 @@ RUN if [ "$INSTALL_DEV" = "1" ]; then uv sync --frozen --no-install-project; \
 # Stage 3: runtime
 # ---------------------------------------------------------------------------
 FROM python:3.12-slim AS runtime
-ARG APP_RELEASE=dev
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PATH="/opt/venv/bin:$PATH" \
     DJANGO_SETTINGS_MODULE=config.settings.prod \
-    APP_RELEASE=${APP_RELEASE} \
     MEDIA_ROOT=/srv/media
 
 # ffmpeg (video transcoding), libmagic (MIME validation), postgres client **16** from PGDG
@@ -69,6 +67,11 @@ RUN chmod +x /scripts/*.sh \
        python manage.py collectstatic --noinput --ignore=src \
     && cp -a /app/staticfiles /app/static-build \
     && chown -R app:app /app/staticfiles /app/static-build
+
+# Last on purpose (D-103): APP_RELEASE changes with every commit, and every layer after it is
+# rebuilt — above the system packages it made each release a ~330 MB download for the server.
+ARG APP_RELEASE=dev
+ENV APP_RELEASE=${APP_RELEASE}
 
 USER app
 EXPOSE 8000

@@ -37,10 +37,14 @@ SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=/dev/null
 [[ -f "${SCRIPTS}/notify.sh" ]] && source "${SCRIPTS}/notify.sh"
 
+# Keepalives (D-103): "pull --quiet" prints nothing for minutes on the 10 Mbit/s VPS, and the
+# GitHub runner's network drops a silent connection after ~4 min ("client_loop: Broken pipe").
+SSH_OPTS=(-o StrictHostKeyChecking=accept-new -o ServerAliveInterval=20 -o ServerAliveCountMax=15)
+
 # remote_deploy IMAGE — prints the image that ran before on the last line ("none" the first time)
 remote_deploy() {
   local image="$1"
-  ssh -o StrictHostKeyChecking=accept-new "${DEPLOY_USER}@${DEPLOY_HOST}" bash -s <<REMOTE
+  ssh "${SSH_OPTS[@]}" "${DEPLOY_USER}@${DEPLOY_HOST}" bash -s <<REMOTE
 set -euo pipefail
 cd "${DEPLOY_PATH}"
 if [[ -n "${GIT_SHA}" && -d .git ]]; then
@@ -80,7 +84,7 @@ REMOTE
 IMAGE="${IMAGE_BASE}:${TAG}"
 echo "== deploy ${IMAGE} → ${TARGET} (${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH})"
 # the image to roll back to, read before anything changes (a failed server step prints nothing)
-PREVIOUS="$(ssh -o StrictHostKeyChecking=accept-new "${DEPLOY_USER}@${DEPLOY_HOST}" \
+PREVIOUS="$(ssh "${SSH_OPTS[@]}" "${DEPLOY_USER}@${DEPLOY_HOST}" \
   "sed -n 's/^WEB_IMAGE=//p' '${DEPLOY_PATH}/.deploy.env' 2>/dev/null" < /dev/null || true)"
 PREVIOUS="${PREVIOUS:-none}"
 
