@@ -421,3 +421,21 @@ def test_deploy_survives_a_slow_pull_and_images_reuse_their_layers() -> None:
     assert runtime.index("ARG APP_RELEASE") > runtime.index("apt-get install")
     assert runtime.index("ARG APP_RELEASE") > runtime.index("collectstatic")
     assert runtime.index("APP_RELEASE") > runtime.index("COPY --chown=app:app . .")  # none earlier
+
+
+def test_bootstrap_hardens_ssh_fail2ban_and_the_kernel() -> None:
+    """D-104: keys only, no forwarding, only root and the deploy user; a day's ban and a week
+    for repeat offenders; no ICMP redirects or source routing."""
+    script = (ROOT / "scripts/bootstrap_vps.sh").read_text(encoding="utf-8")
+    for line in (
+        "PasswordAuthentication no",
+        "AllowTcpForwarding no",
+        "LoginGraceTime 30",
+        'echo "AllowUsers root ${DEPLOY_USER}"',
+        "[recidive]",
+        "bantime  = 7d",
+        "net.ipv4.conf.all.send_redirects = 0",
+        "net.ipv4.conf.all.accept_source_route = 0",
+    ):
+        assert line in script, line
+    assert "00-ertaaniqla.conf" in script  # read before the provider's 50-cloud-init.conf

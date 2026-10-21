@@ -73,11 +73,18 @@ cat > /etc/ssh/sshd_config.d/00-ertaaniqla.conf <<'SSHD'
 PasswordAuthentication no
 PermitRootLogin prohibit-password
 KbdInteractiveAuthentication no
+PermitEmptyPasswords no
 X11Forwarding no
-MaxAuthTries 4
+AllowTcpForwarding no
+AllowAgentForwarding no
+PermitTunnel no
+LoginGraceTime 30
+MaxAuthTries 3
+MaxSessions 4
 ClientAliveInterval 300
 ClientAliveCountMax 2
 SSHD
+echo "AllowUsers root ${DEPLOY_USER}" >> /etc/ssh/sshd_config.d/00-ertaaniqla.conf
 sshd -t
 systemctl reload ssh || systemctl reload sshd || true
 sshd -T | grep -qx "passwordauthentication no" || { echo "sshd still accepts passwords" >&2; exit 1; }
@@ -98,13 +105,22 @@ ufw --force enable
 log "6/9 fail2ban + unattended-upgrades"
 cat > /etc/fail2ban/jail.d/ertaaniqla.conf <<'JAIL'
 [DEFAULT]
-bantime  = 1h
+bantime  = 1d
 findtime = 10m
-maxretry = 5
+maxretry = 4
 backend  = systemd
 
 [sshd]
 enabled = true
+
+# repeat offenders (banned 3 times in a day) are kept out for a week (D-104)
+[recidive]
+enabled  = true
+backend  = auto
+logpath  = /var/log/fail2ban.log
+bantime  = 7d
+findtime = 1d
+maxretry = 3
 JAIL
 systemctl enable --now fail2ban
 cat > /etc/apt/apt.conf.d/20auto-upgrades <<'APT'
@@ -137,6 +153,20 @@ fs.file-max = 2097152
 fs.inotify.max_user_watches = 524288
 # SonarQube's embedded Elasticsearch (compose.sonarqube.yml, ADR-0005)
 vm.max_map_count = 524288
+# network hardening (D-104)
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv6.conf.all.accept_source_route = 0
+net.ipv4.conf.all.log_martians = 1
+net.ipv4.tcp_syncookies = 1
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+kernel.kptr_restrict = 2
+kernel.dmesg_restrict = 1
 SYSCTL
 sysctl --system >/dev/null
 timedatectl set-timezone Asia/Tashkent || true
