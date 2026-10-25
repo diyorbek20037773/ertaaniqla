@@ -126,6 +126,15 @@ class Institution(index.Indexed, TimeStampedModel):
         default=InstitutionSections.BOTH,
         db_index=True,
     )
+    colposcopy_branch = models.BooleanField(
+        _("cervical screening branch"),
+        default=False,
+        db_index=True,
+        help_text=_(
+            "A branch of the Mother & Child Health Centre that tests the screening samples and "
+            "does colposcopy. Shown as the second step of the screening route for its region."
+        ),
+    )
     verified_at = models.DateField(_("data verified on"), null=True, blank=True)
     is_published = models.BooleanField(_("published"), default=True, db_index=True)
     external_id = models.CharField(
@@ -139,7 +148,12 @@ class Institution(index.Indexed, TimeStampedModel):
     panels = [
         MultiFieldPanel([FieldPanel("name_uz"), FieldPanel("name_ru")], heading=_("Name")),
         MultiFieldPanel(
-            [FieldPanel("kind"), FieldPanel("sections"), FieldPanel("free_under_state_programme")],
+            [
+                FieldPanel("kind"),
+                FieldPanel("sections"),
+                FieldPanel("free_under_state_programme"),
+                FieldPanel("colposcopy_branch"),
+            ],
             heading=_("Type"),
         ),
         MultiFieldPanel(

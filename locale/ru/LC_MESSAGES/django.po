@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 23:36+0500\n"
+"POT-Creation-Date: 2026-10-25 16:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,6 +294,27 @@ msgstr "Максимальное количество"
 msgid "Institution list"
 msgstr "Список учреждений"
 
+msgid "Step"
+msgstr "Шаг"
+
+msgid "No places"
+msgstr "Без адресов"
+
+msgid "Polyclinics of the chosen district"
+msgstr "Поликлиники выбранного района"
+
+msgid "Mother & Child Health Centre branch of the region"
+msgstr "Филиал Центра здоровья матери и ребёнка в области"
+
+msgid "Places shown under the step"
+msgstr "Адреса под шагом"
+
+msgid "Intro"
+msgstr "Вводный текст"
+
+msgid "Screening route (region and district → places)"
+msgstr "Маршрут скрининга (область и район → адреса)"
+
 msgid "Button label"
 msgstr "Текст кнопки"
 
@@ -343,9 +364,6 @@ msgstr "Полоса заголовка"
 
 msgid "Highlight box"
 msgstr "Акцентный блок"
-
-msgid "Intro"
-msgstr "Вводный текст"
 
 msgid "Items"
 msgstr "Пункты"
@@ -958,6 +976,18 @@ msgstr "бесплатно по государственной программ�
 msgid "sections"
 msgstr "разделы"
 
+msgid "cervical screening branch"
+msgstr "филиал скрининга (шейка матки)"
+
+msgid ""
+"A branch of the Mother & Child Health Centre that tests the screening "
+"samples and does colposcopy. Shown as the second step of the screening route"
+" for its region."
+msgstr ""
+"Филиал Центра здоровья матери и ребёнка, где исследуют образцы скрининга и "
+"проводят кольпоскопию. Показывается вторым шагом маршрута скрининга для "
+"своей области."
+
 msgid "data verified on"
 msgstr "дата проверки данных"
 
@@ -1300,9 +1330,6 @@ msgstr "Текст ссылки"
 
 msgid "Link page"
 msgstr "Страница, на которую ведёт ссылка"
-
-msgid "Step"
-msgstr "Шаг"
 
 msgid "hero title"
 msgstr "заголовок главного блока"
@@ -1961,6 +1988,41 @@ msgstr "Скачать"
 msgid "No institutions match the selected filters yet."
 msgstr "По выбранным фильтрам учреждения пока не найдены."
 
+msgid "Where to get screened"
+msgstr "Где пройти скрининг"
+
+msgid "Your region"
+msgstr "Ваша область"
+
+msgid "Choose the region"
+msgstr "Выберите область"
+
+msgid "Your district"
+msgstr "Ваш район"
+
+msgid "Choose the district"
+msgstr "Выберите район"
+
+msgid "First choose the region"
+msgstr "Сначала выберите область"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "No branch for your region is on record yet. The nearest branches:"
+msgstr "Филиал вашей области ещё не внесён в справочник. Ближайшие филиалы:"
+
+msgid "No polyclinic of this district is on record yet."
+msgstr "Поликлиника этого района ещё не внесена в справочник."
+
+msgid ""
+"Choose your region and district above — the places for this step appear "
+"here."
+msgstr "Выберите выше область и район — адреса для этого шага появятся здесь."
+
+msgid "Choose your region above — the place for this step appears here."
+msgstr "Выберите выше область — адрес для этого шага появится здесь."
+
 msgid "High contrast"
 msgstr "Высокий контраст"
 
@@ -2187,9 +2249,6 @@ msgstr "Район, село или название"
 
 msgid "e.g. Chilonzor or 12-OP"
 msgstr "например: Чиланзар или 12-ОП"
-
-msgid "Show"
-msgstr "Показать"
 
 msgid "Loading…"
 msgstr "Загрузка…"
@@ -2559,62 +2618,19 @@ msgstr "Показать результат"
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
 
-#~ msgid "All news"
-#~ msgstr "Все новости"
 
-#~ msgctxt "header menu"
-#~ msgid "Q&A"
-#~ msgstr "Вопрос-ответ"
 
-#~ msgctxt "header menu"
-#~ msgid "Doctors"
-#~ msgstr "Врачи"
 
-#~ msgid "Want a private reply? (optional)"
-#~ msgstr "Нужен личный ответ? (необязательно)"
 
-#~ msgid "Information you should know"
-#~ msgstr "Информация, которую нужно знать"
 
-#~ msgctxt "hero button"
-#~ msgid "Get help"
-#~ msgstr "Обратиться"
 
-#~ msgctxt "article card"
-#~ msgid "Read more"
-#~ msgstr "Читать дальше"
 
-#~ msgid "Featured articles"
-#~ msgstr "Избранные статьи"
 
-#~ msgid "Featured videos"
-#~ msgstr "Избранные видео"
 
-#~ msgid "Partners"
-#~ msgstr "Партнёры"
 
-#~ msgid "Ask a doctor"
-#~ msgstr "Спросить врача"
 
-#~ msgid "Self-checks"
-#~ msgstr "Самопроверка"
 
-#~ msgid "Key figures"
-#~ msgstr "Ключевые цифры"
 
-#~ msgid "Get in touch"
-#~ msgstr "Связаться с нами"
 
-#~ msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
-#~ msgstr ""
-#~ "Необязательный идентификатор иконки для дизайнера (например, 'dna', 'age')."
 
-#~ msgid "Open section"
-#~ msgstr "Открыть раздел"
 
-#~ msgid ""
-#~ "This site is an information and education resource. It does not make a "
-#~ "diagnosis. If you notice symptoms, contact a doctor."
-#~ msgstr ""
-#~ "Этот сайт — информационно-образовательный ресурс. Он не ставит диагноз. Если"
-#~ " вы заметили симптомы, обратитесь к врачу."

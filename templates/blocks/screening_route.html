@@ -1,0 +1,58 @@
+{% load i18n wagtailcore_tags %}
+{% comment %} blocks/screening_route.html — ScreeningRouteBlock (D-105). Context: value {title, intro},
+   regions, districts [(value, label)], region, district, steps [{step, items, fallback}].
+   GET ?sr=&sd= on the page itself; HTMX swaps only this section (hx-select), a plain submit
+   reloads the page without JS. {% endcomment %}
+<section class="block screening-route" id="screening-route" aria-labelledby="screening-route-title">
+  <h2 class="screening-route__title" id="screening-route-title">{% if value.title %}{{ value.title }}{% else %}{% trans "Where to get screened" %}{% endif %}</h2>
+  {% if value.intro %}<div class="screening-route__intro">{{ value.intro|richtext }}</div>{% endif %}
+
+  <form class="screening-route__form" method="get" action="{{ request.path }}#screening-route"
+        hx-get="{{ request.path }}" hx-trigger="change" hx-select="#screening-route" hx-target="#screening-route" hx-swap="outerHTML" hx-push-url="true">
+    <div class="screening-route__field">
+      <label for="sr-region">{% trans "Your region" %}</label>
+      <select id="sr-region" name="sr">
+        <option value="">{% trans "Choose the region" %}</option>
+        {% for r in regions %}
+          <option value="{{ r.code }}" {% if r.code == region %}selected{% endif %}>{% if LANGUAGE_CODE == "ru" %}{{ r.name_ru }}{% else %}{{ r.name_uz }}{% endif %}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="screening-route__field">
+      <label for="sr-district">{% trans "Your district" %}</label>
+      <select id="sr-district" name="sd" {% if not districts %}disabled{% endif %}>
+        <option value="">{% if districts %}{% trans "Choose the district" %}{% else %}{% trans "First choose the region" %}{% endif %}</option>
+        {% for code, label in districts %}
+          <option value="{{ code }}" {% if code == district %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="button button--primary screening-route__submit">{% trans "Show" %}</button>
+  </form>
+
+  <ol class="screening-route__steps">
+    {% for entry in steps %}
+      <li class="screening-route__step">
+        <span class="screening-route__number" aria-hidden="true">{{ forloop.counter }}</span>
+        <div class="screening-route__body">
+          <h3 class="screening-route__step-title">{{ entry.step.title }}</h3>
+          {% if entry.step.text %}<div class="screening-route__text">{{ entry.step.text|richtext }}</div>{% endif %}
+          {% if entry.step.places %}
+            {% if entry.items %}
+              {% if entry.fallback %}<p class="screening-route__note">{% trans "No branch for your region is on record yet. The nearest branches:" %}</p>{% endif %}
+              <div class="institution-list__items screening-route__places">
+                {% for institution in entry.items %}{% include "components/institution_card.html" with institution=institution %}{% endfor %}
+              </div>
+            {% elif entry.step.places == "district_polyclinics" and region and district %}
+              <p class="screening-route__note">{% trans "No polyclinic of this district is on record yet." %}</p>
+            {% elif entry.step.places == "district_polyclinics" %}
+              <p class="screening-route__hint">{% trans "Choose your region and district above — the places for this step appear here." %}</p>
+            {% elif not region %}
+              <p class="screening-route__hint">{% trans "Choose your region above — the place for this step appears here." %}</p>
+            {% endif %}
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+</section>

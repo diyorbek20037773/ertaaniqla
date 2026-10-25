@@ -855,7 +855,14 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
         ),
     ]
     risk_tiles = [
-        ("c-virus", uz("Infeksiyalar"), uz("OIV, genital gerpes, sitomegalovirus, xlamidioz.")),
+        (
+            "c-virus",
+            uz("Infeksiyalar"),
+            # doctor 2026-10-25 (D-105): cytomegalovirus does not cause cervical cancer
+            uz(
+                "OIV, genital gerpes, xlamidioz. Bu infeksiyalar mahalliy immunitetni pasaytirishi mumkin."
+            ),
+        ),
         (
             "c-vitamin",
             uz("Vitamin yetishmasligi"),
@@ -1574,12 +1581,81 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
     ]
 
 
+def screening_route(lang: str) -> dict[str, Any]:
+    """D-105: region + district → the place for each step of cervical screening (the doctor's
+    feedback of 2026-10-25: the woman must not have to choose an institution type). Step texts
+    restate the PQ-402 programme already on the page and where the doctor said each step
+    happens."""
+    return {
+        "type": "screening_route",
+        "value": {
+            "title": t(lang, uz("Skriningni qayerda o'tasiz"), "Где пройти скрининг"),
+            "intro": p(
+                t(
+                    lang,
+                    uz(
+                        "Viloyatingiz va tumaningizni tanlang — har bir qadam uchun qayerga "
+                        "borishingiz ko'rsatiladi."
+                    ),
+                    "Выберите область и район — для каждого шага будет показано, куда идти.",
+                )
+            ),
+            "steps": [
+                {
+                    "title": t(lang, "Tahlil topshirish", "Сдать анализ"),
+                    "text": p(
+                        t(
+                            lang,
+                            uz(
+                                "30, 40 va 50 yoshdagi ayollar uchun bepul: odam papilloma virusiga "
+                                "(HPV) test va suyuq sitologiya. Tahlil tumaningizdagi "
+                                "poliklinikaning onkologik ogohlik xonasida olinadi."
+                            ),
+                            "Для женщин 30, 40 и 50 лет — бесплатно: тест на вирус папилломы "
+                            "человека (ВПЧ) и жидкостная цитология. Анализ берут в кабинете "
+                            "онконастороженности поликлиники вашего района.",
+                        )
+                    ),
+                    "places": "district_polyclinics",
+                },
+                {
+                    "title": t(
+                        lang,
+                        uz("Natijada o'zgarish bo'lsa — kolposkopiya"),
+                        "Если в результате есть изменения — кольпоскопия",
+                    ),
+                    "text": p(
+                        t(
+                            lang,
+                            uz(
+                                "Namunalar Ona va bola salomatligi markazi filialida tekshiriladi. "
+                                "HPV aniqlansa va sitologiyada o'zgarish bo'lsa, sizni filialdagi "
+                                "kolposkopist qabuliga chaqirishadi."
+                            ),
+                            "Образцы исследуют в филиале Центра здоровья матери и ребёнка. Если "
+                            "выявлен ВПЧ и цитология показала изменения, вас пригласят к "
+                            "кольпоскописту филиала.",
+                        )
+                    ),
+                    "places": "region_branch",
+                },
+            ],
+        },
+    }
+
+
 def body_cervical_screening(lang: str, ctx: SeedContext) -> Body:
     """No Figma frame: the generic screening copy, the TZ rules and the Figma state-programme
     text for cervical cancer (from the «Qo'llab-quvvatlash» frame)."""
     if lang != "uz":
         body = _ru_skeleton(lang, ctx, ["Что такое скрининг?", "Скрининг рака шейки матки"])
-        return [*body[:-1], _tz_screening_rules(lang), _where_to_screen(lang), body[-1]]
+        return [
+            *body[:-1],
+            _tz_screening_rules(lang),
+            screening_route(lang),
+            _where_to_screen(lang),
+            body[-1],
+        ]
     return [
         *_screening_intro(),
         heading(uz("Bachadon bo'yni saratoni skriningi")),
@@ -1588,6 +1664,7 @@ def body_cervical_screening(lang: str, ctx: SeedContext) -> Body:
             + p(f"{TODO} {VERIFY}")
         ),
         _tz_screening_rules(lang),
+        screening_route(lang),
         _where_to_screen(lang),
         appeal(lang, ctx),
         verify_note(lang),

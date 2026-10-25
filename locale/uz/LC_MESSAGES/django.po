@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 23:36+0500\n"
+"POT-Creation-Date: 2026-10-25 16:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,6 +294,27 @@ msgstr "Maksimal soni"
 msgid "Institution list"
 msgstr "Muassasalar roʻyxati"
 
+msgid "Step"
+msgstr "Qadam"
+
+msgid "No places"
+msgstr "Manzil koʻrsatilmaydi"
+
+msgid "Polyclinics of the chosen district"
+msgstr "Tanlangan tuman poliklinikalari"
+
+msgid "Mother & Child Health Centre branch of the region"
+msgstr "Viloyatdagi Ona va bola salomatligi markazi filiali"
+
+msgid "Places shown under the step"
+msgstr "Qadam ostida koʻrsatiladigan manzillar"
+
+msgid "Intro"
+msgstr "Kirish"
+
+msgid "Screening route (region and district → places)"
+msgstr "Skrining yoʻli (viloyat va tuman → manzillar)"
+
 msgid "Button label"
 msgstr "Tugma matni"
 
@@ -341,9 +362,6 @@ msgstr "Sarlavha chizigʻi"
 
 msgid "Highlight box"
 msgstr "Ajratilgan quti"
-
-msgid "Intro"
-msgstr "Kirish"
 
 msgid "Items"
 msgstr "Bandlar"
@@ -951,6 +969,18 @@ msgstr "davlat dasturi boʻyicha bepul"
 msgid "sections"
 msgstr "boʻlimlar"
 
+msgid "cervical screening branch"
+msgstr "skrining filiali (bachadon boʻyni)"
+
+msgid ""
+"A branch of the Mother & Child Health Centre that tests the screening "
+"samples and does colposcopy. Shown as the second step of the screening route"
+" for its region."
+msgstr ""
+"Skrining namunalarini tekshiradigan va kolposkopiya qiladigan Ona va bola "
+"salomatligi markazi filiali. Oʻz viloyati uchun skrining yoʻlining ikkinchi "
+"qadamida koʻrsatiladi."
+
 msgid "data verified on"
 msgstr "maʼlumot tekshirilgan sana"
 
@@ -1289,9 +1319,6 @@ msgstr "Havola matni"
 
 msgid "Link page"
 msgstr "Havola sahifasi"
-
-msgid "Step"
-msgstr "Qadam"
 
 msgid "hero title"
 msgstr "asosiy sarlavha"
@@ -1946,6 +1973,45 @@ msgstr "Yuklab olish"
 msgid "No institutions match the selected filters yet."
 msgstr "Tanlangan filtrlarga mos muassasalar hozircha yoʻq."
 
+msgid "Where to get screened"
+msgstr "Skriningni qayerda oʻtasiz"
+
+msgid "Your region"
+msgstr "Viloyatingiz"
+
+msgid "Choose the region"
+msgstr "Viloyatni tanlang"
+
+msgid "Your district"
+msgstr "Tumaningiz"
+
+msgid "Choose the district"
+msgstr "Tumanni tanlang"
+
+msgid "First choose the region"
+msgstr "Avval viloyatni tanlang"
+
+msgid "Show"
+msgstr "Koʻrsatish"
+
+msgid "No branch for your region is on record yet. The nearest branches:"
+msgstr ""
+"Viloyatingiz filiali hali roʻyxatga kiritilmagan. Eng yaqin filiallar:"
+
+msgid "No polyclinic of this district is on record yet."
+msgstr "Bu tuman poliklinikasi hali roʻyxatga kiritilmagan."
+
+msgid ""
+"Choose your region and district above — the places for this step appear "
+"here."
+msgstr ""
+"Yuqorida viloyat va tumaningizni tanlang — bu qadam uchun manzillar shu "
+"yerda chiqadi."
+
+msgid "Choose your region above — the place for this step appears here."
+msgstr ""
+"Yuqorida viloyatingizni tanlang — bu qadam uchun manzil shu yerda chiqadi."
+
 msgid "High contrast"
 msgstr "Yuqori kontrast"
 
@@ -2168,9 +2234,6 @@ msgstr "Tuman, qishloq yoki nomi"
 
 msgid "e.g. Chilonzor or 12-OP"
 msgstr "masalan: Chilonzor yoki 12-OP"
-
-msgid "Show"
-msgstr "Koʻrsatish"
 
 msgid "Loading…"
 msgstr "Yuklanmoqda…"
@@ -2527,62 +2590,19 @@ msgstr "Natijani koʻrsatish"
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
 
-#~ msgid "All news"
-#~ msgstr "Barcha yangiliklar"
 
-#~ msgctxt "header menu"
-#~ msgid "Q&A"
-#~ msgstr "Savol-Javob"
 
-#~ msgctxt "header menu"
-#~ msgid "Doctors"
-#~ msgstr "Shifokorlar"
 
-#~ msgid "Want a private reply? (optional)"
-#~ msgstr "Shaxsiy javob kerakmi? (ixtiyoriy)"
 
-#~ msgid "Information you should know"
-#~ msgstr "Siz bilishingiz lozim boʻlgan maʼlumotlar"
 
-#~ msgctxt "hero button"
-#~ msgid "Get help"
-#~ msgstr "Murojaat qilish"
 
-#~ msgctxt "article card"
-#~ msgid "Read more"
-#~ msgstr "Koʻproq oʻqish"
 
-#~ msgid "Featured articles"
-#~ msgstr "Tanlangan maqolalar"
 
-#~ msgid "Featured videos"
-#~ msgstr "Tanlangan videolar"
 
-#~ msgid "Partners"
-#~ msgstr "Hamkorlar"
 
-#~ msgid "Ask a doctor"
-#~ msgstr "Shifokorga savol bering"
 
-#~ msgid "Self-checks"
-#~ msgstr "Oʻz-oʻzini tekshirish"
 
-#~ msgid "Key figures"
-#~ msgstr "Asosiy raqamlar"
 
-#~ msgid "Get in touch"
-#~ msgstr "Bogʻlanish"
 
-#~ msgid "Optional icon identifier for the designer (e.g. 'dna', 'age')."
-#~ msgstr ""
-#~ "Dizayner uchun ixtiyoriy ikonka identifikatori (masalan, 'dna', 'age')."
 
-#~ msgid "Open section"
-#~ msgstr "Boʻlimni ochish"
 
-#~ msgid ""
-#~ "This site is an information and education resource. It does not make a "
-#~ "diagnosis. If you notice symptoms, contact a doctor."
-#~ msgstr ""
-#~ "Bu sayt axborot-taʼlim manbasi. U tashxis qoʻymaydi. Belgilarni sezsangiz, "
-#~ "shifokorga murojaat qiling."

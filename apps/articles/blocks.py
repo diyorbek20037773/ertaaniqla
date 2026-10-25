@@ -440,6 +440,65 @@ class InstitutionListBlock(blocks.StructBlock):
         return context
 
 
+class ScreeningRouteStepBlock(blocks.StructBlock):
+    title = blocks.CharBlock(max_length=120, label=_("Step"))
+    text = blocks.RichTextBlock(required=False, features=INLINE_FEATURES, label=_("Text"))
+    places = blocks.ChoiceBlock(
+        choices=[
+            ("", _("No places")),
+            ("district_polyclinics", _("Polyclinics of the chosen district")),
+            ("region_branch", _("Mother & Child Health Centre branch of the region")),
+        ],
+        required=False,
+        label=_("Places shown under the step"),
+    )
+
+
+class ScreeningRouteBlock(blocks.StructBlock):
+    """The patient's screening route with the places for each step (D-105): the visitor picks a
+    region and a district — no institution type to choose. GET ?sr=<region>&sd=<district> on
+    the page itself; HTMX swaps only this block, a plain submit works without JS."""
+
+    title = blocks.CharBlock(required=False, max_length=160, label=_("Heading"))
+    intro = blocks.RichTextBlock(required=False, features=INLINE_FEATURES, label=_("Intro"))
+    steps = blocks.ListBlock(ScreeningRouteStepBlock(), min_num=1, label=_("Steps"))
+
+    class Meta:
+        icon = "list-ol"
+        label = _("Screening route (region and district → places)")
+        template = "blocks/screening_route.html"
+
+    def get_context(self, value: Any, parent_context: Any = None) -> dict[str, Any]:
+        from django.utils.translation import get_language
+
+        from apps.directory.services import region_list, route_districts, route_places
+
+        context: dict[str, Any] = super().get_context(value, parent_context=parent_context)
+        request = (parent_context or {}).get("request")
+        params = getattr(request, "GET", {})
+        regions = region_list()
+        region = str(params.get("sr", ""))[:40]
+        if region not in {r.code for r in regions}:
+            region = ""
+        districts = route_districts(region, get_language() or "uz")
+        district = str(params.get("sd", ""))[:120]
+        if district not in {code for code, _label in districts}:
+            district = ""
+        context.update(
+            {
+                "regions": regions,
+                "districts": districts,
+                "region": region,
+                "district": district,
+                "steps": [
+                    {"step": step, **route_places(step["places"], region, district)}
+                    for step in value["steps"]
+                ],
+            }
+        )
+        return context
+
+
 class CTABlock(blocks.StructBlock):
     text = blocks.RichTextBlock(required=False, features=INLINE_FEATURES, label=_("Text"))
     button_label = blocks.CharBlock(max_length=80, label=_("Button label"))
@@ -696,6 +755,7 @@ class ArticleBodyBlock(blocks.StreamBlock):
     faq_accordion = FAQAccordionBlock()
     glossary_terms = GlossaryTermsBlock()
     institution_list = InstitutionListBlock()
+    screening_route = ScreeningRouteBlock()
     cta = CTABlock()
     quote = QuoteBlock()
     table = TableBlock()
@@ -717,6 +777,7 @@ class IntroBlock(blocks.StreamBlock):
     stat = StatBlock()
     cta = CTABlock()
     video = VideoBlock()
+    screening_route = ScreeningRouteBlock()
 
 
 # ---------------------------------------------------------------------------

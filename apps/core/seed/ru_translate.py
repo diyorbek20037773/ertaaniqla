@@ -34,6 +34,7 @@ TECHNICAL_KEYS = {
     "image",
     "kind",
     "layout",
+    "places",  # ScreeningRouteBlock step: a code, not text (D-105)
     "note_icon",
     "number",
     "page",

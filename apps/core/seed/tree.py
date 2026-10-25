@@ -181,7 +181,10 @@ def table(caption: str, headings: list[str], rows: list[list[str]]) -> dict[str,
 # WOMEN — bodies
 # ---------------------------------------------------------------------------
 def body_w_directory(lang: str, ctx: SeedContext) -> Body:
+    from apps.core.seed.women_figma import screening_route  # imports this module
+
     return [
+        screening_route(lang),  # D-105: the simple route first, the full catalogue below
         callout(
             "info",
             t(lang, "Qayerga murojaat qilish", "Куда обратиться"),
@@ -193,7 +196,7 @@ def body_w_directory(lang: str, ctx: SeedContext) -> Body:
                 ),
                 TODO,
             ),
-        )
+        ),
     ]
 
 

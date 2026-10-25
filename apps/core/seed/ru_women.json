@@ -186,7 +186,7 @@
  "Bachadon boʻyni rakining asosiy sababi papillomavirus infeksiyasi, ayniqsa OPV 16 va 18 serotiplaridir. IPV 16 yassi hujayrali saraton bilan, IPV 18 esa adenokarsinoma bilan assotsiatsiyalanadi.": "Основная причина рака шейки матки — папилломавирусная инфекция, особенно ВПЧ 16-го и 18-го типов. ВПЧ 16 ассоциирован с плоскоклеточным раком, а ВПЧ 18 — с аденокарциномой.",
  "Xavf omillari quyidagilardan iborat:": "К факторам риска относятся:",
  "Infeksiyalar": "Инфекции",
- "OIV, genital gerpes, sitomegalovirus, xlamidioz.": "ВИЧ, генитальный герпес, цитомегаловирус, хламидиоз.",
+ "OIV, genital gerpes, xlamidioz. Bu infeksiyalar mahalliy immunitetni pasaytirishi mumkin.": "ВИЧ, генитальный герпес, хламидиоз. Эти инфекции могут снижать местный иммунитет.",
  "Vitamin yetishmasligi": "Дефицит витаминов",
  "Organizmda A va S vitaminlari yetishmovchiligi": "Недостаток витаминов A и C в организме",
  "kimyoviy moddalar va radiatsiyaning taʼsiri": "Воздействие химических веществ и радиации",
@@ -475,5 +475,11 @@
  "kasallik varaqasi va mehnat huquqlari;": "больничный и трудовые права;",
  "moliyaviy qoʻllab-quvvatlash va imtiyozlar;": "финансовая поддержка и льготы;",
  "tashxis qoʻyilgan yaqin insonga qanday yordam berish mumkin;": "как помочь близкому человеку с диагнозом;",
- "shifokorga berish muhim boʻlgan savollar.": "вопросы, которые важно задать врачу."
+ "shifokorga berish muhim boʻlgan savollar.": "вопросы, которые важно задать врачу.",
+ "Skriningni qayerda oʻtasiz": "Где пройти скрининг",
+ "Viloyatingiz va tumaningizni tanlang — har bir qadam uchun qayerga borishingiz koʻrsatiladi.": "Выберите область и район — для каждого шага будет показано, куда идти.",
+ "Tahlil topshirish": "Сдать анализ",
+ "30, 40 va 50 yoshdagi ayollar uchun bepul: odam papilloma virusiga (HPV) test va suyuq sitologiya. Tahlil tumaningizdagi poliklinikaning onkologik ogohlik xonasida olinadi.": "Для женщин 30, 40 и 50 лет — бесплатно: тест на вирус папилломы человека (ВПЧ) и жидкостная цитология. Анализ берут в кабинете онконастороженности поликлиники вашего района.",
+ "Natijada oʻzgarish boʻlsa — kolposkopiya": "Если в результате есть изменения — кольпоскопия",
+ "Namunalar Ona va bola salomatligi markazi filialida tekshiriladi. HPV aniqlansa va sitologiyada oʻzgarish boʻlsa, sizni filialdagi kolposkopist qabuliga chaqirishadi.": "Образцы исследуют в филиале Центра здоровья матери и ребёнка. Если выявлен ВПЧ и цитология показала изменения, вас пригласят к кольпоскописту филиала."
 }

@@ -159,3 +159,82 @@ def map_overview(
         "points": map_payload(exact, language),
         "selected": {"region": region, "district": district},
     }
+
+
+# --- screening route (D-105): the visitor picks a region and a district, nothing else -------------
+ROUTE_DISTRICT_PLACES = "district_polyclinics"
+ROUTE_REGION_BRANCH = "region_branch"
+ROUTE_STEP_KINDS = (InstitutionKind.POLYCLINIC, InstitutionKind.ONCO_ROOM)
+
+
+def route_districts(region: str, language: str) -> list[tuple[str, str]]:
+    """(value, label) of the districts of `region` that have a step-one place. The value is the
+    Uzbek name — the key every institution carries; the label follows the page language."""
+    if not region:
+        return []
+    rows = (
+        filter_institutions(region=region, section=InstitutionSections.WOMEN)
+        .filter(kind__in=ROUTE_STEP_KINDS)
+        .exclude(district_uz="")
+        .values_list("district_uz", "district_ru")
+        .distinct()
+    )
+    names = {uz: (ru if language == "ru" and ru else uz) for uz, ru in rows}
+    return sorted(names.items(), key=lambda item: item[1].lower())
+
+
+def route_places(places: str, region: str, district: str, limit: int = 12) -> dict[str, Any]:
+    """Institutions for one step of the screening route: the district's polyclinics (where the
+    samples are taken) or the region's Mother & Child Health Centre branch (colposcopy). When the
+    region has no branch on record yet, every branch is listed (`fallback`)."""
+    women = filter_institutions(section=InstitutionSections.WOMEN)
+    if places == ROUTE_DISTRICT_PLACES:
+        if not (region and district):
+            return {"items": [], "fallback": False}
+        qs = filter_institutions(women, region=region, district=district).filter(
+            kind__in=ROUTE_STEP_KINDS
+        )
+        return {"items": list(qs.order_by("kind", "name_uz")[:limit]), "fallback": False}
+    if places == ROUTE_REGION_BRANCH:
+        if not region:
+            return {"items": [], "fallback": False}
+        branches = women.filter(colposcopy_branch=True)
+        local = list(branches.filter(region__code=region).order_by("name_uz")[:limit])
+        if local:
+            return {"items": local, "fallback": False}
+        return {"items": _nearest(branches, region, district), "fallback": True}
+    return {"items": [], "fallback": False}
+
+
+def _nearest(
+    branches: QuerySet[Institution], region: str, district: str, count: int = 2
+) -> list[Institution]:
+    """The branches closest to the district (or the region) when the region has none on record:
+    two cards instead of every branch in the country (a long list on a phone). The registry has
+    no coordinates, so a place without its own falls back to its district's centre (D-083)."""
+    from apps.directory.geo import district_centre, district_centres
+
+    here: list[float] | None = district_centre(region, district) if district else None
+    if here is None:
+        points = [c for key, c in district_centres().items() if key.startswith(f"{region}|")]
+        if points:
+            here = [
+                sum(p[0] for p in points) / len(points),
+                sum(p[1] for p in points) / len(points),
+            ]
+
+    def point(place: Institution) -> list[float] | None:
+        if place.lat is not None and place.lng is not None:
+            return [float(place.lat), float(place.lng)]
+        return district_centre(place.region.code, place.district_uz)
+
+    located = [(place, point(place)) for place in branches]
+    known = [(place, p) for place, p in located if p is not None]
+    if here is None or not known:
+        return list(branches.order_by("region__sort_order", "name_uz")[:count])
+    origin = here
+
+    def distance(item: tuple[Institution, list[float]]) -> float:
+        return (item[1][0] - origin[0]) ** 2 + (item[1][1] - origin[1]) ** 2
+
+    return [place for place, _p in sorted(known, key=distance)[:count]]

@@ -15,6 +15,56 @@ ROOT = Path(__file__).resolve().parent.parent
 # msgid: (uz, ru)
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
+    # D-105: screening route (region and district → the place for each step)
+    "Where to get screened": ("Skriningni qayerda oʻtasiz", "Где пройти скрининг"),
+    "Your region": ("Viloyatingiz", "Ваша область"),
+    "Your district": ("Tumaningiz", "Ваш район"),
+    "Choose the region": ("Viloyatni tanlang", "Выберите область"),
+    "Choose the district": ("Tumanni tanlang", "Выберите район"),
+    "First choose the region": ("Avval viloyatni tanlang", "Сначала выберите область"),
+    "No branch for your region is on record yet. The nearest branches:": (
+        "Viloyatingiz filiali hali roʻyxatga kiritilmagan. Eng yaqin filiallar:",
+        "Филиал вашей области ещё не внесён в справочник. Ближайшие филиалы:",
+    ),
+    "No polyclinic of this district is on record yet.": (
+        "Bu tuman poliklinikasi hali roʻyxatga kiritilmagan.",
+        "Поликлиника этого района ещё не внесена в справочник.",
+    ),
+    "Choose your region and district above — the places for this step appear here.": (
+        "Yuqorida viloyat va tumaningizni tanlang — bu qadam uchun manzillar shu yerda chiqadi.",
+        "Выберите выше область и район — адреса для этого шага появятся здесь.",
+    ),
+    "Choose your region above — the place for this step appears here.": (
+        "Yuqorida viloyatingizni tanlang — bu qadam uchun manzil shu yerda chiqadi.",
+        "Выберите выше область — адрес для этого шага появится здесь.",
+    ),
+    "No places": ("Manzil koʻrsatilmaydi", "Без адресов"),
+    "Polyclinics of the chosen district": (
+        "Tanlangan tuman poliklinikalari",
+        "Поликлиники выбранного района",
+    ),
+    "Mother & Child Health Centre branch of the region": (
+        "Viloyatdagi Ona va bola salomatligi markazi filiali",
+        "Филиал Центра здоровья матери и ребёнка в области",
+    ),
+    "Places shown under the step": (
+        "Qadam ostida koʻrsatiladigan manzillar",
+        "Адреса под шагом",
+    ),
+    "Screening route (region and district → places)": (
+        "Skrining yoʻli (viloyat va tuman → manzillar)",
+        "Маршрут скрининга (область и район → адреса)",
+    ),
+    "cervical screening branch": (
+        "skrining filiali (bachadon boʻyni)",
+        "филиал скрининга (шейка матки)",
+    ),
+    "A branch of the Mother & Child Health Centre that tests the screening samples and does colposcopy. Shown as the second step of the screening route for its region.": (
+        "Skrining namunalarini tekshiradigan va kolposkopiya qiladigan Ona va bola salomatligi "
+        "markazi filiali. Oʻz viloyati uchun skrining yoʻlining ikkinchi qadamida koʻrsatiladi.",
+        "Филиал Центра здоровья матери и ребёнка, где исследуют образцы скрининга и проводят "
+        "кольпоскопию. Показывается вторым шагом маршрута скрининга для своей области.",
+    ),
     # design 2026-10: awareness accordion and its blocks
     "Icon tiles, bright pink (cervical cancer)": (
         "Ikonka plitkalari, yorqin pushti (bachadon boʻyni saratoni)",
