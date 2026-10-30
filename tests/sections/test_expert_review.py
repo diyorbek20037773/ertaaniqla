@@ -168,6 +168,14 @@ def test_the_live_update_turns_the_old_pages_into_the_seed(seeded) -> None:
     assert _snapshot([p.specific for p in Page.objects.live().specific()]) == expected
 
 
+def test_a_pair_that_contains_its_old_text_is_applied_once() -> None:
+    pairs = update.replacements()
+    old = "Dastlabki alomatlar, diagnostika, parvarish va kasallikdan keyingi hayot."
+    once, found = update.apply(old, pairs)
+    assert once.startswith("Ishlab chiqish rejasida. Dastlabki") and found == {old}
+    assert update.apply(once, pairs) == (once, set())
+
+
 def test_the_live_update_never_publishes_an_editors_draft(seeded) -> None:
     page = next(p for p in _pages(TREATMENT_BREAST) if _lang(p) == "uz")
     raw = json.dumps(list(page.body.raw_data), ensure_ascii=False)

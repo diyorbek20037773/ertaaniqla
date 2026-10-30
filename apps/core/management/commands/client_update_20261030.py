@@ -248,6 +248,17 @@ def replacements() -> list[tuple[str, str]]:
     return pairs
 
 
+def apply(text: str, pairs: list[tuple[str, str]]) -> tuple[str, set[str]]:
+    """`text` with the pairs applied, and the old strings that were found. A pair whose new text
+    contains the old one («Ishlab chiqish rejasida. Dastlabki alomatlar…») is not applied twice."""
+    found: set[str] = set()
+    for old, new in pairs:
+        if old in text and not (old in new and new in text):
+            text = text.replace(old, new)
+            found.add(old)
+    return text, found
+
+
 def _language(page: Any) -> str:
     return "ru" if page.locale.language_code == "ru" else "uz"
 
@@ -296,11 +307,9 @@ class Command(BaseCommand):
             for name in streams:
                 raw = list(getattr(page, name).raw_data)
                 text = json.dumps(raw, ensure_ascii=False)
-                for old, new in pairs:
-                    if old in text:
-                        text = text.replace(old, new)
-                        used.add(old)
-                        changes.append("text")
+                text, found = apply(text, pairs)
+                used |= found
+                changes += ["text"] if found else []
                 raw = json.loads(text)
                 if name == "body":
                     changes += self._restructure(page, raw)
@@ -310,11 +319,9 @@ class Command(BaseCommand):
                 value = getattr(page, name, None)
                 if not isinstance(value, str):
                     continue
-                for old, new in pairs:
-                    if old in value:
-                        value = value.replace(old, new)
-                        used.add(old)
-                        changes.append(name)
+                value, found = apply(value, pairs)
+                used |= found
+                changes += [name] if found else []
                 setattr(page, name, value)
             if not changes:
                 continue
@@ -419,9 +426,7 @@ class Command(BaseCommand):
 
         changed = 0
         for question in Question.objects.exclude(answer=""):
-            answer = question.answer
-            for old, new in pairs:
-                answer = answer.replace(old, new)
+            answer, _found = apply(question.answer, pairs)
             if answer == question.answer:
                 continue
             changed += 1
