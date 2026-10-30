@@ -245,17 +245,30 @@ def _nearest(
 # Registry text (expert review, D-106)
 # ---------------------------------------------------------------------------------------------
 _DOUBLE_QUOTES = frozenset('"“”„')
-_OPENS_AFTER = frozenset("([«/-")
+_OPENS_AFTER = frozenset("([«/-,;:")
 TIDY_FIELDS = ("name_uz", "name_ru", "address_uz", "address_ru")
+
+
+def _dropped(chars: list[str], i: int) -> str:
+    """An unpaired quote goes; between two words it leaves a space («Fayzobod"koʻchasi»)."""
+    if chars[i] not in _DOUBLE_QUOTES:
+        return chars[i]
+    glued = 0 < i < len(chars) - 1 and chars[i - 1].isalnum() and chars[i + 1].isalnum()
+    return " " if glued else ""
 
 
 def tidy_quotes(text: str) -> str:
     """The registry's straight quotes → «», unpaired ones dropped:
     `"Kelovchi" oilaviy shifokor punkti"` → `«Kelovchi» oilaviy shifokor punkti`,
-    `"26- OP "Uyrot"` → `26- OP «Uyrot»`, `MFY"Uxum"` → `MFY «Uxum»`."""
+    `"26- OP "Uyrot"` → `26- OP «Uyrot»`, `MFY"Uxum"` → `MFY «Uxum»`,
+    `"Yunusobod tumani,"Amir Temur" kuchasi"` → `Yunusobod tumani, «Amir Temur» kuchasi`."""
     text = text.replace("''", '"')
     if not _DOUBLE_QUOTES.intersection(text):
         return text
+    text = text.replace("«", '"').replace("»", '"')  # «"A. Dosnazarov»" — mixed in one field
+    inner = [c for c in text[1:-1] if c in _DOUBLE_QUOTES]
+    if len(text) > 1 and {text[0], text[-1]} <= _DOUBLE_QUOTES and inner and len(inner) % 2 == 0:
+        text = text[1:-1]  # the whole field wrapped in quotes around quoted names inside
     chars = list(text)
     marks: dict[int, str] = {}
     opened: list[int] = []
@@ -271,8 +284,8 @@ def tidy_quotes(text: str) -> str:
             marks[i] = "»"
         elif after.isalnum():
             opened.append(i)  # «MFY"Uxum"»: glued to the word before it
-    out = "".join(marks.get(i, "" if c in _DOUBLE_QUOTES else c) for i, c in enumerate(chars))
-    out = re.sub(r"(?<=\w)«", " «", out)
+    out = "".join(marks.get(i, _dropped(chars, i)) for i in range(len(chars)))
+    out = re.sub(r"(?<=[\w,;:])«", " «", out)
     out = re.sub(r"»(?=\w)", "» ", out)
     out = re.sub(r"«\s+", "«", re.sub(r"\s+»", "»", out))
     return re.sub(r"\s{2,}", " ", out).strip()

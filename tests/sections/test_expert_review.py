@@ -188,6 +188,22 @@ def test_the_live_update_never_publishes_an_editors_draft(seeded) -> None:
         ('"26- OP "Uyrot"', "26- OP «Uyrot»"),
         ('Forish tumani MFY"Uxum", Eski Forish"', "Forish tumani MFY «Uxum», Eski Forish"),
         ('"Kesakli"oilaviy shifokor punkti"', "«Kesakli» oilaviy shifokor punkti"),
+        (
+            '"Yunusobod tumani,"Amir Temur" kuchasi, 117 uy"',
+            "Yunusobod tumani, «Amir Temur» kuchasi, 117 uy",
+        ),
+        (
+            '"Mirzaobod tumani, QFY"Nurafshon","Beruniy" qishlogʻi"',
+            "Mirzaobod tumani, QFY «Nurafshon», «Beruniy» qishlogʻi",
+        ),
+        ('"Boʻka tumani"Jagʻalbayli" MFY"', "Boʻka tumani «Jagʻalbayli» MFY"),
+        ('" ОФЙ"Қораўзак"', "ОФЙ «Қораўзак»"),
+        ('"ОШПУСМОН НОСИР" НОМЛИ"', "«ОШПУСМОН НОСИР» НОМЛИ"),
+        ('" OFY"A. Dosnazarov»"', "OFY «A. Dosnazarov»"),
+        (
+            'Jizzax shahar,Toʻkimachilar"koʻchasi, 62-uy',
+            "Jizzax shahar,Toʻkimachilar koʻchasi, 62-uy",
+        ),
         ("Toshkent shahar 2–son klinik shifoxonasi", "Toshkent shahar 2–son klinik shifoxonasi"),
         ("«Sogʻlom» poliklinikasi", "«Sogʻlom» poliklinikasi"),
     ],
