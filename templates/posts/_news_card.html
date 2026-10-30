@@ -3,6 +3,6 @@
 {% load wagtailimages_tags %}
 <article class="news-card" data-topic="{{ post.topic }}">
   <div class="news-card__media">{% if post.image %}{% picture post.image format-{webp,jpeg} fill-{400x250,800x500} sizes="(max-width: 48rem) 90vw, 18rem" alt="" class="news-card__img" loading="lazy" %}{% endif %}</div>
-  <p class="card-meta"><span class="topic-chip topic-chip--sm">{{ post.get_topic_display }}</span> <time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time></p>
+  <p class="card-meta">{% if post.topic %}<span class="topic-chip topic-chip--sm">{{ post.get_topic_display }}</span>{% endif %} <time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time></p>
   <h3 class="news-card__title"><a class="news-card__link" href="{{ post.url }}">{{ post.title }}</a></h3>
 </article>

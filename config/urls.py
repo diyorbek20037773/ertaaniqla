@@ -23,6 +23,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from apps.core import views as core_views
+from apps.posts import views as posts_views
 
 urlpatterns = [
     path("healthz/", core_views.healthz, name="healthz"),
@@ -39,6 +40,8 @@ urlpatterns = [
     path(f"{settings.CMS_URL_PREFIX}/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("metrics", core_views.metrics, name="metrics"),
+    # the news bot's channel posts (D-109); 403 until TELEGRAM_NEWS_BOT_TOKEN is set
+    path("telegram/webhook/", posts_views.telegram_webhook, name="telegram_webhook"),
 ]
 
 # Superuser-only Django admin (users, low-level data). Off on the public host when the CMS covers

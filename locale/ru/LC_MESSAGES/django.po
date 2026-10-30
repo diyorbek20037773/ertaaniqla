@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:00+0500\n"
+"POT-Creation-Date: 2026-10-30 16:57+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1656,6 +1656,35 @@ msgstr "новость / статья"
 
 msgid "news and articles"
 msgstr "новости и статьи"
+
+msgid "chat"
+msgstr "Чат"
+
+msgid "album"
+msgstr "Альбом"
+
+msgid "waiting photo"
+msgstr "Ожидающее фото"
+
+#| msgid "news item / article"
+msgid "news item"
+msgstr "Новость"
+
+#| msgid "%(counter)s news item"
+#| msgid_plural "%(counter)s news items"
+msgid "Russian news item"
+msgstr "Новость на русском"
+
+msgid "received"
+msgstr "Получено"
+
+#| msgid "Telegram"
+msgid "Telegram post"
+msgstr "Пост Telegram"
+
+#| msgid "Telegram"
+msgid "Telegram posts"
+msgstr "Посты Telegram"
 
 msgid "Search"
 msgstr "Поиск"

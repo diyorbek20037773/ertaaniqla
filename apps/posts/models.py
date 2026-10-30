@@ -115,7 +115,10 @@ class PostIndexPage(BasePage):
 class PostPage(BasePage):
     """One news item or article: topic chip, date, picture, summary, body."""
 
-    topic = models.CharField(_("topic"), max_length=16, choices=Topic.choices, db_index=True)
+    # empty = a general item, listed under «Barchasi» only (Telegram posts on no topic, D-109)
+    topic = models.CharField(
+        _("topic"), max_length=16, choices=Topic.choices, blank=True, db_index=True
+    )
     date = models.DateField(_("date"), default=timezone.localdate, db_index=True)
     image = models.ForeignKey(
         settings.WAGTAILIMAGES_IMAGE_MODEL,
@@ -166,3 +169,42 @@ class PostPage(BasePage):
     def kind(self) -> str:
         parent = self.get_parent()
         return str(getattr(parent.specific, "kind", PostKind.NEWS)) if parent else PostKind.NEWS
+
+
+class TelegramPost(models.Model):
+    """A message of the portal's Telegram channel the news bot has handled (D-109): which news
+    item it became, so a repeated delivery is ignored and an edit or another album photo finds
+    its item."""
+
+    chat_id = models.BigIntegerField(_("chat"))
+    message_id = models.BigIntegerField(_("message"))
+    media_group_id = models.CharField(_("album"), max_length=64, blank=True, db_index=True)
+    # an album photo that arrived before the album's captioned message (no item to join yet)
+    photo_file_id = models.CharField(_("waiting photo"), max_length=255, blank=True)
+    page = models.ForeignKey(
+        PostPage,
+        verbose_name=_("news item"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    ru_page = models.ForeignKey(
+        PostPage,
+        verbose_name=_("Russian news item"),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    created_at = models.DateTimeField(_("received"), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Telegram post")
+        verbose_name_plural = _("Telegram posts")
+        constraints = [
+            models.UniqueConstraint(fields=["chat_id", "message_id"], name="telegram_post_once")
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.chat_id}/{self.message_id}"

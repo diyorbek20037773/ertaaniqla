@@ -5,6 +5,6 @@
   <div class="news-row__media">{% if post.image %}{% picture post.image format-{webp,jpeg} fill-{160x120,320x240} sizes="8rem" alt="" class="news-row__img" loading="lazy" %}{% endif %}</div>
   <div class="news-row__body">
     <h3 class="news-row__title"><a class="news-row__link" href="{{ post.url }}">{{ post.title }}</a></h3>
-    <p class="card-meta"><time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time> <span class="topic-chip topic-chip--sm">{{ post.get_topic_display }}</span></p>
+    <p class="card-meta"><time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time> {% if post.topic %}<span class="topic-chip topic-chip--sm">{{ post.get_topic_display }}</span>{% endif %}</p>
   </div>
 </article>

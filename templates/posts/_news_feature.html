@@ -7,7 +7,7 @@
     {% if post.image %}{% picture post.image format-{webp,jpeg} fill-{640x400,1280x800} sizes="(max-width: 56rem) 100vw, 36rem" alt="" class="news-feature__img" %}{% endif %}
   </div>
   <div class="news-feature__body">
-    <p class="card-meta"><span class="topic-chip">{{ post.get_topic_display }}</span> <time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time></p>
+    <p class="card-meta">{% if post.topic %}<span class="topic-chip">{{ post.get_topic_display }}</span>{% endif %} <time datetime="{{ post.date|date:'Y-m-d' }}">{{ post.date|date:"j E Y"|lower }}</time></p>
     <h3 class="news-feature__title"><a class="news-feature__link" href="{{ post.url }}">{{ post.title }}</a></h3>
     {% if post.summary %}<p class="news-feature__text">{{ post.summary }}</p>{% endif %}
     {% if layout == "side" %}<span class="btn btn--outline btn--sm news-feature__more" aria-hidden="true">{% trans "Read more" %} {% include "components/icons/arrow-right.svg" %}</span>{% endif %}

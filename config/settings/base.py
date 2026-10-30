@@ -473,6 +473,11 @@ YANDEX_METRIKA_ID = env("YANDEX_METRIKA_ID", default="")
 YANDEX_WEBMASTER_VERIFICATION = env("YANDEX_WEBMASTER_VERIFICATION", default="")
 GOOGLE_SITE_VERIFICATION = env("GOOGLE_SITE_VERIFICATION", default="")
 
+# Telegram channel → «Yangiliklar» (D-109, apps.posts.telegram). A bot of its own, not the
+# alerts bot (TELEGRAM_BOT_TOKEN); the channel as @name, name or https://t.me/name.
+TELEGRAM_NEWS_BOT_TOKEN = env("TELEGRAM_NEWS_BOT_TOKEN", default="")
+TELEGRAM_NEWS_CHANNEL = env("TELEGRAM_NEWS_CHANNEL", default="")
+
 # Anonymous page cache (spec §4.5); 0 disables (dev/test), prod sets 300
 PAGE_CACHE_SECONDS = env.int("PAGE_CACHE_SECONDS", default=0)
 # shared caches (the nginx micro-cache) may keep anonymous HTML this long: s-maxage (D-093)

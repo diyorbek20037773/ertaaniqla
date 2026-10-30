@@ -182,6 +182,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [ ] Waiting for the doctor (D-105): full route text, the 14 branches, precancer block — `docs/review/2026-10-25_skrining_RShM_dlya_vracha.md`
   - [x] Expert review 2026-10-26 + doctor's «Читка» (D-106): screening ages (PQ-402 cohorts, ultrasound 30–44), breast treatment criteria, terminology, local-immunity group, about/home consistency, directory card; live: `client_update_20261030`; report `docs/expert_analysis/Erta_aniqla_ekspert_xulosa_natija.docx`
   - [x] Launch 2026-10-30: «test mode» ribbon (D-107), site open to search engines (D-108)
+  - [x] Telegram channel → news (D-109): bot webhook `/telegram/webhook/`, every @erta_aniqla post → published uz/ru news item (RUNBOOK §5.0); prod: token in `.env` + `telegram_news setup`
   - [ ] Launch leftovers: real Turnstile keys (Cloudflare account — client), SMTP (mailbox — client), off-server backup on a second dicloud VPS (to be bought)
   - [ ] Waiting for the gynaecologic oncologist (D-106): the result-by-result routing table (NILM, ASC-US … CIN, AIS), a source for the international breast recommendations, phones/verification of the registry
   - [x] Continuous deployment (D-100, 2026-10-20): green CI on master → prod VPS (smoke test + automatic rollback); GitHub environments, protected `stage`, prod vars and CI deploy key set; deploy.sh fixed (stdin, image check, rollback target)
@@ -189,7 +190,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] www.ertaaniqla.uz → Railway (D-092, RUNBOOK §1.4): live 2026-10-19 (NS → `ns1/ns2.eskiz.uz`, zone in Eskiz DNS hosting, mail kept on the old cPanel host), `SITE_BASE_URL=https://www.ertaaniqla.uz`. Still open: the bare `ertaaniqla.uz` shows the old site until the old host redirects it; demo flags on the real domain (`ROBOTS_NOINDEX=true`, Turnstile test keys, console e-mail). Unused: Railway domain `ertaaniqla.uz` + `docs/dns/ertaaniqla.uz.zone` (Cloudflare plan, D-091)
   - [x] Client 2026-10-19 (D-097): ribbon favicon; video description uz / ru on the watch page; six Anhor.uz interviews via `python manage.py client_update_20261019` (done on Railway 2026-10-19); agency (white, uz / ru) and Hamroh (white) logos next to Yandex in the footer (D-098)
   - [x] Client videos 2026-10-20 (D-101): four more Anhor.uz programmes via `python manage.py client_update_20261020` (run once on the VPS after the deploy)
-  - Waiting (client): Russian translation of new news items (wagtail-localize), Telegram bot token + «all posts or #sayt only», VPS IP/SSH, Turnstile, SMTP
+  - Waiting (client): Russian translation of new news items (wagtail-localize), VPS IP/SSH, Turnstile, SMTP
   - Open with the client: two landing files differ — «lending new (1).png» (no video / article rows, cards titled «Eng koʻp beriladigan savollar») was implemented; the titles are CMS fields
 - [x] FINAL REPORT → docs/FINAL_REPORT_uz.md (2026-09-17)
 - [ ] **Railway audit fixes** (external audit 2026-09-27 by Claude in Chrome, prompt in

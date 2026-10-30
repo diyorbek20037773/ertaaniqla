@@ -266,6 +266,26 @@ ssh -L 3000:127.0.0.1:3000 -L 16686:127.0.0.1:16686 deploy@vps   # Grafana :3000
 dc run --rm web python manage.py find_placeholders --fail   # launch gate: no [[TODO]]/[[VERIFY]] live
 ```
 
+### 5.0 Telegram channel → news (D-109)
+
+Every post of the channel @erta_aniqla becomes a published news item (uz → /uz/yangiliklar/,
+ru → /ru/novosti/, a bilingual post → both, linked as a translation); an edited post updates the
+item while nobody has edited it in the CMS. Code: `apps/posts/telegram.py`, webhook
+`/telegram/webhook/` (secret header, 403 otherwise).
+
+1. A bot of its own (not the alerts bot): @BotFather → `/newbot`; add the bot to the channel as
+   an **administrator** (no rights needed — admins are the only bots Telegram sends posts to).
+2. Production `.env`: `TELEGRAM_NEWS_BOT_TOKEN=<token>`, `TELEGRAM_NEWS_CHANNEL=erta_aniqla`;
+   `dc up -d web worker` (recreate so the variables are read).
+3. Once: `dc exec web python manage.py telegram_news setup` — checks the bot is an admin of the
+   channel and registers `<SITE_BASE_URL>/telegram/webhook/` (max_connections=1).
+4. Check: `dc exec web python manage.py telegram_news status` → `pending_update_count: 0`, no
+   `last_error_message`. Logs: logger `ertaaniqla.telegram`.
+
+Not covered by Telegram: a **deleted** post (unpublish the item in the CMS) and posts from before
+the bot joined. Rotating the token or `DJANGO_SECRET_KEY` changes the webhook secret: run `setup`
+again. Stop: `telegram_news remove`.
+
 ### 5.1 CMS users, roles and 2FA
 
 Roles are the groups **Editor**, **Medical Reviewer**, **Admin** (`apps/users/roles.py`, DECISIONS

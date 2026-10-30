@@ -55,3 +55,6 @@ tests/e2e/a11y/
 docker/nginx/staging.htpasswd
 .lighthouseci/
 .locust/
+
+# Telegram bot secret handed over by the developer (never commit)
+bot.env

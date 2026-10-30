@@ -15,6 +15,15 @@ ROOT = Path(__file__).resolve().parent.parent
 # msgid: (uz, ru)
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
+    # D-109: Telegram channel → news (apps.posts.TelegramPost)
+    "chat": ("Chat", "Чат"),
+    "album": ("Albom", "Альбом"),
+    "waiting photo": ("Kutilayotgan rasm", "Ожидающее фото"),
+    "received": ("Qabul qilingan", "Получено"),
+    "news item": ("Yangilik", "Новость"),
+    "Russian news item": ("Ruscha yangilik", "Новость на русском"),
+    "Telegram post": ("Telegram posti", "Пост Telegram"),
+    "Telegram posts": ("Telegram postlari", "Посты Telegram"),
     # D-106: an institution whose details nobody has verified yet (expert review)
     "Details are being verified": (
         "Maʼlumotlar aniqlashtirilmoqda",
