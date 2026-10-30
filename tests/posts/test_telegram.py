@@ -14,6 +14,7 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import Client
 from PIL import Image
+from wagtail.contrib.redirects.models import Redirect
 
 from apps.core.sentry import scrub_sentry_event
 from apps.media_library.models import PortalImage
@@ -111,6 +112,16 @@ def test_formatting_survives_with_emoji_before_it() -> None:
     assert "javascript" not in article.html
 
 
+def test_summary_is_not_repeated_in_the_body() -> None:
+    text = "Sarlavha\n\nQisqa mazmun shu yerda.\n\nAsosiy matn birinchi xatboshi."
+    article = telegram.read_post(_post(1, text)).articles["uz"]
+    assert article.summary == "Qisqa mazmun shu yerda."
+    assert article.html == "<p>Asosiy matn birinchi xatboshi.</p>"
+    long_lead = "Uzun " + "soʻz " * 80
+    article = telegram.read_post(_post(2, f"Sarlavha\n\n{long_lead}\n\nOxiri.")).articles["uz"]
+    assert article.summary.endswith("…") and article.html.startswith("<p>Uzun")  # cut: kept
+
+
 def test_long_first_line_is_cut_at_a_sentence() -> None:
     sentence = "Koʻkrak bezi saratoni haqida bilishingiz kerak boʻlgan eng muhim gaplar."
     rest = " Bu ikkinchi gap. " * 12
@@ -187,6 +198,7 @@ def test_bilingual_post_publishes_uz_item_and_its_russian_version(
     assert ru.translation_key == uz.translation_key and ru.locale.language_code == "ru"
     assert uz.slug == "bemor-yaqiningizga-qanday-suyanch-bolishni-bilmayapsizmi"
     assert ru.title.startswith("Как быть опорой") and ru.slug.startswith("kak-byt-oporoy")
+    assert not Redirect.objects.filter(redirect_page=ru).exists()  # its uz slug was never public
     assert photos == ["big"] and uz.image_id is not None and ru.image_id == uz.image_id
     assert PortalImage.objects.get(pk=uz.image_id).credit == "Telegram"
     html = client.get(uz.url).content.decode()

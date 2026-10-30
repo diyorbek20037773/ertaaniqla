@@ -1,8 +1,10 @@
 """The news bot (D-109): `setup` checks the bot and the channel and points Telegram at
-`<SITE_BASE_URL>/telegram/webhook/`; `status` shows what Telegram reports; `remove` stops it.
+`<SITE_BASE_URL>/telegram/webhook/`; `status` shows what Telegram reports; `remove` stops it;
+`import` publishes the channel's last N earlier posts (the bot only sees new ones).
 
     python manage.py telegram_news setup
     python manage.py telegram_news status
+    python manage.py telegram_news import --last 20
     python manage.py telegram_news remove
 """
 
@@ -16,16 +18,22 @@ from django.urls import reverse
 
 
 class Command(BaseCommand):
-    help = "Connect the Telegram news bot to the site (setup / status / remove)."
+    help = "Connect the Telegram news bot to the site (setup / status / import / remove)."
 
     def add_arguments(self, parser: CommandParser) -> None:
-        parser.add_argument("action", choices=["setup", "status", "remove"])
+        parser.add_argument("action", choices=["setup", "status", "import", "remove"])
+        parser.add_argument(
+            "--last", type=int, default=20, help="import: how many recent posts (default 20)"
+        )
 
     def handle(self, *args: Any, **options: Any) -> None:
         from apps.posts import telegram
 
         try:
-            getattr(self, f"_{options['action']}")(telegram)
+            if options["action"] == "import":
+                self._import(options["last"])
+            else:
+                getattr(self, f"_{options['action']}")(telegram)
         except telegram.TelegramError as error:
             raise CommandError(str(error)) from None
 
@@ -62,6 +70,14 @@ class Command(BaseCommand):
         for key in ("url", "pending_update_count", "last_error_date", "last_error_message"):
             if key in info:
                 self.stdout.write(f"{key}: {info[key]}")
+
+    def _import(self, last: int) -> None:
+        from apps.posts.telegram_import import import_recent
+
+        if last < 1:
+            raise CommandError("--last must be at least 1")
+        published = import_recent(last)
+        self.stdout.write(f"telegram_news: imported {len(published)} post(s) {published}")
 
     def _remove(self, telegram: Any) -> None:
         telegram.api("deleteWebhook")

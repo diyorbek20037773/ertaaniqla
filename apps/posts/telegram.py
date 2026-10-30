@@ -5,8 +5,9 @@ news item by itself; an edited post updates it.
   Telegram sends it `channel_post` / `edited_channel_post` updates. They arrive at
   `/telegram/webhook/` (registered by `manage.py telegram_news setup`) one at a time
   (max_connections=1), carrying a secret header derived from SECRET_KEY and the token;
-* a post becomes: title = its first line (emoji trimmed), summary = the next paragraph, body =
-  the rest (bold, italic and links kept), date = the post's date, topic guessed from the words
+* a post becomes: title = its first line (emoji trimmed), summary = the next paragraph (shown
+  as the page's lead, so the body leaves it out unless it was too long), body = the rest
+  (bold, italic and links kept), date = the post's date, topic guessed from the words
   (koʻkrak / bachadon / bola…, empty = «Barchasi» only), picture = the photo or the video's
   preview. A video, GIF or file post also embeds the Telegram post itself, so it plays on the
   page;
@@ -70,6 +71,7 @@ HASHTAG_OR_MENTION_RE = re.compile(r"[#@][\w.]+")
 _APOS = re.compile(r"['’`‘]")
 TITLE_LEAD = frozenset('«"„“(')
 TITLE_TAIL_TRIM = ":;,.-–—"
+CDN_HOST_RE = re.compile(r"^cdn\d*\.(telesco\.pe|telegram-cdn\.org)$")
 EMBED_KINDS = ("video", "animation", "document", "audio", "voice", "video_note")
 
 
@@ -409,14 +411,18 @@ def compose(st: Styled, lines: list[tuple[int, int]], uz: bool) -> Article | Non
         else:
             paragraphs[-1].append((a, b))
     paragraphs = [p for p in paragraphs if p]
+    summary = ""
+    if paragraphs:
+        raw = " ".join(text[a:b] for a, b in paragraphs[0])
+        lead = _lead_trimmed(uz_apostrophes(raw) if uz else raw)
+        summary = _shorten(lead, SUMMARY_MAX)
+        if summary == lead and len(paragraphs) > 1:
+            # the page shows the summary as its lead: the body starts after it (as D-087)
+            paragraphs = paragraphs[1:]
     html = "".join(
         "<p>" + "<br/>".join(_render(st, a, b, uz) for a, b in paragraph) + "</p>"
         for paragraph in paragraphs
     )
-    summary = ""
-    if paragraphs:
-        raw = " ".join(text[a:b] for a, b in paragraphs[0])
-        summary = _shorten(_lead_trimmed(uz_apostrophes(raw) if uz else raw), SUMMARY_MAX)
     return Article(
         title=title or _shorten(" ".join(line.split()), TITLE_MAX), summary=summary, html=html
     )
@@ -456,9 +462,23 @@ def _embed_url(message: dict[str, Any]) -> str:
     return f"https://t.me/{username}/{int(message['message_id'])}"
 
 
+def fetch_public(url: str) -> bytes:
+    """A picture from the channel's public page (https://cdnN.telesco.pe/… only)."""
+    parts = urllib.parse.urlsplit(url)
+    if (
+        parts.scheme != "https"
+        or not CDN_HOST_RE.match(parts.hostname or "")
+        or parts.port is not None
+        or "@" in parts.netloc
+    ):
+        raise TelegramError("photo: not a Telegram CDN address")
+    return _open(url, None, MAX_IMAGE_BYTES, "cdn")
+
+
 def _image(file_id: str, title: str, name: str) -> Any:
     """Download a photo once and keep it as a portal image; None when it cannot be had (the item
-    is published without it rather than lost)."""
+    is published without it rather than lost). `file_id` is a Bot API file id, or a CDN address
+    of the public channel page (the import of earlier posts)."""
     from django.core.files.images import ImageFile
     from PIL import Image as PILImage
 
@@ -467,7 +487,7 @@ def _image(file_id: str, title: str, name: str) -> Any:
     if not file_id:
         return None
     try:
-        data = download(file_id)
+        data = fetch_public(file_id) if file_id.startswith("https://") else download(file_id)
         with PILImage.open(BytesIO(data)) as probe:
             if probe.format not in ("JPEG", "PNG", "WEBP"):
                 raise TelegramError(f"photo: {probe.format} is not an image we keep")
@@ -608,6 +628,8 @@ def _new_page(
 
 def _create(post: Post, message: dict[str, Any], image: Any) -> tuple[Any, Any]:
     """The uz item and its ru version (or the ru item alone); (uz page, ru page)."""
+    from wagtail.models import Page
+
     message_id = int(message["message_id"])
     uz_page = ru_page = None
     uz_article, ru_article = post.articles.get("uz"), post.articles.get("ru")
@@ -621,7 +643,11 @@ def _create(post: Post, message: dict[str, Any], image: Any) -> tuple[Any, Any]:
     if uz_page is not None and uz_page.get_parent().get_translation_or_none(locale) is not None:
         ru_page = uz_page.copy_for_translation(locale)  # linked: the language switch finds it
         _fill(ru_page, ru_article, post.embed)
+        # the copy's uz slug was never public: set the Russian one in the database directly,
+        # a save() would see a changed slug and make a redirect from the uz one
         ru_page.slug = _slug(ru_page.get_parent(), ru_article.title, message_id)
+        ru_page.set_url_path(ru_page.get_parent())
+        Page.objects.filter(pk=ru_page.pk).update(slug=ru_page.slug, url_path=ru_page.url_path)
         ru_page.save()
         _publish(ru_page)
     else:
