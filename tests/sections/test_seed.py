@@ -130,8 +130,8 @@ def test_section_urls_match_spec(seeded) -> None:
             "women.screening.breast",
             [
                 "маммография: женщины 45–65 лет, раз в 2 года",
-                "УЗИ: женщины до 45 лет, раз в 2 года",
-                "ВПЧ-тест: женщины 30–50 лет",
+                "УЗИ: женщины 30–44 лет, раз в 2 года",  # TZ narrowed to PQ-402 (D-106)
+                "ВПЧ-тест: женщины 30, 40 и 50 лет",
                 "Призывы к самостоятельному обследованию",
                 "[[VERIFY: doctor]]",
                 "семейные врачебные пункты",
@@ -147,9 +147,8 @@ def test_section_urls_match_spec(seeded) -> None:
                 "Обратитесь к терапевту или гинекологу при первых признаках или при плановом визите.",
                 "Направление на диагностику",
                 "УЗИ, маммография, тесты, прием у кабинета «Онконастороженности» и др.",
-                "Онколог / онкогинеколог",
+                "Онколог или маммолог-онколог",  # breast cancer (D-106)
                 "направление в онкологический центр (в соответствии с датами в ПП-402)",
-                "[[VERIFY: PP-402 referral deadlines]]",
                 "Лечение",
                 "Информация об этапах лечения.",
             ],
@@ -199,8 +198,8 @@ def test_section_urls_match_spec(seeded) -> None:
             "women.screening.cervical",
             [
                 "маммография: женщины 45–65 лет, раз в 2 года",
-                "УЗИ: женщины до 45 лет, раз в 2 года",
-                "ВПЧ-тест: женщины 30–50 лет",
+                "УЗИ: женщины 30–44 лет, раз в 2 года",  # TZ narrowed to PQ-402 (D-106)
+                "ВПЧ-тест: женщины 30, 40 и 50 лет",
                 "Призывы к самостоятельному обследованию",
                 "[[VERIFY: doctor]]",
                 "семейные врачебные пункты",
@@ -406,11 +405,12 @@ def test_six_childhood_cancer_cards(seeded) -> None:
     assert len(grid.value["cards"]) == 6
 
 
-def test_patient_route_has_four_steps_with_pp402_deadline(seeded) -> None:
+def test_patient_route_has_four_steps_and_no_empty_deadline(seeded) -> None:
     page = page_for("women.treatment.breast", "ru")
     steps = next(b for b in page.body if b.block_type == "steps")
     assert len(steps.value["steps"]) == 4
-    assert steps.value["steps"][2]["deadline"] == "[[VERIFY: PP-402 referral deadlines]]"
+    # the deadline field stays empty until an approved one is given — no bare «Muddat:» (D-106)
+    assert steps.value["steps"][2]["deadline"] == ""
 
 
 @pytest.mark.parametrize("lang", ["uz", "ru"])

@@ -43,9 +43,9 @@ BREAST: list[tuple[str, str, list[str], str]] = [
         [
             "O‘zbekiston Respublikasi Prezidentning PQ-402-son qaroriga muvofiq, 30 yoshdan 65 "
             "yoshgacha bo‘lgan ayollarning har ikki yilda bir marta skriningdan o‘tishi ko‘zda "
-            "tutilgan. Birinchi bosqichda tibbiyot xodimi tomonidan ko‘rik o‘tkaziladi. 45 "
-            "yoshgacha bo‘lgan ayollarda sut bezlari ultratovush tekshiruvi, 45 yoshdan 65 "
-            "yoshgacha bo‘lgan ayollarda esa mammografiya yordamida tekshiriladi."
+            "tutilgan. Birinchi bosqichda tibbiyot xodimi tomonidan ko‘rik o‘tkaziladi. 30–44 "
+            "yoshdagi ayollarda sut bezlari ultratovush tekshiruvi, 45 yoshdan 65 "
+            "yoshgacha bo‘lgan ayollarda esa mammografiya yordamida tekshiriladi."  # D-106
         ],
         "women.screening.breast",
     ),
@@ -119,12 +119,14 @@ CERVICAL: list[tuple[str, str, list[str], str]] = [
         "screening",
         "Skriningdan o‘tish kimlarga tavsiya qilinadi?",
         [
+            # D-106: 30–65 every two years is the breast programme; cervical screening (expert
+            # review) is the HPV test at 30, 40 and 50
             "O‘zbekiston Respublikasi Prezidentining 2024-yil 22-noyabrdagi PQ-402-son qaroriga "
-            "muvofiq, 30 yoshdan 65 yoshgacha bo‘lgan ayollarni har ikki yilda bir marta "
-            "tekshiruvdan o‘tkazish ko‘zda tutilgan. Bachadon bo‘ynidagi o‘zgarishlarni aniqlash "
-            "uchun maxsus tekshiruv, jumladan, belgilangan tartibda OPV (odam papillomavirusi) "
-            "testi o‘tkaziladi. Tekshiruv joyi va muddatlarini oilaviy poliklinikadan aniqlash "
-            "mumkin."
+            "muvofiq, davlat dasturi doirasida 30, 40 va 50 yoshli ayollar bachadon bo‘yni "
+            "saratoni skriningiga jalb etiladi: OPV (odam papillomavirusi) testi o‘tkaziladi, "
+            "musbat natijada suyuqlik asosidagi sitologiya qilinadi. Natija manfiy bo‘lsa, keyingi "
+            "rejali tekshiruv 10 yildan keyin. Tekshiruv joyi va muddatlarini oilaviy "
+            "poliklinikadan aniqlash mumkin."
         ],
         "women.screening.cervical",
     ),

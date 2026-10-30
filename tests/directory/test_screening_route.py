@@ -118,7 +118,7 @@ def test_live_update_adds_the_route_once_and_fixes_the_infections(seeded, client
     import json
 
     raw = json.dumps(list(awareness.body.raw_data), ensure_ascii=False).replace(
-        "OIV, genital gerpes, xlamidioz. Bu infeksiyalar mahalliy immunitetni pasaytirishi mumkin.",
+        "OIV, genital gerpes, xlamidioz.",  # the tile as D-106 left it
         "OIV, genital gerpes, sitomegalovirus, xlamidioz.",
     )
     awareness.body = json.loads(raw)

@@ -220,9 +220,27 @@ class Institution(index.Indexed, TimeStampedModel):
     def hours_for(self, language: str) -> str:
         return self.hours_ru if language == "ru" else self.hours_uz
 
+    def location_for(self, language: str) -> str:
+        """«Region, district, address» for the card. The registry often starts the address with
+        the district («Olmazor tumani, Olmazor koʻchasi…»), so the district is not repeated then
+        (expert review, D-106)."""
+        region = self.region.name_ru if language == "ru" else self.region.name_uz
+        district = self.district_for(language)
+        address = self.address_for(language)
+        if district and _place_word(address) == _place_word(district):
+            district = ""
+        return ", ".join(part for part in (region, district, address) if part)
+
     @property
     def has_coordinates(self) -> bool:
         return self.lat is not None and self.lng is not None
+
+
+def _place_word(text: str) -> str:
+    """The first word of a place name, lower-cased: «Fargʻona sh.» and «Fargʻona shahar, …» both
+    give «fargʻona»."""
+    word = text.strip().split(maxsplit=1)[0] if text.strip() else ""
+    return word.rstrip(",.").lower()
 
 
 DIRECTORY_PAGE_SIZE = 30

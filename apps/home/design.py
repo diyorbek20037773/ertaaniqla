@@ -70,7 +70,9 @@ UZ: dict[str, Any] = {
         (
             "children",
             "Bolalar saratoni",
-            "Dastlabki alomatlar, diagnostika, parvarish va kasallikdan keyingi hayot.",
+            # D-106: the children's section is planned, not open yet
+            "Ishlab chiqish rejasida. Dastlabki alomatlar, diagnostika, parvarish va kasallikdan "
+            "keyingi hayot.",
             "bolalar/",
             [
                 ("Dastlabki alomatlar", "bolalar/onkologiya-haqida/", ""),
@@ -131,7 +133,7 @@ RU: dict[str, Any] = {
         ),
         (
             "Детский рак",
-            "Первые признаки, диагностика, уход и жизнь после болезни.",
+            "В плане разработки. Первые признаки, диагностика, уход и жизнь после болезни.",
             ["Первые признаки", "Диагностика", "Информация для семьи"],
         ),
     ],

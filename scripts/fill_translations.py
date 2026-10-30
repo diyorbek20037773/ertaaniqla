@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parent.parent
 # msgid: (uz, ru)
 T: dict[str, tuple[str, str]] = {
     "Page": ("Sahifa", "Страница"),
+    # D-106: an institution whose details nobody has verified yet (expert review)
+    "Details are being verified": (
+        "Maʼlumotlar aniqlashtirilmoqda",
+        "Данные уточняются",
+    ),
     # D-105: screening route (region and district → the place for each step)
     "Where to get screened": ("Skriningni qayerda oʻtasiz", "Где пройти скрининг"),
     "Your region": ("Viloyatingiz", "Ваша область"),

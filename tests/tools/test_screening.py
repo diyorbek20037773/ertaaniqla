@@ -14,9 +14,9 @@ def result(age: int, test: str, **last):
 @pytest.mark.parametrize(
     ("age", "mammography", "ultrasound", "hpv"),
     [
-        (18, False, True, False),
-        (29, False, True, False),
-        (30, False, True, True),  # HPV band starts
+        (18, False, False, False),
+        (29, False, False, False),  # PQ-402: ultrasound from 30 (D-106)
+        (30, False, True, True),  # ultrasound and HPV bands start
         (44, False, True, True),  # last ultrasound age ("до 45")
         (45, True, False, True),  # mammography starts
         (50, True, False, True),  # last HPV age
@@ -72,7 +72,7 @@ def test_rules_are_the_tz_table() -> None:
     assert TESTS == ("mammography", "ultrasound", "hpv")
     by_test = {r.test: r for r in RULES}
     assert (by_test["mammography"].min_age, by_test["mammography"].max_age) == (45, 65)
-    assert (by_test["ultrasound"].min_age, by_test["ultrasound"].max_age) == (None, 44)
+    assert (by_test["ultrasound"].min_age, by_test["ultrasound"].max_age) == (30, 44)
     assert (by_test["hpv"].min_age, by_test["hpv"].max_age) == (30, 50)
     assert by_test["mammography"].interval_years == by_test["ultrasound"].interval_years == 2
 

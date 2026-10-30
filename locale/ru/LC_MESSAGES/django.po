@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 16:20+0500\n"
+"POT-Creation-Date: 2026-10-30 06:00+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2109,6 +2109,9 @@ msgstr "Сайт"
 msgid "Data verified"
 msgstr "Данные проверены"
 
+msgid "Details are being verified"
+msgstr "Данные уточняются"
+
 msgid "Language"
 msgstr "Язык"
 
@@ -2617,20 +2620,3 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

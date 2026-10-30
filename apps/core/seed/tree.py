@@ -1196,8 +1196,8 @@ TOOLS = Node(
             title={"uz": "Menga skrining kerakmi?", "ru": "Пора ли мне на скрининг?"},
             slug={"uz": "skrining", "ru": "skrining"},
             summary={
-                "uz": "Yoshingiz va oxirgi tekshiruvlaringizga qarab — qaysi test va qachon (mammografiya 45–65, UTT 45 gacha, HPV 30–50).",
-                "ru": "По возрасту и дате последних обследований — какой тест и когда (маммография 45–65, УЗИ до 45, ВПЧ 30–50).",
+                "uz": "Yoshingiz va oxirgi tekshiruvlaringizga qarab — qaysi test va qachon (mammografiya 45–65, UTT 30–44, HPV 30, 40 va 50 yoshda).",
+                "ru": "По возрасту и дате последних обследований — какой тест и когда (маммография 45–65, УЗИ 30–44, ВПЧ в 30, 40 и 50 лет).",
             },
             extra={"fields": SCREENING_FIELDS},
         ),
@@ -1363,18 +1363,19 @@ ABOUT = Node(
             "value": p(
                 t(
                     lang,
-                    "«Erta aniqla» onkologik hushyorlik portali — ikki asosiy boʻlimni birlashtirgan "
-                    "axborot-taʼlim platformasi: koʻkrak bezi va bachadon boʻyni saratoni hamda "
-                    "bolalar saratoni. Platforma aholining onkologik kasalliklarning oldini olish "
+                    # D-106: only the open section is «available», children's is planned
+                    "«Erta aniqla» onkologik hushyorlik portali — axborot-taʼlim platformasi. Hozir "
+                    "portalda koʻkrak bezi va bachadon boʻyni saratoni boʻlimi ishlaydi; bolalar "
+                    "saratoni boʻlimi ishlab chiqish rejasida. Platforma aholining onkologik kasalliklarning oldini olish "
                     "boʻyicha oʻtkazilayotgan tadbirlar haqidagi xabardorligini oshirish, tibbiy "
                     "yordamga oʻz vaqtida murojaat qilishga koʻmaklashish va bemorlar hamda ularning "
                     "oilalarini hushyorlikdan davolanish va saratondan keyingi hayotgacha boʻlgan "
                     "barcha bosqichlarda qoʻllab-quvvatlash uchun yaratilmoqda.",
                     "Портал настороженности «Эрта аниқла» — это информационно-образовательная "
-                    "платформа, объединяющая два ключевых раздела: РМЖ/РШМ и детский рак. "
+                    "платформа. Сейчас на портале работает раздел о раке молочной железы и шейки "
+                    "матки; раздел о детском раке находится в плане разработки. "
                     "Платформа создается для повышения осведомленности населения о проводимых "
-                    "мероприятиях по предотвращению онкологических заболеваний по двум "
-                    "направлениям, содействия своевременному обращению за медицинской помощью и "
+                    "мероприятиях по предотвращению онкологических заболеваний, содействия своевременному обращению за медицинской помощью и "
                     "сопровождения пациентов и их семей на всех этапах – от настороженности до "
                     "лечения и жизни после рака.",
                 )

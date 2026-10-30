@@ -31,6 +31,7 @@ from apps.directory.models import (
     Region,
     Service,
 )
+from apps.directory.services import TIDY_FIELDS, tidy_quotes
 
 REQUIRED = ("name_uz", "name_ru", "kind", "region")
 TRUE_VALUES = {"1", "yes", "true", "ha", "да", "y"}
@@ -74,6 +75,8 @@ def import_rows(rows: list[dict[str, str]], source: str, dry_run: bool = False) 
     with transaction.atomic():
         for number, raw in enumerate(rows, start=2):
             row = {k.strip().lower(): (v or "").strip() for k, v in raw.items() if k}
+            for name in TIDY_FIELDS:  # the registry's broken quotes (D-106)
+                row[name] = tidy_quotes(row.get(name, ""))
             missing = [c for c in REQUIRED if not row.get(c)]
             if missing:
                 report.errors.append(f"row {number}: missing {', '.join(missing)}")

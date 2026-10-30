@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping
 from typing import Any
 
@@ -238,3 +239,40 @@ def _nearest(
         return (item[1][0] - origin[0]) ** 2 + (item[1][1] - origin[1]) ** 2
 
     return [place for place, _p in sorted(known, key=distance)[:count]]
+
+
+# ---------------------------------------------------------------------------------------------
+# Registry text (expert review, D-106)
+# ---------------------------------------------------------------------------------------------
+_DOUBLE_QUOTES = frozenset('"“”„')
+_OPENS_AFTER = frozenset("([«/-")
+TIDY_FIELDS = ("name_uz", "name_ru", "address_uz", "address_ru")
+
+
+def tidy_quotes(text: str) -> str:
+    """The registry's straight quotes → «», unpaired ones dropped:
+    `"Kelovchi" oilaviy shifokor punkti"` → `«Kelovchi» oilaviy shifokor punkti`,
+    `"26- OP "Uyrot"` → `26- OP «Uyrot»`, `MFY"Uxum"` → `MFY «Uxum»`."""
+    text = text.replace("''", '"')
+    if not _DOUBLE_QUOTES.intersection(text):
+        return text
+    chars = list(text)
+    marks: dict[int, str] = {}
+    opened: list[int] = []
+    for i, char in enumerate(chars):
+        if char not in _DOUBLE_QUOTES:
+            continue
+        before = chars[i - 1] if i else " "
+        after = chars[i + 1] if i + 1 < len(chars) else " "
+        if (before.isspace() or before in _OPENS_AFTER) and not after.isspace():
+            opened.append(i)
+        elif opened:
+            marks[opened.pop()] = "«"
+            marks[i] = "»"
+        elif after.isalnum():
+            opened.append(i)  # «MFY"Uxum"»: glued to the word before it
+    out = "".join(marks.get(i, "" if c in _DOUBLE_QUOTES else c) for i, c in enumerate(chars))
+    out = re.sub(r"(?<=\w)«", " «", out)
+    out = re.sub(r"»(?=\w)", "» ", out)
+    out = re.sub(r"«\s+", "«", re.sub(r"\s+»", "»", out))
+    return re.sub(r"\s{2,}", " ", out).strip()

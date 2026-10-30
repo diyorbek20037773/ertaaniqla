@@ -377,6 +377,12 @@ def phone_href(value: str) -> str:
 
 
 @register.filter
+def location(institution: Any, language: str) -> str:
+    """Institution card address line (`Institution.location_for`)."""
+    return str(institution.location_for(language))
+
+
+@register.filter
 def localized_value(obj: Any, field: str) -> Any:
     """Like `localized` but returns the raw value (StreamField, FK) — footer columns."""
     if obj is None:

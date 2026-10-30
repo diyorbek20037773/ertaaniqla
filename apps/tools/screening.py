@@ -1,8 +1,11 @@
-"""Screening eligibility helper (spec A1) — table-driven from the TZ screening table:
+"""Screening eligibility helper (spec A1) — table-driven from the TZ screening table, narrowed to
+PQ-402 by the expert review of 2026-10-26 (D-106):
 
     маммография: женщины 45–65 лет, раз в 2 года
-    УЗИ:         женщины до 45 лет,  раз в 2 года
-    ВПЧ-тест:    женщины 30–50 лет   (interval not given in the TZ → [[VERIFY: doctor]])
+    УЗИ:         женщины 30–44 лет,  раз в 2 года   (TZ: «до 45 лет»; PQ-402 screens from 30)
+    ВПЧ-тест:    женщины 30–50 лет      (PQ-402 invites the 30, 40 and 50-year-olds; a negative
+                                         test is repeated in 10 years — the form's «3 years or
+                                         more» cannot tell that apart, so the doctor decides)
 
 Stateless: nothing is stored. The result says which tests apply at this age, whether each is
 due now (never done / last done ≥ interval ago) and when the next one is expected.
@@ -30,10 +33,10 @@ class Rule:
         return not (self.max_age is not None and age > self.max_age)
 
 
-# Verbatim TZ facts. "до 45 лет" = up to and including 44.
+# "до 45 лет" = up to and including 44.
 RULES: tuple[Rule, ...] = (
     Rule("mammography", 45, 65, 2),
-    Rule("ultrasound", None, 44, 2),
+    Rule("ultrasound", 30, 44, 2),
     Rule("hpv", 30, 50, None),
 )
 TESTS = tuple(rule.test for rule in RULES)

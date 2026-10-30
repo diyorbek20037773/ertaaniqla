@@ -187,6 +187,69 @@ def verify_note(lang: str) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------------------------
+# Expert review of 2026-10-26 (D-106): the corrected texts the client sent in
+# «Erta_aniqla_tuzatilgan_matnlar.docx» (Uzbek Cyrillic, here in Latin script) and the doctor's
+# «Читка». Shared with the one-off `client_update_20261030`, which puts them on live sites.
+# ---------------------------------------------------------------------------------------------
+GLANDULAR_FORMS = "BEZLI EPITELIYDAN RIVOJLANADIGAN O'SIMTALAR"
+HPV_CAUSE = (
+    "Bachadon bo'yni saratonining asosiy sababi yuqori onkogen xavfli HPV infeksiyasining uzoq "
+    "saqlanib qolishidir, ayniqsa HPV 16 va 18 turlari. HPV 16 yassi hujayrali saraton bilan, "
+    "HPV 18 esa adenokarsinoma bilan bog'liq."
+)
+CERVIX_CHANGES = (
+    "Bachadon bo'yni displaziyasi (CIN) — saraton oldi o'zgarishlari. Ektopiya (ko'pincha "
+    "«eroziya» deyiladi) mustaqil saraton oldi kasalligi emas."
+)
+LOCAL_IMMUNITY = "Mahalliy immunitet pasayishi sabablari:"
+CERVICAL_SCREENING = (
+    "Bachadon bo'yni saratoni skriningi — shikoyati bo'lmagan ayollarda saraton oldi "
+    "o'zgarishlari va kasallikni erta aniqlashga qaratilgan tekshiruvdir. O'zbekistonning "
+    "PQ-402-son qaroriga muvofiq davlat dasturi doirasida 30, 40 va 50 yoshli ayollar rejali "
+    "skriningga jalb etiladi. Skriningda yuqori onkogen xavfli odam papilloma virusini (HPV) "
+    "aniqlash uchun PCR tekshiruvi va zaruratga ko'ra suyuqlik asosidagi sitologiya qo'llanadi. "
+    "HPV natijasi manfiy bo'lsa, qarorning asosiy matnida qayta rejali tekshiruv o'n yildan "
+    "keyin belgilangan; musbat natija qo'shimcha tekshiruvni talab qiladi.",
+    "HPV musbat chiqishi saraton tashxisi degani emas. Keyingi tekshiruv sitologiya natijasi, "
+    "avvalgi tahlillar va klinik holatga qarab shifokor tomonidan belgilanadi. Jinsiy aloqadan "
+    "keyin qon ketishi, odatdan tashqari qonli ajralma yoki boshqa xavotirli belgilar bo'lsa, "
+    "rejali skrining sanasini kutmasdan ginekologga murojaat qilish zarur.",
+)
+CERVICAL_RESULTS_TITLE = "Natija olingandan keyin"
+CERVICAL_RESULTS = (
+    "Skrining natijasi olingach, tibbiyot xodimi ayolni natija va keyingi qadamlar haqida "
+    "xabardor qiladi. Manfiy HPV natijasida rejali kuzatuv belgilanadi. HPV musbat bo'lganda "
+    "sitologik triaj va klinik baholash o'tkaziladi. Sitologiyada ASC-US, LSIL, ASC-H, HSIL, AGC "
+    "yoki bezli o'zgarishlar aniqlansa, keyingi tekshiruv natijaning xavf darajasiga qarab "
+    "tashkil etiladi. Shubhali bachadon bo'yni o'zgarishlarida kolposkopiya va ko'rsatma bo'lsa "
+    "maqsadli biopsiya o'tkaziladi. Invaziv saratonga shubha tug'ilsa, bemor onkoginekologga "
+    "kechiktirmasdan yuboriladi."
+)
+BREAST_PROGRAMME_TITLE = "O'zbekiston davlat dasturi (PQ-402)"
+BREAST_PROGRAMME = (
+    "O'zbekiston davlat dasturiga ko'ra, 30–65 yoshdagi ayollar har ikki yilda bir marta "
+    "birlamchi saralashdan o'tkaziladi. 30–44 yoshda ko'krak bezlari ultratovush tekshiruvi "
+    "(UTT), 45–65 yoshda mammografiya ko'zda tutilgan."
+)
+BREAST_SYMPTOMS = (
+    "Ko'krakda yangi tugun, qo'ltiq ostida shish, teri yoki so'rg'ich shaklining o'zgarishi, "
+    "qonli ajralma paydo bo'lsa, rejali skriningni kutmasdan shifokorga murojaat qiling. Bunday "
+    "holatda skrining emas, diagnostik tekshiruv kerak bo'ladi. O'z-o'zini kuzatish tasviriy "
+    "tekshiruvlar o'rnini bosmaydi."
+)
+INTERNATIONAL_TITLE = "Xalqaro tavsiyalar"
+BREAST_TREATMENT_CHOICE = (
+    "Ko'krak bezi saratonini davolash usuli kasallik bosqichi, o'smaning gistologik turi, gormon "
+    "retseptorlari (ER va PR), HER2 holati, limfa tugunlari holati, bemorning umumiy ahvoli va "
+    "xohishlarini hisobga olgan holda onkologlar jamoasi tomonidan tanlanadi. Davolash "
+    "jarrohlik, nur terapiyasi, kimyoterapiya, endokrin terapiya, nishonli va ayrim hollarda "
+    "immunoterapiyani o'z ichiga olishi mumkin. Nur terapiyasi faqat menopauzadan keyin, "
+    "kimyoterapiya esa faqat menopauzagacha o'tkaziladi degan qoida mavjud emas. Menopauza holati "
+    "ayrim endokrin davo usulini tanlashda ahamiyatli."
+)
+
+
+# ---------------------------------------------------------------------------------------------
 # «Xabardorlik» — breast cancer (Figma 2408:194, text from the layers)
 # ---------------------------------------------------------------------------------------------
 DONT_PANIC = uz(
@@ -765,7 +828,7 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
         ),
         (
             "2",
-            uz("BEZI JIGARRANG EPITELIYDAN RIVOJLANGAN O'SIMTALAR"),
+            uz(GLANDULAR_FORMS),
             ul(
                 [
                     uz("HPV bilan bog'liq adenokarsinoma;"),
@@ -856,28 +919,21 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
     ]
     risk_tiles = [
         (
-            "c-virus",
-            uz("Infeksiyalar"),
-            # doctor 2026-10-25 (D-105): cytomegalovirus does not cause cervical cancer
-            uz(
-                "OIV, genital gerpes, xlamidioz. Bu infeksiyalar mahalliy immunitetni pasaytirishi mumkin."
-            ),
-        ),
-        (
-            "c-vitamin",
-            uz("Vitamin yetishmasligi"),
-            uz("Organizmda A va S vitaminlari yetishmovchiligi"),
-        ),
-        (
             "c-radiation",
             uz("Radiatsiya ta'siri"),
             uz("kimyoviy moddalar va radiatsiyaning ta'siri"),
         ),
         ("c-cross", uz("Immun tizimi"), uz("Tanada immun tizimining zaiflashishi")),
+        ("c-cervix", uz("Bachadon bo'yni o'zgarishlari"), uz(CERVIX_CHANGES)),
+    ]
+    # doctor's «Читка» (D-106): infections and vitamins are a group of their own, under
+    # «local immunity»; cytomegalovirus went in D-105
+    immunity_tiles = [
+        ("c-virus", uz("Infeksiyalar"), uz("OIV, genital gerpes, xlamidioz.")),
         (
-            "c-cervix",
-            uz("Bachadon bo'yni o'zgarishlari"),
-            uz("Bachadon bo'yni eroziyasi va displaziyasi."),
+            "c-vitamin",
+            uz("Vitamin yetishmasligi"),
+            uz("Organizmda A va S vitaminlari yetishmovchiligi"),
         ),
     ]
     risk_cards = [
@@ -970,15 +1026,10 @@ def body_cervical_awareness(lang: str, ctx: SeedContext) -> Body:
         ),
     ]
     risks_section = [
-        text_card(
-            _lines(
-                "Bachadon bo'yni rakining asosiy sababi papillomavirus infeksiyasi, ayniqsa OPV 16 "
-                "va 18 serotiplaridir. IPV 16 yassi hujayrali saraton bilan, IPV 18 esa "
-                "adenokarsinoma bilan assotsiatsiyalanadi.",
-                "Xavf omillari quyidagilardan iborat:",
-            )
-        ),
+        text_card(_lines(HPV_CAUSE, "Xavf omillari quyidagilardan iborat:")),
         icon_tiles(risk_tiles, layout="icon_tiles_bright"),
+        text_card(p("<b>" + uz(LOCAL_IMMUNITY) + "</b>")),
+        icon_tiles(immunity_tiles, layout="icon_tiles_bright"),
         text_card(
             _lines(
                 "Bachadon bo'yni saratoni samarali oldini olish mumkin bo'lgan saraton turlaridan "
@@ -1415,7 +1466,8 @@ def _where_to_screen(lang: str) -> dict[str, Any]:
 
 
 def _tz_screening_rules(lang: str) -> dict[str, Any]:
-    """TZ screening table, verbatim (TZ §2.1 «Кому и как часто») — the rules the tools use."""
+    """TZ screening table (TZ §2.1 «Кому и как часто») — the rules the tools use. The expert
+    review of 2026-10-26 (D-106) narrowed it to PQ-402: ultrasound from 30, HPV at 30/40/50."""
     return text_card(
         ul(
             [
@@ -1426,17 +1478,25 @@ def _tz_screening_rules(lang: str) -> dict[str, Any]:
                 ),
                 t(
                     lang,
-                    "UTT: 45 yoshgacha bo'lgan ayollar, 2 yilda bir marta;",
-                    "УЗИ: женщины до 45 лет, раз в 2 года;",
+                    "UTT: 30–44 yoshdagi ayollar, 2 yilda bir marta;",
+                    "УЗИ: женщины 30–44 лет, раз в 2 года;",
                 ),
-                t(lang, "HPV-test: 30–50 yoshdagi ayollar;", "ВПЧ-тест: женщины 30–50 лет;"),
                 t(
                     lang,
-                    "o'z-o'zini tekshirishga chaqiriq.",
+                    uz(
+                        "HPV-test: 30, 40 va 50 yoshdagi ayollar (natija manfiy bo'lsa — keyingisi "
+                        "10 yildan keyin);"
+                    ),
+                    "ВПЧ-тест: женщины 30, 40 и 50 лет (при отрицательном результате — следующий "
+                    "через 10 лет);",
+                ),
+                t(
+                    lang,
+                    uz("o'z-o'zini tekshirishga chaqiriq."),
                     "Призывы к самостоятельному обследованию.",
                 ),
             ]
-        ),  # verified by the client on 2026-10-15 (D-087)
+        ),  # verified by the client on 2026-10-15 (D-087), corrected 2026-10-30 (D-106)
         title=t(
             lang, "Davlat dasturi: kimga va qanchalik tez-tez", "Госпрограмма: кому и как часто"
         ),
@@ -1542,6 +1602,13 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
             illustration="mri",
         ),
         heading(uz("Kimlarga skrining tavsiya etiladi")),
+        # D-106: the state programme (with the TZ table) first, the international
+        # recommendations apart from it
+        text_card(
+            p(uz(BREAST_PROGRAMME)) + _tz_screening_rules(lang)["value"]["text"],
+            title=uz(BREAST_PROGRAMME_TITLE),
+        ),
+        callout("warning", "", p(uz(BREAST_SYMPTOMS))),
         text_card(
             ul(
                 [
@@ -1565,9 +1632,9 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
                         "tavsiyasiga qarab belgilanadi."
                     ),
                 ]
-            )  # verified by the client on 2026-10-15 (D-087)
+            ),  # verified by the client on 2026-10-15 (D-087)
+            title=INTERNATIONAL_TITLE,
         ),
-        _tz_screening_rules(lang),
         alert(
             uz(
                 "Skrining saratonning oldini olmaydi, ammo uni mumkin qadar erta aniqlash imkonini "
@@ -1644,6 +1711,13 @@ def screening_route(lang: str) -> dict[str, Any]:
     }
 
 
+def cervical_results() -> dict[str, Any]:
+    """D-106: the expert's general note on what follows a result (Uzbek; the Russian page is
+    translated through ru_women.json). The branch-by-branch table (NILM, ASC-US … CIN, AIS)
+    waits for the gynaecologic oncologist's approval."""
+    return text_card(_lines(CERVICAL_RESULTS), title=uz(CERVICAL_RESULTS_TITLE))
+
+
 def body_cervical_screening(lang: str, ctx: SeedContext) -> Body:
     """No Figma frame: the generic screening copy, the TZ rules and the Figma state-programme
     text for cervical cancer (from the «Qo'llab-quvvatlash» frame)."""
@@ -1659,12 +1733,10 @@ def body_cervical_screening(lang: str, ctx: SeedContext) -> Body:
     return [
         *_screening_intro(),
         heading(uz("Bachadon bo'yni saratoni skriningi")),
-        text_card(
-            p("<b>" + uz("Bachadon bo'yni saratoni (BBS):") + "</b> " + uz(BBS_PROGRAMME))
-            + p(f"{TODO} {VERIFY}")
-        ),
+        text_card(_lines(*CERVICAL_SCREENING)),  # expert review, D-106
         _tz_screening_rules(lang),
         screening_route(lang),
+        cervical_results(),
         _where_to_screen(lang),
         appeal(lang, ctx),
         verify_note(lang),
@@ -1705,7 +1777,8 @@ def _route(lang: str) -> dict[str, Any]:
         ),
         (
             "3",
-            t(lang, "Onkolog / onkoginekolog", "Онколог / онкогинеколог"),
+            # breast cancer: a mammologist-oncologist, not a gynaecologic oncologist (D-106)
+            t(lang, "Onkolog yoki mammolog-onkolog", "Онколог или маммолог-онколог"),
             p(
                 t(
                     lang,
@@ -1730,10 +1803,9 @@ def _route(lang: str) -> dict[str, Any]:
             ),
         ),
     ]
-    block = capsules(items)
-    # TZ: the referral deadline of step 3 is a field of its own (spec §2.2)
-    block["value"]["steps"][2]["deadline"] = "[[VERIFY: PP-402 referral deadlines]]"
-    return block
+    # TZ: the referral deadline of step 3 is a field of its own (spec §2.2). It stays empty — an
+    # empty «Muddat:» showed on the site — until an approved deadline is given (D-106).
+    return capsules(items)
 
 
 def _route_intro(lang: str) -> dict[str, Any]:
@@ -1794,13 +1866,11 @@ def body_breast_treatment(lang: str, ctx: SeedContext) -> Body:
                     uz(
                         "mastektomiya (ko'krak va boshqa to'qimalarni to'liq olib tashlashni o'z ichiga oladi);"
                     ),
+                    # D-106: menopause is not the criterion for radiotherapy or chemotherapy
+                    uz("radiatsion terapiya – saraton radioaktiv nurlanish bilan nurlanadi;"),
                     uz(
-                        "radiatsion terapiya (agar bemor klimaks davridan o'tgan bo'lsa) – saraton "
-                        "radioaktiv nurlanish bilan nurlanadi;"
-                    ),
-                    uz(
-                        "kimyoterapiya (agar bemor klimaks davridan o'tmagan bo'lsa) – saraton "
-                        "hujayralarining o'limini ta'minlaydigan sitostatiklar qo'llaniladi;"
+                        "kimyoterapiya – saraton hujayralarining o'limini ta'minlaydigan "
+                        "sitostatiklar qo'llaniladi;"
                     ),
                     uz(
                         "gormon terapiyasi – o'simtaning gormonlarga sezuvchanligini blokirovka "
@@ -1810,15 +1880,8 @@ def body_breast_treatment(lang: str, ctx: SeedContext) -> Body:
                 ]
             )
         ),
-        text_card(
-            _lines(
-                "Operatsiyadan keyin organizmning xususiyatlariga, davolash sifatiga, kasallikning "
-                "bosqichiga qarab, bemorlarning bir qismi bir necha yil, ba'zilari esa keksalikka "
-                "qadar yashaydi. Statistikaga ko'ra, operatsiyadan keyingi yangi metastazlar "
-                "birinchi 3-5 yil ichida paydo bo'ladi, keyinchalik yangi shakllanish xavfi "
-                "keskin kamayadi."
-            )
-        ),
+        # D-106: replaces the unsourced prognosis («new metastases only in the first 3–5 years»)
+        text_card(_lines(BREAST_TREATMENT_CHOICE)),
         alert(
             uz(
                 "Ko'krak bezi saratonini xalq tabobati bilan davolash samarasizdir. Dorivor "
@@ -1934,16 +1997,18 @@ def body_cervical_treatment(lang: str, ctx: SeedContext) -> Body:
 # ---------------------------------------------------------------------------------------------
 # «Qo'llab-quvvatlash» (Figma 2408:1794) — TZ «Государственная поддержка» + «Уход и поддержка»
 # ---------------------------------------------------------------------------------------------
+# D-106 (expert review): ultrasound is for 30–44; the HPV test goes to the 30, 40 and 50-year-olds
+# of each year, not to every woman of 30–50 every year
 KBS_PROGRAMME = (
     "30–65 yoshdagi ayollar har 2 yilda bir marta tibbiyot xodimlari tomonidan dastlabki "
-    "ko'rikdan o'tadilar. 45 yoshgacha bo'lgan ayollarda ko'krak bezlari UZI orqali, 45–65 "
+    "ko'rikdan o'tadilar. 30–44 yoshdagi ayollarda ko'krak bezlari UZI orqali, 45–65 "
     "yoshda esa mammografiya orqali tekshiriladi."
 )
 BBS_PROGRAMME = (
-    "30–50 yoshdagi ayollar har yili inson papilloma virusi (HPV)ni aniqlash uchun PCR-testi va "
-    "suyuq asosli sitologiya yordamida skriningdan o'tadilar. Natija manfiy bo'lsa, keyingi "
-    "tekshiruv 10 yildan so'ng o'tkaziladi. Natija ijobiy bo'lsa, qo'shimcha tekshiruvga "
-    "yo'llanma beriladi."
+    "davlat dasturi doirasida 30, 40 va 50 yoshli ayollar odam papilloma virusi (HPV)ni aniqlash "
+    "uchun PCR testidan o'tadilar; HPV musbat bo'lsa, suyuq asosli sitologiya qilinadi. Natija "
+    "manfiy bo'lsa, keyingi rejali tekshiruv 10 yildan so'ng o'tkaziladi. Natija musbat bo'lsa, "
+    "qo'shimcha tekshiruvga yo'llanma beriladi."
 )
 
 
