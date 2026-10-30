@@ -276,7 +276,9 @@ item while nobody has edited it in the CMS. Code: `apps/posts/telegram.py`, webh
 1. A bot of its own (not the alerts bot): @BotFather → `/newbot`; add the bot to the channel as
    an **administrator** (no rights needed — admins are the only bots Telegram sends posts to).
 2. Production `.env`: `TELEGRAM_NEWS_BOT_TOKEN=<token>`, `TELEGRAM_NEWS_CHANNEL=erta_aniqla`;
-   `dc up -d web worker` (recreate so the variables are read).
+   `dc up -d --no-deps --wait web worker` (recreate so the variables are read), then
+   **`dc exec nginx nginx -s reload`** — nginx keeps the old container's IP and answers 502
+   (stale cached pages hide it) until reloaded. Done on prod 2026-10-30.
 3. Once: `dc exec web python manage.py telegram_news setup` — checks the bot is an admin of the
    channel and registers `<SITE_BASE_URL>/telegram/webhook/` (max_connections=1).
 4. Check: `dc exec web python manage.py telegram_news status` → `pending_update_count: 0`, no
