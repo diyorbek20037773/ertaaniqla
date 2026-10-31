@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # Stage 1: frontend build (Tailwind + esbuild). No Node in the runtime image.
 # ---------------------------------------------------------------------------
-FROM node:20-alpine AS frontend
+FROM node:25-alpine AS frontend
 WORKDIR /build
 COPY package.json package-lock.json* ./
 RUN npm ci --no-audit --no-fund
