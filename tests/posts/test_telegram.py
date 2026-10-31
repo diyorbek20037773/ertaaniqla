@@ -112,6 +112,38 @@ def test_formatting_survives_with_emoji_before_it() -> None:
     assert "javascript" not in article.html
 
 
+def test_channel_quirks_found_in_qa() -> None:
+    """The channel's real posts (QA 2026-10-30): one «_» between the languages and a Russian
+    paragraph full of brand names (159), a one-line bilingual note (31), a label line (52), a
+    username in the title (88)."""
+    uz = (
+        "Dasturni qoʻllab-quvvatlang!\n\nBirgina suhbat kimningdir hayotini saqlab qolishi "
+        "mumkin, bu oddiy ammo samarali hissa."
+    )
+    ru = (
+        "Поддержите программу!\n\nОдин разговор может спасти чью-то маму.\n\n"
+        "С нами уже — Korzinka, Safia, Bon, Ozbechka, Kimmy Lab, Benedict и др."
+    )
+    articles = telegram.read_post(_post(159, f"{uz}\n\n_\n\n{ru}")).articles
+    assert articles["uz"].title == "Dasturni qoʻllab-quvvatlang!"
+    assert "Korzinka" in articles["ru"].html and "Korzinka" not in articles["uz"].html
+    note = (
+        "Версия на русском языке в комментариях. Har bir postning izohlarida rus tilidagi "
+        "versiya\n\nSalom! Keling, tanishamiz!\n\nMen Lola — sizning ayollar salomatligi "
+        "boʻyicha virtual yoʻlboshchingizman. Bu yerda erta aniqlash haqida gapirib beraman."
+    )
+    intro = telegram.read_post(_post(31, note)).articles
+    assert set(intro) == {"uz"} and intro["uz"].title == "Salom! Keling, tanishamiz!"
+    label = "📢 YANGILIK!\n\nDavlat dasturi ishga tushadi.\n\nTekshiruvlar bepul."
+    assert telegram.read_post(_post(52, label)).articles["uz"].title == (
+        "Davlat dasturi ishga tushadi"
+    )
+    mention = "Triatlonchi @shavkat_musinov Germaniyada marraga yetdi\n\nMatn."
+    assert telegram.read_post(_post(88, mention)).articles["uz"].title == (
+        "Triatlonchi shavkat_musinov Germaniyada marraga yetdi"
+    )
+
+
 def test_summary_is_not_repeated_in_the_body() -> None:
     text = "Sarlavha\n\nQisqa mazmun shu yerda.\n\nAsosiy matn birinchi xatboshi."
     article = telegram.read_post(_post(1, text)).articles["uz"]
@@ -223,7 +255,10 @@ def test_video_post_embeds_the_telegram_post_and_guesses_the_topic(
     assert photos == ["thumb"]
     assert [block.block_type for block in page.body] == ["embed", "rich_text"]
     assert page.body[0].value["url"] == "https://t.me/erta_aniqla/42"
-    assert 'src="https://t.me/erta_aniqla/42?embed=1"' in client.get(page.url).content.decode()
+    html = client.get(page.url).content.decode()
+    assert 'src="https://t.me/erta_aniqla/42?embed=1"' in html
+    assert 'class="post__img"' not in html  # the small preview is not blown up above the player
+    assert page.image_id is not None  # … it stays the card picture
 
 
 @pytest.mark.django_db

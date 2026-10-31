@@ -166,6 +166,12 @@ class PostPage(BasePage):
         return f"{self.summary} {stream_plain_text(self.body)}"
 
     @property
+    def leads_with_video(self) -> bool:
+        """The body opens with an embedded video (Telegram video posts, D-109): the player is the
+        page's picture, the card picture (the video's small preview) is not shown above it."""
+        return bool(self.body) and self.body[0].block_type == "embed"
+
+    @property
     def kind(self) -> str:
         parent = self.get_parent()
         return str(getattr(parent.specific, "kind", PostKind.NEWS)) if parent else PostKind.NEWS

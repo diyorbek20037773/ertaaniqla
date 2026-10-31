@@ -63,11 +63,14 @@ TITLE_MAX = 150
 SUMMARY_MAX = 300
 SLUG_MAX = 80
 MIN_PART_LETTERS = 20  # a shorter part (a signature, an emoji line) joins its neighbour
+CYRILLIC_SHARE = 0.4  # of a part's letters: the part is Russian (brand names stay Latin)
 MIN_HALF_LETTERS = 60  # each language of a bilingual post without a separator line
 # a line made only of these (at least 2 of them) splits a bilingual post: ➖➖➖, ——, ____, -----
 SEPARATOR_RE = re.compile(r"^[➖—–\-_=*•~·.\s]+$")
+SINGLE_SEPARATORS = frozenset({"_", "➖", "—"})
 UZ_CYRILLIC = frozenset("ўқғҳЎҚҒҲ")
 HASHTAG_OR_MENTION_RE = re.compile(r"[#@][\w.]+")
+MENTION_RE = re.compile(r"(?<![\w.])@(\w{3,})")
 _APOS = re.compile(r"['’`‘]")
 TITLE_LEAD = frozenset('«"„“(')
 TITLE_TAIL_TRIM = ":;,.-–—"
@@ -267,6 +270,8 @@ def _trim(text: str, start: int, end: int) -> tuple[int, int]:
 
 def _is_separator(line: str) -> bool:
     stripped = "".join(line.split())
+    if stripped in SINGLE_SEPARATORS:  # one «_» between the languages (post 159)
+        return True
     return len(stripped) >= 2 and bool(SEPARATOR_RE.match(stripped))
 
 
@@ -276,7 +281,7 @@ def _language(text: str, minimum: int = MIN_PART_LETTERS) -> str:
     latin = sum(1 for c in text if c.isascii() and c.isalpha())
     if cyrillic + latin < max(minimum, 1):
         return ""
-    if cyrillic > latin:
+    if cyrillic >= max(CYRILLIC_SHARE * (cyrillic + latin), min(minimum, 10)):
         return "uz" if any(c in UZ_CYRILLIC for c in text) else "ru"
     return "uz"
 
@@ -292,8 +297,11 @@ def _paragraphs(text: str) -> list[list[tuple[int, int]]]:
     return [group for group in groups if group]
 
 
-def _letters(text: str, part: list[tuple[int, int]]) -> int:
-    return sum(1 for a, b in part for c in text[a:b] if c.isalpha())
+def _letters(text: str, part: list[tuple[int, int]], language: str) -> int:
+    """Letters of the language's own script in the part (Cyrillic for ru, Latin for uz)."""
+    if language == "ru":
+        return sum(1 for a, b in part for c in text[a:b] if "\u0400" <= c <= "\u04ff")
+    return sum(1 for a, b in part for c in text[a:b] if c.isascii() and c.isalpha())
 
 
 def _by_language(
@@ -330,7 +338,9 @@ def split_languages(text: str) -> dict[str, list[tuple[int, int]]]:
     merged = _by_language(text, parts)
     if len(parts) <= 1:
         halves = _by_language(text, _paragraphs(text))
-        if len(halves) == 2 and all(_letters(text, h) >= MIN_HALF_LETTERS for _, h in halves):
+        if len(halves) == 2 and all(
+            _letters(text, h, lang) >= MIN_HALF_LETTERS for lang, h in halves
+        ):
             merged = halves
     result: dict[str, list[tuple[int, int]]] = {}
     for language, lines in merged:
@@ -353,8 +363,17 @@ def _lead_trimmed(text: str) -> str:
     return text
 
 
+def _is_label(line: str) -> bool:
+    """One word in capitals or ending in ! / : — a label, not a title."""
+    stripped = "".join(" " if _decor(c) and not c.isspace() else c for c in line).strip()
+    words = stripped.split()
+    return len(words) == 1 and (words[0].isupper() or words[0][-1] in "!:")
+
+
 def _clean_title(text: str) -> str:
-    """No emoji anywhere, no bullet in front, no colon or full stop at the end."""
+    """No emoji anywhere, no bullet in front, no colon or full stop at the end, no @ before a
+    Telegram username."""
+    text = MENTION_RE.sub(r"\1", text)
     kept = "".join(" " if _decor(c) and not c.isspace() else c for c in text)
     return _lead_trimmed(kept).rstrip(TITLE_TAIL_TRIM + " ")
 
@@ -383,9 +402,15 @@ def compose(st: Styled, lines: list[tuple[int, int]], uz: bool) -> Article | Non
         return line != rest and not any(c.isalnum() for c in rest)
 
     lines = [span for span in lines if not noise(*span)]
-    first = next((k for k, (a, b) in enumerate(lines) if any(c.isalpha() for c in text[a:b])), -1)
-    if first < 0:
+    worded = [k for k, (a, b) in enumerate(lines) if any(c.isalpha() for c in text[a:b])]
+    if not worded:
         return None
+    first = worded[0]
+    head = text[slice(*lines[first])]
+    if len(worded) > 1 and (_is_label(head) or (uz and _language(head, minimum=1) == "ru")):
+        # «📢 YANGILIK!» / «MUHIM:» above the real first line, or a Russian note opening an
+        # Uzbek post («Версия на русском языке в комментариях…», post 31)
+        first = worded[1]
     start, end = _trim(text, *lines[first])
     line = text[start:end]
     body_start = end  # where the body continues inside the title line

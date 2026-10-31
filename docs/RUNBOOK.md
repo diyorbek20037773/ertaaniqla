@@ -287,8 +287,9 @@ item while nobody has edited it in the CMS. Code: `apps/posts/telegram.py`, webh
 Earlier posts (a bot never sees posts from before it joined): `dc exec web python manage.py
 telegram_news import --last 20` reads the public page t.me/s/erta_aniqla and publishes the last N
 posts the same way, with their own dates (safe to run again: published posts are skipped). Done
-on prod 2026-10-30 with 20 (the channel's posts date from Oct–Dec 2025, so they list after the
-2026 items). Not covered by Telegram: a **deleted** post (unpublish the item in the CMS). Rotating the token or `DJANGO_SECRET_KEY` changes the webhook secret: run `setup`
+on prod 2026-10-30 with 20, then with 100 = the whole channel (87 posts with words, ids 31–262;
+they date from Apr–Dec 2025, so they list after the 2026 items). Big videos show Telegram's
+«Media is too big — view in Telegram» in the embed: Telegram's own limit. Not covered by Telegram: a **deleted** post (unpublish the item in the CMS). Rotating the token or `DJANGO_SECRET_KEY` changes the webhook secret: run `setup`
 again. Stop: `telegram_news remove`.
 
 ### 5.1 CMS users, roles and 2FA

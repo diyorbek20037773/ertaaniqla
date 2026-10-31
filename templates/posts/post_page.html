@@ -9,7 +9,7 @@
     <h1 class="post__title">{{ page.title }}</h1>
     {% if page.summary %}<p class="post__lead">{{ page.summary }}</p>{% endif %}
   </header>
-  {% if page.image %}{% picture page.image format-{webp,jpeg} width-{400,800,1200} sizes="(max-width: 56rem) 100vw, 56rem" alt="" class="post__img" %}{% endif %}
+  {% if page.image and not page.leads_with_video %}{% picture page.image format-{webp,jpeg} width-{400,800,1200} sizes="(max-width: 56rem) 100vw, 56rem" alt="" class="post__img" %}{% endif %}
   <div class="post__body">{% for block in page.body %}{% include_block block %}{% endfor %}</div>
   {% share_bar %}
   {% with index=page.get_parent %}<p><a class="pill-cta" href="{{ index.url }}">{% trans "All" %}: {{ index.title }}</a></p>{% endwith %}
