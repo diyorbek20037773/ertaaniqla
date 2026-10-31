@@ -232,7 +232,8 @@ qoladi). Qaysi matn hali toʻldirilmaganini bilish uchun ular CMSda turaveradi.
   band uchun H3), roʻyxatlar uchun roʻyxat tugmasi.
 - Ruscha versiya: sahifa menyusi → **Tarjima qilish** → rus tili; tarjimon har bir xatboshini
   toʻldiradi, shifokor tekshiradi, keyin nashr qilinadi (5.2-band).
-- **Telegram kanal yangiliklari** (@erta_aniqla) saytga oʻzi chiqadi: postning birinchi qatori —
+- **Telegram kanal yangiliklari** (@erta_aniqla) saytga oʻzi, alohida «Yangiliklar» roʻyxatida chiqadi
+  (menyuda «Foydali maʼlumotlar»dan keyin; CMSda roʻyxatda «Telegram kanal postlari» belgilangan): postning birinchi qatori —
   sarlavha, keyingi xatboshi — qisqa mazmun, rasm — muqova, video sahifaga joylanadi. Ikki tilli
   post (oʻzbekcha, keyin ➖➖➖ qatoridan soʻng ruscha) ikkala versiyani beradi. Mavzu soʻzlardan
   aniqlanadi (koʻkrak bezi / bachadon boʻyni / bolalar); mavzu boʻlmasa yangilik faqat «Barchasi»

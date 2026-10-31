@@ -47,10 +47,18 @@ class PostIndexPage(BasePage):
         help_text=_("Small line above the title (empty = the design's wording)."),
     )
     lead = models.CharField(_("short description"), max_length=300, blank=True)
+    # D-109: the channel's posts get a list of their own («Yangiliklar»), apart from the site's
+    # own articles in «Foydali maʼlumotlar»
+    telegram_feed = models.BooleanField(
+        _("Telegram channel posts"),
+        default=False,
+        help_text=_("New posts of the Telegram channel are published in this list."),
+    )
 
     content_panels = [
         *Page.content_panels,
         FieldPanel("kind"),
+        FieldPanel("telegram_feed"),
         FieldPanel("eyebrow"),
         FieldPanel("lead"),
         FieldPanel("intro"),

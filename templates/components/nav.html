@@ -4,7 +4,8 @@
    inside each section since the client's change of 2026-10-13 (D-084); the
    hotline, the UZ / ЎЗ / RU switch, «Aa» (accessibility, spec A8), the search button and the
    «Skrining joyini toping» CTA on the right. Rendered by {% main_nav %}.
-   Context: sections (list[NavSection]), links (dict: home, about, faq, directory → URL; an
+   Context: sections (list[NavSection]), links (dict: home, about, faq, directory, news,
+   channel (D-109: the Telegram channel's «Yangiliklar») → URL; an
    item without a page is left out), languages (language_versions), settings, LANGUAGE_CODE,
    section_key (active section), request.
    States: mobile — everything behind the «Menu» disclosure, dropdowns are disclosures
@@ -59,6 +60,9 @@
         </li>
         {% if links.news %}
           <li><a class="site-nav__link" href="{{ links.news }}"{% if request.path == links.news %} aria-current="page"{% endif %}>{% trans "Useful information" context "header menu" %}</a></li>
+        {% endif %}
+        {% if links.channel %}
+          <li><a class="site-nav__link" href="{{ links.channel }}"{% if request.path == links.channel %} aria-current="page"{% endif %}>{% trans "News" context "header menu" %}</a></li>
         {% endif %}
       </ul>
       <div class="site-nav__utils">

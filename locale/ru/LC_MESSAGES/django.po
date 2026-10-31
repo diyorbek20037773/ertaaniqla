@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 16:57+0500\n"
+"POT-Creation-Date: 2026-10-31 13:17+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1636,6 +1636,13 @@ msgstr "Новости"
 msgid "list type"
 msgstr "тип списка"
 
+#| msgid "Telegram channel"
+msgid "Telegram channel posts"
+msgstr "Посты Telegram-канала"
+
+msgid "New posts of the Telegram channel are published in this list."
+msgstr "Новые посты Telegram-канала публикуются в этом списке."
+
 msgid "news / articles list"
 msgstr "список новостей / статей"
 
@@ -1666,23 +1673,18 @@ msgstr "Альбом"
 msgid "waiting photo"
 msgstr "Ожидающее фото"
 
-#| msgid "news item / article"
 msgid "news item"
 msgstr "Новость"
 
-#| msgid "%(counter)s news item"
-#| msgid_plural "%(counter)s news items"
 msgid "Russian news item"
 msgstr "Новость на русском"
 
 msgid "received"
 msgstr "Получено"
 
-#| msgid "Telegram"
 msgid "Telegram post"
 msgstr "Пост Telegram"
 
-#| msgid "Telegram"
 msgid "Telegram posts"
 msgstr "Посты Telegram"
 
@@ -2172,6 +2174,11 @@ msgstr "Разделы"
 msgctxt "header menu"
 msgid "Useful information"
 msgstr "Полезная информация"
+
+#| msgid "News"
+msgctxt "header menu"
+msgid "News"
+msgstr "Новости"
 
 msgid "Find a screening place"
 msgstr "Найти место скрининга"

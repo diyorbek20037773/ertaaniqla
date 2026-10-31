@@ -537,12 +537,9 @@ def _news_index(language: str) -> PostIndexPage | None:
     locale = Locale.objects.filter(language_code=language).first()
     if locale is None:
         return None
-    return (
-        PostIndexPage.objects.live()
-        .filter(locale=locale, kind=PostKind.NEWS)
-        .order_by("path")
-        .first()
-    )
+    lists = PostIndexPage.objects.live().filter(locale=locale, kind=PostKind.NEWS)
+    # the channel's own list («Yangiliklar»), else the first news list
+    return lists.order_by("-telegram_feed", "path").first()
 
 
 RU_LATIN = {

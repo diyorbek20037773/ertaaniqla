@@ -135,7 +135,7 @@ def header_links_cache_key(language_code: str) -> str:
     return f"headerlinks:{language_code}"
 
 
-HEADER_LINK_KEYS = ("home", "about", "doctors", "faq", "news")
+HEADER_LINK_KEYS = ("home", "about", "doctors", "faq", "news", "channel")
 
 
 def build_header_links(language_code: str) -> dict[str, str]:
@@ -176,9 +176,14 @@ def build_header_links(language_code: str) -> dict[str, str]:
     # client request 2026-10-15 (D-087): «Foydali maʼlumotlar» (the news list) after «Boʻlimlar»
     from apps.posts.models import PostIndexPage, PostKind
 
-    news = PostIndexPage.objects.live().filter(locale=locale, kind=PostKind.NEWS).first()
+    lists = PostIndexPage.objects.live().filter(locale=locale, kind=PostKind.NEWS)
+    news = lists.filter(telegram_feed=False).first()
     if news is not None and news.url:
         urls["news"] = str(news.url)
+    # D-109: «Yangiliklar» — the Telegram channel's posts, after «Foydali maʼlumotlar»
+    channel = lists.filter(telegram_feed=True).first()
+    if channel is not None and channel.url:
+        urls["channel"] = str(channel.url)
     return urls
 
 

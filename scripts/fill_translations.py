@@ -24,6 +24,12 @@ T: dict[str, tuple[str, str]] = {
     "Russian news item": ("Ruscha yangilik", "Новость на русском"),
     "Telegram post": ("Telegram posti", "Пост Telegram"),
     "Telegram posts": ("Telegram postlari", "Посты Telegram"),
+    "Telegram channel posts": ("Telegram kanal postlari", "Посты Telegram-канала"),
+    "New posts of the Telegram channel are published in this list.": (
+        "Telegram kanalining yangi postlari shu roʻyxatda chiqadi.",
+        "Новые посты Telegram-канала публикуются в этом списке.",
+    ),
+    "header menu\x04News": ("Yangiliklar", "Новости"),
     # D-106: an institution whose details nobody has verified yet (expert review)
     "Details are being verified": (
         "Maʼlumotlar aniqlashtirilmoqda",

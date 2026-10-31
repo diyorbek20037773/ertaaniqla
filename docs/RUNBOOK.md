@@ -268,8 +268,9 @@ dc run --rm web python manage.py find_placeholders --fail   # launch gate: no [[
 
 ### 5.0 Telegram channel → news (D-109)
 
-Every post of the channel @erta_aniqla becomes a published news item (uz → /uz/yangiliklar/,
-ru → /ru/novosti/, a bilingual post → both, linked as a translation); an edited post updates the
+Every post of the channel @erta_aniqla becomes a published news item in the channel's own list
+«Yangiliklar» (uz → /uz/telegram-yangiliklar/, ru → /ru/telegram-novosti/; the list with
+«Telegram channel posts» ticked in the CMS, D-109 2026-10-31), a bilingual post → both, linked as a translation); an edited post updates the
 item while nobody has edited it in the CMS. Code: `apps/posts/telegram.py`, webhook
 `/telegram/webhook/` (secret header, 403 otherwise).
 

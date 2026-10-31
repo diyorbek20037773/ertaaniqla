@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 16:57+0500\n"
+"POT-Creation-Date: 2026-10-31 13:17+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1621,6 +1621,13 @@ msgstr "Yangiliklar"
 msgid "list type"
 msgstr "roʻyxat turi"
 
+#| msgid "Telegram channel"
+msgid "Telegram channel posts"
+msgstr "Telegram kanal postlari"
+
+msgid "New posts of the Telegram channel are published in this list."
+msgstr "Telegram kanalining yangi postlari shu roʻyxatda chiqadi."
+
 msgid "news / articles list"
 msgstr "yangiliklar / maqolalar roʻyxati"
 
@@ -1651,23 +1658,18 @@ msgstr "Albom"
 msgid "waiting photo"
 msgstr "Kutilayotgan rasm"
 
-#| msgid "news item / article"
 msgid "news item"
 msgstr "Yangilik"
 
-#| msgid "%(counter)s news item"
-#| msgid_plural "%(counter)s news items"
 msgid "Russian news item"
 msgstr "Ruscha yangilik"
 
 msgid "received"
 msgstr "Qabul qilingan"
 
-#| msgid "Telegram"
 msgid "Telegram post"
 msgstr "Telegram posti"
 
-#| msgid "Telegram"
 msgid "Telegram posts"
 msgstr "Telegram postlari"
 
@@ -2161,6 +2163,11 @@ msgstr "Boʻlimlar"
 msgctxt "header menu"
 msgid "Useful information"
 msgstr "Foydali maʼlumotlar"
+
+#| msgid "News"
+msgctxt "header menu"
+msgid "News"
+msgstr "Yangiliklar"
 
 msgid "Find a screening place"
 msgstr "Skrining joyini toping"
