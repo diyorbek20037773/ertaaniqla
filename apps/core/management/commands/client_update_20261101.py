@@ -62,6 +62,7 @@ def rename_lists() -> tuple[list[str], list[str]]:
         if channel and page.lead == LEADS[language][0]:
             page.lead = LEADS[language][1]
         page.save_revision().publish()
+        page.refresh_from_db()  # publish() saved another instance: read the new url_path back
         renamed.append(f"{old_path} → {page.url_path}")
     return renamed, skipped
 
