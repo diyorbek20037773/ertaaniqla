@@ -18,7 +18,8 @@ pytestmark = pytest.mark.django_db
 
 
 def _index(kind: str, lang: str = "uz") -> PostIndexPage:
-    return PostIndexPage.objects.get(kind=kind, locale__language_code=lang)
+    # the site's own lists, not the Telegram channel's «Yangiliklar» (D-109)
+    return PostIndexPage.objects.get(kind=kind, locale__language_code=lang, telegram_feed=False)
 
 
 def _post(index: PostIndexPage, title: str, topic: str, day: int) -> PostPage:
@@ -30,8 +31,8 @@ def _post(index: PostIndexPage, title: str, topic: str, day: int) -> PostPage:
 
 def test_lists_exist_in_both_languages_with_empty_states(seeded, client: Client) -> None:
     for url, empty in (
-        ("/uz/yangiliklar/", "Yangiliklar tez orada"),
-        ("/ru/novosti/", "скоро появятся новости"),
+        ("/uz/foydali-malumotlar/", "Yangiliklar tez orada"),
+        ("/ru/poleznaya-informatsiya/", "скоро появятся новости"),
         ("/uz/maqolalar/", "Maqolalar tez orada"),
         ("/ru/stati/", "скоро появятся статьи"),
         ("/uz/videoroliklar/", "Videoroliklar tez orada"),

@@ -30,7 +30,7 @@ def test_children_section_is_hidden_by_default(seeded, client: Client) -> None:
     assert 'data-section="children"' not in html  # header sections menu
     assert 'href="/uz/bolalar/' not in html  # menu, footer site map, landing cards
     assert 'data-topic="children"' not in html and "topic=children" not in html
-    news = client.get("/uz/yangiliklar/?topic=children").content.decode()
+    news = client.get("/uz/foydali-malumotlar/?topic=children").content.decode()
     assert "topic=children" not in news  # neither a pill nor an accepted filter
     assert 'value="children"' not in client.get("/uz/ayollar/qayerga-murojaat/").content.decode()
     tools = client.get("/uz/vositalar/").content.decode()
@@ -63,9 +63,9 @@ def test_landing_note_under_the_two_cards(seeded, client: Client) -> None:
 
 def test_useful_information_in_the_header(seeded, client: Client) -> None:
     html = client.get("/uz/").content.decode()
-    assert re.search(r'href="/uz/yangiliklar/"[^>]*>Foydali maʼlumotlar</a>', html)
+    assert re.search(r'href="/uz/foydali-malumotlar/"[^>]*>Foydali maʼlumotlar</a>', html)
     ru = client.get("/ru/").content.decode()
-    assert re.search(r'href="/ru/novosti/"[^>]*>Полезная информация</a>', ru)
+    assert re.search(r'href="/ru/poleznaya-informatsiya/"[^>]*>Полезная информация</a>', ru)
 
 
 def test_placeholders_never_reach_visitors(seeded, client: Client) -> None:
@@ -104,7 +104,9 @@ def test_about_page_lists_the_resolutions(seeded, client: Client) -> None:
 
 def _old_site_state() -> None:
     """What a site seeded before 2026-10-15 looks like."""
-    news = Page.objects.get(url_path__endswith="/yangiliklar/", locale__language_code="uz").specific
+    news = Page.objects.get(
+        url_path__endswith="/foydali-malumotlar/", locale__language_code="uz"
+    ).specific
     news.title = "Yangiliklar"
     news.save_revision().publish()
     about = Page.objects.get(url_path__endswith="/haqimizda/", locale__language_code="uz").specific
@@ -135,7 +137,9 @@ def _old_site_state() -> None:
 def test_one_off_command_updates_an_older_site(seeded, client: Client) -> None:
     _old_site_state()
     call_command("client_update_20261015")
-    news = Page.objects.get(url_path__endswith="/yangiliklar/", locale__language_code="uz").specific
+    news = Page.objects.get(
+        url_path__endswith="/foydali-malumotlar/", locale__language_code="uz"
+    ).specific
     assert news.title == "Foydali maʼlumotlar"
     about = Page.objects.get(url_path__endswith="/haqimizda/", locale__language_code="uz").specific
     body = json.dumps(list(about.body.raw_data), ensure_ascii=False)

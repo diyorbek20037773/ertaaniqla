@@ -171,7 +171,8 @@ def test_figma_header_menu_links(seeded, client: Client) -> None:
         "doctors": "/uz/shifokorlar/",
         "faq": "/uz/savol-javob/",
         "directory": "/uz/ayollar/qayerga-murojaat/",
-        "news": "/uz/yangiliklar/",  # «Foydali maʼlumotlar» (D-087)
+        "news": "/uz/foydali-malumotlar/",  # «Foydali maʼlumotlar» (D-087)
+        "channel": "/uz/yangiliklar/",  # «Yangiliklar»: the Telegram channel (D-109)
     }
     assert get_header_links("ru")["about"] == "/ru/o-portale/"
     html = client.get("/uz/bolalar/").content.decode()

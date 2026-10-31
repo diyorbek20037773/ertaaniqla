@@ -23,7 +23,7 @@ PAGES = [
     ("home-ru", "/ru/"),
     ("section-women-uz", "/uz/ayollar/"),
     ("about-uz", "/uz/haqimizda/"),
-    ("useful-info-uz", "/uz/yangiliklar/"),
+    ("useful-info-uz", "/uz/foydali-malumotlar/"),
     ("article-patient-route-uz", "/uz/ayollar/davolash/"),
     ("article-symptoms-ru", "/ru/zhenskiy/osvedomlennost/rak-molochnoy-zhelezy/"),
     ("faq-tab-uz", "/uz/ayollar/savol-javob/kokrak-bezi-saratoni/"),
@@ -146,7 +146,7 @@ COVERED_JS = """() => {
     "path",
     [
         "/uz/",
-        "/uz/yangiliklar/",
+        "/uz/foydali-malumotlar/",
         "/uz/videoroliklar/",
         "/uz/savol-javob/",
         "/uz/haqimizda/",

@@ -17,7 +17,9 @@ RUN npm run build
 # ---------------------------------------------------------------------------
 FROM python:3.12-slim AS deps
 ARG INSTALL_DEV=0
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/opt/venv
+# UV_HTTP_TIMEOUT: uv's 30 s default gave up on slow links (developer laptop, 2026-11-01)
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/opt/venv \
+    UV_HTTP_TIMEOUT=300 UV_HTTP_RETRIES=5
 COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /uvx /bin/
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
@@ -40,8 +42,9 @@ ENV PYTHONUNBUFFERED=1 \
 
 # ffmpeg (video transcoding), libmagic (MIME validation), postgres client **16** from PGDG
 # (must match the server major for pg_dump/pg_restore — Debian ships 17), gettext
-# (compilemessages), curl (healthcheck), restic (backups)
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
+# (compilemessages), curl (healthcheck), restic (backups). Retries: slow links (2026-11-01).
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && apt-get update && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
     && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/pgdg.gpg \
     && . /etc/os-release \
     && echo "deb [signed-by=/usr/share/keyrings/pgdg.gpg] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \

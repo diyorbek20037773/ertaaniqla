@@ -36,7 +36,7 @@ def _video(title: str, topic: str) -> Video:
 def test_news_list_shows_the_topics_videos(seeded, client: Client) -> None:
     _video("Mammografiya haqida", "breast")
     _video("HPV va skrining", "cervical")
-    html = client.get("/uz/yangiliklar/?topic=breast").content.decode()
+    html = client.get("/uz/foydali-malumotlar/?topic=breast").content.decode()
     videos = html.split('id="videolar"', 1)[1]
     assert "Mammografiya haqida" in videos and "HPV va skrining" not in videos
     assert 'href="/uz/videoroliklar/?topic=breast"' in videos  # «Barcha videolar»

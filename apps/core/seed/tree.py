@@ -1490,14 +1490,35 @@ PRIVACY = Node(
 NEWS = Node(
     key="news",
     kind="posts",
-    # client request 2026-10-15 (D-087); the URL keeps the first slug
+    # client request 2026-10-15 (D-087); its own URL since «Yangiliklar» took /yangiliklar/ (D-109)
     title={"uz": "Foydali maʼlumotlar", "ru": "Полезная информация"},
-    slug={"uz": "yangiliklar", "ru": "novosti"},
+    slug={"uz": "foydali-malumotlar", "ru": "poleznaya-informatsiya"},
     summary={
         "uz": "Skrining, davlat dasturlari va loyiha yangiliklari",
         "ru": "Новости о скрининге, государственных программах и проекте",
     },
     extra={"fields": {"kind": "news"}},
+)
+
+# D-109: the Telegram channel's posts (apps.posts.telegram), apart from the site's own articles
+CHANNEL_LEAD = {  # no «Telegram» on the page (developer 2026-11-01)
+    "uz": "«Erta aniqla» loyihasining soʻnggi yangiliklari.",
+    "ru": "Последние новости проекта «Erta aniqla».",
+}
+CHANNEL = Node(
+    key="channel",
+    kind="posts",
+    title={"uz": "Yangiliklar", "ru": "Новости"},
+    slug={"uz": "yangiliklar", "ru": "novosti"},
+    summary=CHANNEL_LEAD,
+    show_in_menus=False,
+    extra={
+        "fields": {
+            "kind": "news",
+            "telegram_feed": True,
+            "lead": lambda lang, ctx: CHANNEL_LEAD[lang],
+        }
+    },
 )
 
 ARTICLES = Node(
@@ -1607,6 +1628,7 @@ TREE: list[Node] = [
     DOCTORS,
     PRIVACY,
     NEWS,
+    CHANNEL,
     ARTICLES,
     VIDEOS,
 ]

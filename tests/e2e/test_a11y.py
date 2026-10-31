@@ -21,7 +21,7 @@ REPORT_DIR = Path(__file__).parent / "a11y"
 PAGES = [
     "/uz/",
     "/ru/zhenskiy/",
-    "/uz/yangiliklar/",
+    "/uz/foydali-malumotlar/",
     "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",
     "/ru/zhenskiy/kuda-obratitsya/",
     "/uz/qidiruv/?q=skrining",
@@ -31,7 +31,7 @@ PAGES = [
     "/uz/lugat/",
     "/uz/materiallar/",
     # design 2026-10
-    "/uz/yangiliklar/",
+    "/uz/foydali-malumotlar/",
     "/uz/maqolalar/",
     "/uz/videoroliklar/",
     "/uz/savol-javob/?topic=breast",
@@ -90,7 +90,7 @@ def test_no_serious_violations(axe_page, path: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "path", ["/uz/", "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/", "/uz/yangiliklar/"]
+    "path", ["/uz/", "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/", "/uz/foydali-malumotlar/"]
 )
 def test_high_contrast_theme_is_aa(axe_page, path: str) -> None:
     """ADR-0006: the high-contrast theme must pass WCAG 2.1 AA colour contrast."""
