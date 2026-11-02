@@ -48,8 +48,11 @@ remote_deploy() {
 set -euo pipefail
 cd "${DEPLOY_PATH}"
 if [[ -n "${GIT_SHA}" && -d .git ]]; then
-  # compose files and nginx config of the same commit as the image
-  git fetch --quiet origin && git checkout --quiet --detach "${GIT_SHA}"
+  # compose files and nginx config of the same commit as the image. Not "fetch && checkout":
+  # set -e ignores a failure inside an && list, so a dropped fetch left the old config in place
+  # while the new image ran (D-111). Retry the fetch; a checkout that still fails stops here.
+  for attempt in 1 2 3; do git fetch --quiet origin && break; sleep 10; done
+  git checkout --quiet --detach "${GIT_SHA}"
 fi
 # the environment's .env may choose its compose files (COMPOSE_FILE); otherwise the defaults
 if ! grep -q '^COMPOSE_FILE=' .env 2>/dev/null; then export COMPOSE_FILE="${DEFAULT_FILES}"; fi
