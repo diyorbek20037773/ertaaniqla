@@ -71,7 +71,12 @@ fi
 if grep -q '^WEB_IMAGE=' .env; then sed -i "s|^WEB_IMAGE=.*|WEB_IMAGE=${image}|" .env; fi
 if grep -q '^APP_RELEASE=' .env; then sed -i "s|^APP_RELEASE=.*|APP_RELEASE=${image##*:}|" .env; fi
 \${COMPOSE} up -d --no-deps worker beat backup < /dev/null
-if [[ "${TARGET}" == "prod" ]]; then \${COMPOSE} up -d nginx < /dev/null; fi
+if [[ "${TARGET}" == "prod" ]]; then
+  \${COMPOSE} up -d nginx < /dev/null
+  # the config is bind-mounted and the web container has a new IP: "up" sees no change, so
+  # reload, or nginx keeps the old snippets and upstream address (D-111)
+  \${COMPOSE} exec -T nginx sh -c 'nginx -t -q && nginx -s reload' < /dev/null
+fi
 if [[ "\${previous}" != "\${WEB_IMAGE}" ]]; then
   echo "WEB_IMAGE=\${previous:-none}" > .deploy.prev.env
 fi
