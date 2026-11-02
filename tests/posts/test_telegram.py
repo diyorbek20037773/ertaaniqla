@@ -491,3 +491,30 @@ def test_setup_command_registers_the_webhook(bot: Any, monkeypatch: pytest.Monke
         call_command("telegram_news", "setup", stdout=out)
     call_command("telegram_news", "remove", stdout=out)
     assert calls[-1][0] == "deleteWebhook"
+
+
+def test_links_do_not_make_a_russian_post_bilingual() -> None:
+    """QA 2026-11-02 (post 105): a Russian post signed with Latin links stays Russian."""
+    text = (
+        "Онкологию можно предотвратить\n\nРак шейки матки и молочной железы — одни из самых "
+        "распространённых заболеваний. Своевременная диагностика повышает шансы.\n\n"
+        "Telegram: https://t.me/erta_aniqla\nInstagram: https://www.instagram.com/erta.aniqla\n\n"
+        "Берегите себя!\n\nApp | Telegram-бот | Facebook | Insta | Web | Korzinka Go"
+    )
+    assert set(telegram.read_post(_post(105, text)).articles) == {"ru"}
+
+
+@pytest.mark.django_db
+def test_a_repost_of_the_same_words_is_not_published_twice(
+    seeded: Any, client: Client, bot: Any
+) -> None:
+    text = "Salom, qizlar!\n\nProfilaktik tekshiruvlar — bu oʻz sogʻligʻingizni asrash."
+    _send(client, {"update_id": 1, "channel_post": _post(83, text)})
+    _send(client, {"update_id": 2, "channel_post": _post(91, text)})
+    first, repeat = TelegramPost.objects.get(message_id=83), TelegramPost.objects.get(message_id=91)
+    assert repeat.page_id == first.page_id
+    assert PostPage.objects.filter(title="Salom, qizlar!").count() == 1
+    # the same words on a video are a new item (a series repeats its caption)
+    video = {"file_id": "v", "duration": 5}
+    _send(client, {"update_id": 3, "channel_post": _post(92, text, video=video)})
+    assert TelegramPost.objects.get(message_id=92).page_id != first.page_id

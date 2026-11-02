@@ -1343,7 +1343,10 @@ def about_laws(lang: str) -> list[dict[str, Any]]:
             items.append(f'<a href="{url}">{line_ru}</a>')
         else:
             items.append(f'<a href="{url}">«{title}»</a><br/>{line_uz}')
-    return [{"type": "heading", "value": LAWS_HEADING[lang]}, rich(p(*items))]
+    return [
+        {"type": "heading", "value": {"text": LAWS_HEADING[lang], "anchor": ""}},
+        rich(p(*items)),
+    ]
 
 
 ABOUT = Node(
@@ -1735,10 +1738,10 @@ FOOTER: list[tuple[dict[str, str], list[FooterLink]]] = [
                 "women.screening.breast",
                 "kimlarga",
             ),
-            (
+            (  # the section is the support page's first heading (QA 2026-11-02)
                 "Davlat dasturi doirasida bepul skrining",
                 "Бесплатный скрининг по госпрограмме",
-                "women.screening.breast",
+                "women.support.breast",
                 "bepul-skrining",
             ),
             ("Davolashni tashkil qilish", "Организация лечения", "women.treatment.breast", ""),

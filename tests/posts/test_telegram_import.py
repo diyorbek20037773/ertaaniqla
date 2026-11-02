@@ -61,7 +61,7 @@ PAGE = "".join(
         _message(
             10,
             f"{EMOJI} <b>Bepul koʻrik</b> — 1-noyabr<br/><br/>Roʻyxatdan "
-            '<a href="https://example.uz/reg" target="_blank">bu yerda</a> oʻting, '
+            '<a href="https://example.uz/reg?a=1&amp;amp;b=2" target="_blank">bu yerda</a> oʻting, '
             "koʻkrak bezi tekshiruvi.<br/><br/>——<br/><br/>Бесплатный осмотр<br/><br/>"
             "Запишитесь заранее, осмотр молочной железы.",
             PHOTO.format(id=10, name="photo10"),
@@ -105,7 +105,8 @@ def test_page_parser_reads_text_formatting_media_and_skips_service() -> None:
     assert posts[2].has_video and posts[2].video_thumb == f"{CDN}thumb.jpg"
     article = telegram.read_post(first.message("erta_aniqla")).articles["uz"]
     assert article.title == "Bepul koʻrik — 1-noyabr"
-    assert '<a href="https://example.uz/reg">bu yerda</a>' in article.html
+    # t.me escapes the link's & twice: it arrives once escaped, as rich text wants it
+    assert '<a href="https://example.uz/reg?a=1&amp;b=2">bu yerda</a>' in article.html
 
 
 def test_recent_posts_pages_back_until_enough(monkeypatch: pytest.MonkeyPatch) -> None:

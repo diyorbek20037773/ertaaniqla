@@ -70,6 +70,7 @@ SEPARATOR_RE = re.compile(r"^[➖—–\-_=*•~·.\s]+$")
 SINGLE_SEPARATORS = frozenset({"_", "➖", "—"})
 UZ_CYRILLIC = frozenset("ўқғҳЎҚҒҲ")
 HASHTAG_OR_MENTION_RE = re.compile(r"[#@][\w.]+")
+LINK_OR_TAG_RE = re.compile(r"(?:https?://|www\.)\S+|[#@][\w.]+", re.I)
 MENTION_RE = re.compile(r"(?<![\w.])@(\w{3,})")
 _APOS = re.compile(r"['’`‘]")
 TITLE_LEAD = frozenset('«"„“(')
@@ -275,8 +276,15 @@ def _is_separator(line: str) -> bool:
     return len(stripped) >= 2 and bool(SEPARATOR_RE.match(stripped))
 
 
+def _words(text: str) -> str:
+    """The text without links, @names and #tags: their Latin letters say nothing about the
+    language (a Russian post signed «Telegram: https://t.me/…», QA 2026-11-02)."""
+    return LINK_OR_TAG_RE.sub(" ", text)
+
+
 def _language(text: str, minimum: int = MIN_PART_LETTERS) -> str:
     """ "uz" (Latin, or Cyrillic with ў қ ғ ҳ), "ru" (other Cyrillic) or "" (too few letters)."""
+    text = _words(text)
     cyrillic = sum(1 for c in text if "\u0400" <= c <= "\u04ff")
     latin = sum(1 for c in text if c.isascii() and c.isalpha())
     if cyrillic + latin < max(minimum, 1):
@@ -299,9 +307,10 @@ def _paragraphs(text: str) -> list[list[tuple[int, int]]]:
 
 def _letters(text: str, part: list[tuple[int, int]], language: str) -> int:
     """Letters of the language's own script in the part (Cyrillic for ru, Latin for uz)."""
+    words = _words("\n".join(text[a:b] for a, b in part))
     if language == "ru":
-        return sum(1 for a, b in part for c in text[a:b] if "\u0400" <= c <= "\u04ff")
-    return sum(1 for a, b in part for c in text[a:b] if c.isascii() and c.isalpha())
+        return sum(1 for c in words if "\u0400" <= c <= "\u04ff")
+    return sum(1 for c in words if c.isascii() and c.isalpha())
 
 
 def _by_language(
@@ -716,6 +725,33 @@ def _add_photo(record: TelegramPost, file_id: str, name: str) -> None:
         _publish(page)
 
 
+def _text_html(page: Any) -> str:
+    return "".join(str(b.value.source) for b in page.body if b.block_type == "rich_text")
+
+
+def repeated_items(post: Post) -> dict[str, Any] | None:
+    """The live items an identical earlier post made — same title, summary and text, no video —
+    when the channel posts it again (it does: QA 2026-11-02 found 3 such pairs). None otherwise."""
+    from apps.posts.models import PostPage, TelegramPost
+
+    if post.embed or not post.articles:
+        return None
+    ids = {i for pair in TelegramPost.objects.values_list("page_id", "ru_page_id") for i in pair}
+    found: dict[str, Any] = {}
+    for language, article in post.articles.items():
+        page = (
+            PostPage.objects.live()
+            .filter(id__in=ids - {None}, locale__language_code=language)
+            .filter(title=article.title, summary=article.summary)
+            .order_by("id")
+            .first()
+        )
+        if page is None or _text_html(page) != article.html:
+            return None
+        found[language] = page
+    return found
+
+
 def _handle_new(message: dict[str, Any]) -> None:
     from apps.posts.models import TelegramPost
 
@@ -742,6 +778,13 @@ def _handle_new(message: dict[str, Any]) -> None:
         )
         if joined:
             _add_photo(record, post.photo, name)
+        return
+    same = repeated_items(post)
+    if same is not None:  # a repost: the earlier item stands, no second copy on the site
+        TelegramPost.objects.create(
+            chat_id=chat_id, message_id=message_id, page=same.get("uz"), ru_page=same.get("ru")
+        )
+        logger.info("telegram: post %s repeats an earlier one, not published again", message_id)
         return
     waiting = [r for r in album if r.photo_file_id and not (r.page_id or r.ru_page_id)]
     photo = post.photo

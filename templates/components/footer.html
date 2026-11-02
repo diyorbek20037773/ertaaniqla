@@ -38,7 +38,7 @@
         {% if s.youtube_url %}<li><a href="{{ s.youtube_url }}" rel="noopener" aria-label="YouTube">{% include "components/icons/youtube.svg" %}</a></li>{% endif %}
         {% if s.tiktok_url %}<li><a href="{{ s.tiktok_url }}" rel="noopener" aria-label="TikTok">{% include "components/icons/tiktok.svg" %}</a></li>{% endif %}
       </ul>
-      <div class="site-footer__partners">
+      <div class="site-footer__partners" id="hamkorlar">
         {# the agency's white logo for dark backgrounds, in the page's language (D-098) #}
         {% trans "Agency for Strategic Development and Reforms under the President of the Republic of Uzbekistan" as agency %}
         {% if s.partner_agency_logo %}{% image s.partner_agency_logo height-150 class="site-footer__partner site-footer__partner--agency" alt=agency %}

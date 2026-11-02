@@ -42,8 +42,25 @@ def uz(text: str) -> str:
 # ---------------------------------------------------------------------------------------------
 # design blocks (JSON form of the StreamField values)
 # ---------------------------------------------------------------------------------------------
+# section headings the footer site map links to (QA 2026-11-02): heading text → anchor
+SECTION_ANCHORS: dict[str, str] = {
+    "Skrining usullari": "usullari",
+    "Методы скрининга": "usullari",
+    "Kimlarga skrining tavsiya etiladi": "kimlarga",
+    "Кому рекомендован скрининг": "kimlarga",
+    "Davlat dasturi doirasida bepul skrining": "bepul-skrining",
+    "Бесплатный скрининг в рамках государственной программы": "bepul-skrining",
+    "«Onkologik hushyorlik» xonalarida mavjud imkoniyatlar": "xonalar",
+    "Возможности в кабинетах «Онконастороженности»": "xonalar",
+    "Bemorlar va shifokorlarning huquq va majburiyatlari": "huquqlar",
+    "Права и обязанности пациентов и врачей": "huquqlar",
+}
+
+
 def heading(text: str) -> dict[str, Any]:
-    return {"type": "heading", "value": text}
+    anchor = SECTION_ANCHORS.get(text)
+    # always the struct shape: wagtail-localize reads the raw value (D-110)
+    return {"type": "heading", "value": {"text": text, "anchor": anchor or ""}}
 
 
 def card(

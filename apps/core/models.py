@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from apps.sections.models import SectionIndexPage
 
 WORDS_PER_MINUTE = 180  # slow, plain-language reading (anxious / low-literacy audience)
+META_DESCRIPTION_MAX = 160  # what search engines show of a <meta name="description">
 
 
 class TimeStampedModel(models.Model):
@@ -145,7 +146,15 @@ class BasePage(Page):
 
     @property
     def meta_description(self) -> str:
+        """The search description, else the page's own summary / lead cut to 160 characters (the
+        Telegram news items have no search description: QA 2026-11-02, 95 pages without one)."""
         description = str(self.search_description or "")
+        if not description:
+            fallback = getattr(self, "summary", "") or getattr(self, "lead", "") or ""
+            text = " ".join(strip_tags(str(fallback)).split())
+            if len(text) > META_DESCRIPTION_MAX:
+                text = text[: META_DESCRIPTION_MAX - 1].rsplit(" ", 1)[0].rstrip(",;:.–— ") + "…"
+            description = text
         group = getattr(self, "variant_group", None)
         return f"{group.title}. {description}" if description and group is not None else description
 

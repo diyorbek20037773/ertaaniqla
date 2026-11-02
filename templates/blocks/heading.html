@@ -1,2 +1,3 @@
-{# heading: section heading of the design — flower icon + gradient uppercase h2 (Figma 2408:240). #}
-<h2 class="block block--heading section-heading__title">{{ value }}</h2>
+{% comment %} heading: section heading of the design — flower icon + gradient uppercase h2 (Figma 2408:240).
+   The anchor (optional) is the h2's id: footer links like …/skrining/…/#usullari land here. {% endcomment %}
+<h2 class="block block--heading section-heading__title"{% if value.anchor %} id="{{ value.anchor }}"{% endif %}>{{ value.text }}</h2>

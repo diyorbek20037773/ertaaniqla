@@ -205,12 +205,45 @@ class CardsGridBlock(blocks.StructBlock):
 
 
 class HeadingBlock(blocks.CharBlock):
-    """Section heading of the design: flower icon + gradient uppercase title (Figma 2408:240)."""
+    """The section heading before it had an anchor (a plain string). Kept for the historical
+    migrations, which name this class; streams use `SectionHeadingBlock`."""
 
     class Meta:
         icon = "title"
         label = _("Section heading")
         template = "blocks/heading.html"
+
+
+class SectionHeadingBlock(blocks.StructBlock):
+    """Section heading of the design: flower icon + gradient uppercase title (Figma 2408:240).
+
+    The optional anchor lets a link open the section (footer site map: `#usullari`, QA
+    2026-11-02). Headings saved before it existed are a plain string; they read as
+    {"text": …, "anchor": ""}, so no data migration is needed."""
+
+    text = blocks.CharBlock(max_length=160, label=_("Heading"))
+    anchor = blocks.CharBlock(
+        required=False,
+        max_length=60,
+        label=_("Anchor"),
+        help_text=_("Latin letters and dashes, e.g. bosqichlari — links can open this item."),
+    )
+
+    class Meta:
+        icon = "title"
+        label = _("Section heading")
+        template = "blocks/heading.html"
+        form_classname = "struct-block heading-block"
+
+    @staticmethod
+    def _upgrade(value: Any) -> Any:
+        return {"text": value, "anchor": ""} if isinstance(value, str) else value
+
+    def to_python(self, value: Any) -> Any:
+        return super().to_python(self._upgrade(value))
+
+    def bulk_to_python(self, values: Any) -> Any:
+        return super().bulk_to_python([self._upgrade(value) for value in values])
 
 
 class TextCardBlock(blocks.StructBlock):
@@ -685,7 +718,7 @@ class MethodCardsBlock(blocks.StructBlock):
 
 
 class AccordionBodyBlock(blocks.StreamBlock):
-    heading = HeadingBlock(max_length=160)
+    heading = SectionHeadingBlock()
     rich_text = RichTextBlock(features=RICH_TEXT_FEATURES)
     text_card = TextCardBlock()
     text_cards = TextCardsBlock()
@@ -738,7 +771,7 @@ class AccordionBlock(blocks.StructBlock):
 # Stream definitions
 # ---------------------------------------------------------------------------
 class ArticleBodyBlock(blocks.StreamBlock):
-    heading = HeadingBlock(max_length=160)
+    heading = SectionHeadingBlock()
     rich_text = RichTextBlock(features=RICH_TEXT_FEATURES)
     text_card = TextCardBlock()
     text_cards = TextCardsBlock()
@@ -804,6 +837,7 @@ _SKIP_KEYS = frozenset(
         "layout",
         "illustration",
         "width",
+        "anchor",
     }
 )
 

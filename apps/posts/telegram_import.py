@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import datetime as dt
+import html
 import json
 import logging
 import time
@@ -158,8 +159,10 @@ class ChannelPage(HTMLParser):
             self._stack.append((tag, "", 0, ""))
             return
         offset = _utf16(self._post.text)
-        if tag == "a" and (attrs.get("href") or "").startswith(("http://", "https://")):
-            self._stack.append((tag, "text_link", offset, str(attrs["href"])))
+        # t.me escapes a link's & twice (href="…&amp;amp;…"): the parser undoes one, this the other
+        href = html.unescape(attrs.get("href") or "")
+        if tag == "a" and href.startswith(("http://", "https://")):
+            self._stack.append((tag, "text_link", offset, href))
         else:
             self._stack.append((tag, FORMAT_TAGS.get(tag, ""), offset, ""))
 
@@ -234,6 +237,15 @@ def import_post(item: PublicPost, channel: str) -> bool:
     message = item.message(channel)
     post = telegram.read_post(message)
     if not post.articles:
+        return False
+    same = telegram.repeated_items(post)
+    if same is not None:  # the channel posted it again: the earlier item stands
+        TelegramPost.objects.create(
+            chat_id=item.chat_id,
+            message_id=item.message_id,
+            page=same.get("uz"),
+            ru_page=same.get("ru"),
+        )
         return False
     pictures = item.photos or ([(item.message_id, item.video_thumb)] if item.video_thumb else [])
     title = next(iter(post.articles.values())).title

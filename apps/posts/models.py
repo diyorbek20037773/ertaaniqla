@@ -170,6 +170,31 @@ class PostPage(BasePage):
 
     jsonld_article = True
 
+    @property
+    def html_title(self) -> str:
+        """Unique per page (EA-13): items of one list sharing a title — the Telegram channel
+        repeats a headline for a video series — get their date, and a number on the same day."""
+        title = BasePage.html_title.fget(self)  # type: ignore[attr-defined]
+        if self.seo_title:
+            return title
+        parent = self.get_parent()
+        if parent is None:
+            return title
+        twins = list(
+            PostPage.objects.child_of(parent)
+            .live()
+            .filter(title=self.title)
+            .order_by("date", "id")
+            .values_list("id", "date")
+        )
+        if len(twins) < 2:
+            return title
+        same_day = [pk for pk, day in twins if day == self.date]
+        suffix = f"{self.date:%d.%m.%Y}"
+        if len(same_day) > 1 and self.pk in same_day:
+            suffix += f" ({same_day.index(self.pk) + 1})"
+        return f"{title} — {suffix}"
+
     def get_body_text(self) -> str:
         return f"{self.summary} {stream_plain_text(self.body)}"
 
