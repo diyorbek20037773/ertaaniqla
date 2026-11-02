@@ -439,3 +439,23 @@ def test_bootstrap_hardens_ssh_fail2ban_and_the_kernel() -> None:
     ):
         assert line in script, line
     assert "00-ertaaniqla.conf" in script  # read before the provider's 50-cloud-init.conf
+
+
+def test_security_headers_go_out_once() -> None:
+    """Security QA 2026-11-02: nginx and Django both set these; nginx hides Django's copies so
+    each header is sent once, with one value (Permissions-Policy differed)."""
+    security = (ROOT / "docker/nginx/snippets/security.conf").read_text(encoding="utf-8")
+    proxy = (ROOT / "docker/nginx/snippets/proxy.conf").read_text(encoding="utf-8")
+    for header in (
+        "X-Frame-Options",
+        "X-Content-Type-Options",
+        "Referrer-Policy",
+        "Permissions-Policy",
+        "Strict-Transport-Security",
+    ):
+        assert f"add_header {header} " in security, header
+        assert f"proxy_hide_header {header};" in proxy, header
+    from django.conf import settings
+
+    nginx_policy = re.search(r'add_header Permissions-Policy "([^"]+)"', security)
+    assert nginx_policy is not None and nginx_policy.group(1) == settings.PERMISSIONS_POLICY

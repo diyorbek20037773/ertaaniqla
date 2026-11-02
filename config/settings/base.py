@@ -270,7 +270,10 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
 # Permissions-Policy is emitted by nginx (docker/nginx/snippets/security.conf) and by
 # apps.core.middleware.PermissionsPolicyMiddleware for non-nginx setups.
-PERMISSIONS_POLICY = "camera=(), microphone=(), geolocation=(self), payment=(), usb=()"
+# the same value as nginx's (no page uses geolocation; it differed until D-110)
+PERMISSIONS_POLICY = (
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+)
 
 # django-ratelimit uses the default cache (Redis)
 RATELIMIT_USE_CACHE = "default"
