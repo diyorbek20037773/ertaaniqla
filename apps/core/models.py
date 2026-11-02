@@ -150,7 +150,8 @@ class BasePage(Page):
         Telegram news items have no search description: QA 2026-11-02, 95 pages without one)."""
         description = str(self.search_description or "")
         if not description:
-            fallback = getattr(self, "summary", "") or getattr(self, "lead", "") or ""
+            # a one-line Telegram video post has neither: its title is all the text there is
+            fallback = getattr(self, "summary", "") or getattr(self, "lead", "") or self.title
             text = " ".join(strip_tags(str(fallback)).split())
             if len(text) > META_DESCRIPTION_MAX:
                 text = text[: META_DESCRIPTION_MAX - 1].rsplit(" ", 1)[0].rstrip(",;:.–— ") + "…"

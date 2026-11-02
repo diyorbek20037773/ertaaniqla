@@ -75,6 +75,11 @@ def test_meta_description_falls_back_to_the_summary(seeded: Any, client: Client)
     html = client.get(page.url).content.decode()
     meta = html.split('<meta name="description" content="', 1)[1].split('"', 1)[0]
     assert meta.startswith("Skrining haqida muhim") and meta.endswith("…") and len(meta) <= 160
+    video = _item(_news_list(), "Sizlarga hali hech kim aytmagan faktni aytaman", 2)  # no summary
+    assert (
+        '<meta name="description" content="Sizlarga hali hech kim aytmagan faktni aytaman">'
+        in client.get(video.url).content.decode()
+    )
     page.search_description = "Muharrir tavsifi"
     page.save_revision().publish()
     assert (
