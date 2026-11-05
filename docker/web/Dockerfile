@@ -15,7 +15,7 @@ RUN npm run build
 # ---------------------------------------------------------------------------
 # Stage 2: python deps with uv
 # ---------------------------------------------------------------------------
-FROM python:3.12-slim AS deps
+FROM python:3.15-slim AS deps
 ARG INSTALL_DEV=0
 # UV_HTTP_TIMEOUT: uv's 30 s default gave up on slow links (developer laptop, 2026-11-01)
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/opt/venv \
@@ -33,7 +33,7 @@ RUN if [ "$INSTALL_DEV" = "1" ]; then uv sync --frozen --no-install-project; \
 # ---------------------------------------------------------------------------
 # Stage 3: runtime
 # ---------------------------------------------------------------------------
-FROM python:3.12-slim AS runtime
+FROM python:3.15-slim AS runtime
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PATH="/opt/venv/bin:$PATH" \
