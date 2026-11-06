@@ -2,8 +2,8 @@
 {% comment %} posts/_news_marquee.html — two rows of news moving in opposite directions, full width
    (developer 2026-11-06, D-112, after uzcombinator.uz). Context: marquee (two lists of PostPage).
    Each row holds its cards twice and moves by exactly one set, so the loop has no seam; the copy
-   is hidden from screen readers and from the keyboard. Paused on hover, on keyboard focus and by
-   the button (WCAG 2.2.2). With «reduce motion» (OS or «Aa») the rows stand still and scroll by
+   is hidden from screen readers and from the keyboard. Keeps moving under the mouse (developer
+   2026-11-06); paused by the button (WCAG 2.2.2), the row with keyboard focus stands. With «reduce motion» (OS or «Aa») the rows stand still and scroll by
    hand. {% endcomment %}
 <section class="news-marquee" data-marquee aria-label="{% trans 'Latest news' %}">
   {% for row in marquee %}
