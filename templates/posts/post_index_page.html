@@ -5,6 +5,8 @@
    posts (Page of PostPage), topic, topics, query; news only: videos (same topic, with
    watch_url) and video_index.
    News: the newest item beside its text, then a three-column grid and numbered pages.
+   «Yangiliklar» (marquee: two rows of PostPage, D-112): two moving rows across the full width
+   under the head instead of the large first item; the container closes around them.
    Articles: description + search, a large first card, three columns, «Yana yuklash». {% endcomment %}
 {% block breadcrumbs %}{% endblock %}{# rendered inside the list head #}
 {% block content %}
@@ -16,6 +18,7 @@
     {% include "components/list_head.html" with eyebrow=page.eyebrow|default:_("Latest news") lead=page.lead %}
     {% blocktrans trimmed count counter=posts.paginator.count asvar count_label %}{{ counter }} news item{% plural %}{{ counter }} news items{% endblocktrans %}
   {% endif %}
+  {% if marquee %}</div>{% include "posts/_news_marquee.html" %}<div class="container container--narrow list-page list-page--after-marquee">{% endif %}
   {% include "components/topic_filter.html" with base_url=page.url %}
   {% for block in page.intro %}{% include_block block %}{% endfor %}
 
@@ -27,9 +30,9 @@
       </div>
       {% include "components/load_more.html" with items=posts target="post-grid" %}
     {% else %}
-      {% if posts.number == 1 and not topic %}{% include "posts/_news_feature.html" with post=posts.object_list.0 layout="side" %}{% endif %}
+      {% if posts.number == 1 and not topic and not marquee %}{% include "posts/_news_feature.html" with post=posts.object_list.0 layout="side" %}{% endif %}
       <div class="card-grid" id="post-grid">
-        {% for post in posts %}{% if posts.number > 1 or topic or not forloop.first %}{% include "posts/_news_card.html" %}{% endif %}{% endfor %}
+        {% for post in posts %}{% if posts.number > 1 or topic or marquee or not forloop.first %}{% include "posts/_news_card.html" %}{% endif %}{% endfor %}
       </div>
       {% include "components/pager.html" with items=posts %}
     {% endif %}

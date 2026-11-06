@@ -1,0 +1,4 @@
+{% load wagtailimages_tags %}{% comment %} posts/_news_marquee_card.html — one moving news card: the picture and its title in a white pill.
+   Context: post, copy (the row's hidden second set: no tab stop). Same renditions as the news
+   grid, so a visit generates nothing new. {% endcomment %}
+<li class="news-marquee__item"><a class="news-marquee__card" href="{{ post.url }}"{% if copy %} tabindex="-1"{% endif %}>{% picture post.image format-{webp,jpeg} fill-{400x250,800x500} sizes="24rem" alt="" class="news-marquee__img" loading="lazy" %}<span class="news-marquee__pill">{{ post.title }}</span></a></li>

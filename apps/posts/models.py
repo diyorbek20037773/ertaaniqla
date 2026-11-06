@@ -26,6 +26,8 @@ from apps.core.visibility import hidden_topics, visible_topics
 
 PAGE_SIZE = 12
 VIDEOS_UNDER_NEWS = 6
+MARQUEE_ITEMS = 24  # D-112: two moving rows of 12 are wider than any screen
+MARQUEE_MIN_ITEMS = 8  # fewer leave gaps on a wide screen: the plain list stays alone
 
 
 class PostKind(models.TextChoices):
@@ -88,6 +90,20 @@ class PostIndexPage(BasePage):
             )
         return posts.order_by("-date", "-first_published_at")
 
+    def get_marquee(self) -> list[list[PostPage]]:
+        """The two moving rows of «Yangiliklar» (D-112): one card per headline (the channel repeats
+        a headline for a video series), photos first — a video's preview is a small, nearly
+        identical frame — then videos, newest first within each; [] when too few have a picture."""
+        seen: set[str] = set()
+        photos: list[PostPage] = []
+        videos: list[PostPage] = []
+        for post in self.get_posts().exclude(image=None).prefetch_related("image__renditions"):
+            if post.title not in seen:
+                seen.add(post.title)
+                (videos if post.leads_with_video else photos).append(post)
+        items = (photos + videos)[:MARQUEE_ITEMS]
+        return [items[0::2], items[1::2]] if len(items) >= MARQUEE_MIN_ITEMS else []
+
     def get_context(self, request: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context(request, *args, **kwargs)
         topic = topic_from_request(request)
@@ -97,6 +113,8 @@ class PostIndexPage(BasePage):
         context["query"] = query
         context["topics"] = visible_topics()
         context["posts"] = paginator.get_page(request.GET.get("page"))
+        if self.telegram_feed and context["posts"].number == 1 and not topic:
+            context["marquee"] = self.get_marquee()
         if self.kind == PostKind.NEWS:
             context.update(self.get_videos(topic))
         return context

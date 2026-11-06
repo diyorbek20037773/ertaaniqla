@@ -240,6 +240,7 @@ qoladi). Qaysi matn hali toʻldirilmaganini bilish uchun ular CMSda turaveradi.
   boʻlimida koʻrinadi. Kanalda tahrirlangan post yangilikni ham yangilaydi, **CMSda tahrirlanmaguncha**:
   siz tahrirlagandan keyin sayt kanaldagi oʻzgarishni olmaydi. Kanaldan oʻchirilgan postni CMSda
   oʻzingiz nashrdan oling (Telegram oʻchirish haqida xabar bermaydi).
+- «Yangiliklar» sahifasi tepasida ikki qator kartochka qarama-qarshi yoʻnalishda yuradi: rasmli 24 tagacha yangilik, avval fotolilar. Sozlash shart emas.
 - Videolar YouTube kanalidan oʻzi keladi (*Snippetlar → Videolar*); «Foydali maʼlumotlar»
   sahifasida yangiliklar ostida shu mavzudagi videolar koʻrsatiladi.
 - Word shablonidagi (Сарлавҳа, Қисқа мазмун, Асосий матн, Мавзу, Сана, Муқова) yangiliklarni

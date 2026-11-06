@@ -464,6 +464,34 @@
     .section-banner__toggle { display: none; }
   }
   html[data-reduce-motion="true"] .section-banner__toggle { display: none; }
+
+  /* «Yangiliklar»: two rows of news moving in opposite directions (D-112). A track holds its set
+     twice, so moving by half its width is seamless; the gap sits inside each set for that. */
+  .news-marquee { --card-w: clamp(15rem, 62vw, 24rem); --row-gap: clamp(0.75rem, 1.4vw, 1.25rem); position: relative; display: grid; gap: var(--row-gap); margin-block: 0 clamp(1.5rem, 3vw, 3rem); overflow: hidden; }
+  .news-marquee__row { overflow: hidden; }
+  .news-marquee__track { display: flex; width: max-content; animation: news-marquee 90s linear infinite; will-change: transform; }
+  .news-marquee__row--reverse .news-marquee__track { animation-direction: reverse; }
+  .news-marquee__set { display: flex; flex: none; gap: var(--row-gap); margin: 0; padding: 0 var(--row-gap) 0 0; list-style: none; }
+  @keyframes news-marquee { to { transform: translate3d(-50%, 0, 0); } }
+  .news-marquee:hover .news-marquee__track, .news-marquee__track:focus-within, .news-marquee.is-paused .news-marquee__track { animation-play-state: paused; }
+  .news-marquee__item { flex: none; width: var(--card-w); margin: 0; }
+  .news-marquee__card { position: relative; display: block; aspect-ratio: 3 / 2; overflow: hidden; border-radius: clamp(1.25rem, 2vw, 1.75rem); background: var(--c-line); color: var(--c-ink); text-decoration: none; }
+  .news-marquee__card picture { display: block; height: 100%; }
+  .news-marquee__img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .news-marquee__card:hover .news-marquee__img { transform: scale(1.04); }
+  .news-marquee__card:focus-visible { outline: 3px solid var(--c-wine); outline-offset: -3px; }
+  .news-marquee__pill { position: absolute; left: 0.75rem; bottom: 0.75rem; box-sizing: border-box; max-width: calc(100% - 1.5rem); overflow: hidden; padding: 0.4em 0.95em; border-radius: var(--radius-pill); background: #fff; font-size: 0.9375rem; font-weight: 600; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 2px 10px rgba(43, 26, 46, 0.14); }
+  .news-marquee__pill::before { content: ""; display: inline-block; width: 0.5em; height: 0.5em; margin-right: 0.5em; border-radius: 50%; background: var(--c-pink-400); vertical-align: 0.1em; }
+  .news-marquee.is-paused .section-banner__play { display: inline; }
+  .news-marquee.is-paused .section-banner__pause { display: none; }
+  .list-page--after-marquee { padding-top: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .news-marquee__track { animation: none; }
+    .news-marquee__row { overflow-x: auto; }
+    .news-marquee__set--copy { display: none; }
+  }
+  html[data-reduce-motion="true"] .news-marquee__row { overflow-x: auto; }
+  html[data-reduce-motion="true"] .news-marquee__set--copy { display: none; }
   .section-tabs, .article--designed, body[data-section] .article { max-width: calc(var(--container-narrow) + 2 * var(--gutter)); margin-inline: auto; }
   /* six tabs since the «Savol-javob» tab (D-084): the bar may be wider than the text column */
   .section-tabs { max-width: min(100%, calc(var(--container-narrow) + 9rem)); margin-block: 0 var(--space-4); }

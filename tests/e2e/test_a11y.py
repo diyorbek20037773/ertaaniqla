@@ -22,6 +22,7 @@ PAGES = [
     "/uz/",
     "/ru/zhenskiy/",
     "/uz/foydali-malumotlar/",
+    "/uz/yangiliklar/",
     "/uz/ayollar/ogohlik/kokrak-bezi-saratoni/",
     "/ru/zhenskiy/kuda-obratitsya/",
     "/uz/qidiruv/?q=skrining",
