@@ -5,7 +5,8 @@
    «Bepul skrining» panel (region → directory, three steps) · news (lead + rows) ·
    «Savolingiz bormi?» panel. Every text is a HomePage field (CMS); empty fields fall back to
    the design wording below, empty cards to one card per topic.
-   Context: page (HomePage), sections, directory_url, regions, faq_page, topics, news_index, news.
+   Context: page (HomePage), sections, directory_url, regions, faq_page, topics, news_index, news,
+   channel_index, marquee (the moving rows of «Yangiliklar», D-112).
    The ribbons are decoration and never carry meaning (aria-hidden). {% endcomment %}
 {% block title_suffix %}{% endblock %}{# the hero slogan already names the site (EA-13) #}
 {% block breadcrumbs %}{% endblock %}
@@ -77,11 +78,24 @@
     </section>
   {% endif %}
 
+  {% if marquee %}
+    <section class="home-block" aria-labelledby="home-channel">
+      <header class="container home-block__head">
+        <div>
+          <p class="eyebrow">{% firstof channel_index.eyebrow _("Latest news") %}</p>
+          <h2 class="display-title" id="home-channel">{{ channel_index.title }}</h2>
+        </div>
+        <a class="btn btn--outline" href="{{ channel_index.url }}">{% trans "See all" context "useful information" %} {% include "components/icons/arrow-right.svg" %}</a>
+      </header>
+      {% include "posts/_news_marquee.html" %}
+    </section>
+  {% endif %}
+
   {% if news_index %}
     <section class="container home-block" aria-labelledby="home-news">
       <header class="home-block__head">
         <div>
-          <p class="eyebrow">{% firstof news_index.eyebrow _("News") %}</p>
+          <p class="eyebrow">{% firstof news_index.eyebrow _("Important to know") %}</p>
           <h2 class="display-title" id="home-news">{{ news_index.title }}</h2>
         </div>
         <a class="btn btn--outline" href="{{ news_index.url }}">{% trans "See all" context "useful information" %} {% include "components/icons/arrow-right.svg" %}</a>

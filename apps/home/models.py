@@ -242,7 +242,8 @@ class HomePage(BasePage):
         def child(model: Any, **filters: Any) -> Any:
             return model.objects.child_of(self).live().filter(**filters).first()
 
-        news_index = child(PostIndexPage, kind=PostKind.NEWS)
+        news_index = child(PostIndexPage, kind=PostKind.NEWS, telegram_feed=False)
+        channel_index = child(PostIndexPage, kind=PostKind.NEWS, telegram_feed=True)
         articles_index = child(PostIndexPage, kind=PostKind.ARTICLES)
         video_index = child(VideoIndexPage)
         videos = list(ready_videos()[:8])
@@ -253,6 +254,8 @@ class HomePage(BasePage):
             "topics": visible_topics(),
             "news_index": news_index,
             "news": list(news_index.get_posts()[:4]) if news_index else [],
+            "channel_index": channel_index,  # «Yangiliklar»: the two moving rows (D-112)
+            "marquee": channel_index.get_marquee() if channel_index else [],
             "articles_index": articles_index,
             "articles": list(articles_index.get_posts()[:8]) if articles_index else [],
             "video_index": video_index,

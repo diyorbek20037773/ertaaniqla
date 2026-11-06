@@ -485,6 +485,7 @@
   .news-marquee.is-paused .section-banner__play { display: inline; }
   .news-marquee.is-paused .section-banner__pause { display: none; }
   .list-page--after-marquee { padding-top: 0; }
+  .home-block > .news-marquee { margin-bottom: 0; }
   @media (prefers-reduced-motion: reduce) {
     .news-marquee__track { animation: none; }
     .news-marquee__row { overflow-x: auto; }

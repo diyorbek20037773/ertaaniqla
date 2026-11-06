@@ -100,3 +100,20 @@ def test_too_few_items_and_other_lists_keep_the_plain_page(seeded: Any, client: 
     assert 'class="news-marquee"' not in html and "news-feature" in html
     useful = client.get("/uz/foydali-malumotlar/").content.decode()
     assert 'class="news-marquee"' not in useful
+
+
+def test_home_page_shows_the_rows_above_useful_information(
+    channel_posts: PostIndexPage, client: Client
+) -> None:
+    html = client.get("/uz/").content.decode()
+    assert html.index('class="news-marquee"') < html.index('id="home-news"')
+    head = html.split('id="home-channel"', 1)[1]
+    assert head.startswith(">Yangiliklar</h2>") and f'href="{CHANNEL}"' in head
+    news = html.split('id="home-news"', 1)[1]
+    assert news.startswith(">Foydali maʼlumotlar</h2>")
+    assert "Foto yangilik 10" in html.split('class="news-marquee"', 1)[1]
+
+
+def test_home_page_without_enough_news_has_no_rows(seeded: Any, client: Client) -> None:
+    html = client.get("/uz/").content.decode()
+    assert 'class="news-marquee"' not in html and 'id="home-channel"' not in html

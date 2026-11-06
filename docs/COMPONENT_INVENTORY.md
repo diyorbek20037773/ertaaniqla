@@ -141,7 +141,7 @@ Blocks are the editor's building kit (`apps/articles/blocks.py`). Each maps to a
 - Mobile 390 px first; desktop ≥ 1024 px (`64rem`) shows the mega-menu inline.
 - No JS: menu and accordions work through `<details>`; embeds show a link.
 - Accessibility toolbar (`a11y_toolbar.html`): font ×1.25 / ×1.5 (`html[data-font-scale]`), high contrast (`html[data-contrast="high"]` — neutral palette inverted, brand colours kept), reduced motion (`html[data-reduce-motion]`). The design must work in all three.
-- News marquee (`posts/_news_marquee.html`, D-112): two rows of cards moving in opposite directions on «Yangiliklar»; states: moving (also under the mouse), paused (button), reduced motion (rows scroll by hand), hidden in print and with fewer than 8 items.
+- News marquee (`posts/_news_marquee.html`, D-112): two rows of cards moving in opposite directions on «Yangiliklar» and the home page; states: moving (also under the mouse), paused (button), reduced motion (rows scroll by hand), hidden in print and with fewer than 8 items.
 - Print (`static/src/print.css`, tested in `tests/e2e/test_print.py`): article, patient route, self-exam steps, symptom list, question checklists, tool results, glossary — chrome hidden, accordions expanded, `ertaaniqla.uz` footer note.
 - Consent banner (`consent_banner.html`) is fixed at the bottom on first visit; JSON-LD, OG/Twitter tags and share bar are on every page (`base.html`).
 - Placeholders `[[TODO: content — copywriter]]` / `[[VERIFY: doctor]]` appear in content until the copywriter replaces them — style `.placeholder` only.
