@@ -2192,7 +2192,7 @@ msgid "News"
 msgstr "Yangiliklar"
 
 msgid "Your path to a check-up"
-msgstr "Sizning tekshiruv yoʻlagi"
+msgstr "Sizning tekshiruv yoʻlagingiz"
 
 #, python-format
 msgid "%(minutes)s min read"

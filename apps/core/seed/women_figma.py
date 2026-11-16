@@ -195,7 +195,7 @@ def appeal(lang: str, ctx: SeedContext) -> dict[str, Any]:
     return cta("", t(lang, *APPEAL_LABEL), ctx.page_id("women.directory", lang))
 
 
-APPEAL_LABEL = ("Sizning tekshiruv yoʻlagi", "Ваш путь к проверке")  # D-113
+APPEAL_LABEL = ("Sizning tekshiruv yoʻlagingiz", "Ваш путь к проверке")  # D-113
 
 
 def verify_note(lang: str) -> dict[str, Any]:

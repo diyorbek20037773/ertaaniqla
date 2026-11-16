@@ -50,7 +50,7 @@ def test_route_has_the_doctors_eight_steps(seeded: Any, client: Client) -> None:
 
 def test_wording_without_murojaat(seeded: Any, client: Client) -> None:
     home = client.get("/uz/").content.decode()
-    assert "Sizning tekshiruv yoʻlagi" in home and "Skrining joyini toping" not in home
+    assert "Sizning tekshiruv yoʻlagingiz" in home and "Skrining joyini toping" not in home
     assert "Ваш путь к проверке" in client.get("/ru/").content.decode()
     directory = DirectoryPage.objects.get(locale__language_code="uz")
     html = client.get(directory.url).content.decode()
@@ -116,7 +116,7 @@ def test_one_off_update_brings_a_live_site_there(seeded: Any, client: Client) ->
     html = client.get(SCREENING_UZ).content.decode()
     route = _route(html)
     assert route.count('class="screening-route__step"') == 8 and "Tahlil topshirish" not in route
-    assert "Murojaat qilish" not in html and "Sizning tekshiruv yoʻlagi" in html
+    assert "Murojaat qilish" not in html and "Sizning tekshiruv yoʻlagingiz" in html
     out = io.StringIO()
     call_command("client_update_20261116", stdout=out)
     assert out.getvalue().strip() == "footer links renamed: 0"  # nothing left to do
@@ -129,3 +129,18 @@ def test_one_off_update_leaves_an_editors_draft(seeded: Any, admin_user: Any) ->
     out = io.StringIO()
     call_command("client_update_20261116", stdout=out)
     assert f"skipped (unpublished draft): {screening.url_path}" in out.getvalue()
+
+
+def test_one_off_update_fixes_the_first_wording(seeded: Any, client: Client) -> None:
+    """«Sizning tekshiruv yoʻlagi» was live for a day; the grammar wants «…yoʻlagingiz»."""
+    screening, _directory = _old_site()
+    raw = json.loads(json.dumps(list(screening.body.raw_data)))
+    for block in raw:
+        if block["type"] == "cta":
+            block["value"]["button_label"] = "Sizning tekshiruv yoʻlagi"
+    screening.body = raw
+    screening.save_revision().publish()
+    call_command("client_update_20261116", stdout=io.StringIO())
+    html = client.get(SCREENING_UZ).content.decode()
+    assert "Sizning tekshiruv yoʻlagingiz" in html
+    assert html.count("Sizning tekshiruv yoʻlagi") == html.count("Sizning tekshiruv yoʻlagingiz")

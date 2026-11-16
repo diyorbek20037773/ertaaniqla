@@ -9,8 +9,8 @@ docs/new_edits/ of 2026-11-16). Run once after the deploy:
 * no «murojaat»: the directory page is «Tekshiruv yoʻlagi va tibbiyot muassasalari» /
   «Медицинские учреждения и путь проверки», its callout «Tibbiyot muassasalari», the footer link
   carries the page's new name and the closing «Murojaat qilish» / «Обратиться» pills say
-  «Sizning tekshiruv yoʻlagi» / «Ваш путь к проверке» (the header button and the other labels are
-  translations, shipped with the code).
+  «Sizning tekshiruv yoʻlagingiz» / «Ваш путь к проверке» (the header button and the other
+  labels are translations, shipped with the code).
 
 Pages with an unpublished draft are skipped (an editor's work is never published by this
 command); a second run changes nothing.
@@ -35,7 +35,8 @@ CALLOUT_TITLES = {
     "Qayerga murojaat qilish": "Tibbiyot muassasalari",
     "Куда обратиться": "Медицинские учреждения",
 }
-OLD_PILLS = {"Murojaat qilish", "Обратиться"}
+# «Sizning tekshiruv yoʻlagi»: the first wording, live for a day (grammar fix, 2026-11-16)
+OLD_PILLS = {"Murojaat qilish", "Обратиться", "Sizning tekshiruv yoʻlagi"}
 OLD_LINKS = {"Murojaat qilish", "Куда обратиться", *OLD_DIRECTORY_TITLES}
 
 

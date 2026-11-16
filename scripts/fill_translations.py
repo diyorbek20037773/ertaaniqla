@@ -31,7 +31,7 @@ T: dict[str, tuple[str, str]] = {
     ),
     "header menu\x04News": ("Yangiliklar", "Новости"),
     # D-113: the client's wording of 2026-11-16 (no «murojaat») and the doctor's patient route
-    "Your path to a check-up": ("Sizning tekshiruv yoʻlagi", "Ваш путь к проверке"),
+    "Your path to a check-up": ("Sizning tekshiruv yoʻlagingiz", "Ваш путь к проверке"),
     "Check-up steps": ("Tekshiruv qadamlari", "Этапы обследования"),
     "Under the state programme": ("Davlat dasturi doirasida", "В рамках государственной программы"),
     "Where it takes place": ("Qayerda oʻtadi", "Где проходит"),
