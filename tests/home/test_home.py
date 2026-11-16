@@ -84,7 +84,7 @@ def test_hero_title_splits_after_the_dash(seeded, client: Client) -> None:
     html = client.get("/uz/").content.decode()
     assert '<span class="home-hero__main">Erta aniqla</span>' in html
     assert '<em class="home-hero__accent">hayotni</em> <em>saqla</em>' in html
-    assert 'href="/uz/ayollar/qayerga-murojaat/">Skrining joyini toping' in html
+    assert 'href="/uz/ayollar/qayerga-murojaat/">Sizning tekshiruv yoʻlagi' in html
     assert 'href="#yonalishlar">Yoʻnalishlar bilan tanishing</a>' in html
     home.hero_title = "Faqat sarlavha"
     assert home.hero_title_parts == ("Faqat sarlavha", "")

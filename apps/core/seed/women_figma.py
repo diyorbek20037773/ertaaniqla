@@ -190,8 +190,12 @@ def alert(text: str) -> dict[str, Any]:
 
 
 def appeal(lang: str, ctx: SeedContext) -> dict[str, Any]:
-    """The design's closing «Murojaat qilish» pill → the «where to go» directory (D-064)."""
-    return cta("", t(lang, "Murojaat qilish", "Обратиться"), ctx.page_id("women.directory", lang))
+    """The design's closing pill → the «where to go» directory (D-064); «Sizning tekshiruv
+    yoʻlagi» since the client's wording of 2026-11-16 (D-113, no «murojaat»)."""
+    return cta("", t(lang, *APPEAL_LABEL), ctx.page_id("women.directory", lang))
+
+
+APPEAL_LABEL = ("Sizning tekshiruv yoʻlagi", "Ваш путь к проверке")  # D-113
 
 
 def verify_note(lang: str) -> dict[str, Any]:
@@ -1665,67 +1669,205 @@ def body_breast_screening(lang: str, ctx: SeedContext) -> Body:
     ]
 
 
+# The doctor's patient route for cervical screening (docs/new_edits/Маршрут_пациентки_РШМ.docx,
+# 2026-11-16, D-113): the Russian text is the doctor's, verbatim; the Uzbek is a translation in the
+# site's own terms. Each entry: (uz, ru) pairs; «where» says where the step takes place.
+POLYCLINIC = (
+    "Oilaviy shifokorlik punkti (OShP) / tuman poliklinikasi",
+    "Семейный врачебный пункт (СВП) / районная поликлиника",
+)
+CABINET = (
+    "«Onkologik hushyorlik» xonasi, tuman poliklinikasi",
+    "Кабинет онконастороженности, районная поликлиника",
+)
+MCH = (
+    "Ona va bola salomatligi markazi yoki uning filiali",
+    "Центр здоровья матери и ребёнка / филиал",
+)
+ONCOLOGY = (
+    "Onkologiya markazi (respublika yoki hududiy)",
+    "Онкологический центр (РОНЦ / региональный)",
+)
+ROUTE_STEPS: list[dict[str, Any]] = [
+    {
+        "title": ("Tekshiruvga taklif", "Приглашение на обследование"),
+        "text": (
+            "30–50 yoshdagi ayollar shikoyat paydo bo'lishini kutmasdan, ro'yxat bo'yicha "
+            "skriningga taklif qilinadi.",
+            "Женщин 30–50 лет приглашают на скрининг по списку, не дожидаясь жалоб.",
+        ),
+        "where": POLYCLINIC,
+    },
+    {
+        "title": ("Ginekolog qabuli va tahlil olish", "Приём гинеколога и забор анализов"),
+        "text": (
+            "HPV testi va suyuq sitologiya uchun namuna bir vaqtda olinadi.",
+            "Берут ВПЧ-тест и жидкостную цитологию одновременно.",
+        ),
+        "where": CABINET,
+        "places": "district_polyclinics",
+    },
+    {
+        "title": ("Tahlillarni tekshirish", "Исследование анализов"),
+        "text": (
+            "Namunalar HPV testi va sitologiya uchun uskunasi bor laboratoriyaga yuboriladi.",
+            "Образцы отправляют в лабораторию, где есть оборудование для ВПЧ-теста и цитологии.",
+        ),
+        "where": MCH,
+    },
+    {
+        "title": ("Natija", "Результат"),
+        "text": ("Keyingi yo'l natijaga bog'liq.", "Дальше маршрут зависит от результата."),
+        "outcomes": [
+            {
+                "title": ("HPV aniqlanmadi", "ВПЧ не найден"),
+                "text": (
+                    "Jadval bo'yicha kuzatuv, takroriy tekshiruv 10 yildan keyin.",
+                    "Наблюдение по графику, повторная проверка через 10 лет.",
+                ),
+                "where": ("«Onkologik hushyorlik» xonasi", "Кабинет онконастороженности"),
+            },
+            {
+                "title": ("HPV aniqlandi va hujayralar o'zgargan", "ВПЧ найден и клетки изменены"),
+                "text": (
+                    "Ayol kolposkopiyaga (bachadon bo'ynini ko'zdan kechirish) chaqiriladi.",
+                    "Женщину вызывают на кольпоскопию (осмотр шейки матки).",
+                ),
+                "where": MCH,
+            },
+        ],
+    },
+    {
+        "title": ("Kolposkopiya va o'zgarishlarni baholash", "Кольпоскопия и оценка изменений"),
+        "text": (
+            "Hujayralardagi o'zgarishlar darajasi (CIN 1, 2 yoki 3) yoki saraton belgilari "
+            "aniqlanadi.",
+            "Определяют степень изменений клеток (CIN 1, 2 или 3) или признаки рака.",
+        ),
+        "where": MCH,
+        "places": "region_branch",
+        "outcomes": [
+            {
+                "title": ("Yengil o'zgarishlar (CIN 1)", "Лёгкие изменения (CIN 1)"),
+                "text": (
+                    "Bir yildan keyin nazorat: HPV testi, sitologiya va kolposkopiya takrorlanadi.",
+                    "Контроль через год: повторные ВПЧ-тест, цитология и кольпоскопия.",
+                ),
+                "where": MCH,
+            },
+            {
+                "title": (
+                    "O'rtacha va kuchli o'zgarishlar (CIN 2–3)",
+                    "Умеренные и выраженные изменения (CIN 2–3)",
+                ),
+                "text": (
+                    "Biopsiya, so'ng davolash (konizatsiya) — onkologga yo'naltirilmasdan.",
+                    "Биопсия, затем лечение (конизация) без перехода к онкологу.",
+                ),
+                "where": MCH,
+            },
+            {
+                "title": ("Saraton belgilari", "Признаки рака"),
+                "text": ("Onkologga yo'llanma beriladi.", "Направление к онкологу."),
+                "where": ONCOLOGY,
+            },
+        ],
+    },
+    {
+        "title": ("Davolash", "Лечение"),
+        "text": ("Davolash bosqichlarini onkolog belgilaydi.", "Этапы лечения определяет онколог."),
+        "where": (
+            "Onkologiya markazi (respublika yoki hududiy); shifoxona / ko'p tarmoqli tibbiyot "
+            "markazi",
+            "Онкологический центр (РОНЦ / региональный); больница / многопрофильный медицинский "
+            "центр",
+        ),
+    },
+    {
+        "title": ("Psixologik yordam", "Психологическая помощь"),
+        "text": (
+            "Davolanish vaqtida va undan keyin ayolni va uning yaqinlarini qo'llab-quvvatlash.",
+            "Поддержка женщины и близких во время и после лечения.",
+        ),
+        "where": ("Psixologik yordam", "Психологическая поддержка"),
+    },
+    {
+        "title": ("Boshqa ayollar ko'magi", "Поддержка других женщин"),
+        "text": (
+            "Davolanayotgan yoki davolanib bo'lgan ayollar uchun o'zaro yordam guruhlari.",
+            "Группы взаимопомощи для тех, кто проходит или прошёл лечение.",
+        ),
+        "where": (
+            "Nodavlat notijorat tashkiloti / qo'llab-quvvatlash guruhi",
+            "ННО / группа поддержки",
+        ),
+    },
+]
+ROUTE_TITLE = ("Tekshiruv qadamlari", "Этапы обследования")
+ROUTE_INTRO = (
+    "Viloyatingiz va tumaningizni tanlang — har bir qadam uchun qayerga borishingiz ko'rsatiladi.",
+    "Выберите область и район — для каждого шага будет показано, куда идти.",
+)
+ROUTE_NOTE_TITLE = ("CIN nima degani", "Что значит CIN")
+ROUTE_NOTE = (
+    (
+        "CIN (servikal intraepitelial neoplaziya) — bachadon bo'yni hujayralarining saraton oldi "
+        "o'zgarishlari. Bu hali saraton emas.",
+        "CIN 1 — yengil o'zgarishlar, odatda kuzatib boriladi.",
+        "CIN 2–3 — o'rtacha va kuchli o'zgarishlar, saraton rivojlanmasligi uchun davolanadi.",
+    ),
+    (
+        "CIN (цервикальная интраэпителиальная неоплазия) — предраковые изменения клеток шейки "
+        "матки. Это ещё не рак.",
+        "CIN 1 — лёгкие изменения, их обычно наблюдают.",
+        "CIN 2–3 — умеренные и выраженные изменения, их лечат, чтобы рак не развился.",
+    ),
+)
+
+
+def _pick(pair: tuple[str, str], lang: str) -> str:
+    return t(lang, uz(pair[0]), pair[1])
+
+
+def route_value(lang: str) -> dict[str, Any]:
+    """The value of the route block: the doctor's 8 steps with where each takes place and the
+    branches after a result, the region / district picker showing the polyclinics (step 2) and
+    the Mother & Child Health Centre branch (step 5), «what CIN means» under the steps."""
+    steps = []
+    for step in ROUTE_STEPS:
+        steps.append(
+            {
+                "title": _pick(step["title"], lang),
+                "text": p(_pick(step["text"], lang)),
+                "where": _pick(step["where"], lang) if "where" in step else "",
+                "places": step.get("places", ""),
+                "outcomes": [
+                    {
+                        "title": _pick(outcome["title"], lang),
+                        "text": p(_pick(outcome["text"], lang)),
+                        "where": _pick(outcome["where"], lang),
+                    }
+                    for outcome in step.get("outcomes", [])
+                ],
+            }
+        )
+    first, *items = ROUTE_NOTE[0] if lang != "ru" else ROUTE_NOTE[1]
+    if lang != "ru":
+        first, items = uz(first), [uz(item) for item in items]
+    return {
+        "title": _pick(ROUTE_TITLE, lang),
+        "intro": p(_pick(ROUTE_INTRO, lang)),
+        "steps": steps,
+        "note_title": _pick(ROUTE_NOTE_TITLE, lang),
+        "note": p(first) + ul(items),
+    }
+
+
 def screening_route(lang: str) -> dict[str, Any]:
     """D-105: region + district → the place for each step of cervical screening (the doctor's
-    feedback of 2026-10-25: the woman must not have to choose an institution type). Step texts
-    restate the PQ-402 programme already on the page and where the doctor said each step
-    happens."""
-    return {
-        "type": "screening_route",
-        "value": {
-            "title": t(lang, uz("Skriningni qayerda o'tasiz"), "Где пройти скрининг"),
-            "intro": p(
-                t(
-                    lang,
-                    uz(
-                        "Viloyatingiz va tumaningizni tanlang — har bir qadam uchun qayerga "
-                        "borishingiz ko'rsatiladi."
-                    ),
-                    "Выберите область и район — для каждого шага будет показано, куда идти.",
-                )
-            ),
-            "steps": [
-                {
-                    "title": t(lang, "Tahlil topshirish", "Сдать анализ"),
-                    "text": p(
-                        t(
-                            lang,
-                            uz(
-                                "30, 40 va 50 yoshdagi ayollar uchun bepul: odam papilloma virusiga "
-                                "(HPV) test va suyuq sitologiya. Tahlil tumaningizdagi "
-                                "poliklinikaning onkologik ogohlik xonasida olinadi."
-                            ),
-                            "Для женщин 30, 40 и 50 лет — бесплатно: тест на вирус папилломы "
-                            "человека (ВПЧ) и жидкостная цитология. Анализ берут в кабинете "
-                            "онконастороженности поликлиники вашего района.",
-                        )
-                    ),
-                    "places": "district_polyclinics",
-                },
-                {
-                    "title": t(
-                        lang,
-                        uz("Natijada o'zgarish bo'lsa — kolposkopiya"),
-                        "Если в результате есть изменения — кольпоскопия",
-                    ),
-                    "text": p(
-                        t(
-                            lang,
-                            uz(
-                                "Namunalar Ona va bola salomatligi markazi filialida tekshiriladi. "
-                                "HPV aniqlansa va sitologiyada o'zgarish bo'lsa, sizni filialdagi "
-                                "kolposkopist qabuliga chaqirishadi."
-                            ),
-                            "Образцы исследуют в филиале Центра здоровья матери и ребёнка. Если "
-                            "выявлен ВПЧ и цитология показала изменения, вас пригласят к "
-                            "кольпоскописту филиала.",
-                        )
-                    ),
-                    "places": "region_branch",
-                },
-            ],
-        },
-    }
+    feedback of 2026-10-25: the woman must not have to choose an institution type); the steps
+    are the doctor's full patient route of 2026-11-16 (D-113)."""
+    return {"type": "screening_route", "value": route_value(lang)}
 
 
 def cervical_results() -> dict[str, Any]:

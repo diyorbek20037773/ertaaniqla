@@ -187,7 +187,7 @@ def body_w_directory(lang: str, ctx: SeedContext) -> Body:
         screening_route(lang),  # D-105: the simple route first, the full catalogue below
         callout(
             "info",
-            t(lang, "Qayerga murojaat qilish", "Куда обратиться"),
+            t(lang, "Tibbiyot muassasalari", "Медицинские учреждения"),  # D-113
             p(
                 t(
                     lang,
@@ -872,7 +872,11 @@ WOMEN = Node(
         Node(
             key="women.directory",
             kind="directory",
-            title={"uz": "Qayerga murojaat qilish", "ru": "Куда обратиться"},
+            # D-113 (client 2026-11-16): no «murojaat»; the path to a check-up and the places
+            title={
+                "uz": "Tekshiruv yoʻlagi va tibbiyot muassasalari",
+                "ru": "Медицинские учреждения и путь проверки",
+            },
             slug={"uz": "qayerga-murojaat", "ru": "kuda-obratitsya"},
             summary={
                 "uz": "Muassasalar katalogi: xarita va roʻyxat, viloyat boʻyicha filtr",
@@ -1693,7 +1697,12 @@ FOOTER: list[tuple[dict[str, str], list[FooterLink]]] = [
             ("Videoroliklar", "Видеоролики", "videos", ""),
             ("Maqolalar", "Статьи", "articles", ""),
             ("Biz bilan bogʻlanish", "Связаться с нами", "feedback", ""),
-            ("Murojaat qilish", "Куда обратиться", "women.directory", ""),
+            (  # D-113
+                "Tekshiruv yoʻlagi va tibbiyot muassasalari",
+                "Медицинские учреждения и путь проверки",
+                "women.directory",
+                "",
+            ),
         ],
     ),
     (

@@ -11,6 +11,6 @@
     <span class="tool-result__count">({% blocktrans trimmed with checked=result.checked total=result.total %}{{ checked }} of {{ total }} ticked{% endblocktrans %})</span>
   </p>
   <div class="prose">{{ result_text|richtext }}</div>
-  {% if page.where_page and result.see_doctor %}<a class="button button--primary" href="{{ page.where_page.url }}">{% trans "Where to go" %}</a>{% endif %}
+  {% if page.where_page and result.see_doctor %}<a class="button button--primary" href="{{ page.where_page.url }}">{% trans "Your path to a check-up" %}</a>{% endif %}
 </section>
 {% endif %}

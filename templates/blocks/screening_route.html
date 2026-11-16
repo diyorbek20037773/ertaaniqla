@@ -1,10 +1,12 @@
 {% load i18n wagtailcore_tags %}
-{% comment %} blocks/screening_route.html — ScreeningRouteBlock (D-105). Context: value {title, intro},
-   regions, districts [(value, label)], region, district, steps [{step, items, fallback}].
+{% comment %} blocks/screening_route.html — ScreeningRouteBlock (D-105, the doctor's 8 steps D-113).
+   Context: value {title, intro, note_title, note}, regions, districts [(value, label)], region,
+   district, steps [{step: {title, text, where, places, outcomes [{title, text, where}]}, items,
+   fallback}]. Each step says where it takes place; a result step lists its branches.
    GET ?sr=&sd= on the page itself; HTMX swaps only this section (hx-select), a plain submit
    reloads the page without JS. {% endcomment %}
 <section class="block screening-route" id="screening-route" aria-labelledby="screening-route-title">
-  <h2 class="screening-route__title" id="screening-route-title">{% if value.title %}{{ value.title }}{% else %}{% trans "Where to get screened" %}{% endif %}</h2>
+  <h2 class="screening-route__title" id="screening-route-title">{% if value.title %}{{ value.title }}{% else %}{% trans "Check-up steps" %}{% endif %}</h2>
   {% if value.intro %}<div class="screening-route__intro">{{ value.intro|richtext }}</div>{% endif %}
 
   <form class="screening-route__form" method="get" action="{{ request.path }}#screening-route"
@@ -37,6 +39,7 @@
         <div class="screening-route__body">
           <h3 class="screening-route__step-title">{{ entry.step.title }}</h3>
           {% if entry.step.text %}<div class="screening-route__text">{{ entry.step.text|richtext }}</div>{% endif %}
+          {% if entry.step.where %}<p class="screening-route__where">{% include "components/icons/pin.svg" %}<span class="sr-only">{% trans "Where it takes place" %}: </span>{{ entry.step.where }}</p>{% endif %}
           {% if entry.step.places %}
             {% if entry.items %}
               {% if entry.fallback %}<p class="screening-route__note">{% trans "No branch for your region is on record yet. The nearest branches:" %}</p>{% endif %}
@@ -51,8 +54,25 @@
               <p class="screening-route__hint">{% trans "Choose your region above — the place for this step appears here." %}</p>
             {% endif %}
           {% endif %}
+          {% if entry.step.outcomes %}
+            <ul class="screening-route__outcomes">
+              {% for outcome in entry.step.outcomes %}
+                <li class="screening-route__outcome">
+                  <p class="screening-route__outcome-title">{{ outcome.title }}</p>
+                  {% if outcome.text %}<div class="screening-route__text">{{ outcome.text|richtext }}</div>{% endif %}
+                  {% if outcome.where %}<p class="screening-route__where">{% include "components/icons/pin.svg" %}<span class="sr-only">{% trans "Where it takes place" %}: </span>{{ outcome.where }}</p>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         </div>
       </li>
     {% endfor %}
   </ol>
+  {% if value.note %}
+    <div class="screening-route__glossary">
+      {% if value.note_title %}<h3 class="screening-route__step-title">{{ value.note_title }}</h3>{% endif %}
+      <div class="screening-route__text">{{ value.note|richtext }}</div>
+    </div>
+  {% endif %}
 </section>

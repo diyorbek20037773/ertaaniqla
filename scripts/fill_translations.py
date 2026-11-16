@@ -30,6 +30,26 @@ T: dict[str, tuple[str, str]] = {
         "Новые посты Telegram-канала публикуются в этом списке.",
     ),
     "header menu\x04News": ("Yangiliklar", "Новости"),
+    # D-113: the client's wording of 2026-11-16 (no «murojaat») and the doctor's patient route
+    "Your path to a check-up": ("Sizning tekshiruv yoʻlagi", "Ваш путь к проверке"),
+    "Check-up steps": ("Tekshiruv qadamlari", "Этапы обследования"),
+    "Under the state programme": ("Davlat dasturi doirasida", "В рамках государственной программы"),
+    "Where it takes place": ("Qayerda oʻtadi", "Где проходит"),
+    "Shown under the step, e.g. «District polyclinic».": (
+        "Qadam ostida koʻrsatiladi, masalan «Tuman poliklinikasi».",
+        "Показывается под шагом, например «Районная поликлиника».",
+    ),
+    "Result": ("Natija", "Результат"),
+    "Results (branches of the route)": (
+        "Natijalar (yoʻnalish tarmoqlari)",
+        "Результаты (ветви маршрута)",
+    ),
+    "Note heading": ("Izoh sarlavhasi", "Заголовок пояснения"),
+    "Note under the steps": ("Qadamlar ostidagi izoh", "Пояснение под шагами"),
+    "E.g. what the terms of the route mean.": (
+        "Masalan, yoʻnalishdagi atamalar nimani anglatadi.",
+        "Например, что означают термины маршрута.",
+    ),
     # D-106: an institution whose details nobody has verified yet (expert review)
     "Details are being verified": (
         "Maʼlumotlar aniqlashtirilmoqda",

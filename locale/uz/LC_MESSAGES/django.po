@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:12+0500\n"
+"POT-Creation-Date: 2026-11-16 14:55+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,8 +144,8 @@ msgstr "Anchor (havola nomi)"
 
 msgid "Latin letters and dashes, e.g. bosqichlari — links can open this item."
 msgstr ""
-"Lotin harflari va chiziqcha, masalan bosqichlari — havolalar shu bandni ocha "
-"oladi."
+"Lotin harflari va chiziqcha, masalan bosqichlari — havolalar shu bandni ocha"
+" oladi."
 
 msgid "Label"
 msgstr "Izoh"
@@ -242,7 +242,8 @@ msgstr "Video tanlang yoki tashqi havola kiriting."
 
 msgid "Only YouTube, Telegram, Instagram and TikTok links are supported."
 msgstr ""
-"Faqat YouTube, Telegram, Instagram va TikTok havolalari qoʻllab-quvvatlanadi."
+"Faqat YouTube, Telegram, Instagram va TikTok havolalari qoʻllab-"
+"quvvatlanadi."
 
 msgid "Images"
 msgstr "Rasmlar"
@@ -301,8 +302,21 @@ msgstr "Maksimal soni"
 msgid "Institution list"
 msgstr "Muassasalar roʻyxati"
 
+#| msgid "Results"
+msgid "Result"
+msgstr "Natija"
+
+msgid "Where it takes place"
+msgstr "Qayerda oʻtadi"
+
 msgid "Step"
 msgstr "Qadam"
+
+msgid "Shown under the step, e.g. «District polyclinic»."
+msgstr "Qadam ostida koʻrsatiladi, masalan «Tuman poliklinikasi»."
+
+msgid "Results (branches of the route)"
+msgstr "Natijalar (yoʻnalish tarmoqlari)"
 
 msgid "No places"
 msgstr "Manzil koʻrsatilmaydi"
@@ -318,6 +332,17 @@ msgstr "Qadam ostida koʻrsatiladigan manzillar"
 
 msgid "Intro"
 msgstr "Kirish"
+
+#| msgid "Section heading"
+msgid "Note heading"
+msgstr "Izoh sarlavhasi"
+
+#| msgid "note under the cards"
+msgid "Note under the steps"
+msgstr "Qadamlar ostidagi izoh"
+
+msgid "E.g. what the terms of the route mean."
+msgstr "Masalan, yoʻnalishdagi atamalar nimani anglatadi."
 
 msgid "Screening route (region and district → places)"
 msgstr "Skrining yoʻli (viloyat va tuman → manzillar)"
@@ -406,7 +431,8 @@ msgstr "Usul kartalari (katta raqamlar)"
 msgid "Frame the content"
 msgstr "Kontentni ramkaga olish"
 
-msgid "One rounded frame around everything inside (diagnostics in the design)."
+msgid ""
+"One rounded frame around everything inside (diagnostics in the design)."
 msgstr ""
 "Ichidagi hamma narsa atrofida bitta yumaloq ramka (dizayndagi diagnostika)."
 
@@ -972,8 +998,8 @@ msgstr "skrining filiali (bachadon boʻyni)"
 
 msgid ""
 "A branch of the Mother & Child Health Centre that tests the screening "
-"samples and does colposcopy. Shown as the second step of the screening route "
-"for its region."
+"samples and does colposcopy. Shown as the second step of the screening route"
+" for its region."
 msgstr ""
 "Skrining namunalarini tekshiradigan va kolposkopiya qiladigan Ona va bola "
 "salomatligi markazi filiali. Oʻz viloyati uchun skrining yoʻlining ikkinchi "
@@ -991,7 +1017,8 @@ msgstr "tashqi ID"
 msgid ""
 "Identifier in an external registry (e.g. DMED) for future synchronisation."
 msgstr ""
-"Kelajakda sinxronlash uchun tashqi reyestrdagi (masalan, DMED) identifikator."
+"Kelajakda sinxronlash uchun tashqi reyestrdagi (masalan, DMED) "
+"identifikator."
 
 msgid "external source"
 msgstr "tashqi manba"
@@ -1047,7 +1074,8 @@ msgstr "Mavzu"
 msgid "Other / not sure"
 msgstr "Boshqa / bilmayman"
 
-msgid "I agree to the processing of my data as described in the privacy policy"
+msgid ""
+"I agree to the processing of my data as described in the privacy policy"
 msgstr ""
 "Maxfiylik siyosatida tavsiflanganidek, maʼlumotlarim qayta ishlanishiga "
 "roziman"
@@ -1710,8 +1738,8 @@ msgid ""
 "topic (302). The overview stays visible in preview."
 msgstr ""
 "Dizaynda boʻlim sharhi yoʻq: tashrif buyuruvchilar toʻgʻridan-toʻgʻri "
-"menyuning birinchi mavzusiga oʻtadi (302). Sharh oldindan koʻrishda koʻrinib "
-"turadi."
+"menyuning birinchi mavzusiga oʻtadi (302). Sharh oldindan koʻrishda koʻrinib"
+" turadi."
 
 msgid "Section identity"
 msgstr "Boʻlim identikasi"
@@ -1999,8 +2027,8 @@ msgstr "Yuklab olish"
 msgid "No institutions match the selected filters yet."
 msgstr "Tanlangan filtrlarga mos muassasalar hozircha yoʻq."
 
-msgid "Where to get screened"
-msgstr "Skriningni qayerda oʻtasiz"
+msgid "Check-up steps"
+msgstr "Tekshiruv qadamlari"
 
 msgid "Your region"
 msgstr "Viloyatingiz"
@@ -2021,13 +2049,15 @@ msgid "Show"
 msgstr "Koʻrsatish"
 
 msgid "No branch for your region is on record yet. The nearest branches:"
-msgstr "Viloyatingiz filiali hali roʻyxatga kiritilmagan. Eng yaqin filiallar:"
+msgstr ""
+"Viloyatingiz filiali hali roʻyxatga kiritilmagan. Eng yaqin filiallar:"
 
 msgid "No polyclinic of this district is on record yet."
 msgstr "Bu tuman poliklinikasi hali roʻyxatga kiritilmagan."
 
 msgid ""
-"Choose your region and district above — the places for this step appear here."
+"Choose your region and district above — the places for this step appear "
+"here."
 msgstr ""
 "Yuqorida viloyat va tumaningizni tanlang — bu qadam uchun manzillar shu "
 "yerda chiqadi."
@@ -2161,8 +2191,8 @@ msgctxt "header menu"
 msgid "News"
 msgstr "Yangiliklar"
 
-msgid "Find a screening place"
-msgstr "Skrining joyini toping"
+msgid "Your path to a check-up"
+msgstr "Sizning tekshiruv yoʻlagi"
 
 #, python-format
 msgid "%(minutes)s min read"
@@ -2246,7 +2276,8 @@ msgid ""
 "review."
 msgstr ""
 "Belgi tibbiy ekspert sahifani «Tibbiy tekshiruv» jarayonida tasdiqlaganda "
-"avtomatik qoʻyiladi. Tekshiruv soʻrash uchun sahifani moderatsiyaga yuboring."
+"avtomatik qoʻyiladi. Tekshiruv soʻrash uchun sahifani moderatsiyaga "
+"yuboring."
 
 msgid "Results"
 msgstr "Natijalar"
@@ -2264,6 +2295,10 @@ msgstr "Tuman, qishloq yoki nomi"
 
 msgid "e.g. Chilonzor or 12-OP"
 msgstr "masalan: Chilonzor yoki 12-OP"
+
+#| msgid "free under the state programme"
+msgid "Under the state programme"
+msgstr "Davlat dasturi doirasida"
 
 msgid "Loading…"
 msgstr "Yuklanmoqda…"
@@ -2420,9 +2455,15 @@ msgstr "Skriningdan qayerda oʻtish mumkin?"
 msgid "Show institutions"
 msgstr "Muassasalarni koʻrsatish"
 
+msgid "Latest news"
+msgstr "Soʻnggi xabarlar"
+
 msgctxt "useful information"
 msgid "See all"
 msgstr "Barchasini koʻrish"
+
+msgid "Important to know"
+msgstr "Bilish muhim"
 
 msgid "News will appear here soon."
 msgstr "Yangiliklar tez orada shu yerda chiqadi."
@@ -2433,8 +2474,8 @@ msgstr "Savolingiz bormi?"
 msgid ""
 "Send a question to the specialists or call the hotline. You are not alone."
 msgstr ""
-"Mutaxassislarga murojaat yuboring yoki ishonch telefoniga qoʻngʻiroq qiling. "
-"Siz yolgʻiz emassiz."
+"Mutaxassislarga murojaat yuboring yoki ishonch telefoniga qoʻngʻiroq qiling."
+" Siz yolgʻiz emassiz."
 
 msgctxt "home cta"
 msgid "Ask a question"
@@ -2498,9 +2539,6 @@ msgstr "Oʻqish"
 msgid "Read more"
 msgstr "Batafsil"
 
-msgid "Important to know"
-msgstr "Bilish muhim"
-
 msgid "Search the articles"
 msgstr "Maqolalardan qidirish"
 
@@ -2508,9 +2546,6 @@ msgstr "Maqolalardan qidirish"
 msgid "%(counter)s article"
 msgid_plural "%(counter)s articles"
 msgstr[0] "%(counter)s ta maqola"
-
-msgid "Latest news"
-msgstr "Soʻnggi xabarlar"
 
 #, python-format
 msgid "%(counter)s news item"
@@ -2542,7 +2577,8 @@ msgid "In Uzbek"
 msgstr "Oʻzbek tilida"
 
 msgid ""
-"Nothing found. Try another word, for example the name of a symptom or a test."
+"Nothing found. Try another word, for example the name of a symptom or a "
+"test."
 msgstr ""
 "Hech narsa topilmadi. Boshqa soʻzni sinab koʻring, masalan, belgi yoki "
 "tekshiruv nomini."
@@ -2597,9 +2633,6 @@ msgid "every %(years)s year"
 msgid_plural "every %(years)s years"
 msgstr[0] "har %(years)s yilda"
 
-msgid "Where to go"
-msgstr "Qayerga murojaat qilish"
-
 msgid "No warning signs ticked"
 msgstr "Xavotirli belgilar belgilanmagan"
 
@@ -2618,3 +2651,12 @@ msgstr "Natijani koʻrsatish"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Asboblar tibbiy tasdiqdan keyin shu yerda paydo boʻladi."
+
+#~ msgid "Where to get screened"
+#~ msgstr "Skriningni qayerda oʻtasiz"
+
+#~ msgid "Find a screening place"
+#~ msgstr "Skrining joyini toping"
+
+#~ msgid "Where to go"
+#~ msgstr "Qayerga murojaat qilish"

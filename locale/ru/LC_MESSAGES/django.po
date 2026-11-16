@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 11:12+0500\n"
+"POT-Creation-Date: 2026-11-16 14:55+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,8 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "Analytics"
 msgstr "Аналитика"
@@ -124,8 +123,8 @@ msgstr "Значок"
 
 msgid "Designer icon shown on the pink tile (used when no image is uploaded)."
 msgstr ""
-"Значок из дизайн-макета на розовой плитке (используется, если изображение не "
-"загружено)."
+"Значок из дизайн-макета на розовой плитке (используется, если изображение не"
+" загружено)."
 
 msgid "Cards"
 msgstr "Карточки"
@@ -147,8 +146,8 @@ msgstr "Якорь"
 
 msgid "Latin letters and dashes, e.g. bosqichlari — links can open this item."
 msgstr ""
-"Латинские буквы и дефисы, например bosqichlari. По этому якорю ссылки смогут "
-"открывать данный пункт."
+"Латинские буквы и дефисы, например bosqichlari. По этому якорю ссылки смогут"
+" открывать данный пункт."
 
 msgid "Label"
 msgstr "Подпись"
@@ -303,8 +302,21 @@ msgstr "Максимальное количество"
 msgid "Institution list"
 msgstr "Список учреждений"
 
+#| msgid "Results"
+msgid "Result"
+msgstr "Результат"
+
+msgid "Where it takes place"
+msgstr "Где проходит"
+
 msgid "Step"
 msgstr "Шаг"
+
+msgid "Shown under the step, e.g. «District polyclinic»."
+msgstr "Показывается под шагом, например «Районная поликлиника»."
+
+msgid "Results (branches of the route)"
+msgstr "Результаты (ветви маршрута)"
 
 msgid "No places"
 msgstr "Без адресов"
@@ -320,6 +332,17 @@ msgstr "Адреса под шагом"
 
 msgid "Intro"
 msgstr "Вводный текст"
+
+#| msgid "Section heading"
+msgid "Note heading"
+msgstr "Заголовок пояснения"
+
+#| msgid "note under the cards"
+msgid "Note under the steps"
+msgstr "Пояснение под шагами"
+
+msgid "E.g. what the terms of the route mean."
+msgstr "Например, что означают термины маршрута."
 
 msgid "Screening route (region and district → places)"
 msgstr "Маршрут скрининга (область и район → адреса)"
@@ -410,7 +433,8 @@ msgstr "Карточки методов (крупные цифры)"
 msgid "Frame the content"
 msgstr "Заключить содержимое в рамку"
 
-msgid "One rounded frame around everything inside (diagnostics in the design)."
+msgid ""
+"One rounded frame around everything inside (diagnostics in the design)."
 msgstr ""
 "Общая скруглённая рамка вокруг всего вложенного содержимого (как в разделе "
 "«Диагностика» в дизайне)."
@@ -739,8 +763,8 @@ msgstr "адрес (uz)"
 
 msgid "Footer location icon; opens Yandex Maps when no map link is set."
 msgstr ""
-"Значок адреса в подвале; если ссылка на карту не указана, открываются Яндекс "
-"Карты."
+"Значок адреса в подвале; если ссылка на карту не указана, открываются Яндекс"
+" Карты."
 
 msgid "address (ru)"
 msgstr "адрес (ru)"
@@ -778,8 +802,8 @@ msgstr "полоса над подвалом (uz)"
 msgid ""
 "Shown on every page; an e-mail address becomes a link. Empty = no strip."
 msgstr ""
-"Показывается на каждой странице; адрес электронной почты становится ссылкой. "
-"Если поле пустое, полоса не показывается."
+"Показывается на каждой странице; адрес электронной почты становится ссылкой."
+" Если поле пустое, полоса не показывается."
 
 msgid "notice above the footer (ru)"
 msgstr "полоса над подвалом (ru)"
@@ -981,8 +1005,8 @@ msgstr "филиал скрининга (шейка матки)"
 
 msgid ""
 "A branch of the Mother & Child Health Centre that tests the screening "
-"samples and does colposcopy. Shown as the second step of the screening route "
-"for its region."
+"samples and does colposcopy. Shown as the second step of the screening route"
+" for its region."
 msgstr ""
 "Филиал Центра здоровья матери и ребёнка, где исследуют образцы скрининга и "
 "проводят кольпоскопию. Показывается вторым шагом маршрута скрининга для "
@@ -1030,7 +1054,8 @@ msgid "default section filter"
 msgstr "раздел в фильтре по умолчанию"
 
 msgid "Pre-selects the section filter; visitors can change it."
-msgstr "Раздел, выбранный в фильтре изначально; посетители могут его изменить."
+msgstr ""
+"Раздел, выбранный в фильтре изначально; посетители могут его изменить."
 
 msgid "directory page (where to go)"
 msgstr "страница справочника (куда обратиться)"
@@ -1057,7 +1082,8 @@ msgstr "Тема"
 msgid "Other / not sure"
 msgstr "Другое / не знаю"
 
-msgid "I agree to the processing of my data as described in the privacy policy"
+msgid ""
+"I agree to the processing of my data as described in the privacy policy"
 msgstr ""
 "Я даю согласие на обработку моих данных в соответствии с политикой "
 "конфиденциальности"
@@ -1168,8 +1194,8 @@ msgstr "вопрос в опубликованном виде"
 
 msgid "Edited/anonymised wording shown on the site (empty = original text)."
 msgstr ""
-"Отредактированная или обезличенная формулировка для сайта (если поле пустое, "
-"используется исходный текст)."
+"Отредактированная или обезличенная формулировка для сайта (если поле пустое,"
+" используется исходный текст)."
 
 msgid "answer"
 msgstr "ответ"
@@ -1218,7 +1244,8 @@ msgstr "Карточки «Информация, которую нужно зн�
 
 msgid "Short links to pages, shown next to the most asked questions."
 msgstr ""
-"Краткие ссылки на страницы, отображаемые рядом с часто задаваемыми вопросами."
+"Краткие ссылки на страницы, отображаемые рядом с часто задаваемыми "
+"вопросами."
 
 msgid "questions & answers page"
 msgstr "страница «Вопросы и ответы»"
@@ -1295,7 +1322,8 @@ msgid "synonyms"
 msgstr "синонимы"
 
 msgid "Comma-separated alternative spellings (e.g. Cyrillic, abbreviations)."
-msgstr "Варианты написания через запятую (например, на кириллице, сокращения)."
+msgstr ""
+"Варианты написания через запятую (например, на кириллице, сокращения)."
 
 msgid "glossary term"
 msgstr "термин словаря"
@@ -1539,8 +1567,8 @@ msgstr "Показывается на русской версии сайта. П
 
 msgid "Filter on the «Videos» page; empty = shown under «All» only."
 msgstr ""
-"Фильтр на странице «Видеоролики»; если не выбрано, видео отображается только "
-"во вкладке «Все»."
+"Фильтр на странице «Видеоролики»; если не выбрано, видео отображается только"
+" во вкладке «Все»."
 
 msgid "source"
 msgstr "источник"
@@ -1614,7 +1642,8 @@ msgstr "%(label)s: недопустимый тип содержимого %(mime
 
 msgid "Subtitle files must be WebVTT (start with 'WEBVTT')."
 msgstr ""
-"Файлы субтитров должны быть в формате WebVTT (начинаться со строки 'WEBVTT')."
+"Файлы субтитров должны быть в формате WebVTT (начинаться со строки "
+"'WEBVTT')."
 
 msgid "short description"
 msgstr "краткое описание"
@@ -1707,8 +1736,8 @@ msgstr "основной цвет"
 
 msgid "Overrides the token default (--brand). Leave empty to use tokens.css."
 msgstr ""
-"Переопределяет значение токена по умолчанию (--brand). Оставьте поле пустым, "
-"чтобы использовать значение из tokens.css."
+"Переопределяет значение токена по умолчанию (--brand). Оставьте поле пустым,"
+" чтобы использовать значение из tokens.css."
 
 msgid "accent colour"
 msgstr "акцентный цвет"
@@ -1723,8 +1752,8 @@ msgid ""
 "The design has no section overview: visitors go straight to the first menu "
 "topic (302). The overview stays visible in preview."
 msgstr ""
-"В дизайне нет обзорной страницы раздела: посетитель сразу переходит к первой "
-"теме меню (перенаправление 302). Обзорная страница остаётся доступной в "
+"В дизайне нет обзорной страницы раздела: посетитель сразу переходит к первой"
+" теме меню (перенаправление 302). Обзорная страница остаётся доступной в "
 "предпросмотре."
 
 msgid "Section identity"
@@ -2013,8 +2042,8 @@ msgstr "Скачать"
 msgid "No institutions match the selected filters yet."
 msgstr "По выбранным фильтрам учреждения пока не найдены."
 
-msgid "Where to get screened"
-msgstr "Где пройти скрининг"
+msgid "Check-up steps"
+msgstr "Этапы обследования"
 
 msgid "Your region"
 msgstr "Ваша область"
@@ -2041,7 +2070,8 @@ msgid "No polyclinic of this district is on record yet."
 msgstr "Поликлиника этого района ещё не внесена в справочник."
 
 msgid ""
-"Choose your region and district above — the places for this step appear here."
+"Choose your region and district above — the places for this step appear "
+"here."
 msgstr "Выберите выше область и район — адреса для этого шага появятся здесь."
 
 msgid "Choose your region above — the place for this step appears here."
@@ -2172,8 +2202,8 @@ msgctxt "header menu"
 msgid "News"
 msgstr "Новости"
 
-msgid "Find a screening place"
-msgstr "Найти место скрининга"
+msgid "Your path to a check-up"
+msgstr "Ваш путь к проверке"
 
 #, python-format
 msgid "%(minutes)s min read"
@@ -2280,6 +2310,10 @@ msgstr "Район, село или название"
 
 msgid "e.g. Chilonzor or 12-OP"
 msgstr "например: Чиланзар или 12-ОП"
+
+#| msgid "free under the state programme"
+msgid "Under the state programme"
+msgstr "В рамках государственной программы"
 
 msgid "Loading…"
 msgstr "Загрузка…"
@@ -2434,9 +2468,15 @@ msgstr "Где пройти скрининг?"
 msgid "Show institutions"
 msgstr "Показать учреждения"
 
+msgid "Latest news"
+msgstr "Последние новости"
+
 msgctxt "useful information"
 msgid "See all"
 msgstr "Смотреть все"
+
+msgid "Important to know"
+msgstr "Важно знать"
 
 msgid "News will appear here soon."
 msgstr "Здесь скоро появятся новости."
@@ -2517,9 +2557,6 @@ msgstr "Читать"
 msgid "Read more"
 msgstr "Подробнее"
 
-msgid "Important to know"
-msgstr "Важно знать"
-
 msgid "Search the articles"
 msgstr "Поиск по статьям"
 
@@ -2529,9 +2566,6 @@ msgid_plural "%(counter)s articles"
 msgstr[0] "%(counter)s статья"
 msgstr[1] "%(counter)s статьи"
 msgstr[2] "%(counter)s статей"
-
-msgid "Latest news"
-msgstr "Последние новости"
 
 #, python-format
 msgid "%(counter)s news item"
@@ -2567,7 +2601,8 @@ msgid "In Uzbek"
 msgstr "На узбекском"
 
 msgid ""
-"Nothing found. Try another word, for example the name of a symptom or a test."
+"Nothing found. Try another word, for example the name of a symptom or a "
+"test."
 msgstr ""
 "Ничего не найдено. Попробуйте другое слово, например название симптома или "
 "обследования."
@@ -2626,9 +2661,6 @@ msgstr[0] "раз в %(years)s год"
 msgstr[1] "раз в %(years)s года"
 msgstr[2] "раз в %(years)s лет"
 
-msgid "Where to go"
-msgstr "Куда обратиться"
-
 msgid "No warning signs ticked"
 msgstr "Тревожные признаки не отмечены"
 
@@ -2647,3 +2679,12 @@ msgstr "Показать результат"
 
 msgid "Tools will appear here after medical sign-off."
 msgstr "Инструменты появятся здесь после медицинского согласования."
+
+#~ msgid "Where to get screened"
+#~ msgstr "Где пройти скрининг"
+
+#~ msgid "Find a screening place"
+#~ msgstr "Найти место скрининга"
+
+#~ msgid "Where to go"
+#~ msgstr "Куда обратиться"

@@ -72,7 +72,8 @@ def test_translations_are_linked(seeded) -> None:
 def test_women_menu_has_the_five_figma_tabs(seeded) -> None:
     section = page_for("women", "ru")
     titles = [p.title for p in section.get_menu_items()]
-    # D-064: the Figma tabs replace the TZ menu; «Куда обратиться» stays as a CTA target
+    # D-064: the Figma tabs replace the TZ menu; the directory («Медицинские учреждения и путь
+    # проверки» since D-113) stays as a CTA target
     assert titles == [
         "Общая информация",
         "Скрининг",
@@ -82,7 +83,7 @@ def test_women_menu_has_the_five_figma_tabs(seeded) -> None:
         "Вопросы и ответы",  # client 2026-10-13 (D-084)
     ]
     all_titles = [p.title for p in section.get_subsections()]
-    assert "Куда обратиться" in all_titles
+    assert "Медицинские учреждения и путь проверки" in all_titles
 
 
 def test_women_topics_are_breast_and_cervical_variant_groups(seeded) -> None:

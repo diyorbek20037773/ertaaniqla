@@ -473,9 +473,26 @@ class InstitutionListBlock(blocks.StructBlock):
         return context
 
 
+class ScreeningRouteOutcomeBlock(blocks.StructBlock):
+    """One branch of a step: a result and what follows it (the doctor's route, D-113)."""
+
+    title = blocks.CharBlock(max_length=120, label=_("Result"))
+    text = blocks.RichTextBlock(required=False, features=INLINE_FEATURES, label=_("Text"))
+    where = blocks.CharBlock(required=False, max_length=200, label=_("Where it takes place"))
+
+
 class ScreeningRouteStepBlock(blocks.StructBlock):
     title = blocks.CharBlock(max_length=120, label=_("Step"))
     text = blocks.RichTextBlock(required=False, features=INLINE_FEATURES, label=_("Text"))
+    where = blocks.CharBlock(
+        required=False,
+        max_length=200,
+        label=_("Where it takes place"),
+        help_text=_("Shown under the step, e.g. «District polyclinic»."),
+    )
+    outcomes = blocks.ListBlock(
+        ScreeningRouteOutcomeBlock(), default=[], label=_("Results (branches of the route)")
+    )
     places = blocks.ChoiceBlock(
         choices=[
             ("", _("No places")),
@@ -495,6 +512,13 @@ class ScreeningRouteBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=False, max_length=160, label=_("Heading"))
     intro = blocks.RichTextBlock(required=False, features=INLINE_FEATURES, label=_("Intro"))
     steps = blocks.ListBlock(ScreeningRouteStepBlock(), min_num=1, label=_("Steps"))
+    note_title = blocks.CharBlock(required=False, max_length=160, label=_("Note heading"))
+    note = blocks.RichTextBlock(
+        required=False,
+        features=LIST_FEATURES,
+        label=_("Note under the steps"),
+        help_text=_("E.g. what the terms of the route mean."),
+    )
 
     class Meta:
         icon = "list-ol"
