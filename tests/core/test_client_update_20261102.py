@@ -159,3 +159,17 @@ def test_one_off_update_fixes_anchors_footer_and_repeats(seeded: Any, client: Cl
 
     call_command("client_update_20261102", stdout=out)
     assert out.getvalue().rstrip().endswith("news items unpublished 0, link fixes 0")
+
+
+def test_caches_are_dropped_again_once_a_change_is_committed(
+    seeded: Any, django_capture_on_commit_callbacks: Any
+) -> None:
+    """A page rendered while a long transaction publishes (a one-off client_update) caches the
+    old rows under the new version; the bump after the commit retires it (D-113, 2026-11-16)."""
+    from apps.core.cache import page_cache_version
+
+    page = Page.objects.get(url_path__endswith="/haqimizda/").specific
+    with django_capture_on_commit_callbacks(execute=True) as callbacks:
+        page.save_revision().publish()
+        inside = page_cache_version()
+    assert callbacks and page_cache_version() > inside
