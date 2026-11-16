@@ -43,6 +43,7 @@ ENV PYTHONUNBUFFERED=1 \
 # ffmpeg (video transcoding), libmagic (MIME validation), postgres client **16** from PGDG
 # (must match the server major for pg_dump/pg_restore — Debian ships 17), gettext
 # (compilemessages), curl (healthcheck), restic (backups). Retries: slow links (2026-11-01).
+# "upgrade": Debian security fixes the base image does not carry yet (zlib1g, trivy 2026-11-16).
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
     && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/pgdg.gpg \
@@ -51,6 +52,7 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
         > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update && apt-get install -y --no-install-recommends \
         ffmpeg libmagic1 postgresql-client-16 gettext restic tini \
+    && apt-get upgrade -y --no-install-recommends \
     && apt-get purge -y gnupg && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 1000 app && useradd --uid 1000 --gid app --create-home app \
