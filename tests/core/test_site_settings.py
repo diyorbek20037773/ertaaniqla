@@ -58,16 +58,22 @@ def test_footer_short_hotline_and_address(site_settings, client: Client) -> None
 
 
 def test_footer_shows_the_agency_logo_in_the_page_language(site_settings, client: Client) -> None:
-    """D-098: the white partner logos next to Yandex — the agency in the page's language."""
+    """D-098, D-114: the white partner logos next to Yandex — the agency's vertical logo (one
+    image for both languages until a Russian vertical one comes), its name in the page's
+    language, then the Ministry of Health, Hamroh and Yandex."""
     uz = client.get("/uz/").content.decode()
-    assert "img/partners/asrr-uz-inverse" in uz and "asrr-ru-inverse" not in uz
+    assert "img/partners/asrr-uz-vertical-inverse" in uz
     assert 'alt="Oʻzbekiston Respublikasi Prezidenti huzuridagi Strategik rivojlanish' in uz
-    assert uz.index("asrr-uz-inverse") < uz.index("yandex-uz")
     ru = client.get("/ru/").content.decode()
-    assert "img/partners/asrr-ru-inverse" in ru and "asrr-uz-inverse" not in ru
+    assert "img/partners/asrr-uz-vertical-inverse" in ru
     assert 'alt="Агентство стратегического развития и реформ' in ru
-    # Hamroh: one white wordmark for every language, between the agency and Yandex
-    assert uz.index("asrr-uz-inverse") < uz.index("hamroh-inverse") < uz.index("yandex-uz")
+    # Hamroh: one white wordmark for every language, after the ministry and before Yandex
+    assert (
+        uz.index("asrr-uz-vertical")
+        < uz.index("ssv-uz")
+        < uz.index("hamroh-inverse")
+        < uz.index("yandex-uz")
+    )
     assert 'alt="Hamroh — xotin-qizlar tadbirkorligini qoʻllab-quvvatlash kompaniyasi"' in uz
     assert 'alt="Hamroh — компания поддержки женского предпринимательства"' in ru
 
