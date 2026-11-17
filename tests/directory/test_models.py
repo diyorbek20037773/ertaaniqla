@@ -100,10 +100,42 @@ def test_directory_page_renders_filters_and_results(
     filtered = client.get(page.url, {"region": "fergana", "section": "children"}).content.decode()
     assert "B onkogematologiya" in filtered
     assert "A poliklinika" not in filtered
-    empty = client.get(page.url, {"kind": "ngo"}).content.decode()
+    empty = client.get(page.url, {"q": "Hech qayer"}).content.decode()
     assert "institution-list__empty" in empty
     ru_page = DirectoryPage.objects.get(locale__language_code="ru")
     assert client.get(ru_page.url).status_code == 200
+
+
+def _kind_options(html: str) -> list[str]:
+    field = html.split('id="filter-kind-field"', 1)[1].split("</select>", 1)[0]
+    return [part.split('"', 1)[0] for part in field.split('<option value="')[2:]]
+
+
+def test_type_options_follow_region_and_section(
+    children_visible, seeded, institutions, client: Client
+) -> None:
+    """Region first, then the section; «Type» offers only the kinds found there and drops one
+    the new choice has none of (client 2026-11-17, D-114)."""
+    page = DirectoryPage.objects.get(locale__language_code="uz")
+    html = client.get(page.url).content.decode()
+    form = html.split('class="filter-form"', 1)[1]
+    order = [form.index(f'for="filter-{name}"') for name in ("region", "section", "kind", "q")]
+    assert order == sorted(order)
+    assert _kind_options(html) == ["polyclinic", "paediatric_oncohaematology"]  # NGO unpublished
+    assert _kind_options(client.get(page.url, {"section": "women"}).content.decode()) == [
+        "polyclinic"
+    ]
+    assert _kind_options(client.get(page.url, {"region": "fergana"}).content.decode()) == [
+        "paediatric_oncohaematology"
+    ]
+    # HTMX: the options come back out of band; a kind the new region lacks is dropped
+    partial = client.get(
+        page.url, {"region": "fergana", "kind": "polyclinic"}, HTTP_HX_REQUEST="true"
+    ).content.decode()
+    assert 'id="filter-kind-field" hx-swap-oob="true"' in partial
+    assert _kind_options(partial) == ["paediatric_oncohaematology"]
+    assert "B onkogematologiya" in partial and "selected>" not in partial.split("</select>")[0]
+    assert "hx-swap-oob" not in html  # the full page has the field once
 
 
 def test_directory_page_default_section_filter(seeded, institutions, client: Client) -> None:

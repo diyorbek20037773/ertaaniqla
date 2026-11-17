@@ -187,6 +187,7 @@ The UI design is made by a separate designer and arrives later (Figma). Until th
   - [x] Security check 2026-11-02 (D-111): only 22/80/443 open, SSH key-only + fail2ban, TLS 1.2/1.3, probes refused, audits clean; duplicate security headers fixed
   - [x] «Yangiliklar» moving rows (D-112): two rows in opposite directions, `posts/_news_marquee.html`, also on the home page
   - [x] Doctor's patient route + client wording without «murojaat» (D-113, 2026-11-16); prod: `client_update_20261116`; Uzbek translation sent for checking (`docs/review/2026-11-16_marshrut_tarjima_tekshiruv.md`)
+  - [x] Directory filter: region → section → type (options follow the first two); footer: vertical agency logo + Ministry of Health, one smaller height (D-114, 2026-11-17)
   - [ ] Launch leftovers: real Turnstile keys (Cloudflare account — client), SMTP (mailbox — client), off-server backup closed by the client 2026-10-30 (no second server; nightly local dumps stay on the VPS; a provider snapshot can be added if the tariff has one)
   - [ ] Waiting for the gynaecologic oncologist (D-106): the result-by-result routing table (NILM, ASC-US … CIN, AIS), a source for the international breast recommendations, phones/verification of the registry
   - [x] Continuous deployment (D-100, 2026-10-20): green CI on master → prod VPS (smoke test + automatic rollback); GitHub environments, protected `stage`, prod vars and CI deploy key set; deploy.sh fixed (stdin, image check, rollback target)

@@ -1,6 +1,8 @@
 {% load i18n %}
 {% comment %} directory/_results.html — results list + map data island (HTMX partial).
-   Context: institutions (current page), page_obj (Paginator page), map_data (JSON string). {% endcomment %}
+   Context: institutions (current page), page_obj (Paginator page), map_data (JSON string),
+   kinds + filter + kind_oob (HTMX only: the «Type» options, swapped out of band). {% endcomment %}
+{% if kind_oob %}{% include "directory/_kind_field.html" with oob=True %}{% endif %}
 <script type="application/json" id="map-data">{{ map_data|safe }}</script>
 <section class="institution-list" aria-live="polite">
   <h2 class="sr-only">{% trans "Results" %}</h2>

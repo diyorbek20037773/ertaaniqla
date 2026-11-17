@@ -1,0 +1,14 @@
+{% load i18n %}
+{% comment %} directory/_kind_field.html — the «Type» filter. Its options follow the chosen region and
+   section: only the kinds of institution found there (client 2026-11-17). Rendered in the form
+   and, on an HTMX filter request, again out of band so the options follow the other two fields.
+   Context: kinds [(code, label)], filter.kind, oob. {% endcomment %}
+<div class="filter-form__field" id="filter-kind-field"{% if oob %} hx-swap-oob="true"{% endif %}>
+  <label for="filter-kind">{% trans "Type" %}</label>
+  <select id="filter-kind" name="kind">
+    <option value="">{% trans "All types" %}</option>
+    {% for code, label in kinds %}
+      <option value="{{ code }}" {% if filter.kind == code %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+</div>

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load i18n static wagtailcore_tags %}
 {% comment %} directory/directory_page.html — Context: page (DirectoryPage), institutions, regions, kinds,
-   filter {region, kind, section, free}, map_data (JSON). Fields: section first, then region
-   and type, then the search (client 2026-11-16, D-113). GET form; HTMX swaps #directory-results
+   filter {region, kind, section, free}, map_data (JSON). Fields: region first, then the
+   section, then the type, whose options follow those two (client 2026-11-17, D-114); then the
+   search. GET form; HTMX swaps #directory-results
    (list + map data) and map.js re-renders markers. Non-JS: full page reload. {% endcomment %}
 {% block extra_head %}<link rel="stylesheet" href="{% static 'dist/map.css' %}">{% endblock %}
 {% block content %}
@@ -15,14 +16,6 @@
   <form class="filter-form" method="get" action="{{ page.url }}" aria-label="{% trans 'Filter institutions' %}"
         hx-get="{{ page.url }}" hx-target="#directory-results" hx-trigger="change, submit, search" hx-push-url="true" hx-indicator="#directory-loading">
     <div class="filter-form__field">
-      <label for="filter-section">{% trans "Section" %}</label>
-      <select id="filter-section" name="section">
-        <option value="" {% if not filter.section %}selected{% endif %}>{% trans "All" %}</option>
-        <option value="women" {% if filter.section == "women" %}selected{% endif %}>{% trans "Women's cancer" %}</option>
-        {% if "children" not in hidden_sections %}<option value="children" {% if filter.section == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>{% endif %}
-      </select>
-    </div>
-    <div class="filter-form__field">
       <label for="filter-region">{% trans "Region" %}</label>
       <select id="filter-region" name="region">
         <option value="">{% trans "All regions" %}</option>
@@ -32,14 +25,14 @@
       </select>
     </div>
     <div class="filter-form__field">
-      <label for="filter-kind">{% trans "Type" %}</label>
-      <select id="filter-kind" name="kind">
-        <option value="">{% trans "All types" %}</option>
-        {% for code, label in kinds %}
-          <option value="{{ code }}" {% if filter.kind == code %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
+      <label for="filter-section">{% trans "Section" %}</label>
+      <select id="filter-section" name="section">
+        <option value="" {% if not filter.section %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="women" {% if filter.section == "women" %}selected{% endif %}>{% trans "Women's cancer" %}</option>
+        {% if "children" not in hidden_sections %}<option value="children" {% if filter.section == "children" %}selected{% endif %}>{% trans "Childhood cancer" %}</option>{% endif %}
       </select>
     </div>
+    {% include "directory/_kind_field.html" %}
     <div class="filter-form__field">
       <label for="filter-q">{% trans "District, village or name" %}</label>
       <input class="search-form__input" id="filter-q" type="search" name="q" value="{{ filter.q }}" maxlength="100" placeholder="{% trans 'e.g. Chilonzor or 12-OP' %}">

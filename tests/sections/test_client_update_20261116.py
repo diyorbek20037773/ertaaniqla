@@ -58,8 +58,8 @@ def test_wording_without_murojaat(seeded: Any, client: Client) -> None:
     assert "Qayerga murojaat qilish" not in html and "Murojaat qilish" not in html
     assert ">Davlat dasturi doirasida</label>" in html
     form = html.split('class="filter-form"', 1)[1]
-    order = [form.index(f'for="filter-{name}"') for name in ("section", "region", "kind", "q")]
-    assert order == sorted(order)  # section first, then region and type
+    order = [form.index(f'for="filter-{name}"') for name in ("region", "section", "kind", "q")]
+    assert order == sorted(order)  # region first, then section and type (2026-11-17, D-114)
     ru = DirectoryPage.objects.get(locale__language_code="ru")
     assert ru.title == "Медицинские учреждения и путь проверки"
     footer = html.split('class="site-footer"', 1)[1]

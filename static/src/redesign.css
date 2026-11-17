@@ -146,8 +146,11 @@
   .social-icons a { width: 44px; height: 44px; border-radius: 10px; background: #ffffff; color: var(--c-ink); }
   .social-icons a:hover { background: var(--c-blush); }
   .site-footer__partner { width: clamp(72px, 5vw, 96px); }
-  .site-footer__partner--agency { flex: none; width: auto; max-width: 100%; height: clamp(52px, 4.5vw, 72px); object-fit: contain; object-position: right bottom; }
-  .site-footer__partner--wide { flex: none; width: auto; max-width: 100%; height: clamp(22px, 2.2vw, 32px); object-fit: contain; object-position: right bottom; }
+  /* one height for the emblems, smaller than before (client 2026-11-17, D-114); the Hamroh
+     wordmark is a single wide line, kept to the emblems' text size */
+  .site-footer__partners { align-items: center; }
+  .site-footer__partner--emblem { flex: none; width: auto; height: clamp(52px, 4.4vw, 64px); object-fit: contain; }
+  .site-footer__partner--wide { flex: none; width: auto; max-width: 100%; height: clamp(18px, 1.6vw, 24px); object-fit: contain; }
   .site-footer__bottom { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-6); margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid rgba(255, 255, 255, 0.14); color: rgba(255, 255, 255, 0.6); font-size: 0.8rem; }
   .site-footer__bottom p { margin: 0; }
   .site-footer__bottom a { color: rgba(255, 255, 255, 0.85); }

@@ -33,6 +33,11 @@ T: dict[str, tuple[str, str]] = {
     # D-113: the client's wording of 2026-11-16 (no «murojaat») and the doctor's patient route
     "Your path to a check-up": ("Sizning tekshiruv yoʻlagingiz", "Ваш путь к проверке"),
     "Check-up steps": ("Tekshiruv qadamlari", "Этапы обследования"),
+    # D-114: the Ministry of Health's logo in the footer, after the agency's
+    "Ministry of Health of the Republic of Uzbekistan": (
+        "Oʻzbekiston Respublikasi Sogʻliqni saqlash vazirligi",
+        "Министерство здравоохранения Республики Узбекистан",
+    ),
     "Under the state programme": ("Davlat dasturi doirasida", "В рамках государственной программы"),
     "Where it takes place": ("Qayerda oʻtadi", "Где проходит"),
     "Shown under the step, e.g. «District polyclinic».": (

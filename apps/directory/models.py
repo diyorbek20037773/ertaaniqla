@@ -279,9 +279,9 @@ class DirectoryPage(BasePage):
         from django.template.response import TemplateResponse
 
         if request.headers.get("HX-Request"):
-            response = TemplateResponse(
-                request, "directory/_results.html", self.get_context(request, *args, **kwargs)
-            )
+            context = self.get_context(request, *args, **kwargs)
+            context["kind_oob"] = True
+            response = TemplateResponse(request, "directory/_results.html", context)
             response["Vary"] = "HX-Request, Accept-Language, Cookie"
             return response
         return super().serve(request, *args, **kwargs)
@@ -300,6 +300,14 @@ class DirectoryPage(BasePage):
         free_only = request.GET.get("free") == "1"
         query = " ".join(request.GET.get("q", "").split())[:100]
         district = request.GET.get("district", "")[:120]
+        # «Type» follows the region and section (client 2026-11-17): only the kinds found there;
+        # a kind the new region/section has none of is dropped rather than showing nothing
+        found = set(
+            filter_institutions(region=region, section=section).values_list("kind", flat=True)
+        )
+        kinds = [(code, label) for code, label in InstitutionKind.choices if code in found]
+        if kind not in found:
+            kind = ""
         # the map counts every place for the other filters; the list narrows to the place
         others = filter_institutions(kind=kind, section=section, free_only=free_only, query=query)
         matches = filter_institutions(others, region=region, district=district).order_by(
@@ -324,7 +332,7 @@ class DirectoryPage(BasePage):
                     ensure_ascii=False,
                 ).replace("</", r"<\/"),
                 "regions": region_list(),
-                "kinds": InstitutionKind.choices,
+                "kinds": kinds,
                 "filter": {
                     "region": region,
                     "kind": kind,

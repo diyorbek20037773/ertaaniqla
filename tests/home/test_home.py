@@ -89,3 +89,20 @@ def test_hero_title_splits_after_the_dash(seeded, client: Client) -> None:
     home.hero_title = "Faqat sarlavha"
     assert home.hero_title_parts == ("Faqat sarlavha", "")
     assert home.hero_title_lines == ("Faqat sarlavha", "", "")
+
+
+def test_footer_partners_one_height_agency_then_ministry(seeded, client: Client) -> None:
+    """The agency's vertical logo, then the Ministry of Health; the emblems share one height
+    (client 2026-11-17, D-114)."""
+    for url, ministry in (
+        ("/uz/", "Oʻzbekiston Respublikasi Sogʻliqni saqlash vazirligi"),
+        ("/ru/", "Министерство здравоохранения Республики Узбекистан"),
+    ):
+        partners = client.get(url).content.decode().split('id="hamkorlar"', 1)[1]
+        partners = partners.split("</div>", 1)[0]
+        assert "asrr-uz-vertical-inverse" in partners and "{#" not in partners
+        assert (
+            partners.index("asrr-uz-vertical") < partners.index("ssv-uz") < partners.index("hamroh")
+        )
+        assert f'alt="{ministry}"' in partners
+        assert partners.count("site-footer__partner--emblem") == 3

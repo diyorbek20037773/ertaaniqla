@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 14:55+0500\n"
+"POT-Creation-Date: 2026-11-17 16:24+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -302,7 +302,6 @@ msgstr "Максимальное количество"
 msgid "Institution list"
 msgstr "Список учреждений"
 
-#| msgid "Results"
 msgid "Result"
 msgstr "Результат"
 
@@ -333,11 +332,9 @@ msgstr "Адреса под шагом"
 msgid "Intro"
 msgstr "Вводный текст"
 
-#| msgid "Section heading"
 msgid "Note heading"
 msgstr "Заголовок пояснения"
 
-#| msgid "note under the cards"
 msgid "Note under the steps"
 msgstr "Пояснение под шагами"
 
@@ -2145,6 +2142,9 @@ msgstr ""
 "Агентство стратегического развития и реформ при Президенте Республики "
 "Узбекистан"
 
+msgid "Ministry of Health of the Republic of Uzbekistan"
+msgstr "Министерство здравоохранения Республики Узбекистан"
+
 msgid "Hamroh, the company supporting women's entrepreneurship"
 msgstr "Hamroh — компания поддержки женского предпринимательства"
 
@@ -2311,7 +2311,6 @@ msgstr "Район, село или название"
 msgid "e.g. Chilonzor or 12-OP"
 msgstr "например: Чиланзар или 12-ОП"
 
-#| msgid "free under the state programme"
 msgid "Under the state programme"
 msgstr "В рамках государственной программы"
 
